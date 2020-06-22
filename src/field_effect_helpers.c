@@ -168,14 +168,18 @@ void LoadSpecialReflectionPalette(struct ObjectEvent *objectEvent, struct Sprite
     sprite->oam.paletteNum = IndexOfSpritePaletteTag(reflectionPalette.tag);
     UpdatePaletteGammaType(sprite->oam.paletteNum, GAMMA_ALT);
     UpdateSpritePaletteWithWeather(sprite->oam.paletteNum);
+    UpdateSpritePaletteWithTime(sprite->oam.paletteNum);
 }
 
 static void UpdateObjectReflectionSprite(struct Sprite *reflectionSprite)
 {
     struct ObjectEvent *objectEvent;
+    //struct SpritePalette reflectionPalette;
     struct Sprite *mainSprite;
     objectEvent = &gObjectEvents[reflectionSprite->sReflectionObjEventId];
     mainSprite = &gSprites[objectEvent->spriteId];
+
+    
     if (!objectEvent->active || !objectEvent->hasReflection || objectEvent->localId != reflectionSprite->sReflectionObjEventLocalId)
     {
         reflectionSprite->inUse = FALSE;

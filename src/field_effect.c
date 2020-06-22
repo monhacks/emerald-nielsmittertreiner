@@ -219,6 +219,8 @@ static void SpriteCB_DeoxysRockFragment(struct Sprite* sprite);
 
 static void Task_MoveDeoxysRock(u8 taskId);
 
+
+
 // Static RAM declarations
 
 static u8 sActiveList[32];
@@ -763,6 +765,7 @@ void FieldEffectScript_LoadFadedPalette(u8 **script)
     LoadSpritePalette(palette);
     UpdatePaletteGammaType(IndexOfSpritePaletteTag(palette->tag), GAMMA_NORMAL);
     UpdateSpritePaletteWithWeather(IndexOfSpritePaletteTag(palette->tag));
+    UpdateSpritePaletteWithTime(IndexOfSpritePaletteTag(palette->tag));
     (*script) += 4;
 }
 

@@ -216,7 +216,7 @@ static void LoadMapNamePopUpWindowBg(void)
 static void HBlankCB_MapNamePopupWindow(void)
 {
     struct Task *task = &gTasks[sPopupTaskId];
-    s16 currentOffset = 24 - task->data[2];
+    s16 currentOffset = 24 - task->data[2] - 1;
 
     if (REG_VCOUNT < currentOffset || REG_VCOUNT > 160)
     {

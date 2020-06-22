@@ -458,6 +458,9 @@ const u8 gInitialMovementTypeFacingDirections[] = {
 #define OBJ_EVENT_PAL_TAG_CONSTRUCTION_WORKER     0x111E
 #define OBJ_EVENT_PAL_TAG_FISHERMAN               0x111F
 
+#define OBJ_EVENT_PAL_TAG_LIGHT                   0x8000
+#define OBJ_EVENT_PAL_TAG_LANTERN_LIGHT           OBJ_EVENT_PAL_TAG_LIGHT + 1
+
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF
 
 #include "data/field_effects/field_effect_object_template_pointers.h"
@@ -500,6 +503,7 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Phyllos,               OBJ_EVENT_PAL_TAG_PHYLLOS},
     {gObjectEventPal_ConstructionWorker,    OBJ_EVENT_PAL_TAG_CONSTRUCTION_WORKER},
     {gObjectEventPal_Fisherman,             OBJ_EVENT_PAL_TAG_FISHERMAN},
+    {gObjectEventPal_LanternLight,          OBJ_EVENT_PAL_TAG_LIGHT},
     {NULL,                                  0x0000},
 };
 #include "data/object_events/berry_tree_graphics_tables.h"
@@ -1476,6 +1480,94 @@ u8 CreateObjectSprite(u16 graphicsId, u8 objectEventId, s16 x, s16 y, u8 z, u8 d
     return spriteId;
 }
 
+// Callback for light sprites
+void UpdateLightSprite(struct Sprite *sprite)
+{
+    s16 left =   gSaveBlock1Ptr->pos.x - 2;
+    s16 right =  gSaveBlock1Ptr->pos.x + 17;
+    s16 top =    gSaveBlock1Ptr->pos.y;
+    s16 bottom = gSaveBlock1Ptr->pos.y + 15;
+    s16 x = sprite->data[6];
+    s16 y = sprite->data[7];
+    u16 sheetTileStart;
+    u32 paletteNum;
+    bool8 finished = TRUE;
+
+    // Ripped from RemoveObjectEventIfOutsideView
+    if (x >= left && x <= right &&
+        y >= top && y <= bottom)
+            finished = FALSE;
+    
+    finished = finished ? finished : gTimeOfDay != TIME_OF_DAY_NIGHT;
+
+    if (finished)
+    {        
+        FieldEffectFreeTilesIfUnused(sprite->sheetTileStart);
+        FieldEffectFreePaletteIfUnused(sprite->oam.paletteNum);
+        DestroySprite(sprite);
+        return;
+    }
+
+    sprite->invisible = gSaveBlock2Ptr->playTimeVBlanks & 1;
+}
+
+// Spawn a light at a map coordinate based on metatile behavior
+static void SpawnLightSprite(s16 x, s16 y, s16 cameraX, s16 cameraY, u32 behavior)
+{
+    struct Sprite *sprite;
+    u8 spriteId;
+    u8 i;
+
+    for (i = 0; i < MAX_SPRITES; i++)
+    {
+        sprite = &gSprites[i];
+        if (sprite->inUse && sprite->callback == UpdateLightSprite && sprite->data[6] == x && sprite->data[7] == y)
+            return;
+    }
+
+    spriteId = CreateSprite(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_LANTERN_LIGHT], 0, 0, 0);
+    sprite = &gSprites[spriteId];
+    
+    UpdateSpritePaletteByTemplate(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_LANTERN_LIGHT], sprite);
+    GetMapCoordsFromSpritePos(x + cameraX, y + cameraY, &sprite->x, &sprite->y);
+    sprite->data[6] = x;
+    sprite->data[7] = y;
+    sprite->affineAnims = gDummySpriteAffineAnimTable;
+    sprite->affineAnimBeginning = TRUE;
+    sprite->centerToCornerVecX = -(32 >> 1);
+    sprite->centerToCornerVecY = -(32 >> 1);
+    sprite->oam.priority = 1;
+    sprite->oam.objMode = ST_OAM_OBJ_BLEND; // BLEND
+    sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
+    sprite->coordOffsetEnabled = TRUE;
+    sprite->x += 8;
+    sprite->y += 22 + sprite->centerToCornerVecY;
+}
+
+void TrySpawnLightSprites(s16 cameraX, s16 cameraY)
+{
+    s16 left =   gSaveBlock1Ptr->pos.x - 2;
+    s16 right =  gSaveBlock1Ptr->pos.x + 17;
+    s16 top =    gSaveBlock1Ptr->pos.y;
+    s16 bottom = gSaveBlock1Ptr->pos.y + 16;
+    s16 x, y;
+    u32 behavior;
+
+    if (gTimeOfDay != TIME_OF_DAY_NIGHT)
+        return;
+    
+    for (x = left; x <= right; x++)
+    {
+        for (y = top; y <= bottom; y++)
+        {
+            if (MetatileBehavior_IsLanternLight(MapGridGetMetatileBehaviorAt(x, y)))
+            {
+                SpawnLightSprite(x, y, cameraX, cameraY, behavior);
+            }
+        }
+    }
+}
+
 void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
 {
     u8 i;
@@ -1501,11 +1593,14 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
             s16 npcX = template->x + 7;
             s16 npcY = template->y + 7;
 
-            if (top <= npcY && bottom >= npcY && left <= npcX && right >= npcX
-                && !FlagGet(template->flagId))
+            if (top <= npcY && bottom >= npcY && left <= npcX && right >= npcX &&
+                !FlagGet(template->flagId))
+            {
                 TrySpawnObjectEventTemplate(template, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup, cameraX, cameraY);
+            }
         }
     }
+    TrySpawnLightSprites(cameraX, cameraY);
 }
 
 void RemoveObjectEventsOutsideView(void)
@@ -1557,6 +1652,7 @@ void SpawnObjectEventsOnReturnToField(s16 x, s16 y)
             SpawnObjectEventOnReturnToField(i, x, y);
     }
     CreateReflectionEffectSprites();
+    TrySpawnLightSprites(x, y);
 }
 
 static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
@@ -1634,6 +1730,63 @@ static void SetPlayerAvatarObjectEventIdAndObjectId(u8 objectEventId, u8 spriteI
     gPlayerAvatar.spriteId = spriteId;
     gPlayerAvatar.gender = GetPlayerAvatarGenderByGraphicsId(gObjectEvents[objectEventId].graphicsId);
     SetPlayerAvatarExtraStateTransition(gObjectEvents[objectEventId].graphicsId, PLAYER_AVATAR_FLAG_5);
+}
+
+// Update sprite's palette, freeing old palette if necessary
+static u8 UpdateSpritePalette(const struct SpritePalette *spritePalette, struct Sprite *sprite)
+{
+    // Free palette if otherwise unused
+    sprite->inUse = FALSE;
+    FieldEffectFreePaletteIfUnused(sprite->oam.paletteNum);
+    sprite->inUse = TRUE;
+    if (IndexOfSpritePaletteTag(spritePalette->tag) == 0xFF)
+    {
+        sprite->oam.paletteNum = LoadSpritePalette(spritePalette);
+        UpdateSpritePaletteWithTime(sprite->oam.paletteNum);
+    }
+    else
+    {
+        sprite->oam.paletteNum = LoadSpritePalette(spritePalette);
+    }
+
+    return sprite->oam.paletteNum;
+}
+
+// Find and update based on template's paletteTag
+// TODO: Should this logic happen in CreateSpriteAt?
+u8 UpdateSpritePaletteByTemplate(const struct SpriteTemplate *template, struct Sprite *sprite)
+{
+    u8 i = FindObjectEventPaletteIndexByTag(template->paletteTag);
+
+    if (i == 0xFF)
+        return i;
+    
+    return UpdateSpritePalette(&sObjectEventSpritePalettes[i], sprite);
+}
+
+// Set graphics *by info*
+static void ObjectEventSetGraphics(struct ObjectEvent *objectEvent, const struct ObjectEventGraphicsInfo *graphicsInfo)
+{
+    struct Sprite *sprite = &gSprites[objectEvent->spriteId];
+    u8 i = FindObjectEventPaletteIndexByTag(graphicsInfo->paletteTag);
+    if (i != 0xFF)
+        UpdateSpritePalette(&sObjectEventSpritePalettes[i], sprite);
+
+    sprite->oam.shape = graphicsInfo->oam->shape;
+    sprite->oam.size = graphicsInfo->oam->size;
+    sprite->images = graphicsInfo->images;
+    sprite->anims = graphicsInfo->anims;
+    sprite->subspriteTables = graphicsInfo->subspriteTables;
+    objectEvent->inanimate = graphicsInfo->inanimate;
+    SetSpritePosToMapCoords(objectEvent->currentCoords.x, objectEvent->currentCoords.y, &sprite->x, &sprite->y);
+    sprite->centerToCornerVecX = -(graphicsInfo->width >> 1);
+    sprite->centerToCornerVecY = -(graphicsInfo->height >> 1);
+    sprite->x += 8;
+    sprite->y += 16 + sprite->centerToCornerVecY;
+    if (objectEvent->trackedByCamera)
+    {
+        CameraObjectReset1();
+    }
 }
 
 void ObjectEventSetGraphicsId(struct ObjectEvent *objectEvent, u16 graphicsId)
@@ -1860,12 +2013,17 @@ static void LoadObjectEventPaletteSet(u16 *paletteTags)
 
 static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette)
 {
+    u8 paletteNum;
     if (IndexOfSpritePaletteTag(spritePalette->tag) != 0xFF)
+    {
         return 0xFF;
+    }
 
-    return LoadSpritePalette(spritePalette);
+    LoadSpritePalette(spritePalette);
+    UpdateSpritePaletteWithTime(IndexOfSpritePaletteTag(spritePalette->tag));
+    return IndexOfSpritePaletteTag(spritePalette->tag);
+
 }
-
 void PatchObjectPalette(u16 paletteTag, u8 paletteSlot)
 {
     u8 paletteIndex = FindObjectEventPaletteIndexByTag(paletteTag);
