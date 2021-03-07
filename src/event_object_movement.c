@@ -1489,16 +1489,19 @@ void UpdateLightSprite(struct Sprite *sprite)
     s16 bottom = gSaveBlock1Ptr->pos.y + 15;
     s16 x = sprite->data[6];
     s16 y = sprite->data[7];
-    u16 sheetTileStart;
-    u32 paletteNum;
     bool8 finished = TRUE;
 
     // Ripped from RemoveObjectEventIfOutsideView
     if (x >= left && x <= right &&
         y >= top && y <= bottom)
-            finished = FALSE;
+    {
+        finished = FALSE;
+    }
     
-    finished = finished ? finished : gTimeOfDay != TIME_OF_DAY_NIGHT;
+    if (gTimeOfDay == TIME_OF_DAY_NIGHT)
+        finished = FALSE;
+    else
+        finished = TRUE;
 
     if (finished)
     {        
@@ -1508,11 +1511,11 @@ void UpdateLightSprite(struct Sprite *sprite)
         return;
     }
 
-    sprite->invisible = gSaveBlock2Ptr->playTimeVBlanks & 1;
+    sprite->invisible = gSaveBlock2Ptr->inGameClock.vblanks & 1;
 }
 
 // Spawn a light at a map coordinate based on metatile behavior
-static void SpawnLightSprite(s16 x, s16 y, s16 cameraX, s16 cameraY, u32 behavior)
+static void SpawnLightSprite(s16 x, s16 y, s16 cameraX, s16 cameraY)
 {
     struct Sprite *sprite;
     u8 spriteId;
@@ -1552,18 +1555,19 @@ void TrySpawnLightSprites(s16 cameraX, s16 cameraY)
     s16 bottom = gSaveBlock1Ptr->pos.y + 16;
     s16 x, y;
     u32 behavior;
+    u32 i;
 
     if (gTimeOfDay != TIME_OF_DAY_NIGHT)
         return;
     
-    for (x = left; x <= right; x++)
+    for (i = 0; gLightMetatiles[i].x > 0; i++)
     {
-        for (y = top; y <= bottom; y++)
+        x = gLightMetatiles[i].x;
+        y = gLightMetatiles[i].y;
+        if (x >= left && x <= right && y >= top && y <= bottom &&
+            MetatileBehavior_IsLanternLight(MapGridGetMetatileBehaviorAt(x, y)))
         {
-            if (MetatileBehavior_IsLanternLight(MapGridGetMetatileBehaviorAt(x, y)))
-            {
-                SpawnLightSprite(x, y, cameraX, cameraY, behavior);
-            }
+            SpawnLightSprite(x, y, cameraX, cameraY);
         }
     }
 }
