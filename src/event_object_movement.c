@@ -1541,7 +1541,7 @@ static void SpawnLightSprite(s16 x, s16 y, s16 cameraX, s16 cameraY)
     sprite->centerToCornerVecX = -(32 >> 1);
     sprite->centerToCornerVecY = -(32 >> 1);
     sprite->oam.priority = 1;
-    sprite->oam.objMode = ST_OAM_OBJ_BLEND; // BLEND
+    sprite->oam.objMode = ST_OAM_OBJ_BLEND;
     sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
     sprite->coordOffsetEnabled = TRUE;
     sprite->x += 8;
