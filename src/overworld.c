@@ -1548,12 +1548,15 @@ void BlendPalettesWithTime(u32 palettes)
         }
 
         palettes &= ~0xE000; // Don't blend tile palettes [13,15]
-        palettes &= ~(1 << 6);
-        gTimeOfDay = gTimeOfDay > TIME_OF_DAY_MAX ? TIME_OF_DAY_MAX : gTimeOfDay;
-        BlendPalettes(palettes, sTimeOfDayBlendVars[gTimeOfDay].coeff, sTimeOfDayBlendVars[gTimeOfDay].blendColor);
+        gTimeOfDay = min(TIME_OF_DAY_MAX, gTimeOfDay);
+        if (!palettes)
+            return;
+
+        TimePalettes(palettes, sTimeOfDayBlendVars[gTimeOfDay].coeff, sTimeOfDayBlendVars[gTimeOfDay].blendColor);
     }
 }
 
+// TODO: Optimize this
 u8 UpdateSpritePaletteWithTime(u8 paletteNum)
 {
     BlendPalettesWithTime(1 << (paletteNum + 16));
