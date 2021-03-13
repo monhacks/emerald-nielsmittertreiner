@@ -467,7 +467,7 @@ static u8 UpdateTimeOfDayPaletteFade(void)
         return PALETTE_FADE_STATUS_DONE;
 
     if (IsSoftwarePaletteFadeFinishing())
-      return gPaletteFade.active ? PALETTE_FADE_STATUS_ACTIVE : PALETTE_FADE_STATUS_DONE;
+        return gPaletteFade.active ? PALETTE_FADE_STATUS_ACTIVE : PALETTE_FADE_STATUS_DONE;
 
     if (!gPaletteFade.objPaletteToggle)
     {
@@ -491,20 +491,28 @@ static u8 UpdateTimeOfDayPaletteFade(void)
         paletteOffset = 256;
     }
 
-    for (paletteNum = 0; paletteNum < 16; paletteNum++, selectedPalettes >>= 1, paletteOffset += 16) {
-      if (selectedPalettes & 1) {
-        if (gPaletteFade.yDec) {
-          if (gPaletteFade.objPaletteToggle) { // sprite palettes
-            if (gPaletteFade.y >= gPaletteFade.targetY || GetSpritePaletteTagByPaletteNum(paletteNum) & 0x8000)
-              TimePalette(paletteOffset, 16, gPaletteFade.y, gPaletteFade.blendColor);
-          // tile palettes
-          } else if (gPaletteFade.y >= gPaletteFade.targetY || (paletteNum >= 13 && paletteNum <= 15)) {
-              TimePalette(paletteOffset, 16, gPaletteFade.y, gPaletteFade.blendColor);
-          }
-        } else {
-          TimePalette(paletteOffset, 16, gPaletteFade.y, gPaletteFade.blendColor);
+    for (paletteNum = 0; paletteNum < 16; paletteNum++, selectedPalettes >>= 1, paletteOffset += 16)
+    {
+        if (selectedPalettes & 1)
+        {
+            if (gPaletteFade.yDec)
+            {
+                if (gPaletteFade.objPaletteToggle) // sprite palettes
+                {
+                    if (gPaletteFade.y >= gPaletteFade.targetY || GetSpritePaletteTagByPaletteNum(paletteNum) & 0x8000)
+                        TimeBlendPalette(paletteOffset, 16, gPaletteFade.y, gPaletteFade.blendColor);
+                // tile palettes
+                }
+                else if (gPaletteFade.y >= gPaletteFade.targetY || (paletteNum >= 13 && paletteNum <= 15))
+                {
+                    TimeBlendPalette(paletteOffset, 16, gPaletteFade.y, gPaletteFade.blendColor);
+                }
+            }
+            else
+            {
+                TimeBlendPalette(paletteOffset, 16, gPaletteFade.y, gPaletteFade.blendColor);
+            }
         }
-      }
     }
 
     gPaletteFade.objPaletteToggle ^= 1;
@@ -979,9 +987,10 @@ void BlendPalettes(u32 selectedPalettes, u8 coeff, u16 color)
 }
 
 // Like BlendPalette, but ignores blendColor if the transparency high bit is set
-void TimePalette(u16 palOffset, u16 numEntries, u8 coeff, u16 blendColor)
+void TimeBlendPalette(u16 palOffset, u16 numEntries, u8 coeff, u16 blendColor)
 {
     u16 i;
+    u16 defaultBlendColor = 0x3f9f;
     s8 r, g, b;
     struct PlttData *data2 = (struct PlttData *)&blendColor;
     struct PlttData *data3;
@@ -998,8 +1007,12 @@ void TimePalette(u16 palOffset, u16 numEntries, u8 coeff, u16 blendColor)
             if (data1->unused_15)
             { 
                 gPlttBufferFaded[index] = gPlttBufferUnfaded[index];
-                altBlendIndices = gPlttBufferUnfaded[index] & 0x7FFF;
+                altBlendIndices = gPlttBufferUnfaded[index] & 0x7FFF; // Note that color 15 will never be light-blended
                 data3 = (struct PlttData *)&gPlttBufferUnfaded[index+15];
+                if (!data3->unused_15) // Use default blend color instead
+                {
+                    data3 = (struct PlttData *)&defaultBlendColor;
+                }
             }
             continue;
         }
@@ -1014,14 +1027,14 @@ void TimePalette(u16 palOffset, u16 numEntries, u8 coeff, u16 blendColor)
 }
 
 // Apply time effect to a series of palettes
-void TimePalettes(u32 palettes, u8 coeff, u16 color)
+void TimeBlendPalettes(u32 palettes, u8 coeff, u16 color)
 {
     u16 paletteOffset;
 
     for (paletteOffset = 0; palettes; paletteOffset += 16)
     {
         if (palettes & 1)
-            TimePalette(paletteOffset, 16, coeff, color);
+            TimeBlendPalette(paletteOffset, 16, coeff, color);
         palettes >>= 1;
     }
 }
