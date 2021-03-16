@@ -57,7 +57,7 @@ gTileset_Slateport::
 gTileset_Mauville::
 	.byte TRUE @ is compressed
 	.byte TRUE @ is secondary tileset
-	.2byte 0x12 @ lightPalettes 7,10
+	.2byte 0x32 @ lightPalettes 7,10,11
 	.4byte gTilesetTiles_Mauville
 	.4byte gTilesetPalettes_Mauville
 	.4byte gMetatiles_Mauville
@@ -90,7 +90,7 @@ gTileset_Fallarbor::
 gTileset_Fortree::
 	.byte TRUE @ is compressed
 	.byte TRUE @ is secondary tileset
-	.2byte 0 @ padding
+	.2byte 0x0404 @ lightPalettes 8, customLights 8
 	.4byte gTilesetTiles_Fortree
 	.4byte gTilesetPalettes_Fortree
 	.4byte gMetatiles_Fortree

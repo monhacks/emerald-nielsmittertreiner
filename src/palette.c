@@ -1007,7 +1007,7 @@ void TimeBlendPalette(u16 palOffset, u16 numEntries, u8 coeff, u16 blendColor)
             if (data1->unused_15)
             { 
                 gPlttBufferFaded[index] = gPlttBufferUnfaded[index];
-                altBlendIndices = gPlttBufferUnfaded[index] & 0x7FFF; // Note that color 15 will never be light-blended
+                altBlendIndices = gPlttBufferUnfaded[index] << 1; // bit 0 species color 1, etc.
                 data3 = (struct PlttData *)&gPlttBufferUnfaded[index+15];
                 if (!data3->unused_15) // Use default blend color instead
                 {
