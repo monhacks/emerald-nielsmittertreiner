@@ -1489,19 +1489,20 @@ void UpdateLightSprite(struct Sprite *sprite)
     s16 bottom = gSaveBlock1Ptr->pos.y + 15;
     s16 x = sprite->data[6];
     s16 y = sprite->data[7];
-    bool8 finished = TRUE;
+    bool8 finished;
 
-    // Ripped from RemoveObjectEventIfOutsideView
     if (x >= left && x <= right &&
         y >= top && y <= bottom)
     {
-        finished = FALSE;
+        if (gTimeOfDay != TIME_OF_DAY_NIGHT)
+            finished = TRUE;
+        else
+            finished = FALSE;
     }
-    
-    if (gTimeOfDay == TIME_OF_DAY_NIGHT)
-        finished = FALSE;
     else
+    {
         finished = TRUE;
+    }
 
     if (finished)
     {        
