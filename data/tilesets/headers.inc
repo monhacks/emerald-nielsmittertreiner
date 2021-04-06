@@ -134,7 +134,7 @@ gTileset_EverGrande::
 gTileset_Pacifidlog::
 	.byte TRUE @ is compressed
 	.byte TRUE @ is secondary tileset
-	.2byte 0 @ padding
+	.2byte 8 @ lightPalettes 9
 	.4byte gTilesetTiles_Pacifidlog
 	.4byte gTilesetPalettes_Pacifidlog
 	.4byte gMetatiles_Pacifidlog
