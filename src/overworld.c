@@ -1536,7 +1536,8 @@ static bool8 FadePalettesWithTime(void)
 
 void UpdatePalettesWithTime(u32 palettes)
 {
-    u32 i;
+    u8 i, j;
+    u16 tempPaletteBuffer[16];
 
     // Only blend if not transitioning between times and the map type allows
     if (gTimeOfDayState == 0 && MapHasNaturalLight(gMapHeader.mapType))
@@ -1552,7 +1553,17 @@ void UpdatePalettesWithTime(u32 palettes)
         if (!palettes)
             return;
 
-        TimeBlendPalettes(palettes, sTimeOfDayBlendVars[gTimeOfDay].coeff, sTimeOfDayBlendVars[gTimeOfDay].blendColor);
+        for (i = 0; palettes; i++)
+        {
+            if (palettes & 1)
+            {
+                TimeBlendPalette(i*16, 16, sTimeOfDayBlendVars[gTimeOfDay].coeff, sTimeOfDayBlendVars[gTimeOfDay].blendColor);
+                CpuFastCopy(&gPlttBufferFaded[i*16], tempPaletteBuffer, 32);
+                TimeBlendPalette(i*16, 16, sTimeOfDayBlendVars[TIME_OF_DAY_TWILIGHT].coeff, sTimeOfDayBlendVars[TIME_OF_DAY_TWILIGHT].blendColor);
+                AveragePalettes(tempPaletteBuffer, &gPlttBufferFaded[i*16], &gPlttBufferFaded[i*16], 256);
+            }
+            palettes >>= 1;
+        }
     }
 }
 
