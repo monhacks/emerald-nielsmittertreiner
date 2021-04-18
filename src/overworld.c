@@ -1519,7 +1519,7 @@ u8 UpdateTimeOfDay(void)
 
 static bool8 MapHasNaturalLight(u8 mapType)
 {
-    return mapType == MAP_TYPE_TOWN || mapType == MAP_TYPE_CITY || mapType == MAP_TYPE_ROUTE;
+    return mapType == MAP_TYPE_TOWN || mapType == MAP_TYPE_CITY || mapType == MAP_TYPE_ROUTE || mapType == MAP_TYPE_OCEAN_ROUTE;
 }
 
 static bool8 FadePalettesWithTime(void)
