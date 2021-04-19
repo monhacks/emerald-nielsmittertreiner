@@ -189,7 +189,9 @@ static u16 (*sPlayerKeyInterceptCallback)(u32);
 static bool8 sReceivingFromLink;
 static u8 sRfuKeepAliveTimer;
 
-u8 static gTimeOfDayState;
+static u8 gTimeOfDayState;
+static u8 timeCounter;
+static struct TimeBlendSettings currentTimeBlend;
 
 // IWRAM common
 u16 *gBGTilemapBuffers1;
@@ -1509,12 +1511,51 @@ static const struct TimeOfDayBlend sTimeOfDayBlendVars[] =
 
 u8 UpdateTimeOfDay(void)
 {
-    if (gSaveBlock2Ptr->inGameClock.hours >= 20 || gSaveBlock2Ptr->inGameClock.hours < 4)
-        return gTimeOfDay = TIME_OF_DAY_NIGHT;
-    else if (gSaveBlock2Ptr->inGameClock.hours >= 10 && gSaveBlock2Ptr->inGameClock.hours < 20)
-        return gTimeOfDay = TIME_OF_DAY_DAY;
+    s8 hours = gSaveBlock2Ptr->inGameClock.hours;
+    s8 minutes = gSaveBlock2Ptr->inGameClock.minutes;
     
-    return gTimeOfDay = TIME_OF_DAY_TWILIGHT;
+    if (hours >= 22 || hours < 4)
+    {
+        currentTimeBlend.weight = 256;
+        return gTimeOfDay = currentTimeBlend.time0 = currentTimeBlend.time1 = TIME_OF_DAY_NIGHT;
+    }
+    else if (hours >= 4 && hours < 7) // night->twilight
+    {
+        currentTimeBlend.time0 = TIME_OF_DAY_NIGHT;
+        currentTimeBlend.time1 = TIME_OF_DAY_TWILIGHT;
+        currentTimeBlend.weight = 256 - 256 * ((hours - 4) * 60 + minutes) / ((7-4)*60);
+        return gTimeOfDay = TIME_OF_DAY_DAY;
+    }
+    else if (hours >= 7 && hours < 10) // twilight->day
+    {
+        currentTimeBlend.time0 = TIME_OF_DAY_TWILIGHT;
+        currentTimeBlend.time1 = TIME_OF_DAY_DAY;
+        currentTimeBlend.weight = 256 - 256 * ((hours - 7) * 60 + minutes) / ((10-7)*60);
+        return gTimeOfDay = TIME_OF_DAY_DAY;
+    }
+    else if (hours >= 10 && hours < 18) // day
+    {
+        currentTimeBlend.weight = 256;
+        return gTimeOfDay = currentTimeBlend.time0 = currentTimeBlend.time1 = TIME_OF_DAY_DAY;
+    }
+    else if (hours >= 18 && hours < 20) // day->twilight
+    {
+        currentTimeBlend.time0 = TIME_OF_DAY_DAY;
+        currentTimeBlend.time1 = TIME_OF_DAY_TWILIGHT;
+        currentTimeBlend.weight = 256 - 256 * ((hours - 18) * 60 + minutes) / ((20-18)*60);
+        return gTimeOfDay = TIME_OF_DAY_TWILIGHT;
+    }
+    else if (hours >= 20 && hours < 22) // twilight->night
+    {
+        currentTimeBlend.time0 = TIME_OF_DAY_TWILIGHT;
+        currentTimeBlend.time1 = TIME_OF_DAY_NIGHT;
+        currentTimeBlend.weight = 256 - 256 * ((hours - 20) * 60 + minutes) / ((22-20)*60);
+        return gTimeOfDay = TIME_OF_DAY_NIGHT;
+    }
+    else // This should never occur
+    {
+        return TIME_OF_DAY_MAX;
+    }
 }
 
 static bool8 MapHasNaturalLight(u8 mapType)
@@ -1522,7 +1563,8 @@ static bool8 MapHasNaturalLight(u8 mapType)
     return mapType == MAP_TYPE_TOWN || mapType == MAP_TYPE_CITY || mapType == MAP_TYPE_ROUTE || mapType == MAP_TYPE_OCEAN_ROUTE;
 }
 
-static bool8 FadePalettesWithTime(void)
+// Only used to fade back in
+static bool8 FadePalettesWithTime(void) 
 {
     gTimeOfDayState = 0;
     gTimeOfDay = UpdateTimeOfDay();
@@ -1540,7 +1582,7 @@ void UpdatePalettesWithTime(u32 palettes)
     u16 tempPaletteBuffer[16];
 
     // Only blend if not transitioning between times and the map type allows
-    if (gTimeOfDayState == 0 && MapHasNaturalLight(gMapHeader.mapType))
+    if (MapHasNaturalLight(gMapHeader.mapType))
     {
         for (i = 0; i < 16; i++)
         {
@@ -1557,10 +1599,15 @@ void UpdatePalettesWithTime(u32 palettes)
         {
             if (palettes & 1)
             {
-                TimeBlendPalette(i*16, 16, sTimeOfDayBlendVars[gTimeOfDay].coeff, sTimeOfDayBlendVars[gTimeOfDay].blendColor);
-                CpuFastCopy(&gPlttBufferFaded[i*16], tempPaletteBuffer, 32);
-                TimeBlendPalette(i*16, 16, sTimeOfDayBlendVars[TIME_OF_DAY_TWILIGHT].coeff, sTimeOfDayBlendVars[TIME_OF_DAY_TWILIGHT].blendColor);
-                AveragePalettes(tempPaletteBuffer, &gPlttBufferFaded[i*16], &gPlttBufferFaded[i*16], 256);
+                TimeBlendPalette(i * 16, sTimeOfDayBlendVars[currentTimeBlend.time0].coeff, sTimeOfDayBlendVars[currentTimeBlend.time0].blendColor);
+                if (currentTimeBlend.weight == 256)
+                {
+                    palettes >>= 1;
+                    continue;
+                }
+                CpuFastCopy(&gPlttBufferFaded[i * 16], tempPaletteBuffer, 32);
+                TimeBlendPalette(i * 16, sTimeOfDayBlendVars[currentTimeBlend.time1].coeff, sTimeOfDayBlendVars[currentTimeBlend.time1].blendColor);
+                AveragePalettes(tempPaletteBuffer, &gPlttBufferFaded[i * 16], &gPlttBufferFaded[i * 16], currentTimeBlend.weight);
             }
             palettes >>= 1;
         }
@@ -1585,6 +1632,23 @@ static void OverworldBasic(void)
     UpdatePaletteFade();
     UpdateTilesetAnimations();
     DoScheduledBgTilemapCopiesToVram();
+    if (!(gPaletteFade.active || (timeCounter++ % 60)))
+    {
+        struct TimeBlendSettings cachedBlend =
+        {
+            .time0 = currentTimeBlend.time0,
+            .time1 = currentTimeBlend.time1,
+            .weight = currentTimeBlend.weight,
+        };
+        
+        timeCounter = 0;
+        UpdateTimeOfDay();
+        
+        if (cachedBlend.time0 != currentTimeBlend.time0
+         || cachedBlend.time1 != currentTimeBlend.time1
+         || cachedBlend.weight != currentTimeBlend.weight)
+            UpdatePalettesWithTime(0xFFFFFFFF);
+    }
 }
 
 // This CB2 is used when starting
@@ -1595,9 +1659,7 @@ void CB2_OverworldBasic(void)
 
 void CB2_Overworld(void)
 {
-    u32 *debugPtr = (u32*) 0x0203de00;
     bool32 fading = (gPaletteFade.active != 0);
-    *debugPtr = (u32) &gTimeOfDay;
     if (fading)
         SetVBlankCallback(NULL);
     OverworldBasic();
