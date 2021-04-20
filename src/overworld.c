@@ -1598,30 +1598,12 @@ void UpdatePalettesWithTime(u32 palettes)
         if (!palettes)
             return;
 
-        for (i = 0; palettes; i += 16)
-        {
-            if (palettes & 1)
-            {
-                if (sTimeOfDayBlendVars[currentTimeBlend.time0].isTint)
-                    TintPalette_RGB_Copy(i, sTimeOfDayBlendVars[currentTimeBlend.time0].blendColor);
-                else
-                    TimeBlendPalette(i, sTimeOfDayBlendVars[currentTimeBlend.time0].coeff, sTimeOfDayBlendVars[currentTimeBlend.time0].blendColor);
-                
-                if (currentTimeBlend.weight == 256)
-                {
-                    palettes >>= 1;
-                    continue;
-                }
-                CpuFastCopy(&gPlttBufferFaded[i], tempPaletteBuffer, 32);
-                if (sTimeOfDayBlendVars[currentTimeBlend.time1].isTint)
-                    TintPalette_RGB_Copy(i, sTimeOfDayBlendVars[currentTimeBlend.time1].blendColor);
-                else
-                    TimeBlendPalette(i, sTimeOfDayBlendVars[currentTimeBlend.time1].coeff, sTimeOfDayBlendVars[currentTimeBlend.time1].blendColor);
-                    
-                AveragePalettes(tempPaletteBuffer, &gPlttBufferFaded[i], &gPlttBufferFaded[i], currentTimeBlend.weight);
-            }
-            palettes >>= 1;
-        }
+        TimeMixPalettes(palettes,
+            sTimeOfDayBlendVars[currentTimeBlend.time0].coeff,
+            sTimeOfDayBlendVars[currentTimeBlend.time0].blendColor,
+            sTimeOfDayBlendVars[currentTimeBlend.time1].coeff,
+            sTimeOfDayBlendVars[currentTimeBlend.time1].blendColor,
+            currentTimeBlend.weight);
     }
 }
 
