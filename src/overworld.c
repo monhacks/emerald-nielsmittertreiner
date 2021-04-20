@@ -1603,7 +1603,9 @@ void UpdatePalettesWithTime(u32 palettes)
             sTimeOfDayBlendVars[currentTimeBlend.time0].blendColor,
             sTimeOfDayBlendVars[currentTimeBlend.time1].coeff,
             sTimeOfDayBlendVars[currentTimeBlend.time1].blendColor,
-            currentTimeBlend.weight);
+            currentTimeBlend.weight,
+            sTimeOfDayBlendVars[currentTimeBlend.time0].isTint,
+            sTimeOfDayBlendVars[currentTimeBlend.time1].isTint);
     }
 }
 
