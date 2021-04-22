@@ -1597,7 +1597,7 @@ void UpdatePalettesWithTime(u32 palettes)
                 palettes &= ~(1 << (i + 16));
         }
 
-        palettes &= ~0xE000; // Don't blend tile palettes [13,15]
+        palettes &= ~0xFFFF1FFF; // Don't blend tile palettes [13,15]
         if (!palettes)
             return;
 
