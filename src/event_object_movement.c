@@ -8236,7 +8236,7 @@ static void GroundEffect_Shadow(struct ObjectEvent *objEvent, struct Sprite *spr
 static void DoFlaggedGroundEffects(struct ObjectEvent *objEvent, struct Sprite *sprite, u32 flags)
 {
     u8 i;
-
+    
     if (ObjectEventIsFarawayIslandMew(objEvent) == TRUE && !ShouldMewShakeGrass(objEvent))
         return;
 
@@ -8247,7 +8247,8 @@ static void DoFlaggedGroundEffects(struct ObjectEvent *objEvent, struct Sprite *
         if (flags & 1)
             sGroundEffectFuncs[i](objEvent, sprite);
     
-    GroundEffect_Shadow(objEvent, sprite);
+    if (!gWeatherPtr->noShadows)
+        GroundEffect_Shadow(objEvent, sprite);
 }
 
 void filters_out_some_ground_effects(struct ObjectEvent *objEvent, u32 *flags)
