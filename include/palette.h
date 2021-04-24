@@ -56,6 +56,7 @@ struct PaletteFadeControl
     u8 deltaY:4; // rate of change of blend coefficient
 };
 
+extern const struct BlendSettings gTimeOfDayBlend[];
 extern struct PaletteFadeControl gPaletteFade;
 extern u32 gPlttBufferTransferPending;
 extern u8 gPaletteDecompressionBuffer[];
@@ -69,7 +70,7 @@ void TransferPlttBuffer(void);
 u8 UpdatePaletteFade(void);
 void ResetPaletteFade(void);
 bool8 BeginNormalPaletteFade(u32, s8, u8, u8, u16);
-bool8 BeginTimeOfDayPaletteFade(u32, s8, u8, u8, struct BlendSettings *, struct BlendSettings *, u16);
+bool8 BeginTimeOfDayPaletteFade(u32, s8, u8, u8, struct BlendSettings *, struct BlendSettings *, u16, u16);
 bool8 unref_sub_8073D3C(u32, u8, u8, u8, u16);
 void unref_sub_8073D84(u8, u32 *);
 void PaletteStruct_ResetById(u16);
