@@ -339,6 +339,7 @@ void UpdateShadowFieldEffect(struct Sprite *sprite)
         sprite->invisible = linkedSprite->invisible;
         if (!objectEvent->active
          || gWeatherPtr->noShadows
+         || objectEvent->inHotSprings
          || MetatileBehavior_IsSurfableWaterOrUnderwater(objectEvent->currentMetatileBehavior)
          || MetatileBehavior_IsSurfableWaterOrUnderwater(objectEvent->previousMetatileBehavior))
         {
