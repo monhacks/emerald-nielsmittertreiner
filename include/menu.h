@@ -127,6 +127,6 @@ void sub_8198C78(void);
 void PrintTextArray(u8 windowId, u8 fontId, u8 left, u8 top, u8 lineHeight, u8 itemCount, const struct MenuAction *strs);
 u8 AddFieldEffectPopUpWindow(void);
 u8 GetFieldEffectPopUpWindowId(void);
-void RemoveMapNamePopUpWindow(void);
+void RemoveFieldEffectPopUpWindow(void);
 
 #endif // GUARD_MENU_H

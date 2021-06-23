@@ -2687,6 +2687,7 @@ static void FieldMoveShowMonEffect_MoveWindowOffscreen(struct Task *task)
 static void FieldMoveShowMonEffect_DestroyGfx(struct Task *task)
 {
     ClearStdWindowAndFrame(GetFieldEffectPopUpWindowId(), TRUE);
+    RemoveFieldEffectPopUpWindow();
     FreeAndDestroyMonIconSprite(&gSprites[task->tMonSpriteId]);
     SetGpuReg_ForcedBlank(REG_OFFSET_BG0VOFS, 0);
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_BG1 | BLDCNT_TGT2_BG2 | BLDCNT_TGT2_BG3 | BLDCNT_TGT2_OBJ);
