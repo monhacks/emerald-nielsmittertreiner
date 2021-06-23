@@ -167,7 +167,7 @@ static void Task_FieldMoveShowMon(u8);
 static void FieldMoveShowMonEffect_Init(struct Task *);
 static void FieldMoveShowMonEffect_LoadGfx(struct Task *);
 static void FieldMoveShowMonEffect_MoveWindowOnscreen(struct Task *);
-static void FieldMoveShowMonEffect_WaitForTimerAndMonCry(struct Task *);
+static void FieldMoveShowMonEffect_WaitForMonCry(struct Task *);
 static void FieldMoveShowMonEffect_MoveWindowOffscreen(struct Task *);
 static void FieldMoveShowMonEffect_DestroyGfx(struct Task *);
 static void FieldMoveShowMonEffect_End(struct Task *);
@@ -2560,7 +2560,7 @@ void (*const sFieldMoveShowMonEffectFuncs[])(struct Task *) = {
     FieldMoveShowMonEffect_Init,
     FieldMoveShowMonEffect_LoadGfx,
     FieldMoveShowMonEffect_MoveWindowOnscreen,
-    FieldMoveShowMonEffect_WaitForTimerAndMonCry,
+    FieldMoveShowMonEffect_WaitForMonCry,
     FieldMoveShowMonEffect_MoveWindowOffscreen,
     FieldMoveShowMonEffect_DestroyGfx,
     FieldMoveShowMonEffect_End,
@@ -2658,18 +2658,15 @@ static void FieldMoveShowMonEffect_MoveWindowOnscreen(struct Task *task)
     SetGpuReg(REG_OFFSET_BG0VOFS, task->tWinOffset);
 }
 
-static void FieldMoveShowMonEffect_WaitForTimerAndMonCry(struct Task *task)
+static void FieldMoveShowMonEffect_WaitForMonCry(struct Task *task)
 {
     if (task->tTimer == 0)
     {
-        PlayCry2(gFieldEffectArguments[0], 0, 125, 10);
+        PlayCry1(gFieldEffectArguments[0], 0);
+        task->tTimer++;
     }
-    if (task->tTimer > 80)
-    {
-        task->tTimer = 0;
+    else if (IsCryFinished())
         task->tState++;
-    }
-    task->tTimer++;
 }
 
 static void FieldMoveShowMonEffect_MoveWindowOffscreen(struct Task *task)
