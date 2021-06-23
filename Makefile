@@ -458,7 +458,7 @@ $(ROM): $(ELF)
 	$(OBJCOPY) -O binary $< $@
 	$(FIX) $@ -p --silent
 
-modern: all
+modern: ; @$(MAKE) MODERN=1
 
 berry_fix/berry_fix.gba: berry_fix
 
