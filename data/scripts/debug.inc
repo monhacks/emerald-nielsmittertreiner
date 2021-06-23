@@ -9,6 +9,8 @@ Debug_EventScript_ResetAllBerries::
 	end
 
 
+.ifdef DEBUG
+
 Debug_EventScript_ShowEndOfCurrentBeta::
 	lock
 	special ShowEndOfCurrentBetaScreen
@@ -17,3 +19,11 @@ Debug_EventScript_ShowEndOfCurrentBeta::
 	release
 	end
 
+
+.else
+
+Debug_EventScript_ShowEndOfCurrentBeta::
+	end
+
+
+.endif
