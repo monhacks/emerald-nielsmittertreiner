@@ -19,12 +19,13 @@
  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#if DEBUG
 #include "gba/types.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-#include "mgba.h"
-#include "printf.h"
+#include "debug/mgba.h"
+#include "debug/printf.h"
 
 #define REG_DEBUG_ENABLE (vu16*) 0x4FFF780
 #define REG_DEBUG_FLAGS (vu16*) 0x4FFF700
@@ -47,3 +48,5 @@ bool8 mgba_open(void) {
 void mgba_close(void) {
 	*REG_DEBUG_ENABLE = 0;
 }
+
+#endif

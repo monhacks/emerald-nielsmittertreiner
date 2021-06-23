@@ -31,6 +31,7 @@
 
 #ifndef _PRINTF_H_
 #define _PRINTF_H_
+#if DEBUG
 
 #include <stdarg.h>
 #include <stddef.h>
@@ -113,5 +114,5 @@ int fctprintf(void (*out)(char character, void* arg), void* arg, const char* for
 }
 #endif
 
-
+#endif
 #endif  // _PRINTF_H_

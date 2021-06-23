@@ -30,10 +30,11 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#if DEBUG
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "printf.h"
+#include "debug/printf.h"
 
 #define PRINTF_DISABLE_SUPPORT_EXPONENTIAL 
 #define PRINTF_DISABLE_SUPPORT_FLOAT
@@ -919,3 +920,5 @@ int fctprintf(void (*out)(char character, void* arg), void* arg, const char* for
   va_end(va);
   return ret;
 }
+
+#endif

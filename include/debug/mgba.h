@@ -19,8 +19,9 @@
  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef MGBA_H
-#define MGBA_H
+#ifndef GUARD_MGBA_H
+#define GUARD_MGBA_H
+#if DEBUG
 
 #include "gba/types.h"
 
@@ -36,3 +37,4 @@ bool8 mgba_open(void);
 void mgba_close(void);
 
 #endif
+#endif // GUARD_MGBA_H

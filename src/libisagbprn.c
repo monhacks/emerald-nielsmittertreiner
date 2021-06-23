@@ -2,7 +2,9 @@
 #include <stdio.h>
 #include "gba/gba.h"
 #include "config.h"
-#include "printf.h"
+#if DEBUG
+#include "debug/printf.h"
+#endif
 
 #define AGB_PRINT_FLUSH_ADDR 0x9FE209D
 #define AGB_PRINT_STRUCT_ADDR (char*) 0x9FE20F8

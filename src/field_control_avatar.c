@@ -1,5 +1,7 @@
 #include "global.h"
-#include "debug.h"
+#if DEBUG
+#include "debug/debug.h"
+#endif
 #include "battle_setup.h"
 #include "bike.h"
 #include "coord_event_weather.h"
@@ -134,11 +136,11 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
         input->dpadDirection = DIR_EAST;
 
 #if DEBUG
-if ((heldKeys & L_BUTTON) && input->pressedStartButton)
-{
-    input->input_field_1_2 = TRUE;
-    input->pressedStartButton = FALSE;
-}
+    if ((heldKeys & L_BUTTON) && input->pressedStartButton)
+    {
+        input->input_field_1_2 = TRUE;
+        input->pressedStartButton = FALSE;
+    }
 #endif
 
 }

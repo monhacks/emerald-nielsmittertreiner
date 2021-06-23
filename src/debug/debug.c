@@ -1,6 +1,6 @@
 #if DEBUG
 #include "global.h"
-#include "debug.h"
+#include "debug/debug.h"
 #include "confetti_util.h"
 #include "data.h"
 #include "event_data.h"
