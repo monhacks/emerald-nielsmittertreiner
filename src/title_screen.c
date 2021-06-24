@@ -1,4 +1,5 @@
 #include "global.h"
+#include "debug/sound_test_screen.h"
 #include "battle.h"
 #include "title_screen.h"
 #include "sprite.h"
@@ -47,6 +48,7 @@ static void CB2_GoToClearSaveDataScreen(void);
 static void CB2_GoToResetRtcScreen(void);
 static void CB2_GoToBerryFixScreen(void);
 static void CB2_GoToCopyrightScreen(void);
+static void CB2_GoToSoundTestScreen(void);
 static void UpdateLegendaryMarkingColor(u8);
 
 static void SpriteCB_VersionBannerLeft(struct Sprite *sprite);
@@ -751,7 +753,15 @@ static void Task_TitleScreenPhase3(u8 taskId)
         FadeOutBGM(4);
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
         SetMainCallback2(CB2_GoToBerryFixScreen);
-    }   
+    }
+    #if DEBUG
+    else if ((JOY_NEW(SELECT_BUTTON)))
+    {
+        FadeOutBGM(4);
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+        SetMainCallback2(CB2_GoToSoundTestScreen);
+    }
+    #endif
     else
     {
         SetGpuReg(REG_OFFSET_BG2Y_L, 0);
@@ -803,6 +813,12 @@ static void CB2_GoToBerryFixScreen(void)
         m4aMPlayAllStop();
         SetMainCallback2(CB2_InitBerryFixProgram);
     }
+}
+
+static void CB2_GoToSoundTestScreen(void)
+{
+    if (!UpdatePaletteFade())
+        SetMainCallback2(CB2_InitSoundTestScreen);
 }
 
 static void UpdateLegendaryMarkingColor(u8 frameNum)
