@@ -574,6 +574,13 @@ void PlaySE(u16 songNum)
     m4aSongNumStart(songNum);
 }
 
+void PlaySEWithVolume(u16 songNum, u16 volume)
+{
+    m4aSongNumStart(songNum);
+    m4aMPlayImmInit(&gMPlayInfo_SE1);
+    m4aMPlayVolumeControl(&gMPlayInfo_SE1, 0xFFFF, volume);
+}
+
 void PlaySE12WithPanning(u16 songNum, s8 pan)
 {
     m4aSongNumStart(songNum);
