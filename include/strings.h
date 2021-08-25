@@ -341,6 +341,9 @@ extern const u8 gText_MainMenuMysteryGift[];
 extern const u8 gText_WirelessNotConnected[];
 extern const u8 gText_MysteryGiftCantUse[];
 extern const u8 gText_MysteryEventsCantUse[];
+extern const u8 gText_Birch_PleaseSetTheTime[];
+extern const u8 gText_Birch_IsThisTimeCorrect[];
+extern const u8 gText_Birch_TimeHasBeenSet[];
 extern const u8 gText_Birch_Welcome[];
 extern const u8 gText_ThisIsAPokemon[];
 extern const u8 gText_Birch_MainSpeech[];
@@ -3039,5 +3042,50 @@ extern const u8 gText_Cancel3[];
 
 extern const u8 gText_Murena[];
 extern const u8 gText_Navire[];
+
+extern const u8 gText_Sunday[];
+extern const u8 gText_Monday[];
+extern const u8 gText_Tuesday[];
+extern const u8 gText_Wednesday[];
+extern const u8 gText_Thursday[];
+extern const u8 gText_Friday[];
+extern const u8 gText_Saturday[];
+
+extern const u8 gText_AM[];
+extern const u8 gText_PM[];
+
+// Pokénav V2
+extern const u8 gText_Pokenav2[];
+extern const u8 gText_Pokenav2_Map[];
+extern const u8 gText_Pokenav2_Agenda[];
+extern const u8 gText_Pokenav2_Radio[];
+extern const u8 gText_Pokenav2_TurnOff[];
+
+extern const u8 gText_Pokenav2_MapDesc[];
+extern const u8 gText_Pokenav2_AgendaDesc[];
+extern const u8 gText_Pokenav2_RadioDesc[];
+extern const u8 gText_Pokenav2_TurnOffDesc[];
+
+extern const u8 gText_Pokenav2_Eurus[];
+
+extern const u8 gText_Pokenav2_PlayersAgenda[];
+extern const u8 gText_Pokenav2_ClockMode[];
+extern const u8 gText_Pokenav2_TodaysEvents[];
+extern const u8 gText_Pokenav2_WeatherForecast[];
+extern const u8 gText_Pokenav2_NoReport[];
+extern const u8 gText_Pokenav2_SunnyClouds[];
+extern const u8 gText_Pokenav2_Clear[];
+extern const u8 gText_Pokenav2_Rain[];
+extern const u8 gText_Pokenav2_Snow[];
+extern const u8 gText_Pokenav2_Thunderstorm[];
+extern const u8 gText_Pokenav2_Fog[];
+extern const u8 gText_Pokenav2_Ash[];
+extern const u8 gText_Pokenav2_Sandstorm[];
+extern const u8 gText_Pokenav2_Shade[];
+extern const u8 gText_Pokenav2_Drought[];
+extern const u8 gText_Pokenav2_Downpour[];
+extern const u8 gText_Pokenav2_Abnormal[];
+
+extern const u8 gText_Pokenav2_EurusRadio[];
 
 #endif // GUARD_STRINGS_H

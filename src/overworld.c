@@ -61,6 +61,7 @@
 #include "wild_encounter.h"
 #include "frontier_util.h"
 #include "follow_me.h"
+#include "time.h"
 #include "constants/abilities.h"
 #include "constants/layouts.h"
 #include "constants/map_types.h"
@@ -1549,6 +1550,7 @@ void CB2_NewGame(void)
     NewGameInitData();
     ResetInitialPlayerAvatarState();
     PlayTimeCounter_Start();
+    InGameClock_Start();
     ScriptContext1_Init();
     ScriptContext2_Disable();
     // Disables truck animation and sounds
@@ -1746,6 +1748,7 @@ void CB2_ContinueSavedGame(void)
         InitMapFromSavedGame();
 
     PlayTimeCounter_Start();
+    InGameClock_Start();
     ScriptContext1_Init();
     ScriptContext2_Disable();
     InitMatchCallCounters();
@@ -1802,7 +1805,6 @@ static void VBlankCB_Field(void)
     FieldUpdateBgTilemapScroll();
     TransferPlttBuffer();
     TransferTilesetAnimsBuffer();
-    CheckClockForImmediateTimeEvents();
 }
 
 static void InitCurrentFlashLevelScanlineEffect(void)

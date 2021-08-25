@@ -155,7 +155,6 @@ static void ApplyIceReflectionFilter(u8 paletteNum, u16 *dest)
 void LoadSpecialReflectionPalette(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
     struct SpritePalette reflectionPalette;
-    u16 paletteTag = gSprites[objectEvent->spriteId].oam.paletteNum;
 
     CpuCopy16(&gPlttBufferUnfaded[0x100 + sprite->oam.paletteNum * 16], gReflectionPaletteUnfadedBuffer, 32);
     if (sprite->sIsStillReflection)
@@ -165,7 +164,7 @@ void LoadSpecialReflectionPalette(struct ObjectEvent *objectEvent, struct Sprite
     
     reflectionPalette.tag = GetSpritePaletteTagByPaletteNum(sprite->oam.paletteNum) + 0x1000;
     reflectionPalette.data = gReflectionPaletteFadedBuffer;
-    LoadSpritePalette(&reflectionPalette);
+    LoadSpritePaletteDayNight(&reflectionPalette);
     sprite->oam.paletteNum = IndexOfSpritePaletteTag(reflectionPalette.tag);
     UpdatePaletteGammaType(sprite->oam.paletteNum, GAMMA_ALT);
     UpdateSpritePaletteWithWeather(sprite->oam.paletteNum);

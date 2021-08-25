@@ -1,3 +1,14 @@
+gText_Birch_PleaseSetTheTime::
+	.string "Errr… What time is it?\n"
+	.string "Use {SELECT_BUTTON} to switch clock modes.$"
+
+gText_Birch_IsThisTimeCorrect::
+	.string "Is this time correct?$"
+
+gText_Birch_TimeHasBeenSet::
+	.string "The time has been set to:\n"
+	.string "{STR_VAR_1}, {STR_VAR_2}:{STR_VAR_3}.$"
+
 gText_Birch_Welcome:: @ 82C897B
 	.string "Hi! Sorry to keep you waiting!\p"
 	.string "Welcome to the world of POKéMON!\p"

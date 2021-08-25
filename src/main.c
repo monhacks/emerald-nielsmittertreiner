@@ -23,6 +23,7 @@
 #include "intro.h"
 #include "main.h"
 #include "trainer_hill.h"
+#include "time.h"
 #include "constants/rgb.h"
 #if DEBUG
 #include "debug/mgba.h"
@@ -160,6 +161,7 @@ void AgbMain()
         }
 
         PlayTimeCounter_Update();
+        InGameClock_Update();
         MapMusicMain();
         WaitForVBlank();
     }

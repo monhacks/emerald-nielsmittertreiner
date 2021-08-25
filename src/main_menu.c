@@ -37,6 +37,7 @@
 #include "title_screen.h"
 #include "window.h"
 #include "mystery_gift.h"
+#include "time.h"
 
 /*
  * Main menu state machine
@@ -173,6 +174,7 @@
 
 static EWRAM_DATA u8 gUnknown_02022D04 = 0;
 static EWRAM_DATA u16 sCurrItemAndOptionMenuCheck = 0;
+static EWRAM_DATA s8 sTimeSelectionData[3];
 
 static u8 sBirchSpeechMainTaskId;
 
@@ -194,6 +196,16 @@ static void Task_HandleMainMenuBPressed(u8);
 static void Task_NewGameBirchSpeech_Init(u8);
 static void Task_DisplayMainMenuInvalidActionError(u8);
 static void AddBirchSpeechObjects(u8);
+static void Task_NewGameBirchSpeech_DrawSetTimeDialogueWindow(u8);
+static void Task_NewGameBirchSpeech_WaitForPleaseSetTheTimeToPrint(u8);
+static void Task_NewGameBirchSpeech_CheckHandleTimeInput(u8);
+static bool8 Task_NewGameBirchSpeech_HandleTimeInput(u8);
+static void Task_NewGameBirchSpeech_IsThisTimeCorrect(u8);
+static void Task_NewGameBirchSpeech_CreateTimeYesNo(u8);
+static void Task_NewGameBirchSpeech_ProcessTimeYesNoMenu(u8);
+static void Task_NewGameBirchSpeech_ConfirmTime(u8);
+static void Task_NewGameBirchSpeech_WaitForConfirmTimeTextprinter(u8);
+static void Task_NewGameBirchSpeech_InitBirchGraphics(u8);
 static void Task_NewGameBirchSpeech_WaitToShowBirch(u8);
 static void NewGameBirchSpeech_StartFadeInTarget1OutTarget2(u8, u8);
 static void NewGameBirchSpeech_StartFadePlatformOut(u8, u8);
@@ -249,11 +261,20 @@ static void MainMenu_FormatSavegameTime(void);
 static void MainMenu_FormatSavegameBadges(void);
 static void NewGameBirchSpeech_CreateDialogueWindowBorder(u8, u8, u8, u8, u8, u8);
 
+static EWRAM_DATA bool8 isAMPM;
+
 // .rodata
 
 static const u16 sBirchSpeechBgPals[][16] = {
     INCBIN_U16("graphics/birch_speech/bg0.gbapal"),
     INCBIN_U16("graphics/birch_speech/bg1.gbapal")
+};
+
+static const s32 sScrollArrowPairCommonPosTable[3] =
+{
+    92,
+    136,
+    151
 };
 
 #define BG_COLOR RGB(31, 31, 26)
@@ -406,6 +427,15 @@ static const struct WindowTemplate gNewGameBirchSpeechTextWindows[] =
         .height = 10,
         .paletteNum = 15,
         .baseBlock = 0x85
+    },
+    {
+        .bg = 0,
+        .tilemapLeft = 8,
+        .tilemapTop = 8,
+        .width = 14,
+        .height = 3,
+        .paletteNum = 15,
+        .baseBlock = 0x6D
     },
     DUMMY_WIN_TEMPLATE
 };
@@ -1265,6 +1295,8 @@ static void HighlightSelectedMainMenuItem(u8 menuType, u8 selectedMenuItem, s16 
 #define tLotadSpriteId data[9]
 #define tBrendanSpriteId data[10]
 #define tMaySpriteId data[11]
+#define tCurrentSelection data[12]
+#define tScrollArrowsId data[13]
 
 static void Task_NewGameBirchSpeech_Init(u8 taskId)
 {
@@ -1279,6 +1311,10 @@ static void Task_NewGameBirchSpeech_Init(u8 taskId)
     SetGpuReg(REG_OFFSET_BLDALPHA, 0);
     SetGpuReg(REG_OFFSET_BLDY, 0);
 
+    sTimeSelectionData[0] = 1;
+    sTimeSelectionData[1] = 7;
+    sTimeSelectionData[2] = 30;
+
     LZ77UnCompVram(sBirchSpeechShadowGfx, (void*)VRAM);
     LZ77UnCompVram(sBirchSpeechBgMap, (void*)(BG_SCREEN_ADDR(7)));
     LoadPalette(sBirchSpeechBgPals, 0, 64);
@@ -1287,38 +1323,282 @@ static void Task_NewGameBirchSpeech_Init(u8 taskId)
     ResetSpriteData();
     FreeAllSpritePalettes();
     ResetAllPicSprites();
-    AddBirchSpeechObjects(taskId);
+    //AddBirchSpeechObjects(taskId);
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
+    isAMPM = TRUE;
     gTasks[taskId].tBG1HOFS = 0;
-    gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowBirch;
+    gTasks[taskId].func = Task_NewGameBirchSpeech_DrawSetTimeDialogueWindow;
     gTasks[taskId].tPlayerSpriteId = SPRITE_NONE;
     gTasks[taskId].data[3] = 0xFF;
-    gTasks[taskId].tTimer = 0xD8;
+    gTasks[taskId].tCurrentSelection = 0;
     PlayBGM(MUS_ROUTE122);
     ShowBg(0);
     ShowBg(1);
+}
+
+static void Task_NewGameBirchSpeech_DrawSetTimeDialogueWindow(u8 taskId)
+{
+    struct SiiRtcInfo *rtc;
+
+    if (!gPaletteFade.active)
+    {
+        InitWindows(gNewGameBirchSpeechTextWindows);
+        LoadMainMenuWindowFrameTiles(0, 0xF3);
+        LoadMessageBoxGfx(0, 0xFC, 0xF0);
+        NewGameBirchSpeech_ShowDialogueWindow(0, 1);
+        PutWindowTilemap(0);
+        CopyWindowToVram(0, 2);
+        NewGameBirchSpeech_ClearWindow(0);
+        FormatDecimalTimeWithoutSeconds(gStringVar1, sTimeSelectionData[1], sTimeSelectionData[2], isAMPM);
+        StringExpandPlaceholders(gStringVar4, gText_Birch_PleaseSetTheTime);
+        AddTextPrinterForMessage(1);
+        gTasks[taskId].func = Task_NewGameBirchSpeech_WaitForPleaseSetTheTimeToPrint;
+    }
+}
+
+static void Task_NewGameBirchSpeech_WaitForPleaseSetTheTimeToPrint(u8 taskId)
+{
+    
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        DrawMainMenuWindowBorder(&gNewGameBirchSpeechTextWindows[3], 0xF3);
+        FillWindowPixelBuffer(3, PIXEL_FILL(1));
+        AddTextPrinterParameterized(3, 1, gDaysOfWeek[sTimeSelectionData[0]], GetStringCenterAlignXOffset(1, gDaysOfWeek[sTimeSelectionData[0]], 56), 5, 0, NULL);
+        AddTextPrinterParameterized(3, 1, gStringVar1, 66, 5, 0, NULL);
+        if (isAMPM)
+        {
+            if (sTimeSelectionData[1] < 12)
+            {
+                AddTextPrinterParameterized(3, 0, gText_AM, 96, 4, 0, NULL);
+            }
+            else
+            {
+                AddTextPrinterParameterized(3, 0, gText_PM, 96, 4, 0, NULL);
+            }
+        }
+        PutWindowTilemap(3);
+        CopyWindowToVram(3, 3);
+        gTasks[taskId].tScrollArrowsId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, sScrollArrowPairCommonPosTable[gTasks[taskId].tCurrentSelection], 62, 90, 0, 500, 500, 0);
+        gTasks[taskId].func = Task_NewGameBirchSpeech_CheckHandleTimeInput;
+    }
+}
+
+static void Task_NewGameBirchSpeech_CheckHandleTimeInput(u8 taskId)
+{
+    if (Task_NewGameBirchSpeech_HandleTimeInput(taskId))
+    {
+        FormatDecimalTimeWithoutSeconds(gStringVar1, sTimeSelectionData[1], sTimeSelectionData[2], isAMPM);
+        FillWindowPixelBuffer(3, PIXEL_FILL(1));
+        if (isAMPM)
+        {
+            if (sTimeSelectionData[1] < 12)
+            {
+                AddTextPrinterParameterized(3, 0, gText_AM, 96, 4, 0, NULL);
+            }
+            else
+            {
+                AddTextPrinterParameterized(3, 0, gText_PM, 96, 4, 0, NULL);
+            }
+        }
+        AddTextPrinterParameterized(3, 1, gDaysOfWeek[sTimeSelectionData[0]], GetStringCenterAlignXOffset(1, gDaysOfWeek[sTimeSelectionData[0]], 56), 5, 0, NULL);
+        AddTextPrinterParameterized(3, 1, gStringVar1, 66, 5, 0, NULL);
+    }
+}
+
+static bool8 Task_NewGameBirchSpeech_HandleTimeInput(u8 taskId)
+{
+    if (JOY_NEW(A_BUTTON))
+    {
+        RemoveScrollIndicatorArrowPair(gTasks[taskId].tScrollArrowsId);
+        gTasks[taskId].func = Task_NewGameBirchSpeech_IsThisTimeCorrect;
+    }
+    else if (JOY_NEW(SELECT_BUTTON))
+    {
+        isAMPM ^= 1;
+        return TRUE;
+    }
+    else if (JOY_REPEAT(DPAD_DOWN))
+    {
+        switch (gTasks[taskId].tCurrentSelection)
+        {
+        case 0:
+            if (sTimeSelectionData[gTasks[taskId].tCurrentSelection] > 0)
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection]--;
+            else
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection] = 6;
+            break;
+        case 1:
+            if (sTimeSelectionData[gTasks[taskId].tCurrentSelection] > 0)
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection]--;
+            else
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection] = 23;
+            break;
+        case 2:
+            if (sTimeSelectionData[gTasks[taskId].tCurrentSelection] > 0)
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection]--;
+            else
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection] = 59;
+            break;
+        }
+        return TRUE;
+    }
+    else if (JOY_REPEAT(DPAD_UP))
+    {
+        switch (gTasks[taskId].tCurrentSelection)
+        {
+        case 0:
+            if (sTimeSelectionData[gTasks[taskId].tCurrentSelection] < 6)
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection]++;
+            else
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection] = 0;
+            break;
+        case 1:
+            if (sTimeSelectionData[gTasks[taskId].tCurrentSelection] < 23)
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection]++;
+            else
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection] = 0;
+            break;
+        case 2:
+            if (sTimeSelectionData[gTasks[taskId].tCurrentSelection] < 59)
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection]++;
+            else
+                sTimeSelectionData[gTasks[taskId].tCurrentSelection] = 0;
+            break;
+        }
+        return TRUE;
+    }
+    else if (JOY_NEW(DPAD_LEFT))
+    {
+        if (gTasks[taskId].tCurrentSelection > 0)
+        {
+            PlaySE(SE_SELECT);
+            gTasks[taskId].tCurrentSelection--;
+            RemoveScrollIndicatorArrowPair(gTasks[taskId].tScrollArrowsId);
+            gTasks[taskId].tScrollArrowsId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, sScrollArrowPairCommonPosTable[gTasks[taskId].tCurrentSelection], 62, 90, 0, 500, 500, 0);
+        }
+        else
+        {
+            gTasks[taskId].tCurrentSelection = 0;
+        }
+        return TRUE;
+    }
+    else if (JOY_NEW(DPAD_RIGHT))
+    {
+        if (gTasks[taskId].tCurrentSelection < 2)
+        {
+            PlaySE(SE_SELECT);
+            gTasks[taskId].tCurrentSelection++;
+            RemoveScrollIndicatorArrowPair(gTasks[taskId].tScrollArrowsId);
+            gTasks[taskId].tScrollArrowsId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, sScrollArrowPairCommonPosTable[gTasks[taskId].tCurrentSelection], 62, 90, 0, 500, 500, 0);
+        }
+        else
+        {
+            gTasks[taskId].tCurrentSelection = 2;
+        }
+        return TRUE;
+    }
+    
+    return FALSE;
+}
+
+static void Task_NewGameBirchSpeech_IsThisTimeCorrect(u8 taskId)
+{
+    FillWindowPixelBuffer(0, PIXEL_FILL(1));
+    StringExpandPlaceholders(gStringVar4, gText_Birch_IsThisTimeCorrect);
+    AddTextPrinterForMessage(1);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_CreateTimeYesNo;
+}
+
+static void Task_NewGameBirchSpeech_CreateTimeYesNo(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        CreateYesNoMenuParameterized(23, 8, 0xF3, 0xDF, 2, 15);
+        gTasks[taskId].func = Task_NewGameBirchSpeech_ProcessTimeYesNoMenu;
+    }
+}
+
+static void Task_NewGameBirchSpeech_ProcessTimeYesNoMenu(u8 taskId)
+{
+    switch (Menu_ProcessInputNoWrapClearOnChoose())
+    {
+        case 0:
+            PlaySE(SE_SELECT);
+            InGameClock_SetTime(sTimeSelectionData[0], sTimeSelectionData[1], sTimeSelectionData[2]);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_ConfirmTime;
+            break;
+        case -1:
+        case 1:
+            PlaySE(SE_SELECT);
+            gTasks[taskId].func = Task_NewGameBirchSpeech_DrawSetTimeDialogueWindow;
+            break;
+    }
+}
+
+static void Task_NewGameBirchSpeech_ConfirmTime(u8 taskId)
+{
+    u8 *dest = gStringVar3;
+
+    ClearStdWindowAndFrame(3, 0);
+    FillWindowPixelBuffer(0, PIXEL_FILL(1));
+    CopyWindowToVram(3, 3);
+    StringCopy(gStringVar1, gDaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
+    if (isAMPM && gSaveBlock2Ptr->inGameClock.hours < 12)
+        ConvertIntToDecimalStringN(gStringVar2, gSaveBlock2Ptr->inGameClock.hours, STR_CONV_MODE_LEADING_ZEROS, 2);   
+    else
+        ConvertIntToDecimalStringN(gStringVar2, gSaveBlock2Ptr->inGameClock.hours - 12, STR_CONV_MODE_LEADING_ZEROS, 2);
+    
+    dest = ConvertIntToDecimalStringN(dest, gSaveBlock2Ptr->inGameClock.minutes, STR_CONV_MODE_LEADING_ZEROS, 2);
+    if (isAMPM)
+    {
+        *dest++ = CHAR_SPACE;
+
+        if (gSaveBlock2Ptr->inGameClock.hours < 12)
+            *dest++ = CHAR_A;
+        else
+            *dest++ = CHAR_P;
+
+        *dest++ = CHAR_M;
+        *dest++ = EOS;
+    }
+    StringExpandPlaceholders(gStringVar4, gText_Birch_TimeHasBeenSet);
+    AddTextPrinterForMessage(1);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_WaitForConfirmTimeTextprinter;
+}
+
+static void Task_NewGameBirchSpeech_WaitForConfirmTimeTextprinter(u8 taskId)
+{
+    if (!RunTextPrintersAndIsPrinter0Active())
+    {
+        if (JOY_NEW(A_BUTTON))
+        {
+            PlaySE(SE_SELECT);
+            ClearDialogWindowAndFrame(0, 1);
+            gSaveBlock2Ptr->is24HClockMode != isAMPM;
+            gTasks[taskId].func = Task_NewGameBirchSpeech_InitBirchGraphics;
+        }
+    }
+}
+
+static void Task_NewGameBirchSpeech_InitBirchGraphics(u8 taskId)
+{
+    AddBirchSpeechObjects(taskId);
+    gTasks[taskId].func = Task_NewGameBirchSpeech_WaitToShowBirch;
 }
 
 static void Task_NewGameBirchSpeech_WaitToShowBirch(u8 taskId)
 {
     u8 spriteId;
 
-    if (gTasks[taskId].tTimer)
-    {
-        gTasks[taskId].tTimer--;
-    }
-    else
-    {
-        spriteId = gTasks[taskId].tBirchSpriteId;
-        gSprites[spriteId].pos1.x = 136;
-        gSprites[spriteId].pos1.y = 60;
-        gSprites[spriteId].invisible = FALSE;
-        gSprites[spriteId].oam.objMode = ST_OAM_OBJ_BLEND;
-        NewGameBirchSpeech_StartFadeInTarget1OutTarget2(taskId, 10);
-        NewGameBirchSpeech_StartFadePlatformOut(taskId, 20);
-        gTasks[taskId].tTimer = 80;
-        gTasks[taskId].func = Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome;
-    }
+    spriteId = gTasks[taskId].tBirchSpriteId;
+    gSprites[spriteId].pos1.x = 136;
+    gSprites[spriteId].pos1.y = 60;
+    gSprites[spriteId].invisible = FALSE;
+    gSprites[spriteId].oam.objMode = ST_OAM_OBJ_BLEND;
+    NewGameBirchSpeech_StartFadeInTarget1OutTarget2(taskId, 10);
+    NewGameBirchSpeech_StartFadePlatformOut(taskId, 20);
+    gTasks[taskId].tTimer = 80;
+    gTasks[taskId].func = Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome;
 }
 
 static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8 taskId)
