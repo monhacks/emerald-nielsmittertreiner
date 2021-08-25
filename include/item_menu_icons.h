@@ -26,11 +26,4 @@ u8 CreateBerryFlavorCircleSprite(s16 x);
 void HideBagItemIconSprite(u8 id);
 void CreateBagShadowSprite(void);
 
-#define TAG_BAG_GFX 100
-#define TAG_ROTATING_BALL_GFX 101
-#define TAG_BAG_SHADOW_GFX 101
-#define TAG_BERRY_CHECK_CIRCLE_GFX 10000
-#define TAG_BERRY_PIC_TILE 0xFFFF
-#define TAG_BERRY_PIC_PAL 0x7544
-
 #endif // GUARD_ITEM_MENU_ICONS_H

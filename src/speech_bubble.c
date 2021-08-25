@@ -78,8 +78,8 @@ void LoadTailFromObjectEventId(u32 id)
     objectEvent = &gObjectEvents[GetObjectEventIdByLocalIdAndMap(id, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup)];
     sprite = &gSprites[objectEvent->spriteId];
 
-    x = sprite->oam.x - (sprite->pos2.x + sprite->centerToCornerVecX);
-    y = sprite->oam.y - (sprite->pos2.y + sprite->centerToCornerVecY);
+    x = sprite->oam.x - (sprite->x2 + sprite->centerToCornerVecX);
+    y = sprite->oam.y - (sprite->y2 + sprite->centerToCornerVecY);
 
     //x += (gSpecialVar_0x8005 < 120) ? -5 : 5;
     y += 8;

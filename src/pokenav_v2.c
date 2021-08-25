@@ -942,11 +942,11 @@ static void LoadOptionAndIconSprites(void)
         struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i]];
         if (sprite->animNum == 0)
         {
-            sprite->pos2.x = -OPTION_SLIDE_X;
+            sprite->x2 = -OPTION_SLIDE_X;
         }
         else
         {
-            sprite->pos2.x = OPTION_SLIDE_X;
+            sprite->x2 = OPTION_SLIDE_X;
         }
     }
 
@@ -955,18 +955,18 @@ static void LoadOptionAndIconSprites(void)
         struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
-            sprite->pos2.x = -OPTION_SLIDE_X;
+            sprite->x2 = -OPTION_SLIDE_X;
         }
         else
         {
-            sprite->pos2.x = OPTION_SLIDE_X;
+            sprite->x2 = OPTION_SLIDE_X;
         }
     }
 
     sPokenav2Struct.menuSpriteIds[8] = CreateSprite(&sSpriteTemplate_AgendaClockIcons, 88, 87, 0);
     StartSpriteAnim(&gSprites[sPokenav2Struct.menuSpriteIds[8]], anim = (gSaveBlock2Ptr->inGameClock.hours < 12) ? gSaveBlock2Ptr->inGameClock.hours : gSaveBlock2Ptr->inGameClock.hours - 12);
     struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
-    sprite->pos2.x = -OPTION_SLIDE_X;
+    sprite->x2 = -OPTION_SLIDE_X;
 }
 
 static void UnloadOption(enum Option option)
@@ -1051,24 +1051,24 @@ static void SpriteCB_Icons(struct Sprite *sprite)
     {
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
-            if (sprite->pos2.x < 8)
+            if (sprite->x2 < 8)
             {
-                sprite->pos2.x += 2;
+                sprite->x2 += 2;
             }
             else
             {
-                sprite->pos2.x = 8;
+                sprite->x2 = 8;
             }
         }
         else
         {
-            if (sprite->pos2.x > -8)
+            if (sprite->x2 > -8)
             {
-                sprite->pos2.x -= 2;
+                sprite->x2 -= 2;
             }
             else
             {
-                sprite->pos2.x = -8;
+                sprite->x2 = -8;
             }
         }
     }
@@ -1076,24 +1076,24 @@ static void SpriteCB_Icons(struct Sprite *sprite)
     {
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
-            if (sprite->pos2.x > 0)
+            if (sprite->x2 > 0)
             {
-                sprite->pos2.x -= 2;
+                sprite->x2 -= 2;
             }
             else
             {
-                sprite->pos2.x = 0;
+                sprite->x2 = 0;
             }
         }
         else
         {
-            if (sprite->pos2.x > 0)
+            if (sprite->x2 > 0)
             {
-                sprite->pos2.x += 2;
+                sprite->x2 += 2;
             }
             else
             {
-                sprite->pos2.x = 0;
+                sprite->x2 = 0;
             }
         }
     }
@@ -1103,24 +1103,24 @@ static void SpriteCB_Agenda(struct Sprite *sprite)
 {
     if (sPokenav2Struct.cursorPosition == 1)
     {
-        if (sprite->pos2.x < 8)
+        if (sprite->x2 < 8)
         {
-            sprite->pos2.x += 2;
+            sprite->x2 += 2;
         }
         else
         {
-            sprite->pos2.x = 8;
+            sprite->x2 = 8;
         }
     }
     else
     {
-        if (sprite->pos2.x > 0)
+        if (sprite->x2 > 0)
         {
-            sprite->pos2.x -= 2;
+            sprite->x2 -= 2;
         }
         else
         {
-            sprite->pos2.x = 0;
+            sprite->x2 = 0;
         }
     }
 }
@@ -1347,24 +1347,24 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
         struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i]];
         if (sprite->animNum == 0)
         {
-            if (sprite->pos2.x < 0)
+            if (sprite->x2 < 0)
             {
-                sprite->pos2.x += OPTION_SLIDE_SPEED;
+                sprite->x2 += OPTION_SLIDE_SPEED;
             }
             else
             {
-                sprite->pos2.x = 0;
+                sprite->x2 = 0;
             }
         }
         else
         {
-            if (sprite->pos2.x > 0)
+            if (sprite->x2 > 0)
             {
-                sprite->pos2.x -= OPTION_SLIDE_SPEED;
+                sprite->x2 -= OPTION_SLIDE_SPEED;
             }
             else
             {
-                sprite->pos2.x = 0;
+                sprite->x2 = 0;
             }
         }
     }
@@ -1374,36 +1374,36 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
         struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
-            if (sprite->pos2.x < 0)
+            if (sprite->x2 < 0)
             {
-                sprite->pos2.x += OPTION_SLIDE_SPEED;
+                sprite->x2 += OPTION_SLIDE_SPEED;
             }
             else
             {
-                sprite->pos2.x = 0;
+                sprite->x2 = 0;
             }
         }
         else
         {
-            if (sprite->pos2.x > 0)
+            if (sprite->x2 > 0)
             {
-                sprite->pos2.x -= OPTION_SLIDE_SPEED;
+                sprite->x2 -= OPTION_SLIDE_SPEED;
             }
             else
             {
-                sprite->pos2.x = 0;
+                sprite->x2 = 0;
             }
         }
     }
 
     struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
-    if (sprite->pos2.x < 0)
+    if (sprite->x2 < 0)
     {
-        sprite->pos2.x += OPTION_SLIDE_SPEED;
+        sprite->x2 += OPTION_SLIDE_SPEED;
     }
     else
     {
-        sprite->pos2.x = 0;
+        sprite->x2 = 0;
     }
 
     return FALSE;
@@ -1431,24 +1431,24 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
         struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i]];
         if (sprite->animNum == 0)
         {
-            if (sprite->pos2.x > -OPTION_SLIDE_X)
+            if (sprite->x2 > -OPTION_SLIDE_X)
             {
-                sprite->pos2.x -= OPTION_SLIDE_SPEED;
+                sprite->x2 -= OPTION_SLIDE_SPEED;
             }
             else
             {
-                sprite->pos2.x = -OPTION_SLIDE_X;
+                sprite->x2 = -OPTION_SLIDE_X;
             }
         }
         else
         {
-            if (sprite->pos2.x < OPTION_SLIDE_X)
+            if (sprite->x2 < OPTION_SLIDE_X)
             {
-                sprite->pos2.x += OPTION_SLIDE_SPEED;
+                sprite->x2 += OPTION_SLIDE_SPEED;
             }
             else
             {
-                sprite->pos2.x = OPTION_SLIDE_X;
+                sprite->x2 = OPTION_SLIDE_X;
             }
         }
     }
@@ -1458,36 +1458,36 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
         struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
-            if (sprite->pos2.x > -OPTION_SLIDE_X)
+            if (sprite->x2 > -OPTION_SLIDE_X)
             {
-                sprite->pos2.x -= OPTION_SLIDE_SPEED;
+                sprite->x2 -= OPTION_SLIDE_SPEED;
             }
             else
             {
-                sprite->pos2.x = -OPTION_SLIDE_X;
+                sprite->x2 = -OPTION_SLIDE_X;
             }
         }
         else
         {
-            if (sprite->pos2.x < OPTION_SLIDE_X)
+            if (sprite->x2 < OPTION_SLIDE_X)
             {
-                sprite->pos2.x += OPTION_SLIDE_SPEED;
+                sprite->x2 += OPTION_SLIDE_SPEED;
             }
             else
             {
-                sprite->pos2.x = OPTION_SLIDE_X;
+                sprite->x2 = OPTION_SLIDE_X;
             }
         }
     }
 
     struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
-    if (sprite->pos2.x > -OPTION_SLIDE_X)
+    if (sprite->x2 > -OPTION_SLIDE_X)
     {
-        sprite->pos2.x -= OPTION_SLIDE_SPEED;
+        sprite->x2 -= OPTION_SLIDE_SPEED;
     }
     else
     {
-        sprite->pos2.x = -OPTION_SLIDE_X;
+        sprite->x2 = -OPTION_SLIDE_X;
     }
 
     return FALSE;
