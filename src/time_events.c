@@ -148,8 +148,7 @@ void UpdateOureaCaveTides(void)
     };
     if (IsMapTypeOutdoors(GetLastUsedWarpMapType()))
     {
-        RtcCalcLocalTime();
-        if (tide[gLocalTime.hours])
+        if (tide[gSaveBlock2Ptr->inGameClock.hours])
             FlagSet(FLAG_SYS_OUREA_TIDE);
         else
             FlagClear(FLAG_SYS_OUREA_TIDE);
