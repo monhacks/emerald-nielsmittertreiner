@@ -1888,4 +1888,14 @@ const u8 gText_Pokenav2_Drought[] = _("EXTREME HEAT");
 const u8 gText_Pokenav2_Downpour[] = _("HEAVY RAINFALL");
 const u8 gText_Pokenav2_Abnormal[] = _("ABNORMAL");
 
+const u8 gText_Pokenav2_EventDescription[] = _("DESCRIPTION:");
+const u8 gText_Pokenav2_EventLocation[] = _("LOCATION:");
+const u8 gText_Pokenav2_EventTimes[] = _("TIMES:");
+const u8 gText_Pokenav2_LeftArrow[] = _("{LEFT_ARROW}");
+
+const u8 gText_Pokenav2_Lottery[] = _("LOTTERY");
+const u8 gText_Pokenav2_LotteryDesc[] = _("WILL YOU DEFY ALL ODDS\nAND WIN A GRAND PRICE?\nCOME FIND OUT!");
+const u8 gText_Pokenav2_Market[] = _("MARKET");
+const u8 gText_Pokenav2_MarketDesc[] = _("VISIT THE MARKET TO BUY\nGOODS NOT AVAILABLE\nIN A POKéMART!");
+
 const u8 gText_Pokenav2_EurusRadio[] = _("EURUS RADIO");

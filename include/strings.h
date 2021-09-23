@@ -3087,6 +3087,16 @@ extern const u8 gText_Pokenav2_Drought[];
 extern const u8 gText_Pokenav2_Downpour[];
 extern const u8 gText_Pokenav2_Abnormal[];
 
+extern const u8 gText_Pokenav2_EventDescription[];
+extern const u8 gText_Pokenav2_EventLocation[];
+extern const u8 gText_Pokenav2_EventTimes[];
+extern const u8 gText_Pokenav2_LeftArrow[];
+
+extern const u8 gText_Pokenav2_Lottery[];
+extern const u8 gText_Pokenav2_LotteryDesc[];
+extern const u8 gText_Pokenav2_Market[];
+extern const u8 gText_Pokenav2_MarketDesc[];
+
 extern const u8 gText_Pokenav2_EurusRadio[];
 
 #endif // GUARD_STRINGS_H

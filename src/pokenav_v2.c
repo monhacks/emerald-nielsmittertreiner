@@ -31,6 +31,13 @@
 #include "debug/mgba.h"
 #include "debug/printf.h"
 
+#define TASK_MAIN         0
+#define TASK_BG3SCROLL    1
+#define TASK_CLOCK        2
+#define TASK_LIST_MENU    3
+#define TASK_EVENT_TIME   4
+#define TASK_SCROLL_ARROW 5
+
 #define WIN_HEADER                0
 #define WIN_DESC                  1
 #define WIN_OPTION_TOP_LEFT       2
@@ -50,6 +57,8 @@
 #define EVENT_CATCHING_CONTEST 3
 #define EVENT_TREASHURE_HUNT   4
 #define EVENT_SAFARI_ZONE      5
+#define EVENT_CEL_NAUTILUS     6
+#define EVENT_MARKET           7
 
 #define SCREEN_WIDTH        240
 #define OPTION_SLIDE_X      128
@@ -60,29 +69,40 @@
 #define TAG_OPTIONS_LEFT  101
 #define TAG_OPTIONS_RIGHT 102
 #define TAG_AGENDA_ICONS  103
+#define TAG_SCROLL_ARROW  104
 
 struct Pokenav2Struct
 {
     struct RegionMap *regionMap;
-    u16 menuSpriteIds[9];
+    const struct EventSchedule *eventDataPtr;
+    const struct EventTextData *eventTextPtr;
+    struct ListMenuItem *listMenuItems;
+    u16 spriteIds[9];
+    u16 taskIds[6];
+    u16 scrollOffset;
+    u16 selectedRow;
     s16 scrollPosition;
     u8 cursorPosition;
-    u8 listTaskId;
     bool8 is24HClockMode;
 };
 
-struct TodaysEventInfo
+struct EventSchedule
 {
     u8 eventId;
     u8 location;
     u16 time[2];
-    u8 dayOfWeek[];
 };
 
-struct TodaysEventText
+struct EventTextData
 {
     const u8 *title;
     const u8 *description;
+};
+
+struct EventScheduleTable
+{
+    const struct EventSchedule *ptr;
+    u8 size;
 };
 
 enum Option
@@ -100,6 +120,8 @@ static void LoadOption(enum Option option);
 static void LoadMainMenu(void);
 static void LoadRegionMap(void);
 static void LoadAgenda(void);
+static void InitEventWindows(void);
+static void CreateEventListMenuTemplate(void);
 static void LoadRadio(void);
 static void LoadOptionAndIconSprites(void);
 static void UnloadOption(enum Option option);
@@ -116,7 +138,12 @@ static void Task_Pokenav2_2(u8 taskId);
 static void Task_Pokenav2_3(u8 taskId);
 static void Task_RegionMap(u8 taskId);
 static void Task_Agenda(u8 taskId);
+static void Task_EventDetailsPage(u8 taskId);
+static void Task_FormatClock(u8 taskId);
+static void Task_FormatEventTime(u8 taskId);
 static void FormatTimeString(u8 *dest, s8 hours, s8 minutes);
+static void CreateEventDetailsPage(u8 input);
+static void FormatEventTimeDisplay(u8 *dest, u8 input);
 static void Task_Radio(u8 taskId);
 static bool8 Task_SlideMainMenuIn(u8 taskId);
 static bool8 Task_SlideMainMenuOut(u8 taskId);
@@ -140,8 +167,8 @@ static void Task_ExitPokenav2_2(u8 taskId);
 static void Task_ExitPokenav2_3(u8 taskId);
 static void Task_ExitPokenav2_4(u8 taskId);
 
-//ewram
-EWRAM_DATA struct Pokenav2Struct sPokenav2Struct = {0};
+// ewram
+static EWRAM_DATA struct Pokenav2Struct sPokenav2Struct = {0};
 
 // .rodata
 static const u32 sPokenav2GridTiles[] = INCBIN_U32("graphics/pokenav_v2/grid.4bpp.lz");
@@ -158,6 +185,7 @@ static const u16 sPokenav2HeaderPalette[] = INCBIN_U16("graphics/pokenav_v2/head
 static const u32 sPokenav2DescTilemap[] = INCBIN_U32("graphics/pokenav_v2/desc.bin.lz");
 static const u32 sPokenav2RegionMapFrameTilemap[] = INCBIN_U32("graphics/pokenav_v2/map.bin.lz");
 static const u32 sPokenav2AgendaTilemap[] = INCBIN_U32("graphics/pokenav_v2/agenda.bin.lz");
+static const u32 sPokenav2RadioTilemap[] = INCBIN_U32("graphics/pokenav_v2/radio.bin.lz");
 
 static const u8 sPokenav2OptionsLeft[] = INCBIN_U8("graphics/pokenav_v2/options_left.4bpp");
 static const u8 sPokenav2OptionsRight[] = INCBIN_U8("graphics/pokenav_v2/options_right.4bpp");
@@ -166,18 +194,18 @@ static const u16 sPokenav2SpritePalette[] = INCBIN_U16("graphics/pokenav_v2/icon
 
 static const s16 sPokenav2OptionLeftPositions[][2] =
 {
-    {48, 56 - 8},
-    {48, 96 - 8},
-    {192, 56 - 8},
-    {192, 96 - 8},
+    {48, 48},
+    {48, 88},
+    {192, 48},
+    {192, 88},
 };
 
 static const s16 sPokenav2OptionRightPositions[][2] =
 {
-    {88, 56 - 8},
-    {88, 96 - 8},
-    {152, 56 - 8},
-    {152, 96 - 8},
+    {88, 48},
+    {88, 88},
+    {152, 48},
+    {152, 88},
 };
 
 static const u8 sTextColorGray[3] =
@@ -220,17 +248,13 @@ static const void (*const sPokenav2Funcs[])(u8) =
     Task_Radio,
 };
 
-static const struct TodaysEventText sTodaysEventText[] =
-{
-    
-};
-
 static const struct ListMenuTemplate sTodaysEventsListMenuTemplate =
 {
+    .items = NULL,
     .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
     .itemPrintFunc = NULL,
-    .totalItems = 6,
-    .maxShowed = 6,
+    .totalItems = 0,
+    .maxShowed = 0,
     .windowId = WIN_AGENDA_EVENTS_CONTENT,
     .header_X = 0,
     .item_X = 8,
@@ -240,12 +264,77 @@ static const struct ListMenuTemplate sTodaysEventsListMenuTemplate =
     .fillValue = 1,
     .cursorShadowPal = 3,
     .lettersSpacing = 1,
-    .itemVerticalPadding = 0,
+    .itemVerticalPadding = 1,
     .scrollMultiple = LIST_NO_MULTIPLE_SCROLL,
     .fontId = 1,
     .cursorKind = 0
 };
 
+static const struct EventSchedule sSundayEventSchedule[] =
+{
+    
+};
+
+static const struct EventSchedule sMondayEventSchedule[] =
+{
+    {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}},
+    {EVENT_MARKET, MAPSEC_MURENA_CITY, {12, 17}},
+    {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}},
+    {EVENT_MARKET, MAPSEC_MURENA_CITY, {12, 17}},
+    {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}},
+    {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}},
+    {EVENT_MARKET, MAPSEC_MURENA_CITY, {12, 17}},
+    {EVENT_MARKET, MAPSEC_MURENA_CITY, {12, 17}},
+    {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}}
+};
+
+static const struct EventSchedule sTuesdayEventSchedule[] =
+{
+    
+};
+
+static const struct EventSchedule sWednesdayEventSchedule[] =
+{
+    {EVENT_MARKET, MAPSEC_MURENA_CITY, {12, 17}}
+};
+
+static const struct EventSchedule sThursdayEventSchedule[] =
+{
+    
+};
+
+static const struct EventSchedule sFridayEventSchedule[] =
+{
+    
+};
+
+static const struct EventSchedule sSaturdayEventSchedule[] =
+{
+    
+};
+
+static const struct EventTextData sEventTextData[] =
+{
+    [EVENT_LOTTERY] = {gText_Pokenav2_Lottery, gText_Pokenav2_LotteryDesc},
+    [EVENT_SALE] = {NULL, NULL},
+    [EVENT_WORLD_TOURNAMENT] = {NULL, NULL},
+    [EVENT_CATCHING_CONTEST] = {NULL, NULL},
+    [EVENT_TREASHURE_HUNT] = {NULL, NULL},
+    [EVENT_SAFARI_ZONE] = {NULL, NULL},
+    [EVENT_CEL_NAUTILUS] = {NULL, NULL},
+    [EVENT_MARKET] = {gText_Pokenav2_Market, gText_Pokenav2_MarketDesc}
+};
+
+static const struct EventScheduleTable sEventScheduleTable[] =
+{
+    {sSundayEventSchedule, ARRAY_COUNT(sSundayEventSchedule)},
+    {sMondayEventSchedule, ARRAY_COUNT(sMondayEventSchedule)},
+    {sTuesdayEventSchedule, ARRAY_COUNT(sTuesdayEventSchedule)},
+    {sWednesdayEventSchedule, ARRAY_COUNT(sWednesdayEventSchedule)},
+    {sThursdayEventSchedule, ARRAY_COUNT(sThursdayEventSchedule)},
+    {sFridayEventSchedule, ARRAY_COUNT(sFridayEventSchedule)},
+    {sSaturdayEventSchedule, ARRAY_COUNT(sSaturdayEventSchedule)}
+};
 
 static const struct BgTemplate sPokenav2BgTemplates[] =
 {
@@ -647,8 +736,6 @@ const struct SpriteTemplate sSpriteTemplate_AgendaClockIcons =
 
 void CB2_InitPokenav2(void)
 {
-    u8 taskId, bg3TaskId;
-
     ResetTasks();
     SetVBlankCallback(NULL);
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
@@ -692,8 +779,8 @@ void CB2_InitPokenav2(void)
 
     sPokenav2Struct.scrollPosition = OPTION_SLIDE_Y;
 
-    taskId = CreateTask(Task_Pokenav2_1, 0);
-    bg3TaskId = CreateTask(Task_ScrollBg3Squares, 1);
+    sPokenav2Struct.taskIds[TASK_MAIN] = CreateTask(Task_Pokenav2_1, TASK_MAIN);
+    sPokenav2Struct.taskIds[TASK_BG3SCROLL] = CreateTask(Task_ScrollBg3Squares, TASK_BG3SCROLL);
 
     ShowBg(0);
     ShowBg(1);
@@ -745,6 +832,8 @@ static void LoadOptionBgs(enum Option option)
         LoadPalette(sPokenav2WindowFramePalette, 32, sizeof(sPokenav2WindowFramePalette));
         break;
     case Radio:
+        LZ77UnCompVram(sPokenav2WindowFrameTiles, (u16 *)BG_CHAR_ADDR(1));
+        LZ77UnCompVram(sPokenav2RadioTilemap, (u16 *)BG_SCREEN_ADDR(26));
         FillWindowPixelBuffer(WIN_HEADER, PIXEL_FILL(8));
         AddTextPrinterParameterized3(WIN_HEADER, 1, GetStringCenterAlignXOffset(1, gText_Pokenav2_EurusRadio, SCREEN_WIDTH), 0, sTextColorWhite, 0, gText_Pokenav2_EurusRadio);
         break;
@@ -797,21 +886,30 @@ static void LoadRegionMap(void)
 
 static void LoadAgenda(void)
 {
-    struct ListMenuTemplate eventListMenuTemplate;
     const u8 *string, *color;
     u8 i;
 
     sPokenav2Struct.is24HClockMode = gSaveBlock2Ptr->is24HClockMode;
-    eventListMenuTemplate = sTodaysEventsListMenuTemplate;
+    sPokenav2Struct.eventDataPtr = sEventScheduleTable[gSaveBlock2Ptr->inGameClock.dayOfWeek].ptr;
+    sPokenav2Struct.eventTextPtr = sEventTextData;
+    sPokenav2Struct.scrollOffset = 0;
+    sPokenav2Struct.selectedRow = 0;
+
+    sPokenav2Struct.taskIds[TASK_CLOCK] = CreateTask(Task_FormatClock, TASK_CLOCK);
 
     PutWindowTilemap(WIN_AGENDA_EVENTS_TITLE);
     PutWindowTilemap(WIN_AGENDA_EVENTS_CONTENT);
     PutWindowTilemap(WIN_AGENDA_DATE_TIME);
     PutWindowTilemap(WIN_AGENDA_WEATHER);
 
-    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_TITLE, 1, GetStringCenterAlignXOffset(1, gText_Pokenav2_TodaysEvents, 104), 0, sTextColorGray, 0, gText_Pokenav2_TodaysEvents);
+    InitEventWindows();
+
+    StringCopy(gStringVar1, gDaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
+    AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, 1, GetStringCenterAlignXOffset(1, gStringVar1, 88), 0, sTextColorGray, 0, gStringVar1);
+    FormatTimeString(gStringVar4, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes);
+    AddTextPrinterParameterized(WIN_AGENDA_DATE_TIME, 0, gStringVar4, GetStringCenterAlignXOffset(1, gStringVar4, 88), 16, 0, NULL);
+
     AddTextPrinterParameterized3(WIN_AGENDA_WEATHER, 0, GetStringCenterAlignXOffset(0, gText_Pokenav2_WeatherForecast, 88), 0, sTextColorGray, 0, gText_Pokenav2_WeatherForecast);
-    sPokenav2Struct.listTaskId = ListMenuInit(&eventListMenuTemplate, 0, 0);
 
     switch (GetSav1Weather())
     {
@@ -883,16 +981,55 @@ static void LoadAgenda(void)
 
     AddTextPrinterParameterized3(WIN_AGENDA_WEATHER, 0, GetStringCenterAlignXOffset(0, string, 88), 16, color, 0, string);
 
-    StringCopy(gStringVar1, gDaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
-    AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, 1, GetStringCenterAlignXOffset(1, gStringVar1, 88), 0, sTextColorGray, 0, gStringVar1);
-    FormatTimeString(gStringVar4, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes);
-    AddTextPrinterParameterized(WIN_AGENDA_DATE_TIME, 0, gStringVar4, GetStringCenterAlignXOffset(1, gStringVar4, 88), 16, 0, NULL);
-
     ScheduleBgCopyTilemapToVram(0);
+}
+
+static void InitEventWindows(void)
+{
+    FillWindowPixelBuffer(WIN_AGENDA_EVENTS_TITLE, PIXEL_FILL(0));
+    FillWindowPixelBuffer(WIN_AGENDA_EVENTS_CONTENT, PIXEL_FILL(0));
+
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_TITLE, 1, GetStringCenterAlignXOffset(1, gText_Pokenav2_TodaysEvents, 104), 0, sTextColorGray, 0, gText_Pokenav2_TodaysEvents);
+    CreateEventListMenuTemplate();
+    sPokenav2Struct.taskIds[TASK_LIST_MENU] = ListMenuInit(&gMultiuseListMenuTemplate, sPokenav2Struct.scrollOffset, sPokenav2Struct.selectedRow);
+    sPokenav2Struct.taskIds[TASK_SCROLL_ARROW] = AddScrollIndicatorArrowPairParameterized(
+        SCROLL_ARROW_UP,
+        68,
+        20,
+        148,
+        gMultiuseListMenuTemplate.totalItems - gMultiuseListMenuTemplate.maxShowed,
+        TAG_SCROLL_ARROW,
+        TAG_SCROLL_ARROW,
+        &sPokenav2Struct.scrollOffset);
+}
+
+static void CreateEventListMenuTemplate(void)
+{
+    u8 i, size;
+
+    size = sEventScheduleTable[gSaveBlock2Ptr->inGameClock.dayOfWeek].size;
+    sPokenav2Struct.listMenuItems = Alloc(size * sizeof(struct ListMenuItem));
+
+    gMultiuseListMenuTemplate = sTodaysEventsListMenuTemplate;
+    gMultiuseListMenuTemplate.totalItems = size;
+
+    if (size < 6)
+        gMultiuseListMenuTemplate.maxShowed = gMultiuseListMenuTemplate.totalItems;
+    else
+        gMultiuseListMenuTemplate.maxShowed = 6;
+
+    for (i = 0; i < size; i++)
+    {
+        sPokenav2Struct.listMenuItems[i].name = sPokenav2Struct.eventTextPtr[sPokenav2Struct.eventDataPtr[i].eventId].title;
+        sPokenav2Struct.listMenuItems[i].id = i;
+    }
+    gMultiuseListMenuTemplate.items = sPokenav2Struct.listMenuItems;
 }
 
 static void LoadRadio(void)
 {
+
+
     ScheduleBgCopyTilemapToVram(0);
 }
 
@@ -924,22 +1061,22 @@ static void LoadOptionAndIconSprites(void)
 
     for (i = 0; i < 4; i++)
     {
-        sPokenav2Struct.menuSpriteIds[i] = CreateSprite(&sSpriteTemplate_OptionsLeft, sPokenav2OptionLeftPositions[i][0], sPokenav2OptionLeftPositions[i][1], 2);
-        sPokenav2Struct.menuSpriteIds[i + 4] = CreateSprite(&sSpriteTemplate_OptionsRight, sPokenav2OptionRightPositions[i][0], sPokenav2OptionRightPositions[i][1], 1);
+        sPokenav2Struct.spriteIds[i] = CreateSprite(&sSpriteTemplate_OptionsLeft, sPokenav2OptionLeftPositions[i][0], sPokenav2OptionLeftPositions[i][1], 2);
+        sPokenav2Struct.spriteIds[i + 4] = CreateSprite(&sSpriteTemplate_OptionsRight, sPokenav2OptionRightPositions[i][0], sPokenav2OptionRightPositions[i][1], 1);
         if (i < 2)
         {
-            StartSpriteAnim(&gSprites[sPokenav2Struct.menuSpriteIds[i]], 0);
+            StartSpriteAnim(&gSprites[sPokenav2Struct.spriteIds[i]], 0);
         }
         else
         {
-            StartSpriteAnim(&gSprites[sPokenav2Struct.menuSpriteIds[i]], 1);
+            StartSpriteAnim(&gSprites[sPokenav2Struct.spriteIds[i]], 1);
         }
-        StartSpriteAnim(&gSprites[sPokenav2Struct.menuSpriteIds[i + 4]], i);
+        StartSpriteAnim(&gSprites[sPokenav2Struct.spriteIds[i + 4]], i);
     }
 
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i]];
         if (sprite->animNum == 0)
         {
             sprite->x2 = -OPTION_SLIDE_X;
@@ -952,7 +1089,7 @@ static void LoadOptionAndIconSprites(void)
 
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
             sprite->x2 = -OPTION_SLIDE_X;
@@ -963,9 +1100,9 @@ static void LoadOptionAndIconSprites(void)
         }
     }
 
-    sPokenav2Struct.menuSpriteIds[8] = CreateSprite(&sSpriteTemplate_AgendaClockIcons, 88, 87, 0);
-    StartSpriteAnim(&gSprites[sPokenav2Struct.menuSpriteIds[8]], anim = (gSaveBlock2Ptr->inGameClock.hours < 12) ? gSaveBlock2Ptr->inGameClock.hours : gSaveBlock2Ptr->inGameClock.hours - 12);
-    struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
+    sPokenav2Struct.spriteIds[8] = CreateSprite(&sSpriteTemplate_AgendaClockIcons, 88, 87, 0);
+    StartSpriteAnim(&gSprites[sPokenav2Struct.spriteIds[8]], anim = (gSaveBlock2Ptr->inGameClock.hours < 12) ? gSaveBlock2Ptr->inGameClock.hours : gSaveBlock2Ptr->inGameClock.hours - 12);
+    struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[8]];
     sprite->x2 = -OPTION_SLIDE_X;
 }
 
@@ -995,6 +1132,9 @@ static void UnloadRegionMap(void)
     ClearWindowTilemap(WIN_REGION_MAP_TITLE);
     ClearWindowTilemap(WIN_REGION_MAP_SECTION);
 
+    Free(sPokenav2Struct.regionMap);
+    sPokenav2Struct.regionMap = NULL;
+
     ScheduleBgCopyTilemapToVram(0);
 }
 
@@ -1004,10 +1144,16 @@ static void UnloadAgenda(void)
 
     gSaveBlock2Ptr->is24HClockMode = sPokenav2Struct.is24HClockMode;
 
+    DestroyTask(sPokenav2Struct.taskIds[TASK_CLOCK]);
+    DestroyListMenuTask(sPokenav2Struct.taskIds[TASK_LIST_MENU], &sPokenav2Struct.scrollOffset, &sPokenav2Struct.selectedRow);
+
     ClearWindowTilemap(WIN_AGENDA_EVENTS_TITLE);
     ClearWindowTilemap(WIN_AGENDA_EVENTS_CONTENT);
     ClearWindowTilemap(WIN_AGENDA_DATE_TIME);
     ClearWindowTilemap(WIN_AGENDA_WEATHER);
+
+    Free(sPokenav2Struct.listMenuItems);
+    sPokenav2Struct.listMenuItems = NULL;
 
     ScheduleBgCopyTilemapToVram(0);
 }
@@ -1038,15 +1184,13 @@ static void UnloadOptionAndIconSprites(void)
 
     for (i = 0; i < 9; i++)
     {
-        FreeSpriteOamMatrix(&gSprites[sPokenav2Struct.menuSpriteIds[i]]);
-        DestroySprite(&gSprites[sPokenav2Struct.menuSpriteIds[i]]);
+        FreeSpriteOamMatrix(&gSprites[sPokenav2Struct.spriteIds[i]]);
+        DestroySprite(&gSprites[sPokenav2Struct.spriteIds[i]]);
     }
 }
 
 static void SpriteCB_Icons(struct Sprite *sprite)
 {
-    s16 *data = gTasks[FindTaskIdByFunc(Task_Pokenav2_3)].data;
-
     if (sprite->animNum == sPokenav2Struct.cursorPosition)
     {
         if (sprite->animNum == 0 || sprite->animNum == 1)
@@ -1151,11 +1295,11 @@ static void Task_Pokenav2_2(u8 taskId)
 
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         sprite->callback = SpriteCB_Icons;
     }
 
-    struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
+    struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[8]];
     sprite->callback = SpriteCB_Agenda;
 
     LoadOption(MainMenu);
@@ -1164,8 +1308,6 @@ static void Task_Pokenav2_2(u8 taskId)
 
 static void Task_Pokenav2_3(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-
     if (JOY_NEW(DPAD_LEFT))
     {
         if (sPokenav2Struct.cursorPosition & 2)
@@ -1217,8 +1359,6 @@ static void Task_Pokenav2_3(u8 taskId)
 
 static void Task_RegionMap(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-
     switch (DoRegionMapInputCallback())
     {
         case MAP_INPUT_MOVE_END:
@@ -1231,7 +1371,7 @@ static void Task_RegionMap(u8 taskId)
             {
                 AddTextPrinterParameterized3(WIN_REGION_MAP_SECTION, 1, GetStringCenterAlignXOffset(1, gText_ThreeDashes, SCREEN_WIDTH), 0, sTextColorGray, 0, gText_ThreeDashes);
             }
-            ScheduleBgCopyTilemapToVram(WIN_REGION_MAP_SECTION);
+            ScheduleBgCopyTilemapToVram(0);
             break;
     }
 
@@ -1243,8 +1383,50 @@ static void Task_RegionMap(u8 taskId)
 
 static void Task_Agenda(u8 taskId)
 {
-    s32 input = ListMenu_ProcessInput(sPokenav2Struct.listTaskId);
-    s16 *data = gTasks[taskId].data;
+    u8 input = ListMenu_ProcessInput(sPokenav2Struct.taskIds[TASK_LIST_MENU]);
+
+    if (JOY_NEW(A_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        RemoveScrollIndicatorArrowPair(sPokenav2Struct.taskIds[TASK_SCROLL_ARROW]);
+        DestroyListMenuTask(sPokenav2Struct.taskIds[TASK_LIST_MENU], &sPokenav2Struct.scrollOffset, &sPokenav2Struct.selectedRow);
+        CreateEventDetailsPage(input);
+        gTasks[taskId].func = Task_EventDetailsPage;
+    }
+    else if (JOY_NEW(B_BUTTON))
+    {
+        RemoveScrollIndicatorArrowPair(sPokenav2Struct.taskIds[TASK_SCROLL_ARROW]);
+        gTasks[taskId].func = Task_ReturnToMainMenu_1;
+    }
+    else if (JOY_NEW(START_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        sPokenav2Struct.is24HClockMode ^= 1;
+    }
+}
+
+static void Task_EventDetailsPage(u8 taskId)
+{
+    if (JOY_NEW(B_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        InitEventWindows();
+        DestroyTask(sPokenav2Struct.taskIds[TASK_EVENT_TIME]);
+        gTasks[taskId].func = Task_Agenda;
+    }
+    else if (JOY_NEW(START_BUTTON))
+    {
+        PlaySE(SE_SELECT);
+        sPokenav2Struct.is24HClockMode ^= 1;
+    }
+}
+
+static void Task_FormatClock(u8 taskId)
+{
+    if (JOY_NEW(START_BUTTON))
+    {
+        FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(1), 0, 16, 88, 12);
+    }
 
     if (gSaveBlock2Ptr->inGameClock.hours && gSaveBlock2Ptr->inGameClock.minutes && gSaveBlock2Ptr->inGameClock.vblanks == 0)
     {
@@ -1266,27 +1448,22 @@ static void Task_Agenda(u8 taskId)
             FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(1), 33, 16, 6, 12);
         }
     }
+}
 
-    if (JOY_NEW(A_BUTTON))
+static void Task_FormatEventTime(u8 taskId)
+{
+    if (JOY_NEW(START_BUTTON))
     {
-        PlaySE(SE_SELECT);
-        mgba_printf(MGBA_LOG_DEBUG, "%d", input);
+        FillWindowPixelRect(WIN_AGENDA_EVENTS_CONTENT, PIXEL_FILL(1), 32, 88, 52, 12);
     }
-    else if (JOY_NEW(B_BUTTON))
-    {
-        gTasks[taskId].func = Task_ReturnToMainMenu_1;
-    }
-    else if (JOY_NEW(START_BUTTON))
-    {
-        PlaySE(SE_SELECT);
-        FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(1), 0, 16, 88, 16);
-        sPokenav2Struct.is24HClockMode ^= 1;
-    }
+
+    FormatEventTimeDisplay(gStringVar3, gTasks[TASK_EVENT_TIME].data[0]);
+    AddTextPrinterParameterized(WIN_AGENDA_EVENTS_CONTENT, 0, gStringVar3, 32, 88, 0, NULL);
 }
 
 static void FormatTimeString(u8 *dest, s8 hours, s8 minutes)
 {
-    u8 *txtPtr, string[8];
+    u8 *txtPtr;
 
     if (!sPokenav2Struct.is24HClockMode && gSaveBlock2Ptr->inGameClock.hours > 12)
     {
@@ -1312,13 +1489,78 @@ static void FormatTimeString(u8 *dest, s8 hours, s8 minutes)
             txtPtr = StringAppend(txtPtr, gText_PM);
         }
     }
-    
+}
+
+static void CreateEventDetailsPage(u8 input)
+{
+    FillWindowPixelBuffer(WIN_AGENDA_EVENTS_TITLE, PIXEL_FILL(0));
+    FillWindowPixelBuffer(WIN_AGENDA_EVENTS_CONTENT, PIXEL_FILL(0));
+
+    StringCopy(gStringVar1, sPokenav2Struct.eventTextPtr[sPokenav2Struct.eventDataPtr[input].eventId].title);
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_TITLE, 1, 4, 0, sTextColorGray, 0, gText_Pokenav2_LeftArrow);
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_TITLE, 1, GetStringCenterAlignXOffset(1, gStringVar1, 104), 0, sTextColorGray, 0, gStringVar1);
+
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_CONTENT, 0, 0, 0, sTextColorBlue, 0, gText_Pokenav2_EventDescription);
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_CONTENT, 0, 0, 56, sTextColorBlue, 0, gText_Pokenav2_EventLocation);
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_CONTENT, 0, 0, 88, sTextColorBlue, 0, gText_Pokenav2_EventTimes);
+
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_CONTENT, 0, 0, 12, sTextColorGray, 0, sPokenav2Struct.eventTextPtr[sPokenav2Struct.eventDataPtr[input].eventId].description);
+
+    GetMapName(gStringVar2, sPokenav2Struct.eventDataPtr[input].location, 0);
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_CONTENT, 0, 0, 68, sTextColorGray, 0, gStringVar2);
+
+    FormatEventTimeDisplay(gStringVar3, input);
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_CONTENT, 0, 32, 88, sTextColorGray, 0, gStringVar3);
+
+    sPokenav2Struct.taskIds[TASK_EVENT_TIME] = CreateTask(Task_FormatEventTime, TASK_EVENT_TIME);
+    gTasks[TASK_EVENT_TIME].data[0] = input;
+
+    ScheduleBgCopyTilemapToVram(0);
+}
+
+static void FormatEventTimeDisplay(u8 *dest, u8 input)
+{
+    u8 *txtPtr;
+
+    if (!sPokenav2Struct.is24HClockMode)
+    {
+        if (sPokenav2Struct.eventDataPtr[input].time[0] > 12)
+        {
+            txtPtr = ConvertIntToDecimalStringN(dest, sPokenav2Struct.eventDataPtr[input].time[0] - 12, STR_CONV_MODE_LEADING_ZEROS, 2);
+            txtPtr = StringAppend(txtPtr, gText_PM);
+        }
+        else
+        {
+            txtPtr = ConvertIntToDecimalStringN(dest, sPokenav2Struct.eventDataPtr[input].time[0], STR_CONV_MODE_LEADING_ZEROS, 2);
+            txtPtr = StringAppend(txtPtr, gText_AM);
+        }
+    }
+    else
+        txtPtr = ConvertIntToDecimalStringN(dest, sPokenav2Struct.eventDataPtr[input].time[0], STR_CONV_MODE_LEADING_ZEROS, 2);
+
+    txtPtr = StringAppend(txtPtr, gText_Space);
+    txtPtr = StringAppend(txtPtr, gText_Dash);
+    txtPtr = StringAppend(txtPtr, gText_Space);
+
+    if (!sPokenav2Struct.is24HClockMode)
+    {
+        if (sPokenav2Struct.eventDataPtr[input].time[1] > 12)
+        {
+            txtPtr = ConvertIntToDecimalStringN(txtPtr, sPokenav2Struct.eventDataPtr[input].time[1] - 12, STR_CONV_MODE_LEADING_ZEROS, 2);
+            txtPtr = StringAppend(txtPtr, gText_PM);
+        }
+        else
+        {
+            txtPtr = ConvertIntToDecimalStringN(txtPtr, sPokenav2Struct.eventDataPtr[input].time[1], STR_CONV_MODE_LEADING_ZEROS, 2);
+            txtPtr = StringAppend(txtPtr, gText_AM);
+        }
+    }
+    else
+        txtPtr = ConvertIntToDecimalStringN(txtPtr, sPokenav2Struct.eventDataPtr[input].time[1], STR_CONV_MODE_LEADING_ZEROS, 2);
 }
 
 static void Task_Radio(u8 taskId)
 {
-    s16 *data = gTasks[taskId].data;
-
     if (JOY_NEW(B_BUTTON))
     {
         gTasks[taskId].func = Task_ReturnToMainMenu_1;
@@ -1344,7 +1586,7 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
 
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i]];
         if (sprite->animNum == 0)
         {
             if (sprite->x2 < 0)
@@ -1371,7 +1613,7 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
 
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
             if (sprite->x2 < 0)
@@ -1396,7 +1638,7 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
         }
     }
 
-    struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
+    struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[8]];
     if (sprite->x2 < 0)
     {
         sprite->x2 += OPTION_SLIDE_SPEED;
@@ -1428,7 +1670,7 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
 
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i]];
         if (sprite->animNum == 0)
         {
             if (sprite->x2 > -OPTION_SLIDE_X)
@@ -1455,7 +1697,7 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
 
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
             if (sprite->x2 > -OPTION_SLIDE_X)
@@ -1480,7 +1722,7 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
         }
     }
 
-    struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
+    struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[8]];
     if (sprite->x2 > -OPTION_SLIDE_X)
     {
         sprite->x2 -= OPTION_SLIDE_SPEED;
@@ -1549,11 +1791,11 @@ static void Task_LoadOption_2(u8 taskId)
 
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         sprite->callback = SpriteCallbackDummy;
     }
 
-    struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
+    struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[8]];
     sprite->callback = SpriteCallbackDummy;
 
     UnloadOption(MainMenu);
@@ -1640,11 +1882,11 @@ static void Task_ReturnToMainMenu_6(u8 taskId)
     
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         sprite->callback = SpriteCB_Icons;
     }
 
-    struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
+    struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[8]];
     sprite->callback = SpriteCB_Agenda;
 
     LoadOption(MainMenu);
@@ -1657,11 +1899,11 @@ static void Task_ExitPokenav2_1(u8 taskId)
 
     for (i = 0; i < 4; i++)
     {
-        struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[i + 4]];
+        struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         sprite->callback = SpriteCallbackDummy;
     }
 
-    struct Sprite *sprite = &gSprites[sPokenav2Struct.menuSpriteIds[8]];
+    struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[8]];
     sprite->callback = SpriteCallbackDummy;
 
     UnloadOption(MainMenu);
@@ -1687,8 +1929,6 @@ static void Task_ExitPokenav2_4(u8 taskId)
 {
     if (!gPaletteFade.active)
     {
-        Free(sPokenav2Struct.regionMap);
-        sPokenav2Struct.regionMap = NULL;
         FreeAllWindowBuffers();
         SetMainCallback2(CB2_ReturnToFieldWithOpenMenu);
     }
