@@ -278,14 +278,13 @@ static const struct EventSchedule sSundayEventSchedule[] =
 static const struct EventSchedule sMondayEventSchedule[] =
 {
     {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}},
-    {EVENT_MARKET, MAPSEC_MURENA_CITY, {12, 17}},
-    {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}},
-    {EVENT_MARKET, MAPSEC_MURENA_CITY, {12, 17}},
-    {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}},
-    {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}},
-    {EVENT_MARKET, MAPSEC_MURENA_CITY, {12, 17}},
-    {EVENT_MARKET, MAPSEC_MURENA_CITY, {12, 17}},
-    {EVENT_LOTTERY, MAPSEC_FIRWEALD_CITY, {10, 18}}
+    {EVENT_SALE,  MAPSEC_MURENA_CITY, {12, 17}},
+    {EVENT_WORLD_TOURNAMENT, MAPSEC_FIRWEALD_CITY, {10, 18}},
+    {EVENT_CATCHING_CONTEST,  MAPSEC_MURENA_CITY, {12, 17}},
+    {EVENT_TREASHURE_HUNT, MAPSEC_OUREA_CAVES, {10, 18}},
+    {EVENT_SAFARI_ZONE, MAPSEC_FIRWEALD_CITY, {10, 18}},
+    {EVENT_CEL_NAUTILUS,  MAPSEC_MURENA_CITY, {12, 17}},
+    {EVENT_MARKET,  MAPSEC_MURENA_CITY, {12, 17}}         
 };
 
 static const struct EventSchedule sTuesdayEventSchedule[] =
@@ -316,12 +315,12 @@ static const struct EventSchedule sSaturdayEventSchedule[] =
 static const struct EventTextData sEventTextData[] =
 {
     [EVENT_LOTTERY] = {gText_Pokenav2_Lottery, gText_Pokenav2_LotteryDesc},
-    [EVENT_SALE] = {NULL, NULL},
-    [EVENT_WORLD_TOURNAMENT] = {NULL, NULL},
-    [EVENT_CATCHING_CONTEST] = {NULL, NULL},
-    [EVENT_TREASHURE_HUNT] = {NULL, NULL},
-    [EVENT_SAFARI_ZONE] = {NULL, NULL},
-    [EVENT_CEL_NAUTILUS] = {NULL, NULL},
+    [EVENT_SALE] = {gText_Pokenav2_Sale, gText_Pokenav2_SaleDesc},
+    [EVENT_WORLD_TOURNAMENT] = {gText_Pokenav2_WorldTournament, gText_Pokenav2_WorldTournamentDesc},
+    [EVENT_CATCHING_CONTEST] = {gText_Pokenav2_CatchingContest, gText_Pokenav2_CatchingContestDesc},
+    [EVENT_TREASHURE_HUNT] = {gText_Pokenav2_TreasureHunt, gText_Pokenav2_TreasureHuntDesc},
+    [EVENT_SAFARI_ZONE] = {gText_Pokenav2_SafariZone, gText_Pokenav2_SafariZoneDesc},
+    [EVENT_CEL_NAUTILUS] = {gText_Pokenav2_CELNautilus, gText_Pokenav2_CELNautilusDesc},
     [EVENT_MARKET] = {gText_Pokenav2_Market, gText_Pokenav2_MarketDesc}
 };
 
@@ -1012,6 +1011,7 @@ static void CreateEventListMenuTemplate(void)
 
     gMultiuseListMenuTemplate = sTodaysEventsListMenuTemplate;
     gMultiuseListMenuTemplate.totalItems = size;
+    gMultiuseListMenuTemplate.totalItems = size;
 
     if (size < 6)
         gMultiuseListMenuTemplate.maxShowed = gMultiuseListMenuTemplate.totalItems;
@@ -1498,7 +1498,7 @@ static void CreateEventDetailsPage(u8 input)
 
     StringCopy(gStringVar1, sPokenav2Struct.eventTextPtr[sPokenav2Struct.eventDataPtr[input].eventId].title);
     AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_TITLE, 1, 4, 0, sTextColorGray, 0, gText_Pokenav2_LeftArrow);
-    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_TITLE, 1, GetStringCenterAlignXOffset(1, gStringVar1, 104), 0, sTextColorGray, 0, gStringVar1);
+    AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_TITLE, 7, GetStringCenterAlignXOffset(7, gStringVar1, 104), 0, sTextColorGray, 0, gStringVar1);
 
     AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_CONTENT, 0, 0, 0, sTextColorBlue, 0, gText_Pokenav2_EventDescription);
     AddTextPrinterParameterized3(WIN_AGENDA_EVENTS_CONTENT, 0, 0, 56, sTextColorBlue, 0, gText_Pokenav2_EventLocation);

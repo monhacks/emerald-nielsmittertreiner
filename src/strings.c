@@ -1894,8 +1894,21 @@ const u8 gText_Pokenav2_EventTimes[] = _("TIMES:");
 const u8 gText_Pokenav2_LeftArrow[] = _("{LEFT_ARROW}");
 
 const u8 gText_Pokenav2_Lottery[] = _("LOTTERY");
-const u8 gText_Pokenav2_LotteryDesc[] = _("WILL YOU DEFY ALL ODDS\nAND WIN A GRAND PRICE?\nCOME FIND OUT!");
+const u8 gText_Pokenav2_Sale[] = _("SALE");
+const u8 gText_Pokenav2_WorldTournament[] = _("WORLD TOURNAMENT");
+const u8 gText_Pokenav2_CatchingContest[] = _("CATCHING CONTEST");
+const u8 gText_Pokenav2_TreasureHunt[] = _("TREASURE HUNT");
+const u8 gText_Pokenav2_SafariZone[] = _("SAFARI ZONE");
+const u8 gText_Pokenav2_CELNautilus[] = _("C.E.L. NAUTILUS");
 const u8 gText_Pokenav2_Market[] = _("MARKET");
+
+const u8 gText_Pokenav2_LotteryDesc[] = _("WILL YOU DEFY ALL ODDS\nAND WIN A GRAND PRICE?\nCOME FIND OUT!");
+const u8 gText_Pokenav2_SaleDesc[] = _("VISIT A LOCAL POKéMART\nAND FIND OUT WHAT ITEMS\nARE ON SALE!");
+const u8 gText_Pokenav2_WorldTournamentDesc[] = _("THE EURUS REGION's\nGRAND WORLD TOURNAMENT\nREGISTRATION EVENT!");
+const u8 gText_Pokenav2_CatchingContestDesc[] = _("A LOCAL CATCHING\nCONTEST THAT VARIES\nPER LOCATION!");
+const u8 gText_Pokenav2_TreasureHuntDesc[] = _("FOLLOW THE CLUES AND\nTREASURE AWAITS!");
+const u8 gText_Pokenav2_SafariZoneDesc[] = _("GO ON A SAFARI AND\nMEET NEW POKéMON\nYOU'VE NEVER SEEN!");
+const u8 gText_Pokenav2_CELNautilusDesc[] = _("BOARD THE C.E.L-\nNAUTILUS AND BATTLE\nALL SORTS OF TRAINERS!");
 const u8 gText_Pokenav2_MarketDesc[] = _("VISIT THE MARKET TO BUY\nGOODS NOT AVAILABLE\nIN A POKéMART!");
 
 const u8 gText_Pokenav2_EurusRadio[] = _("EURUS RADIO");
