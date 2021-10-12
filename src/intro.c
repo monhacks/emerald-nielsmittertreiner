@@ -1,5 +1,6 @@
 #include "global.h"
 #include "main.h"
+#include "debug/sound_test_screen.h"
 #include "palette.h"
 #include "scanline_effect.h"
 #include "task.h"
@@ -35,6 +36,8 @@
 
     After this it progresses to the title screen
 */
+
+static void CB2_GoToSoundTestScreen(void);
 
 // Scene 1 main tasks
 static void Task_Scene1_Load(u8);
@@ -1097,6 +1100,13 @@ static u8 SetUpCopyrightScreen(void)
         SetSerialCallback(SerialCB_CopyrightScreen);
         GameCubeMultiBoot_Init(&gMultibootProgramStruct);
     default:
+        #ifdef DEBUG
+        if (JOY_NEW(START_BUTTON))
+        {
+            BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+            SetMainCallback2(CB2_GoToSoundTestScreen);
+        }
+        #endif
         UpdatePaletteFade();
         gMain.state++;
         GameCubeMultiBoot_Main(&gMultibootProgramStruct);
@@ -1157,6 +1167,14 @@ void CB2_InitCopyrightScreenAfterTitleScreen(void)
 {
     SetUpCopyrightScreen();
 }
+
+#ifdef DEBUG
+static void CB2_GoToSoundTestScreen(void)
+{
+    if (!UpdatePaletteFade())
+        SetMainCallback2(CB2_InitSoundTestScreen);
+}
+#endif
 
 #define sBigDropSpriteId data[0]
 
