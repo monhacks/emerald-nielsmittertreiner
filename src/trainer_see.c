@@ -172,7 +172,7 @@ static const union AnimCmd *const sSpriteAnimTable_Icons[] =
 static const struct SpriteTemplate sSpriteTemplate_ExclamationQuestionMark =
 {
     .tileTag = 0xffff,
-    .paletteTag = FLDEFF_PAL_TAG_ARROW,   ////LoadObjectEventPalette(OBJ_EVENT_PAL_TAG_PLAYER_MALE)
+    .paletteTag = 0x1100,   ////LoadObjectEventPalette(OBJ_EVENT_PAL_TAG_PLAYER_MALE)
     .oam = &sOamData_Icons,
     .anims = sSpriteAnimTable_Icons,
     .images = sSpriteImageTable_ExclamationQuestionMark,
@@ -183,7 +183,7 @@ static const struct SpriteTemplate sSpriteTemplate_ExclamationQuestionMark =
 static const struct SpriteTemplate sSpriteTemplate_HeartIcon =
 {
     .tileTag = 0xffff,
-    .paletteTag = FLDEFF_PAL_TAG_ARROW,
+    .paletteTag = FLDEFF_PAL_TAG_GENERAL_0,
     .oam = &sOamData_Icons,
     .anims = sSpriteAnimTable_Icons,
     .images = sSpriteImageTable_HeartIcon,
