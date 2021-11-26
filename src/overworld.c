@@ -329,6 +329,28 @@ static const struct ScanlineEffectParams sFlashEffectParams =
     0,
 };
 
+static const struct BlendSettings sTimeOfDayBlendVars[] =
+{
+    [TIME_OF_DAY_NIGHT] = 
+    {
+        .coeff = 10,
+        .blendColor = 0x1400,
+        .isTint = FALSE,
+    },
+    [TIME_OF_DAY_TWILIGHT] =
+    {
+        .coeff = 4,
+        .blendColor = 0x15DC,
+        .isTint = TRUE,
+    },
+    [TIME_OF_DAY_DAY] =
+    {
+        .coeff = 0,
+        .blendColor = 0,
+        .isTint = FALSE,
+    },
+};
+
 static u8 MovementEventModeCB_Normal(struct LinkPlayerObjectEvent *, struct ObjectEvent *, u8);
 static u8 MovementEventModeCB_Ignored(struct LinkPlayerObjectEvent *, struct ObjectEvent *, u8);
 static u8 MovementEventModeCB_Scripted(struct LinkPlayerObjectEvent *, struct ObjectEvent *, u8);
@@ -1482,28 +1504,6 @@ void CB1_Overworld(void)
     if (gMain.callback2 == CB2_Overworld)
         DoCB1_Overworld(gMain.newKeys, gMain.heldKeys);
 }
-
-static const struct BlendSettings sTimeOfDayBlendVars[] =
-{
-    [TIME_OF_DAY_NIGHT] = 
-    {
-        .coeff = 10,
-        .blendColor = 0x1400,
-        .isTint = FALSE,
-    },
-    [TIME_OF_DAY_TWILIGHT] =
-    {
-        .coeff = 4,
-        .blendColor = 0x15DC,
-        .isTint = TRUE,
-    },
-    [TIME_OF_DAY_DAY] =
-    {
-        .coeff = 0,
-        .blendColor = 0,
-        .isTint = FALSE,
-    },
-};
 
 u8 UpdateTimeOfDay(void)
 {
