@@ -1280,3 +1280,6 @@ $(MID_SUBDIR)/mus_murena.s: %.s: %.mid
 
 $(MID_SUBDIR)/mus_cedarred_day.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G197 -v100
+
+$(MID_SUBDIR)/mus_drumtest.s: %.s: %.mid
+	$(MID) $< $@ -E -R$(STD_REVERB) -G198 -v100
