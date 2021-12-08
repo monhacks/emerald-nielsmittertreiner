@@ -384,16 +384,16 @@ static const struct WindowTemplate sShopBuyMenuWindowTemplates[] =
         .tilemapLeft = 14,
         .tilemapTop = 2,
         .width = 15,
-        .height = 12,
+        .height = 16,
         .paletteNum = 15,
         .baseBlock = 0x0032,
     },
     {
         .bg = 0,
-        .tilemapLeft = 5,
-        .tilemapTop = 15,
-        .width = 20,
-        .height = 4,
+        .tilemapLeft = 0,
+        .tilemapTop = 13,
+        .width = 14,
+        .height = 6,
         .paletteNum = 15,
         .baseBlock = 0x0122,
     },
@@ -694,8 +694,8 @@ static void BuyMenuBuildListMenuTemplate(void)
     gMultiuseListMenuTemplate = sShopBuyMenuListTemplate;
     gMultiuseListMenuTemplate.items = sListMenuItems;
     gMultiuseListMenuTemplate.totalItems = sMartInfo.itemCount + 1;
-    if (gMultiuseListMenuTemplate.totalItems > 6)
-        gMultiuseListMenuTemplate.maxShowed = 6;
+    if (gMultiuseListMenuTemplate.totalItems > 8)
+        gMultiuseListMenuTemplate.maxShowed = 8;
     else
         gMultiuseListMenuTemplate.maxShowed = gMultiuseListMenuTemplate.totalItems;
 
@@ -773,14 +773,14 @@ static void BuyMenuPrintPriceInList(u8 windowId, u32 itemId, u8 y)
 
 static void BuyMenuAddScrollIndicatorArrows(void)
 {
-    if (sShopData->scrollIndicatorsTaskId == TASK_NONE && sMartInfo.itemCount + 1 > 6)
+    if (sShopData->scrollIndicatorsTaskId == TASK_NONE && sMartInfo.itemCount + 1 > 8)
     {
         sShopData->scrollIndicatorsTaskId = AddScrollIndicatorArrowPairParameterized(
             SCROLL_ARROW_UP,
             172,
             12,
-            112,
-            sMartInfo.itemCount - 5,
+            148,
+            sMartInfo.itemCount - 7,
             TAG_SCROLL_ARROW,
             TAG_SCROLL_ARROW,
             &sShopData->scrollOffset);
@@ -816,7 +816,7 @@ static void BuyMenuAddItemIcon(u16 item, u8 iconSlot)
         {
             *spriteIdPtr = spriteId;
             gSprites[spriteId].x2 = 24;
-            gSprites[spriteId].y2 = 141;
+            gSprites[spriteId].y2 = 88;
         }
     }
     else
