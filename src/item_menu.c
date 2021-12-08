@@ -216,7 +216,6 @@ static void ConfirmToss(u8);
 static void CancelToss(u8);
 static void ConfirmSell(u8);
 static void CancelSell(u8);
-static u8 BagMenu_GetGraphicsId(void);
 
 static const struct BgTemplate sBgTemplates_ItemMenu[] =
 {
@@ -377,51 +376,6 @@ static const struct ScrollArrowsTemplate sBagScrollArrowsTemplate = {
     .tileTag = TAG_BAG_SCROLL_ARROW,
     .palTag = TAG_BAG_SCROLL_ARROW,
     .palNum = 0,
-};
-
-struct BagMenuGraphics
-{
-    const void *tileset;
-    const void *tilemap;
-    const void *palette;
-};
-
-static const struct BagMenuGraphics gBagMenuGraphicsTable[] =
-{
-    [ITEMMENUGRAPHICS_GRASS] =
-    {
-        .tileset = gBagScreenGrass_Gfx,
-        .tilemap = gBagScreenGrass_GfxTileMap,
-        .palette = gBagScreenGrass_Pal,
-    },
-
-    [ITEMMENUGRAPHICS_WATER] =
-    {
-        .tileset = gBagScreenWater_Gfx,
-        .tilemap = gBagScreenWater_GfxTileMap,
-        .palette = gBagScreenWater_Pal,
-    },
-
-    [ITEMMENUGRAPHICS_SAND] =
-    {
-        .tileset = gBagScreenSand_Gfx,
-        .tilemap = gBagScreenSand_GfxTileMap,
-        .palette = gBagScreenSand_Pal,
-    },
-
-    [ITEMMENUGRAPHICS_MOUNTAIN] =
-    {
-        .tileset = gBagScreenMountain_Gfx,
-        .tilemap = gBagScreenMountain_GfxTileMap,
-        .palette = gBagScreenMountain_Pal,
-    },
-
-    [ITEMMENUGRAPHICS_INTERIOR] =
-    {
-        .tileset = gBagScreenInterior_Gfx,
-        .tilemap = gBagScreenInterior_GfxTileMap,
-        .palette = gBagScreenInterior_Pal,
-    },
 };
 
 static const u8 sRegisteredSelect_Gfx[] = INCBIN_U8("graphics/interface/select_button.4bpp");
@@ -602,7 +556,6 @@ static EWRAM_DATA struct ListBuffer1 *sListBuffer1 = 0;
 static EWRAM_DATA struct ListBuffer2 *sListBuffer2 = 0;
 EWRAM_DATA u16 gSpecialVar_ItemId = 0;
 static EWRAM_DATA struct TempWallyBag *sTempWallyBag = 0;
-static EWRAM_DATA u8 gBagMenuGraphics = 0;
 
 void ResetBagScrollPositions(void)
 {
@@ -857,24 +810,238 @@ static void BagMenu_InitBGs(void)
 
 static bool8 LoadBagMenu_Graphics(void)
 {
-    gBagMenuGraphics = BagMenu_GetGraphicsId();
+    u16 metatileBehavior;
+    s16 x, y;
+
+    PlayerGetDestCoords(&x, &y);
+    metatileBehavior = MapGridGetMetatileBehaviorAt(x, y);
 
     switch (gBagMenu->graphicsLoadState)
     {
         case 0:
             ResetTempTileDataBuffers();
-            DecompressAndCopyTileDataToVram(2, gBagMenuGraphicsTable[gBagMenuGraphics].tileset, 0, 0, 0);
+            
+            switch (gMapHeader.mapType)
+            {
+            case MAP_TYPE_TOWN:
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SUNSET_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SUNSET_TOWN))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(CEDARRED_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(CEDARRED_TOWN))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(LITOR_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(LITOR_TOWN))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenSand_Gfx, 0, 0, 0);
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(NAVIRE_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(NAVIRE_TOWN))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenSand_Gfx, 0, 0, 0);
+                break;
+            case MAP_TYPE_CITY:
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(FIRWEALD_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(FIRWEALD_CITY))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MURENA_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MURENA_CITY))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+                break;
+            case MAP_TYPE_ROUTE:
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE401) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE401))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE402) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE402))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE403) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE403))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE406) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE406))
+                {
+                    DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+                    if (gSaveBlock1Ptr->pos.x < 43 && gSaveBlock1Ptr->pos.y < 32)
+                    {
+                        DecompressAndCopyTileDataToVram(2, gBagScreenMountain_Gfx, 0, 0, 0);
+                        break;
+                    }
+                    if (gSaveBlock1Ptr->pos.x > 24 && gSaveBlock1Ptr->pos.x < 36 && gSaveBlock1Ptr->pos.y > 48 && gSaveBlock1Ptr->pos.y < 61)
+                    {
+                        DecompressAndCopyTileDataToVram(2, gBagScreenMountain_Gfx, 0, 0, 0);
+                        break;
+                    }
+                }
+                if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ACREN_FOREST) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ACREN_FOREST))
+                    DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+                break;
+            case MAP_TYPE_UNDERGROUND:
+                DecompressAndCopyTileDataToVram(2, gBagScreenMountain_Gfx, 0, 0, 0);
+                break;
+            case MAP_TYPE_UNDERWATER:
+                DecompressAndCopyTileDataToVram(2, gBagScreenWater_Gfx, 0, 0, 0);
+                break;
+            case MAP_TYPE_OCEAN_ROUTE:
+                DecompressAndCopyTileDataToVram(2, gBagScreenWater_Gfx, 0, 0, 0);
+                break;
+            case MAP_TYPE_SECRET_BASE:
+                DecompressAndCopyTileDataToVram(2, gBagScreenInterior_Gfx, 0, 0, 0);
+                break;
+            case MAP_TYPE_INDOOR:
+                DecompressAndCopyTileDataToVram(2, gBagScreenInterior_Gfx, 0, 0, 0);
+                break;
+            }
+
+            if (MetatileBehavior_IsTallGrass(metatileBehavior) || MetatileBehavior_IsLongGrass(metatileBehavior))
+                DecompressAndCopyTileDataToVram(2, gBagScreenGrass_Gfx, 0, 0, 0);
+            if (MetatileBehavior_IsSandOrDeepSand(metatileBehavior) || MetatileBehavior_IsShallowFlowingWater(metatileBehavior))
+                DecompressAndCopyTileDataToVram(2, gBagScreenSand_Gfx, 0, 0, 0);
+            if (MetatileBehavior_IsMountain(metatileBehavior))
+                DecompressAndCopyTileDataToVram(2, gBagScreenMountain_Gfx, 0, 0, 0);
+            if (MetatileBehavior_IsSurfableWaterOrUnderwater(metatileBehavior) || MetatileBehavior_IsDeepOrOceanWater(metatileBehavior) || TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
+                DecompressAndCopyTileDataToVram(2, gBagScreenWater_Gfx, 0, 0, 0);
+
             gBagMenu->graphicsLoadState++;
             break;
         case 1:
             if (FreeTempTileDataBuffersIfPossible() != TRUE)
             {
-                LZDecompressWram(gBagMenuGraphicsTable[gBagMenuGraphics].tilemap, gBagMenu->tilemapBuffer);
+                switch (gMapHeader.mapType)
+                {
+                case MAP_TYPE_TOWN:
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SUNSET_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SUNSET_TOWN))
+                        LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(CEDARRED_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(CEDARRED_TOWN))
+                        LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(LITOR_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(LITOR_TOWN))
+                        LZDecompressWram(gBagScreenSand_GfxTileMap, gBagMenu->tilemapBuffer);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(NAVIRE_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(NAVIRE_TOWN))
+                        LZDecompressWram(gBagScreenSand_GfxTileMap, gBagMenu->tilemapBuffer);
+                    break;
+                case MAP_TYPE_CITY:
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(FIRWEALD_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(FIRWEALD_CITY))
+                        LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MURENA_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MURENA_CITY))
+                        LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);
+                    break;
+                case MAP_TYPE_ROUTE:
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE401) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE401))
+                        LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE402) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE402))
+                        LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE403) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE403))
+                        LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE406) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE406))
+                    {
+                        LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);
+                        if (gSaveBlock1Ptr->pos.x < 43 && gSaveBlock1Ptr->pos.y < 32)
+                        {
+                            LZDecompressWram(gBagScreenMountain_GfxTileMap, gBagMenu->tilemapBuffer);
+                            break;
+                        }
+                        if (gSaveBlock1Ptr->pos.x > 24 && gSaveBlock1Ptr->pos.x < 36 && gSaveBlock1Ptr->pos.y > 48 && gSaveBlock1Ptr->pos.y < 61)
+                        {
+                            LZDecompressWram(gBagScreenMountain_GfxTileMap, gBagMenu->tilemapBuffer);
+                            break;
+                        }
+                    }
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ACREN_FOREST) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ACREN_FOREST))
+                        LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);                  
+                    break;
+                case MAP_TYPE_UNDERGROUND:
+                    LZDecompressWram(gBagScreenMountain_GfxTileMap, gBagMenu->tilemapBuffer);
+                    break;
+                case MAP_TYPE_UNDERWATER:
+                    LZDecompressWram(gBagScreenWater_GfxTileMap, gBagMenu->tilemapBuffer);
+                    break;
+                case MAP_TYPE_OCEAN_ROUTE:
+                    LZDecompressWram(gBagScreenWater_GfxTileMap, gBagMenu->tilemapBuffer);
+                    break;
+                case MAP_TYPE_SECRET_BASE:
+                    LZDecompressWram(gBagScreenInterior_GfxTileMap, gBagMenu->tilemapBuffer);
+                    break;
+                case MAP_TYPE_INDOOR:
+                    LZDecompressWram(gBagScreenInterior_GfxTileMap, gBagMenu->tilemapBuffer);
+                    break;
+                }
+
+                if (MetatileBehavior_IsTallGrass(metatileBehavior) || MetatileBehavior_IsLongGrass(metatileBehavior))
+                    LZDecompressWram(gBagScreenGrass_GfxTileMap, gBagMenu->tilemapBuffer);
+                if (MetatileBehavior_IsSandOrDeepSand(metatileBehavior) || MetatileBehavior_IsShallowFlowingWater(metatileBehavior))
+                    LZDecompressWram(gBagScreenSand_GfxTileMap, gBagMenu->tilemapBuffer);
+                if (MetatileBehavior_IsMountain(metatileBehavior))
+                    LZDecompressWram(gBagScreenMountain_GfxTileMap, gBagMenu->tilemapBuffer);
+                if (MetatileBehavior_IsSurfableWaterOrUnderwater(metatileBehavior) || MetatileBehavior_IsDeepOrOceanWater(metatileBehavior) || TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
+                    LZDecompressWram(gBagScreenWater_GfxTileMap, gBagMenu->tilemapBuffer);
+                
                 gBagMenu->graphicsLoadState++;
             }
             break;
         case 2:
-            LoadCompressedPalette(gBagMenuGraphicsTable[gBagMenuGraphics].palette, 0, 0x40);
+            switch (gMapHeader.mapType)
+                {
+                case MAP_TYPE_TOWN:
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SUNSET_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SUNSET_TOWN))
+                        LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(CEDARRED_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(CEDARRED_TOWN))
+                        LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(LITOR_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(LITOR_TOWN))
+                        LoadCompressedPalette(gBagScreenSand_Pal, 0, 0x40);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(NAVIRE_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(NAVIRE_TOWN))
+                        LoadCompressedPalette(gBagScreenSand_Pal, 0, 0x40);
+                    break;
+                case MAP_TYPE_CITY:
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(FIRWEALD_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(FIRWEALD_CITY))
+                        LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MURENA_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MURENA_CITY))
+                        LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+                    break;
+                case MAP_TYPE_ROUTE:
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE401) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE401))
+                        LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE402) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE402))
+                        LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE403) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE403))
+                        LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE406) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE406))
+                    {
+                        LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+                        if (gSaveBlock1Ptr->pos.x < 43 && gSaveBlock1Ptr->pos.y < 32)
+                        {
+                            LoadCompressedPalette(gBagScreenMountain_Pal, 0, 0x40);
+                            break;
+                        }
+                        if (gSaveBlock1Ptr->pos.x > 24 && gSaveBlock1Ptr->pos.x < 36 && gSaveBlock1Ptr->pos.y > 48 && gSaveBlock1Ptr->pos.y < 61)
+                        {
+                            LoadCompressedPalette(gBagScreenMountain_Pal, 0, 0x40);
+                            break;
+                        }
+                    }
+                    if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ACREN_FOREST) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ACREN_FOREST))
+                        LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+                    break;
+                case MAP_TYPE_UNDERGROUND:
+                    LoadCompressedPalette(gBagScreenMountain_Pal, 0, 0x40);
+                    break;
+                case MAP_TYPE_UNDERWATER:
+                    LoadCompressedPalette(gBagScreenWater_Pal, 0, 0x40);
+                    break;
+                case MAP_TYPE_OCEAN_ROUTE:
+                    LoadCompressedPalette(gBagScreenWater_Pal, 0, 0x40);
+                    break;
+                case MAP_TYPE_SECRET_BASE:
+                    LoadCompressedPalette(gBagScreenInterior_Pal, 0, 0x40);
+                    break;
+                case MAP_TYPE_INDOOR:
+                    LoadCompressedPalette(gBagScreenInterior_Pal, 0, 0x40);
+                    break;
+                }
+
+            if (MetatileBehavior_IsTallGrass(metatileBehavior) || MetatileBehavior_IsLongGrass(metatileBehavior))
+                LoadCompressedPalette(gBagScreenGrass_Pal, 0, 0x40);
+            if (MetatileBehavior_IsSandOrDeepSand(metatileBehavior) || MetatileBehavior_IsShallowFlowingWater(metatileBehavior))
+                LoadCompressedPalette(gBagScreenSand_Pal, 0, 0x40);
+            if (MetatileBehavior_IsMountain(metatileBehavior))
+                LoadCompressedPalette(gBagScreenMountain_Pal, 0, 0x40);
+            if (MetatileBehavior_IsSurfableWaterOrUnderwater(metatileBehavior) || MetatileBehavior_IsDeepOrOceanWater(metatileBehavior) || TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
+                LoadCompressedPalette(gBagScreenWater_Pal, 0, 0x40);
+
+            if (TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
+            {
+                if (MetatileBehavior_GetBridgeType(metatileBehavior))
+                    return BATTLE_TERRAIN_POND;
+                if (MetatileBehavior_IsBridge(metatileBehavior) == TRUE)
+                    return BATTLE_TERRAIN_WATER;
+            }
+
             gBagMenu->graphicsLoadState++;
             break;
         case 3:
@@ -2654,66 +2821,5 @@ static void PrintTMHMMoveData(u16 itemId)
         ConvertIntToDecimalStringN(gStringVar1, gBattleMoves[moveId].pp, STR_CONV_MODE_LEFT_ALIGN, 3);
         BagMenu_Print(WIN_TMHM_INFO, 1, gStringVar1, 140, 16, 0, 0, TEXT_SPEED_FF, COLORID_TMHM_INFO);
         CopyWindowToVram(WIN_TMHM_INFO, 2);
-    }
-}
-
-static u8 BagMenu_GetGraphicsId(void)
-{
-    u16 metatileBehavior;
-    s16 x, y;
-
-    PlayerGetDestCoords(&x, &y);
-    metatileBehavior = MapGridGetMetatileBehaviorAt(x, y);
-
-    if (MetatileBehavior_IsTallGrass(metatileBehavior) || MetatileBehavior_IsLongGrass(metatileBehavior))
-        return ITEMMENUGRAPHICS_GRASS;
-    if (MetatileBehavior_IsSandOrDeepSand(metatileBehavior) || MetatileBehavior_IsShallowFlowingWater(metatileBehavior))
-        return ITEMMENUGRAPHICS_SAND;
-    if (MetatileBehavior_IsMountain(metatileBehavior))
-        return ITEMMENUGRAPHICS_MOUNTAIN;
-    if (MetatileBehavior_IsSurfableWaterOrUnderwater(metatileBehavior) || MetatileBehavior_IsDeepOrOceanWater(metatileBehavior) || TestPlayerAvatarFlags(PLAYER_AVATAR_FLAG_SURFING))
-        return ITEMMENUGRAPHICS_WATER;
-
-    switch (gMapHeader.mapType)
-    {
-    case MAP_TYPE_TOWN:
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(SUNSET_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(SUNSET_TOWN))
-            return ITEMMENUGRAPHICS_GRASS;
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(CEDARRED_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(CEDARRED_TOWN))
-            return ITEMMENUGRAPHICS_GRASS;
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(LITOR_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(LITOR_TOWN))
-            return ITEMMENUGRAPHICS_SAND;
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(NAVIRE_TOWN) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(NAVIRE_TOWN))
-            return ITEMMENUGRAPHICS_SAND;
-    case MAP_TYPE_CITY:
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(FIRWEALD_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(FIRWEALD_CITY))
-            return ITEMMENUGRAPHICS_GRASS;
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(MURENA_CITY) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(MURENA_CITY))
-            return ITEMMENUGRAPHICS_GRASS;
-    case MAP_TYPE_ROUTE:
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE401) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE401))
-            return ITEMMENUGRAPHICS_GRASS;
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE402) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE402))
-            return ITEMMENUGRAPHICS_GRASS;
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE403) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE403))
-            return ITEMMENUGRAPHICS_GRASS;
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ROUTE406) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE406))
-        {
-            if (gSaveBlock1Ptr->pos.x < 43 && gSaveBlock1Ptr->pos.y < 32)
-                return ITEMMENUGRAPHICS_MOUNTAIN;
-            if (gSaveBlock1Ptr->pos.x > 24 && gSaveBlock1Ptr->pos.x < 36 && gSaveBlock1Ptr->pos.y > 48 && gSaveBlock1Ptr->pos.y < 61)
-                return ITEMMENUGRAPHICS_MOUNTAIN;
-            return ITEMMENUGRAPHICS_GRASS;
-        }
-        if (gSaveBlock1Ptr->location.mapGroup == MAP_GROUP(ACREN_FOREST) && gSaveBlock1Ptr->location.mapNum == MAP_NUM(ACREN_FOREST))
-            return ITEMMENUGRAPHICS_GRASS;
-    case MAP_TYPE_UNDERGROUND:
-        return ITEMMENUGRAPHICS_MOUNTAIN;
-    case MAP_TYPE_UNDERWATER:
-    case MAP_TYPE_OCEAN_ROUTE:
-        return ITEMMENUGRAPHICS_WATER;
-    case MAP_TYPE_SECRET_BASE:
-    case MAP_TYPE_INDOOR:
-        return ITEMMENUGRAPHICS_INTERIOR;
     }
 }
