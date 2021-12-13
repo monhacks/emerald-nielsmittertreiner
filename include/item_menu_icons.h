@@ -6,8 +6,6 @@ extern const struct CompressedSpriteSheet gBagFemaleSpriteSheet;
 extern const struct CompressedSpritePalette gBagPaletteTable;
 extern const struct CompressedSpriteSheet gBerryCheckCircleSpriteSheet;
 extern const struct CompressedSpritePalette gBerryCheckCirclePaletteTable;
-extern const struct CompressedSpriteSheet gBagShadowSpriteSheet;
-extern const struct CompressedSpritePalette gBagShadowPaletteTable;
 
 void RemoveBagSprite(u8 id);
 void AddBagVisualSprite(u8 bagPocketId);
@@ -24,6 +22,5 @@ void FreeBerryTagSpritePalette(void);
 u8 CreateSpinningBerrySprite(u8 berryId, u8 x, u8 y, bool8 startAffine);
 u8 CreateBerryFlavorCircleSprite(s16 x);
 void HideBagItemIconSprite(u8 id);
-void CreateBagShadowSprite(void);
 
 #endif // GUARD_ITEM_MENU_ICONS_H

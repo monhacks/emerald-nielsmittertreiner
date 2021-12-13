@@ -3875,7 +3875,6 @@ extern const u8 gFireRedMenuElements_Gfx[];
 // item menu graphics
 extern const u32 gBagScreen_Gfx[];
 extern const u32 gBagScreen_GfxTileMap[];
-extern const u32 gBagScreen_Pal[];
 extern const u32 gBagScreenFemale_Pal[];
 extern const u32 gBagScreenMale_Pal[];
 extern const u8 gBagMenuHMIcon_Gfx[];
@@ -3885,8 +3884,6 @@ extern const u32 gBagMaleTiles[];
 extern const u32 gBagFemaleTiles[];
 extern const u32 gBagPalette[];
 extern const u32 gBerryCheckCircle_Gfx[];
-extern const u32 gBagShadowTiles[];
-extern const u32 gBagShadowPalette[];
 
 //intro graphics
 extern const u32 gIntroSparkle_Gfx[];
