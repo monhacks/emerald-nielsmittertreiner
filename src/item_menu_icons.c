@@ -546,7 +546,7 @@ void AddBagItemIconSprite(u16 itemId, u8 id)
         {
             *spriteId = iconSpriteId;
             gSprites[iconSpriteId].x2 = 20;
-            gSprites[iconSpriteId].y2 = 20;
+            gSprites[iconSpriteId].y2 = 68;
         }
     }
 }

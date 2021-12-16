@@ -741,7 +741,6 @@ static bool8 SetupBagMenu(void)
     case 13:
         PrintPocketNames(gPocketNamesStringsTable[gBagPosition.pocket], 0);
         CopyPocketNameToWindow(0);
-        //DrawPocketIndicatorSquare(5, FALSE);
         DrawPocketIndicatorSquare(gBagPosition.pocket, TRUE);
         gMain.state++;
         break;
@@ -1385,8 +1384,6 @@ static void Task_SwitchBagPocket(u8 taskId)
                 CopyPocketNameToWindow((u8)(tPocketSwitchTimer >> 1));
             else
                 CopyPocketNameToWindow((u8)(8 - (tPocketSwitchTimer >> 1)));
-            FillBgTilemapBufferRect_Palette0(2, 2, 14, 0, 1, 1);
-            FillBgTilemapBufferRect_Palette0(2, 3, 15, 0, 15, 1);
         }
         if (tPocketSwitchTimer == 16)
             tPocketSwitchState++;
@@ -1398,9 +1395,6 @@ static void Task_SwitchBagPocket(u8 taskId)
         PutWindowTilemap(WIN_DESCRIPTION);
         PutWindowTilemap(WIN_POCKET_NAME);
         ScheduleBgCopyTilemapToVram(0);
-        //FillBgTilemapBufferRect_Palette0(2, 39, 14, 13, 1, 1);
-        //FillBgTilemapBufferRect_Palette0(2, 40, 15, 13, 15, 1);
-        //ScheduleBgCopyTilemapToVram(2);
         CreatePocketScrollArrowPair();
         CreatePocketSwitchArrowPair();
         SwitchTaskToFollowupFunc(taskId);
