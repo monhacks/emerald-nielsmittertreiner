@@ -2546,7 +2546,7 @@ _081DDD90:
 	.bss
 	.global gMPlayTrack_BGM
 gMPlayTrack_BGM:
-	.space 0x320
+	.space 0x3C0
 	.size gMPlayTrack_BGM, .-gMPlayTrack_BGM
 
 	.global gMPlayTrack_SE1
