@@ -24,7 +24,6 @@ enum
     MENUITEM_TEXTSPEED,
     MENUITEM_BATTLESCENE,
     MENUITEM_BATTLESTYLE,
-    MENUITEM_HEALTHBOXMODE,
     MENUITEM_SOUND,
     MENUITEM_BUTTONMODE,
     MENUITEM_FRAMETYPE,
@@ -89,7 +88,6 @@ static const sItemFunctions[MENUITEM_COUNT] =
     [MENUITEM_TEXTSPEED]     = {TextSpeed_DrawChoices, TextSpeed_ProcessInput},
     [MENUITEM_BATTLESCENE]   = {BattleScene_DrawChoices, BattleScene_ProcessInput},
     [MENUITEM_BATTLESTYLE]   = {BattleStyle_DrawChoices, BattleStyle_ProcessInput},
-    [MENUITEM_HEALTHBOXMODE] = {Healthbox_DrawChoices, Healthbox_ProcessInput},
     [MENUITEM_SOUND]         = {Sound_DrawChoices, Sound_ProcessInput},
     [MENUITEM_BUTTONMODE]    = {ButtonMode_DrawChoices, ButtonMode_ProcessInput},
     [MENUITEM_FRAMETYPE]     = {FrameType_DrawChoices, FrameType_ProcessInput},
@@ -107,7 +105,6 @@ static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
     [MENUITEM_TEXTSPEED]     = gText_TextSpeed,
     [MENUITEM_BATTLESCENE]   = gText_BattleScene,
     [MENUITEM_BATTLESTYLE]   = gText_BattleStyle,
-    [MENUITEM_HEALTHBOXMODE] = gText_HealthboxMode,
     [MENUITEM_SOUND]         = gText_Sound,
     [MENUITEM_BUTTONMODE]    = gText_ButtonMode,
     [MENUITEM_FRAMETYPE]     = gText_Frame,
@@ -258,7 +255,6 @@ void CB2_InitOptionMenu(void)
         sOptions->selection[MENUITEM_TEXTSPEED]   = gSaveBlock2Ptr->optionsTextSpeed;
         sOptions->selection[MENUITEM_BATTLESCENE] = gSaveBlock2Ptr->optionsBattleSceneOff;
         sOptions->selection[MENUITEM_BATTLESTYLE] = gSaveBlock2Ptr->optionsBattleStyle;
-        sOptions->selection[MENUITEM_HEALTHBOXMODE]   = gSaveBlock2Ptr->optionsHealthboxMode;
         sOptions->selection[MENUITEM_SOUND]       = gSaveBlock2Ptr->optionsSound;
         sOptions->selection[MENUITEM_BUTTONMODE]  = gSaveBlock2Ptr->optionsButtonMode;
         sOptions->selection[MENUITEM_FRAMETYPE]   = gSaveBlock2Ptr->optionsWindowFrameType;
@@ -416,7 +412,6 @@ static void Task_OptionMenuSave(u8 taskId)
     gSaveBlock2Ptr->optionsTextSpeed =       sOptions->selection[MENUITEM_TEXTSPEED];
     gSaveBlock2Ptr->optionsBattleSceneOff =  sOptions->selection[MENUITEM_BATTLESCENE];
     gSaveBlock2Ptr->optionsBattleStyle =     sOptions->selection[MENUITEM_BATTLESTYLE];
-    gSaveBlock2Ptr->optionsHealthboxMode =   sOptions->selection[MENUITEM_HEALTHBOXMODE];
     gSaveBlock2Ptr->optionsSound =           sOptions->selection[MENUITEM_SOUND];
     gSaveBlock2Ptr->optionsButtonMode =      sOptions->selection[MENUITEM_BUTTONMODE];
     gSaveBlock2Ptr->optionsWindowFrameType = sOptions->selection[MENUITEM_FRAMETYPE];
@@ -559,23 +554,6 @@ static void BattleStyle_DrawChoices(u8 selection, u8 y)
     styles[selection] = 1;
     DrawOptionMenuChoice(gText_BattleStyleShift, 104, y, styles[0]);
     DrawOptionMenuChoice(gText_BattleStyleSet, GetStringRightAlignXOffset(1, gText_BattleStyleSet, 198), y, styles[1]);
-}
-
-static u8 Healthbox_ProcessInput(u8 selection)
-{
-    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
-        selection ^= 1;
-
-    return selection;
-}
-
-static void Healthbox_DrawChoices(u8 selection, u8 y)
-{
-    u8 styles[2] = {0, 0};
-
-    styles[selection] = 1;
-    DrawOptionMenuChoice(gText_HealthboxModeStatic, 104, y, styles[0]);
-    DrawOptionMenuChoice(gText_HealthboxModeMove, GetStringRightAlignXOffset(1, gText_HealthboxModeMove, 198), y, styles[1]);
 }
 
 static u8 Sound_ProcessInput(u8 selection)

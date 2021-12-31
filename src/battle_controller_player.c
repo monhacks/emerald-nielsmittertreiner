@@ -245,14 +245,6 @@ static void HandleInputChooseAction(void)
 {
     u16 itemId = gBattleBufferA[gActiveBattler][2] | (gBattleBufferA[gActiveBattler][3] << 8);
 
-    if (gSaveBlock2Ptr->optionsHealthboxMode == OPTIONS_HEALTHBOX_MODE_MOVE)
-    {
-        if (!IsDoubleBattle())
-            UpdatePlayerBattlerHealthboxCoords(96);
-        else
-            UpdatePlayerBattlerHealthboxCoords(104);
-    }
-
     DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
     DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
 
@@ -352,11 +344,6 @@ static void HandleInputChooseTarget(void)
     u8 identities[MAX_BATTLERS_COUNT];
     memcpy(identities, sTargetIdentities, ARRAY_COUNT(sTargetIdentities));
 
-    if (gSaveBlock2Ptr->optionsHealthboxMode == OPTIONS_HEALTHBOX_MODE_MOVE)
-    {
-        SetHealthboxSpriteInvisible(B_POSITION_PLAYER_LEFT);
-        SetHealthboxSpriteInvisible(B_POSITION_PLAYER_RIGHT);
-    }
     DoBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX, 15, 1);
 
     // what a weird loop
@@ -383,12 +370,6 @@ static void HandleInputChooseTarget(void)
         BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
         DestroyMoveTypeIcons();
         EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
-        if (gSaveBlock2Ptr->optionsHealthboxMode == OPTIONS_HEALTHBOX_MODE_MOVE)
-        {
-            UpdatePlayerBattlerHealthboxCoords(104);
-            SetHealthboxSpriteVisible(B_POSITION_PLAYER_LEFT);
-            SetHealthboxSpriteVisible(B_POSITION_PLAYER_RIGHT);
-        }
         PlayerBufferExecCompleted();
     }
     else if (JOY_NEW(B_BUTTON) || gPlayerDpadHoldFrames > 59)
@@ -399,11 +380,6 @@ static void HandleInputChooseTarget(void)
         DoBounceEffect(gActiveBattler, BOUNCE_HEALTHBOX, 7, 1);
         DoBounceEffect(gActiveBattler, BOUNCE_MON, 7, 1);
         EndBounceEffect(gMultiUsePlayerCursor, BOUNCE_HEALTHBOX);
-        if (gSaveBlock2Ptr->optionsHealthboxMode == OPTIONS_HEALTHBOX_MODE_MOVE)
-        {
-            SetHealthboxSpriteVisible(B_POSITION_PLAYER_LEFT);
-            SetHealthboxSpriteVisible(B_POSITION_PLAYER_RIGHT);
-        }
     }
     else if (JOY_NEW(DPAD_LEFT | DPAD_UP))
     {
@@ -500,9 +476,6 @@ static void HandleInputChooseMove(void)
     bool32 canSelectTarget = FALSE;
     struct ChooseMoveStruct *moveInfo = (struct ChooseMoveStruct*)(&gBattleBufferA[gActiveBattler][4]);
 
-    if (gSaveBlock2Ptr->optionsHealthboxMode == OPTIONS_HEALTHBOX_MODE_MOVE)
-        UpdatePlayerBattlerHealthboxCoords(72);
-
     if (JOY_HELD(DPAD_ANY) && gSaveBlock2Ptr->optionsButtonMode == OPTIONS_BUTTON_MODE_L_EQUALS_A)
         gPlayerDpadHoldFrames++;
     else
@@ -556,8 +529,6 @@ static void HandleInputChooseMove(void)
             BtlController_EmitTwoReturnValues(1, 10, gMoveSelectionCursor[gActiveBattler] | (gMultiUsePlayerCursor << 8));
             PlayerBufferExecCompleted();
             DestroyMoveTypeIcons();
-            if (gSaveBlock2Ptr->optionsHealthboxMode == OPTIONS_HEALTHBOX_MODE_MOVE)
-                UpdatePlayerBattlerHealthboxCoords(96);
         }
         else
         {
