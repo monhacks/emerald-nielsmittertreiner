@@ -812,8 +812,6 @@ bool8 BattleInitAllSprites(u8 *state1, u8 *battlerId)
         }
         break;
     case 2:
-        LoadCompressedSpriteSheet(&sSpriteSheet_MoveTypes);
-        LoadCompressedPalette(gMoveTypes_Pal, 0x1D0, 0x60);
         (*state1)++;
         break;
     case 3:

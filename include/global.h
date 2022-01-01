@@ -556,7 +556,6 @@ struct SaveBlock2
     /*0x64C*/ struct BattleFrontier frontier;
     /*0xF2C*/ struct Follower follower;
     /*0xF2C*/ u8 itemFlags[ITEM_FLAGS_COUNT];
-    /*0xF2C*/ bool8 showMovePowerAndAccuracy;
     /*0xF2C*/ struct InGameClock inGameClock;
     /*0xF2C*/ bool8 is24HClockMode;
 }; // sizeof=0xF2C

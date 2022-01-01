@@ -110,7 +110,6 @@ struct ChooseMoveStruct
     u16 species;
     u8 monType1;
     u8 monType2;
-    u8 moveTypeSpriteIds[4];
 };
 
 enum

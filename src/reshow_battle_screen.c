@@ -1,8 +1,6 @@
 #include "global.h"
 #include "reshow_battle_screen.h"
 #include "battle.h"
-#include "decompress.h"
-#include "graphics.h"
 #include "palette.h"
 #include "pokemon.h"
 #include "main.h"
@@ -78,8 +76,6 @@ static void CB2_ReshowBattleScreenAfterMenu(void)
         gReservedSpritePaletteCount = 4;
         break;
     case 5:
-        LoadCompressedSpriteSheet(&sSpriteSheet_MoveTypes);
-        LoadCompressedPalette(gMoveTypes_Pal, 0x1D0, 0x60);
         ClearSpritesHealthboxAnimData();
         break;
     case 6:
