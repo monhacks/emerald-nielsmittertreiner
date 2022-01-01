@@ -974,45 +974,48 @@ static bool8 IsSoftwarePaletteFadeFinishing(void)
 }
 
 // optimized based on lucktyphlosion's BlendPalettesFine
-static void BlendPalettesFine(u32 palettes, u16 *src, u16 *dst, u32 coeff, u32 color)
+void BlendPalettesFine(u32 palettes, u16 *src, u16 *dest, u32 coeff, u32 color)
 {
     s32 newR, newG, newB;
+    u16 * palDataSrc;
+    u16 * palDataDst;
 
-    if (!palettes)
+    if (!palettes) {
         return;
+    }
 
-    coeff *= 2;
     newR = (color << 27) >> 27;
     newG = (color << 22) >> 27;
     newB = (color << 17) >> 27;
 
-    do
-    {
-        if (palettes & 1)
-        {
-            u16 *srcEnd = src + 16;
-            *dst++ = *src++; // transparency is copied-through
-            while (src != srcEnd)
-            {
-                u32 srcColor = *src;
-                s32 r = (srcColor << 27) >> 27;
-                s32 g = (srcColor << 22) >> 27;
-                s32 b = (srcColor << 17) >> 27;
+    palDataSrc = src;
+    palDataDst = dest;
 
-                *dst++ = ((r + (((newR - r) * coeff) >> 5)) << 0)
-                       | ((g + (((newG - g) * coeff) >> 5)) << 5)
-                       | ((b + (((newB - b) * coeff) >> 5)) << 10);
-                src++;
+    do {
+        if (palettes & 1) {
+            u16 * palDataSrcEnd = palDataSrc + 16;
+            while (palDataSrc != palDataSrcEnd)
+            {
+                u32 palDataSrcColor = *palDataSrc;
+
+                s32 r = (palDataSrcColor << 27) >> 27;
+                s32 g = (palDataSrcColor << 22) >> 27;
+                s32 b = (palDataSrcColor << 17) >> 27;
+
+                *palDataDst = ((r + (((newR - r) * coeff) >> 5)) << 0)
+                                | ((g + (((newG - g) * coeff) >> 5)) << 5)
+                                | ((b + (((newB - b) * coeff) >> 5)) << 10);
+
+                palDataSrc++;
+                palDataDst++;
             }
-        }
-        else
-        {
-            src += 16;
-            dst + 16;
+        } else {
+            palDataSrc += 16;
+            palDataDst += 16;
         }
         palettes >>= 1;
-    }
-    while (palettes);
+
+    } while (palettes);
 }
 
 void BlendPalettes(u32 palettes, u8 coeff, u16 color)
