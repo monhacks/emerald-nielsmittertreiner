@@ -63,7 +63,7 @@
 #define VAR_POISON_STEP_COUNTER                          (GENERAL_PURPOSE_VARS_START + 0xB) 
 #define VAR_RESET_RTC_ENABLE                             (GENERAL_PURPOSE_VARS_START + 0xC) 
 #define VAR_ENIGMA_BERRY_AVAILABLE                       (GENERAL_PURPOSE_VARS_START + 0xD) 
-#define VAR_0x402E                                       (GENERAL_PURPOSE_VARS_START + 0xE) 
+#define VAR_WONDER_NEWS_COUNTER                          (GENERAL_PURPOSE_VARS_START + 0xE) 
 #define VAR_FRONTIER_MANIAC_FACILITY                     (GENERAL_PURPOSE_VARS_START + 0xF) 
 #define VAR_FRONTIER_GAMBLER_CHALLENGE                   (GENERAL_PURPOSE_VARS_START + 0x10)
 #define VAR_FRONTIER_GAMBLER_SET_CHALLENGE               (GENERAL_PURPOSE_VARS_START + 0x11)
@@ -182,14 +182,14 @@
 #define VAR_REGISTER_BIRCH_STATE                         (SPECIAL_STATE_VARS_START + 0x2A)
 #define VAR_UNUSED_0x40DB                                (SPECIAL_STATE_VARS_START + 0x2B) // Unused Var
 #define VAR_UNUSED_0x40DC                                (SPECIAL_STATE_VARS_START + 0x2C) // Unused Var
-#define VAR_EVENT_PICHU_SLOT                             (SPECIAL_STATE_VARS_START + 0x2D)
-#define VAR_NEVER_READ_0x40DE                            (SPECIAL_STATE_VARS_START + 0x2E) // Var is written to, but never read
-#define VAR_NEVER_READ_0x40DF                            (SPECIAL_STATE_VARS_START + 0x2F) // Var is written to, but never read
-#define VAR_NEVER_READ_0x40E0                            (SPECIAL_STATE_VARS_START + 0x30) // Var is written to, but never read
-#define VAR_NEVER_READ_0x40E1                            (SPECIAL_STATE_VARS_START + 0x31) // Var is written to, but never read
-#define VAR_NEVER_READ_0x40E2                            (SPECIAL_STATE_VARS_START + 0x32) // Var is written to, but never read
-#define VAR_NEVER_READ_0x40E3                            (SPECIAL_STATE_VARS_START + 0x33) // Var is written to, but never read
-#define VAR_NEVER_READ_0x40E4                            (SPECIAL_STATE_VARS_START + 0x34) // var is written to, but never read
+#define VAR_GIFT_PICHU_SLOT                              (SPECIAL_STATE_VARS_START + 0x2D)
+#define VAR_GIFT_UNUSED_1                                (SPECIAL_STATE_VARS_START + 0x2E) // Var is written to, but never read
+#define VAR_GIFT_UNUSED_2                                (SPECIAL_STATE_VARS_START + 0x2F) // Var is written to, but never read
+#define VAR_GIFT_UNUSED_3                                (SPECIAL_STATE_VARS_START + 0x30) // Var is written to, but never read
+#define VAR_GIFT_UNUSED_4                                (SPECIAL_STATE_VARS_START + 0x31) // Var is written to, but never read
+#define VAR_GIFT_UNUSED_5                                (SPECIAL_STATE_VARS_START + 0x32) // Var is written to, but never read
+#define VAR_GIFT_UNUSED_6                                (SPECIAL_STATE_VARS_START + 0x33) // Var is written to, but never read
+#define VAR_GIFT_UNUSED_7                                (SPECIAL_STATE_VARS_START + 0x34) // var is written to, but never read
 #define VAR_UNUSED_0x40E5                                (SPECIAL_STATE_VARS_START + 0x35) // Unused Var
 #define VAR_DAILY_SLOTS                                  (SPECIAL_STATE_VARS_START + 0x36)
 #define VAR_DAILY_WILDS                                  (SPECIAL_STATE_VARS_START + 0x37)

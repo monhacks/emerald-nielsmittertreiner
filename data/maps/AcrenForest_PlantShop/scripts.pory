@@ -160,7 +160,7 @@ movement AcrenForest_PlantShop_Movement_ShopOwnerWalkToJulia {
     walk_right * 2
     walk_up
     delay_16
-    walk_in_place_fastest_up
+    walk_in_place_faster_up
 }
 
 movement AcrenForest_PlantShop_Movement_ShopOwnerWalkBehindCounter {

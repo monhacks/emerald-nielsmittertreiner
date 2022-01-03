@@ -202,52 +202,52 @@ AcrenForest_IllegalCabin_Movement_PhyllosWalkForward:
 
 AcrenForest_IllegalCabin_Movement_GruntsFallBack:
 	lock_facing_direction
-	walk_in_place_fastest_right
-	walk_in_place_fastest_right
-	walk_fastest_left
+	walk_in_place_faster_right
+	walk_in_place_faster_right
+	walk_faster_left
 	unlock_facing_direction
 	step_end
 
 AcrenForest_IllegalCabin_Movement_Grunt1RunOut:
-	walk_fastest_down
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_down
 	set_invisible
 	step_end
 
 AcrenForest_IllegalCabin_Movement_Grunt2RunOut:
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_down
 	set_invisible
 	step_end
 
 AcrenForest_IllegalCabin_Movement_Grunt3RunOut:
-	walk_fastest_down
-	walk_fastest_left
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_left
+	walk_faster_down
+	walk_faster_down
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_down
 	set_invisible
 	step_end
 
 AcrenForest_IllegalCabin_Movement_Grunt4RunOut:
-	walk_fastest_down
-	walk_fastest_left
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_left
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_left
+	walk_faster_down
+	walk_faster_down
+	walk_faster_left
+	walk_faster_down
 	set_invisible
 	step_end
 

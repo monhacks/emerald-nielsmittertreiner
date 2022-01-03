@@ -8,22 +8,22 @@ script OureaCaves_EventScript_TryShowMapNamePopup {
 script OureaCaves_EventScript_SetCaveLights {
     switch (var(VAR_OUREA_CAVES_LIGHTS_STATE)) {
         case 1:
-            setflashradius(5)
+            setflashlevel(5)
             break
         case 2:
-            setflashradius(4)
+            setflashlevel(4)
             break
         case 3:
-            setflashradius(3)
+            setflashlevel(3)
             break
         case 4:
-            setflashradius(2)
+            setflashlevel(2)
             break
         case 5:
-            setflashradius(1)
+            setflashlevel(1)
             break
         case 6:
-            setflashradius(0)
+            setflashlevel(0)
             break
     }
     return

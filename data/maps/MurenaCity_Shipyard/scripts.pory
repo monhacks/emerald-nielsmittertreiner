@@ -80,8 +80,8 @@ script MurenaCity_Shipyard_EventScript_CancelFerrySelect {
 
 script MurenaCity_Shipyard_EventScript_SailToLitorTown {
     call(FishermanFerry_EventScript_BackupFerryLocation)
-    setobjectpriority(LOCALID_FISHERMAN, MAP_MURENA_CITY_SHIPYARD, 0)
-    setobjectpriority(OBJ_EVENT_ID_PLAYER, MAP_MURENA_CITY_SHIPYARD, 0)
+    setobjectsubpriority(LOCALID_FISHERMAN, MAP_MURENA_CITY_SHIPYARD, 0)
+    setobjectsubpriority(OBJ_EVENT_ID_PLAYER, MAP_MURENA_CITY_SHIPYARD, 0)
     applymovement(LOCALID_FISHERMAN, MurenaCity_Shipyard_Movement_FishermanBoardBoat)
     waitmovement(0)
     removeobject(LOCALID_FISHERMAN)
@@ -127,7 +127,7 @@ movement MurenaCity_Shipyard_Movement_PlayerBoardBoat {
     walk_up
     face_left
     delay_16
-    walk_in_place_fastest_left * 3
+    walk_in_place_faster_left * 3
     jump_left
     enable_jump_landing_ground_effect
 }

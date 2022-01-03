@@ -216,40 +216,40 @@ movement AcrenForest_IllegalCabin_Movement_PhyllosWalkForward {
 
 movement AcrenForest_IllegalCabin_Movement_GruntsFallBack {
     lock_facing_direction
-    walk_in_place_fastest_right * 2
-    walk_fastest_left
+    walk_in_place_faster_right * 2
+    walk_faster_left
     unlock_facing_direction
 }
 
 movement AcrenForest_IllegalCabin_Movement_Grunt1RunOut {
-    walk_fastest_down
-    walk_fastest_right * 4
-    walk_fastest_down
+    walk_faster_down
+    walk_faster_right * 4
+    walk_faster_down
     set_invisible
 }
 
 movement AcrenForest_IllegalCabin_Movement_Grunt2RunOut {
-    walk_fastest_down * 2
-    walk_fastest_right * 4
-    walk_fastest_down
+    walk_faster_down * 2
+    walk_faster_right * 4
+    walk_faster_down
     set_invisible
 }
 
 movement AcrenForest_IllegalCabin_Movement_Grunt3RunOut {
-    walk_fastest_down
-    walk_fastest_left
-    walk_fastest_down * 2
-    walk_fastest_right * 3
-    walk_fastest_down
+    walk_faster_down
+    walk_faster_left
+    walk_faster_down * 2
+    walk_faster_right * 3
+    walk_faster_down
     set_invisible
 }
 
 movement AcrenForest_IllegalCabin_Movement_Grunt4RunOut {
-    walk_fastest_down
-    walk_fastest_left
-    walk_fastest_down * 2
-    walk_fastest_left
-    walk_fastest_down
+    walk_faster_down
+    walk_faster_left
+    walk_faster_down * 2
+    walk_faster_left
+    walk_faster_down
     set_invisible
 }
 

@@ -48,12 +48,12 @@ MurenaCity_EventScript_SailToLitor::
 	waitmovement 0
 	setobjectxyperm 2, 34, 22
 	addobject 2
-	setobjectpriority 2, MAP_LITOR_TOWN, 0
+	setobjectsubpriority 2, MAP_LITOR_TOWN, 0
 	applymovement 2, Common_Movement_WalkLeft
 	waitmovement 0
 	clearflag FLAG_HIDE_LITOR_TOWN_FISHERMAN
 	addobject 1
-	setobjectpriority 1, MAP_LITOR_TOWN, 1
+	setobjectsubpriority 1, MAP_LITOR_TOWN, 1
 	clearflag FLAG_HIDE_LITOR_TOWN_BOAT
 	setflag FLAG_HIDE_MURENA_CITY_SHIPYARD_BOAT
 	setflag FLAG_HIDE_MURENA_CITY_BOAT
@@ -65,8 +65,8 @@ MurenaCity_EventScript_SailToLitor::
 	msgbox MurenaCity_EventScript_SailToLitor_Text_0
 	destroy_speech_bubble
 	closemessage
-	resetobjectpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN
-	resetobjectpriority 2, MAP_LITOR_TOWN
+	resetobjectsubpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN
+	resetobjectsubpriority 2, MAP_LITOR_TOWN
 	copyobjectxytoperm 2
 	call FishermanFerry_EventScript_RestoreFerryLocation
 	release
@@ -284,7 +284,7 @@ MurenaCity_EventScript_FeebasSeller_5:
 	delay 10
 	playse SE_SHOP
 	removemoney 500, 0
-	updatemoneybox 0, 0
+	updatemoneybox 0
 	delay 30
 	hidemoneybox
 	givemon SPECIES_FEEBAS, 5, ITEM_NONE
@@ -344,7 +344,7 @@ MurenaCity_EventScript_OldMan_5:
 	delay 30
 	playse SE_SHOP
 	addmoney 25000, 0
-	updatemoneybox 0, 0
+	updatemoneybox 0
 	delay 30
 	hidemoneybox
 	load_speech_bubble 15
@@ -393,7 +393,7 @@ MurenaCity_EventScript_MarketSalesWoman_2:
 	delay 10
 	playse SE_SHOP
 	removemoney 250, 0
-	updatemoneybox 0, 0
+	updatemoneybox 0
 	delay 30
 	hidemoneybox
 	giveitem ITEM_TENTACOOL_SKEWER, 1
@@ -494,15 +494,15 @@ MurenaCity_Movement_Grunt2PunchFisherman:
 	lock_facing_direction
 	walk_slow_up
 	unlock_facing_direction
-	walk_in_place_fastest_down
-	walk_in_place_fastest_down
-	walk_in_place_fastest_down
+	walk_in_place_faster_down
+	walk_in_place_faster_down
+	walk_in_place_faster_down
 	walk_fast_down
 	step_end
 
 MurenaCity_Movement_FishermanStrugglesBack:
-	walk_in_place_fastest_up
-	walk_in_place_fastest_up
+	walk_in_place_faster_up
+	walk_in_place_faster_up
 	lock_facing_direction
 	walk_fast_down
 	unlock_facing_direction
@@ -588,31 +588,31 @@ MurenaCity_Movement_SailToLitor:
 	walk_down
 	walk_fast_down
 	walk_fast_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
 	walk_fast_down
 	walk_fast_down
 	walk_down
 	walk_right
 	walk_fast_right
 	walk_fast_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
 	walk_fast_right
 	walk_fast_right
 	walk_right
@@ -625,71 +625,71 @@ MurenaCity_Movement_SailToLitor:
 	walk_right
 	walk_fast_right
 	walk_fast_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
 	walk_fast_right
 	walk_fast_right
 	walk_right
@@ -704,34 +704,34 @@ MurenaCity_Movement_SailToLitor:
 	walk_down
 	walk_fast_down
 	walk_fast_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
 	walk_fast_down
 	walk_fast_down
 	walk_down
 	walk_right
 	walk_fast_right
 	walk_fast_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
 	walk_fast_right
 	walk_fast_right
 	walk_right
@@ -741,21 +741,21 @@ MurenaCity_Movement_SailToLitor:
 	walk_right
 	walk_fast_right
 	walk_fast_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
 	walk_fast_right
 	walk_fast_right
 	walk_right
 	walk_up
 	walk_fast_up
 	walk_fast_up
-	walk_fastest_up
-	walk_fastest_up
+	walk_faster_up
+	walk_faster_up
 	walk_fast_up
 	walk_fast_up
 	walk_up

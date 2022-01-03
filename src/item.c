@@ -926,9 +926,9 @@ u8 ItemId_GetImportance(u16 itemId)
 }
 
 // unused
-u8 ItemId_GetUnknownValue(u16 itemId)
+u8 ItemId_GetRegistrability(u16 itemId)
 {
-    return gItems[SanitizeItemId(itemId)].unk19;
+    return gItems[SanitizeItemId(itemId)].registrability;
 }
 
 u8 ItemId_GetPocket(u16 itemId)
@@ -1036,7 +1036,7 @@ void DrawHeaderBox(void)
     u8 *dst;
     bool8 handleFlash = FALSE;
     
-    if (Overworld_GetFlashLevel() > 1)
+    if (GetFlashLevel() > 1)
         handleFlash = TRUE;
     
     if (headerType == 1)
@@ -1138,7 +1138,7 @@ static void DestroyItemIconSprite(void)
 	FreeSpriteOamMatrix(&gSprites[sItemIconSpriteId]);
 	DestroySprite(&gSprites[sItemIconSpriteId]);
     
-    if (Overworld_GetFlashLevel() > 1 && sItemIconSpriteId2 != MAX_SPRITES)
+    if (GetFlashLevel() > 1 && sItemIconSpriteId2 != MAX_SPRITES)
     {
         FreeSpriteOamMatrix(&gSprites[sItemIconSpriteId2]);
         DestroySprite(&gSprites[sItemIconSpriteId2]);

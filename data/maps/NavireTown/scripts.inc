@@ -52,8 +52,8 @@ NavireTown_EventScript_CancelFerrySelect::
 NavireTown_EventScript_SailToLitor::
 	call FishermanFerry_EventScript_BackupFerryLocation
 	hideobjectat 1, MAP_LITOR_TOWN
-	setobjectpriority 2, MAP_NAVIRE_TOWN, 0
-	setobjectpriority OBJ_EVENT_ID_PLAYER, MAP_NAVIRE_TOWN, 0
+	setobjectsubpriority 2, MAP_NAVIRE_TOWN, 0
+	setobjectsubpriority OBJ_EVENT_ID_PLAYER, MAP_NAVIRE_TOWN, 0
 	applymovement 2, Common_Movement_WalkLeft
 	waitmovement 0
 	removeobject 2
@@ -76,12 +76,12 @@ NavireTown_EventScript_SailToLitor::
 	clearflag FLAG_HIDE_LITOR_TOWN_FISHERMAN
 	setobjectxyperm 2, 34, 22
 	addobject 2
-	setobjectpriority 2, MAP_LITOR_TOWN, 0
+	setobjectsubpriority 2, MAP_LITOR_TOWN, 0
 	applymovement 2, Common_Movement_WalkLeft
 	waitmovement 0
 	clearflag FLAG_HIDE_LITOR_TOWN_FISHERMAN
 	addobject 1
-	setobjectpriority 1, MAP_LITOR_TOWN, 1
+	setobjectsubpriority 1, MAP_LITOR_TOWN, 1
 	clearflag FLAG_HIDE_LITOR_TOWN_BOAT
 	setflag FLAG_HIDE_MURENA_CITY_SHIPYARD_BOAT
 	setflag FLAG_HIDE_MURENA_CITY_BOAT
@@ -93,8 +93,8 @@ NavireTown_EventScript_SailToLitor::
 	msgbox NavireTown_EventScript_SailToLitor_Text_0
 	destroy_speech_bubble
 	closemessage
-	resetobjectpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN
-	resetobjectpriority 2, MAP_LITOR_TOWN
+	resetobjectsubpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN
+	resetobjectsubpriority 2, MAP_LITOR_TOWN
 	copyobjectxytoperm 2
 	call FishermanFerry_EventScript_RestoreFerryLocation
 	release
@@ -147,29 +147,29 @@ NavireTown_Movement_SailToLitor:
 	walk_up
 	walk_fast_up
 	walk_fast_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
 	walk_fast_up
 	walk_fast_up
 	walk_up
 	walk_left
 	walk_fast_left
 	walk_fast_left
-	walk_fastest_left
+	walk_faster_left
 	walk_fast_left
 	walk_fast_left
 	walk_left
 	walk_up
 	walk_fast_up
 	walk_fast_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
 	walk_fast_up
 	walk_fast_up
 	walk_up
@@ -178,15 +178,15 @@ NavireTown_Movement_SailToLitor:
 	walk_up
 	walk_fast_up
 	walk_fast_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
 	walk_fast_up
 	walk_fast_up
 	walk_up
@@ -198,12 +198,12 @@ NavireTown_Movement_SailToLitor:
 	walk_up
 	walk_fast_up
 	walk_fast_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
 	walk_fast_up
 	walk_fast_up
 	walk_up
@@ -212,9 +212,9 @@ NavireTown_Movement_SailToLitor:
 	walk_up
 	walk_fast_up
 	walk_fast_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
 	walk_fast_up
 	walk_fast_up
 	walk_up

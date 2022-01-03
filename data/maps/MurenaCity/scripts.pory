@@ -58,12 +58,12 @@ script MurenaCity_EventScript_SailToLitor {
     waitmovement(0)
     setobjectxyperm(LOCALID_FISHERMAN_LITOR, 34, 22)
     addobject(LOCALID_FISHERMAN_LITOR)
-    setobjectpriority(LOCALID_FISHERMAN_LITOR, MAP_LITOR_TOWN, 0)
+    setobjectsubpriority(LOCALID_FISHERMAN_LITOR, MAP_LITOR_TOWN, 0)
     applymovement(LOCALID_FISHERMAN_LITOR, Common_Movement_WalkLeft)
     waitmovement(0)
     clearflag(FLAG_HIDE_LITOR_TOWN_FISHERMAN)
     addobject(LOCALID_BOAT_LITOR)
-    setobjectpriority(LOCALID_BOAT_LITOR, MAP_LITOR_TOWN, 1)
+    setobjectsubpriority(LOCALID_BOAT_LITOR, MAP_LITOR_TOWN, 1)
     clearflag(FLAG_HIDE_LITOR_TOWN_BOAT)
     setflag(FLAG_HIDE_MURENA_CITY_SHIPYARD_BOAT)
     setflag(FLAG_HIDE_MURENA_CITY_BOAT)
@@ -76,8 +76,8 @@ script MurenaCity_EventScript_SailToLitor {
            "You can smell the salty sea here too.")
     destroy_speech_bubble
     closemessage
-    resetobjectpriority(OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN)
-    resetobjectpriority(LOCALID_FISHERMAN_LITOR, MAP_LITOR_TOWN)
+    resetobjectsubpriority(OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN)
+    resetobjectsubpriority(LOCALID_FISHERMAN_LITOR, MAP_LITOR_TOWN)
     copyobjectxytoperm(LOCALID_FISHERMAN_LITOR)
     call(FishermanFerry_EventScript_RestoreFerryLocation)
     release
@@ -294,7 +294,7 @@ script MurenaCity_EventScript_FeebasSeller {
         delay(10)
         playse(SE_SHOP)
         removemoney(500, 0)
-        updatemoneybox(0, 0)
+        updatemoneybox(0)
         delay(30)
         hidemoneybox
         givemon(SPECIES_FEEBAS, 5, ITEM_NONE)
@@ -355,7 +355,7 @@ script MurenaCity_EventScript_OldMan {
         delay(30)
         playse(SE_SHOP)
         addmoney(25000, 0)
-        updatemoneybox(0, 0)
+        updatemoneybox(0)
         delay(30)
         hidemoneybox
         load_speech_bubble(LOCALID_OLD_MAN)
@@ -416,7 +416,7 @@ script MurenaCity_EventScript_MarketSalesWoman {
         delay(10)
         playse(SE_SHOP)
         removemoney(250, 0)
-        updatemoneybox(0, 0)
+        updatemoneybox(0)
         delay(30)
         hidemoneybox
         giveitem(ITEM_TENTACOOL_SKEWER, 1)
@@ -540,12 +540,12 @@ movement MurenaCity_Movement_Grunt2PunchFisherman {
     lock_facing_direction
     walk_slow_up
     unlock_facing_direction
-    walk_in_place_fastest_down * 3
+    walk_in_place_faster_down * 3
     walk_fast_down
 }
 
 movement MurenaCity_Movement_FishermanStrugglesBack {
-    walk_in_place_fastest_up * 2
+    walk_in_place_faster_up * 2
     lock_facing_direction
     walk_fast_down
     unlock_facing_direction
@@ -608,12 +608,12 @@ movement MurenaCity_Movement_SailToLitor {
     walk_left
     walk_down
     walk_fast_down * 2
-    walk_fastest_down * 12
+    walk_faster_down * 12
     walk_fast_down * 2
     walk_down
     walk_right
     walk_fast_right * 2
-    walk_fastest_right * 7
+    walk_faster_right * 7
     walk_fast_right * 2
     walk_right
     walk_up
@@ -621,7 +621,7 @@ movement MurenaCity_Movement_SailToLitor {
     walk_up
     walk_right
     walk_fast_right * 2
-    walk_fastest_right * 65
+    walk_faster_right * 65
     walk_fast_right * 2
     walk_right
     walk_down
@@ -632,12 +632,12 @@ movement MurenaCity_Movement_SailToLitor {
     walk_right
     walk_down
     walk_fast_down * 2
-    walk_fastest_down * 12
+    walk_faster_down * 12
     walk_fast_down * 2
     walk_down
     walk_right
     walk_fast_right * 2
-    walk_fastest_right * 10
+    walk_faster_right * 10
     walk_fast_right * 2
     walk_right
     walk_up
@@ -645,12 +645,12 @@ movement MurenaCity_Movement_SailToLitor {
     walk_up
     walk_right
     walk_fast_right * 2
-    walk_fastest_right * 7
+    walk_faster_right * 7
     walk_fast_right * 2
     walk_right
     walk_up
     walk_fast_up * 2
-    walk_fastest_up * 2
+    walk_faster_up * 2
     walk_fast_up * 2
     walk_up
     face_down

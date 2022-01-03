@@ -2,14 +2,13 @@ Std_MsgboxNPC:
 	lock
 	faceplayer
 	specialvar VAR_RESULT, IsPlayerInFlashCave
-	compare VAR_RESULT, 0
-	call_if_eq Std_MsgboxLoadSpeechBubble
-	message 0x0
+	call_if_eq VAR_RESULT, FALSE, Std_MsgboxLoadSpeechBubble
+	message NULL
 	waitmessage
 	waitbuttonpress
 	specialvar VAR_RESULT, IsPlayerInFlashCave
 	compare VAR_RESULT, 0
-	call_if_eq Std_MsgboxDestroySpeechBubble
+	call_if_eq VAR_RESULT, FALSE, Std_MsgboxDestroySpeechBubble
 	release
 	return
 
@@ -23,33 +22,34 @@ Std_MsgboxDestroySpeechBubble:
 
 Std_MsgboxSign:
 	lockall
-	message 0x0
+	message NULL
 	waitmessage
 	waitbuttonpress
 	releaseall
 	return
 
 Std_MsgboxDefault:
-	message 0x0
+	message NULL
 	waitmessage
 	waitbuttonpress
 	return
 
 Std_MsgboxYesNo:
-	message 0x0
+	message NULL
 	waitmessage
 	yesnobox 20, 8
 	return
 
 Std_MsgboxGetPoints:
-	message 0x0
+	message NULL
 	playfanfare MUS_OBTAIN_B_POINTS
 	waitfanfare
 	waitmessage
 	return
 
-Std_10:
-	pokenavcall 0x0
+@ Never used, pokenavcall is always used directly instead
+Std_MsgboxPokenav:
+	pokenavcall NULL
 	waitmessage
 	return
 

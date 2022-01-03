@@ -336,7 +336,7 @@ static const struct MatchCallWally sWallyMatchCallHeader =
     .type = MC_TYPE_WALLY,
     .mapSec = 0,
     .flag = FLAG_ENABLE_WALLY_MATCH_CALL,
-    .rematchTableIdx = REMATCH_WALLY_3,
+    .rematchTableIdx = REMATCH_WALLY_VR,
     .desc = gText_WallyMatchCallDesc,
     .textData = sWallyTextScripts,
     .locationData = sWallyLocationData
@@ -658,38 +658,38 @@ static void (*const sMatchCall_GetNameAndDescFunctions[])(match_call_t, const u8
 };
 
 static const struct MatchCallCheckPageOverride sCheckPageOverrides[] = {
-    { 
-        .idx = MC_HEADER_STEVEN,  
-        .facilityClass = FACILITY_CLASS_STEVEN,  
-        .flag = 0xFFFF,                     
-        .flavorTexts = { 
-            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy, 
-            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon, 
-            [CHECK_PAGE_INTRO_1]  = gText_MatchCallSteven_Intro1_BeforeMeteorFallsBattle, 
-            [CHECK_PAGE_INTRO_2]  = gText_MatchCallSteven_Intro2_BeforeMeteorFallsBattle 
-        } 
+    {
+        .idx = MC_HEADER_STEVEN,
+        .facilityClass = FACILITY_CLASS_STEVEN,
+        .flag = 0xFFFF,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy,
+            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon,
+            [CHECK_PAGE_INTRO_1]  = gText_MatchCallSteven_Intro1_BeforeMeteorFallsBattle,
+            [CHECK_PAGE_INTRO_2]  = gText_MatchCallSteven_Intro2_BeforeMeteorFallsBattle
+        }
     },
-    { 
-        .idx = MC_HEADER_STEVEN,  
-        .facilityClass = FACILITY_CLASS_STEVEN,  
-        .flag = FLAG_DEFEATED_MOSSDEEP_GYM, 
-        .flavorTexts = { 
-            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy, 
-            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon, 
-            [CHECK_PAGE_INTRO_1]  = gText_MatchCallSteven_Intro1_AfterMeteorFallsBattle, 
-            [CHECK_PAGE_INTRO_2]  = gText_MatchCallSteven_Intro2_AfterMeteorFallsBattle 
-        } 
+    {
+        .idx = MC_HEADER_STEVEN,
+        .facilityClass = FACILITY_CLASS_STEVEN,
+        .flag = FLAG_DEFEATED_MOSSDEEP_GYM,
+        .flavorTexts = {
+            [CHECK_PAGE_STRATEGY] = gText_MatchCallSteven_Strategy,
+            [CHECK_PAGE_POKEMON]  = gText_MatchCallSteven_Pokemon,
+            [CHECK_PAGE_INTRO_1]  = gText_MatchCallSteven_Intro1_AfterMeteorFallsBattle,
+            [CHECK_PAGE_INTRO_2]  = gText_MatchCallSteven_Intro2_AfterMeteorFallsBattle
+        }
     },
-    { 
-        .idx = MC_HEADER_BRENDAN, 
-        .facilityClass = FACILITY_CLASS_BRENDAN, 
-        .flag = 0xFFFF,                     
+    {
+        .idx = MC_HEADER_BRENDAN,
+        .facilityClass = FACILITY_CLASS_BRENDAN,
+        .flag = 0xFFFF,
         .flavorTexts = MCFLAVOR(Brendan)
     },
-    { 
-        .idx = MC_HEADER_MAY,     
-        .facilityClass = FACILITY_CLASS_MAY,     
-        .flag = 0xFFFF,                     
+    {
+        .idx = MC_HEADER_MAY,
+        .facilityClass = FACILITY_CLASS_MAY,
+        .flag = 0xFFFF,
         .flavorTexts = MCFLAVOR(May)
     }
 };
@@ -842,22 +842,14 @@ static bool32 MatchCall_IsRematchable_NPC(match_call_t matchCall)
 
 static bool32 MatchCall_IsRematchable_Trainer(match_call_t matchCall)
 {
-    #ifndef FREE_MATCH_CALL
     if (matchCall.trainer->rematchTableIdx >= REMATCH_ELITE_FOUR_ENTRIES)
         return FALSE;
     return gSaveBlock1Ptr->trainerRematches[matchCall.trainer->rematchTableIdx] ? TRUE : FALSE;
-    #else
-    return FALSE;
-    #endif
 }
 
 static bool32 MatchCall_IsRematchable_Wally(match_call_t matchCall)
 {
-    #ifndef FREE_MATCH_CALL
     return gSaveBlock1Ptr->trainerRematches[matchCall.wally->rematchTableIdx] ? TRUE : FALSE;
-    #else
-    return FALSE;
-    #endif
 }
 
 static bool32 MatchCall_IsRematchable_Rival(match_call_t matchCall)
@@ -904,12 +896,12 @@ static bool32 MatchCall_HasCheckPage_Wally(match_call_t matchCall)
     return TRUE;
 }
 
-static bool32 MatchCall_HasCheckPage_Rival(match_call_t matchCall) 
+static bool32 MatchCall_HasCheckPage_Rival(match_call_t matchCall)
 {
     return FALSE;
 }
 
-static bool32 MatchCall_HasCheckPage_Birch(match_call_t matchCall) 
+static bool32 MatchCall_HasCheckPage_Birch(match_call_t matchCall)
 {
     return FALSE;
 }
@@ -1012,7 +1004,6 @@ static void MatchCall_BufferCallMessageText(const match_call_text_data_t *textDa
 
 static void MatchCall_BufferCallMessageTextByRematchTeam(const match_call_text_data_t *textData, u16 idx, u8 *dest)
 {
-    #ifndef FREE_MATCH_CALL
     u32 i;
     for (i = 0; textData[i].text != NULL; i++)
     {
@@ -1046,7 +1037,6 @@ static void MatchCall_BufferCallMessageTextByRematchTeam(const match_call_text_d
 
         StringExpandPlaceholders(dest, textData[i].text);
     }
-    #endif
 }
 
 void MatchCall_GetNameAndDesc(u32 idx, const u8 **desc, const u8 **name)

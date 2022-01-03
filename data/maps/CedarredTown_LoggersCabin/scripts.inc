@@ -452,21 +452,21 @@ CedarredTown_LoggersCabin_Movement_LoggerManOneReaction:
 	emote_exclamation_mark
 	delay_4
 	delay_4
-	walk_in_place_fastest_left
+	walk_in_place_faster_left
 	delay_4
 	delay_4
 	delay_4
-	walk_in_place_fastest_right
+	walk_in_place_faster_right
 	delay_4
 	delay_4
-	walk_in_place_fastest_down
+	walk_in_place_faster_down
 	step_end
 
 CedarredTown_LoggersCabin_Movement_LoggerManFourReaction:
 	emote_exclamation_mark
 	delay_4
 	delay_4
-	walk_in_place_fastest_down
+	walk_in_place_faster_down
 	step_end
 
 CedarredTown_LoggersCabin_Movement_LoggerWomanOneReaction:
@@ -475,15 +475,15 @@ CedarredTown_LoggersCabin_Movement_LoggerWomanOneReaction:
 	delay_4
 	delay_4
 	delay_4
-	walk_in_place_fastest_down
+	walk_in_place_faster_down
 	step_end
 
 CedarredTown_LoggersCabin_Movement_LoggerWomanTwoReaction:
 	emote_exclamation_mark
 	delay_4
-	walk_in_place_fastest_up
+	walk_in_place_faster_up
 	delay_4
-	walk_in_place_fastest_down
+	walk_in_place_faster_down
 	step_end
 
 CedarredTown_LoggersCabin_Movement_LoggerQuestMasterNoticePlayer:

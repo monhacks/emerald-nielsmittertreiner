@@ -15,27 +15,27 @@ OureaCaves_EventScript_SetCaveLights_1:
 	return
 
 OureaCaves_EventScript_SetCaveLights_3:
-	setflashradius 5
+	setflashlevel 5
 	goto OureaCaves_EventScript_SetCaveLights_1
 
 OureaCaves_EventScript_SetCaveLights_4:
-	setflashradius 4
+	setflashlevel 4
 	goto OureaCaves_EventScript_SetCaveLights_1
 
 OureaCaves_EventScript_SetCaveLights_5:
-	setflashradius 3
+	setflashlevel 3
 	goto OureaCaves_EventScript_SetCaveLights_1
 
 OureaCaves_EventScript_SetCaveLights_6:
-	setflashradius 2
+	setflashlevel 2
 	goto OureaCaves_EventScript_SetCaveLights_1
 
 OureaCaves_EventScript_SetCaveLights_7:
-	setflashradius 1
+	setflashlevel 1
 	goto OureaCaves_EventScript_SetCaveLights_1
 
 OureaCaves_EventScript_SetCaveLights_8:
-	setflashradius 0
+	setflashlevel 0
 	goto OureaCaves_EventScript_SetCaveLights_1
 
 

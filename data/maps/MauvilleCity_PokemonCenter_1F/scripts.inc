@@ -11,7 +11,7 @@ MauvilleCity_PokemonCenter_1F_OnTransition:
 	end
 
 MauvilleCity_PokemonCenter_1F_EventScript_SetMauvilleOldManGfx::
-	special ScrSpecial_SetMauvilleOldManObjEventGfx
+	special SetMauvilleOldManObjEventGfx
 	end
 
 MauvilleCity_PokemonCenter_1F_EventScript_Nurse::

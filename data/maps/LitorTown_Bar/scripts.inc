@@ -145,7 +145,7 @@ LitorTown_Bar_EventScript_TryBuyFreshWater::
 LitorTown_Bar_EventScript_TryBuyFreshWater_1:
 	playse SE_SHOP
 	removemoney 200, 0
-	updatemoneybox 0, 0
+	updatemoneybox 0
 	delay 30
 	hidemoneybox
 	giveitem ITEM_FRESH_WATER, 1
@@ -169,7 +169,7 @@ LitorTown_Bar_EventScript_TryBuySodaPop::
 LitorTown_Bar_EventScript_TryBuySodaPop_1:
 	playse SE_SHOP
 	removemoney 250, 0
-	updatemoneybox 0, 0
+	updatemoneybox 0
 	delay 30
 	hidemoneybox
 	giveitem ITEM_SODA_POP, 1
@@ -193,7 +193,7 @@ LitorTown_Bar_EventScript_TryBuyLemonade::
 LitorTown_Bar_EventScript_TryBuyLemonade_1:
 	playse SE_SHOP
 	removemoney 350, 0
-	updatemoneybox 0, 0
+	updatemoneybox 0
 	delay 30
 	hidemoneybox
 	giveitem ITEM_LEMONADE, 1
@@ -242,15 +242,15 @@ LitorTown_Bar_EventScript_TuberM::
 
 
 LitorTown_Bar_Movement_MoveCameraShopView:
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
 	step_end
 
 LitorTown_Bar_Movement_ResetCameraShopView:
-	walk_fastest_right
-	walk_fastest_right
-	walk_fastest_right
+	walk_faster_right
+	walk_faster_right
+	walk_faster_right
 	step_end
 
 LitorTown_Bar_EventScript_ChooseFreshWater_Text_0:

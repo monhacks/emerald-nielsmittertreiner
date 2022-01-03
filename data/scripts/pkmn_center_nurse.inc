@@ -36,8 +36,7 @@ Common_EventScript_PkmnCenterNurse_4:
 
 Common_EventScript_PkmnCenterNurse_6:
 	specialvar VAR_RESULT, IsPokerusInParty
-	compare VAR_RESULT, TRUE
-	goto_if_eq Common_EventScript_PkmnCenterNurse_9
+	goto_if_eq VAR_RESULT, TRUE, Common_EventScript_PkmnCenterNurse_9
 	goto Common_EventScript_PkmnCenterNurse_5
 
 Common_EventScript_PkmnCenterNurse_9:
@@ -48,8 +47,7 @@ Common_EventScript_PkmnCenterNurse_9:
 
 Common_EventScript_PkmnCenterTerminal::
 	checkitem ITEM_TERMINAL_PASS, 1
-	compare VAR_RESULT, FALSE
-	goto_if_eq Common_EventScript_PkmnCenterTerminal_2
+	goto_if_eq VAR_RESULT, FALSE, Common_EventScript_PkmnCenterTerminal_2
 Common_EventScript_PkmnCenterTerminal_1:
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestUp
 	msgbox Common_EventScript_PkmnCenterTerminal_Text_0

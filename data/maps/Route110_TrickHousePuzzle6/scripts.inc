@@ -17,8 +17,7 @@ Route110_TrickHousePuzzle6_EventScript_InitPuzzle::
 
 Route110_TrickHousePuzzle6_EventScript_Scroll::
 	lockall
-	compare VAR_ACREN_FOREST_STATE, 0
-	goto_if_eq Route110_TrickHousePuzzle6_EventScript_FoundScroll
+	goto_if_eq VAR_ACREN_FOREST_STATE, 0, Route110_TrickHousePuzzle6_EventScript_FoundScroll
 	goto Route110_TrickHousePuzzle_EventScript_ReadScrollAgain
 	end
 

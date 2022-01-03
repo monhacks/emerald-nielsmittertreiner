@@ -910,7 +910,7 @@ static void LoadAgenda(void)
 
     AddTextPrinterParameterized3(WIN_AGENDA_WEATHER, 0, GetStringCenterAlignXOffset(0, gText_Pokenav2_WeatherForecast, 88), 0, sTextColorGray, 0, gText_Pokenav2_WeatherForecast);
 
-    switch (GetSav1Weather())
+    switch (GetSavedWeather())
     {
     case WEATHER_NONE:
         string = gText_Pokenav2_NoReport;

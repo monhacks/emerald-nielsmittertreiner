@@ -91,8 +91,8 @@ LitorTown_EventScript_CancelFerrySelect::
 LitorTown_EventScript_SailToMurena::
 	call FishermanFerry_EventScript_BackupFerryLocation
 	hideobjectat 10, MAP_MURENA_CITY
-	setobjectpriority 2, MAP_LITOR_TOWN, 0
-	setobjectpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN, 0
+	setobjectsubpriority 2, MAP_LITOR_TOWN, 0
+	setobjectsubpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN, 0
 	applymovement 2, Common_Movement_WalkRight
 	waitmovement 0
 	removeobject 2
@@ -134,8 +134,8 @@ LitorTown_EventScript_SailToMurena_5:
 LitorTown_EventScript_SailToNavire::
 	call FishermanFerry_EventScript_BackupFerryLocation
 	hideobjectat 1, MAP_NAVIRE_TOWN
-	setobjectpriority 2, MAP_LITOR_TOWN, 0
-	setobjectpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN, 0
+	setobjectsubpriority 2, MAP_LITOR_TOWN, 0
+	setobjectsubpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN, 0
 	applymovement 2, Common_Movement_WalkRight
 	waitmovement 0
 	removeobject 2
@@ -159,12 +159,12 @@ LitorTown_EventScript_SailToNavire_1:
 	clearflag FLAG_HIDE_NAVIRE_TOWN_FISHERMAN
 	setobjectxyperm 2, 8, 9
 	addobject 2
-	setobjectpriority 2, MAP_NAVIRE_TOWN, 0
+	setobjectsubpriority 2, MAP_NAVIRE_TOWN, 0
 	applymovement 2, LitorTown_Movement_FishermanExitBoat
 	waitmovement 0
 	clearflag FLAG_HIDE_NAVIRE_TOWN_FISHERMAN
 	addobject 1
-	setobjectpriority 1, MAP_NAVIRE_TOWN, 1
+	setobjectsubpriority 1, MAP_NAVIRE_TOWN, 1
 	clearflag FLAG_HIDE_NAVIRE_TOWN_BOAT
 	setflag FLAG_HIDE_MURENA_CITY_SHIPYARD_BOAT
 	setflag FLAG_HIDE_MURENA_CITY_BOAT
@@ -176,8 +176,8 @@ LitorTown_EventScript_SailToNavire_1:
 	msgbox LitorTown_EventScript_SailToNavire_Text_0
 	destroy_speech_bubble
 	closemessage
-	resetobjectpriority OBJ_EVENT_ID_PLAYER, MAP_NAVIRE_TOWN
-	resetobjectpriority 2, MAP_NAVIRE_TOWN
+	resetobjectsubpriority OBJ_EVENT_ID_PLAYER, MAP_NAVIRE_TOWN
+	resetobjectsubpriority 2, MAP_NAVIRE_TOWN
 	copyobjectxytoperm 2
 	call FishermanFerry_EventScript_RestoreFerryLocation
 	release
@@ -346,21 +346,21 @@ LitorTown_Movement_SailToMurena:
 	walk_down
 	walk_fast_down
 	walk_fast_down
-	walk_fastest_down
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_down
 	walk_fast_down
 	walk_fast_down
 	walk_down
 	walk_left
 	walk_fast_left
 	walk_fast_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
 	walk_fast_left
 	walk_fast_left
 	walk_left
@@ -370,34 +370,34 @@ LitorTown_Movement_SailToMurena:
 	walk_left
 	walk_fast_left
 	walk_fast_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
 	walk_fast_left
 	walk_fast_left
 	walk_left
 	walk_up
 	walk_fast_up
 	walk_fast_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
 	walk_fast_up
 	walk_fast_up
 	walk_up
@@ -412,71 +412,71 @@ LitorTown_Movement_SailToMurena:
 	walk_left
 	walk_fast_left
 	walk_fast_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
 	walk_fast_left
 	walk_fast_left
 	walk_left
@@ -489,31 +489,31 @@ LitorTown_Movement_SailToMurena:
 	walk_left
 	walk_fast_left
 	walk_fast_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
-	walk_fastest_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
+	walk_faster_left
 	walk_fast_left
 	walk_fast_left
 	walk_left
 	walk_up
 	walk_fast_up
 	walk_fast_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
-	walk_fastest_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
+	walk_faster_up
 	walk_fast_up
 	walk_fast_up
 	walk_up
@@ -528,14 +528,14 @@ LitorTown_Movement_SailToNavire:
 	walk_down
 	walk_fast_down
 	walk_fast_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
 	walk_fast_down
 	walk_fast_down
 	walk_down
@@ -544,7 +544,7 @@ LitorTown_Movement_SailToNavire:
 	walk_down
 	walk_fast_down
 	walk_fast_down
-	walk_fastest_down
+	walk_faster_down
 	walk_fast_down
 	walk_fast_down
 	walk_down
@@ -556,15 +556,15 @@ LitorTown_Movement_SailToNavire:
 	walk_down
 	walk_fast_down
 	walk_fast_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
 	walk_fast_down
 	walk_fast_down
 	walk_down
@@ -573,29 +573,29 @@ LitorTown_Movement_SailToNavire:
 	walk_down
 	walk_fast_down
 	walk_fast_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
 	walk_fast_down
 	walk_fast_down
 	walk_down
 	walk_right
 	walk_fast_right
 	walk_fast_right
-	walk_fastest_right
+	walk_faster_right
 	walk_fast_right
 	walk_fast_right
 	walk_right
 	walk_down
 	walk_fast_down
 	walk_fast_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
-	walk_fastest_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
+	walk_faster_down
 	walk_fast_down
 	walk_fast_down
 	walk_down
