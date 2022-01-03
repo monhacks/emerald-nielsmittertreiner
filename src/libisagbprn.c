@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "gba/gba.h"
 #include "config.h"
-#if DEBUG
+#ifdef DEBUG
 #include "debug/printf.h"
 #endif
 

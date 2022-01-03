@@ -1,5 +1,5 @@
 #include "global.h"
-#if DEBUG
+#ifdef DEBUG
 #include "debug/debug.h"
 #endif
 #include "battle_setup.h"
@@ -134,7 +134,7 @@ void FieldGetPlayerInput(struct FieldInput *input, u16 newKeys, u16 heldKeys)
     else if (heldKeys & DPAD_RIGHT)
         input->dpadDirection = DIR_EAST;
 
-#if DEBUG
+#ifdef DEBUG
     if ((heldKeys & L_BUTTON) && input->pressedStartButton)
     {
         input->input_field_1_2 = TRUE;
@@ -201,7 +201,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     if (input->pressedSelectButton && UseRegisteredKeyItemOnField() == TRUE)
         return TRUE;
 
-#if DEBUG
+#ifdef DEBUG
     if (input->input_field_1_2)
     {
         PlaySE(SE_WIN_OPEN);

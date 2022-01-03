@@ -1,11 +1,10 @@
 #ifndef GUARD_DEBUG_H
 #define GUARD_DEBUG_H
-#if DEBUG
+#ifdef DEBUG
 
 #define DEBUG_NUMBER_DIGITS_FLAGS 4
 #define DEBUG_NUMBER_DIGITS_VARIABLES 5
 #define TAG_CONFETTI 1001
-#define BOB_OTID 23501
 
 enum
 {

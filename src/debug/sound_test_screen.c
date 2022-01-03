@@ -1,4 +1,4 @@
-#if DEBUG
+#ifdef DEBUG
 #include "global.h"
 #include "debug/sound_test_screen.h"
 #include "bg.h"

@@ -1,4 +1,4 @@
-#if DEBUG
+#ifdef DEBUG
 #include "global.h"
 #include "debug/debug.h"
 #include "confetti_util.h"
@@ -32,6 +32,7 @@
 #include "constants/event_object_movement.h"
 #include "constants/flags.h"
 #include "constants/map_groups.h"
+#include "constants/pokemon.h"
 #include "constants/items.h"
 #include "constants/songs.h"
 
@@ -101,6 +102,7 @@ static const u8 gDebugText_GodMode_DisableGodMode[] = _("{A_BUTTON} {COLOR}{RED}
 static const u8 gDebugText_GiveMon_GiveMonExplaination[] = _("{COLOR}{DARK_GRAY}YOU ARE ABOUT OVERWRITE YOUR\nCURRENT PARTY WITH A HANDCHOSEN ONE,\nMADE BY BSBOB!\n{COLOR}{RED}YOUR CURRENT PARTY WILL BE LOST!");
 static const u8 gDebugText_Party_RevievedBobParty[] = _("{COLOR}{GREEN}RECEIVED BSBOB'S PARTY   {B_BUTTON} {COLOR}{DARK_GRAY}CANCEL");
 static const u8 gDebugText_Party_AlreadyHasBobParty[] = _("{COLOR}{GREEN}YOU ALREADY HAVE BSBOB'S PARTY!   {B_BUTTON} {COLOR}{DARK_GRAY}CANCEL");
+static const u8 gDebugText_Party_BobMon[] = _("BOB");
 static const u8 gDebugText_Utility_SaveBlocks[] = _("{COLOR}{GREEN}SAVEBLOCKS");
 static const u8 gDebugText_Utility_ResetBerries[] = _("{COLOR}{GREEN}RESET BERRIES");
 static const u8 gDebugText_Utility_RestockBag[] = _("{COLOR}{GREEN}RESTOCK BAG");
@@ -1019,6 +1021,14 @@ static void DebugTask_HandleInput_GiveMon(u8 taskId)
         CreateMon(&gPlayerParty[3], SPECIES_MILOTIC, 80, MAX_PER_STAT_IVS, 1, NATURE_MILD, OT_ID_PRESET, BOB_OTID);
         CreateMon(&gPlayerParty[4], SPECIES_AGGRON, 80, MAX_PER_STAT_IVS, 1, NATURE_IMPISH, OT_ID_PRESET, BOB_OTID);
         CreateMon(&gPlayerParty[5], SPECIES_FLYGON, 80, MAX_PER_STAT_IVS, 1, NATURE_BRAVE, OT_ID_PRESET, BOB_OTID);
+
+        // Set OT Name
+        SetMonData(&gPlayerParty[0], MON_DATA_OT_NAME, gDebugText_Party_BobMon);
+        SetMonData(&gPlayerParty[1], MON_DATA_OT_NAME, gDebugText_Party_BobMon);
+        SetMonData(&gPlayerParty[2], MON_DATA_OT_NAME, gDebugText_Party_BobMon);
+        SetMonData(&gPlayerParty[3], MON_DATA_OT_NAME, gDebugText_Party_BobMon);
+        SetMonData(&gPlayerParty[4], MON_DATA_OT_NAME, gDebugText_Party_BobMon);
+        SetMonData(&gPlayerParty[5], MON_DATA_OT_NAME, gDebugText_Party_BobMon);
 
         // Give Held Items
         SetMonData(&gPlayerParty[0], MON_DATA_HELD_ITEM, &gBobMonHeldItems[0]);
