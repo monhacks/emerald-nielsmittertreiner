@@ -81,6 +81,7 @@ struct Pokenav2Struct
     u16 taskIds[6];
     u16 scrollOffset;
     u16 selectedRow;
+    u16 currItem;
     s16 scrollPosition;
     u8 cursorPosition;
     bool8 is24HClockMode;
@@ -996,10 +997,10 @@ static void InitEventWindows(void)
         68,
         20,
         148,
-        gMultiuseListMenuTemplate.totalItems - gMultiuseListMenuTemplate.maxShowed,
+        gMultiuseListMenuTemplate.totalItems - 1,
         TAG_SCROLL_ARROW,
         TAG_SCROLL_ARROW,
-        &sPokenav2Struct.scrollOffset);
+        &sPokenav2Struct.currItem);
 }
 
 static void CreateEventListMenuTemplate(void)
@@ -1402,6 +1403,16 @@ static void Task_Agenda(u8 taskId)
     {
         PlaySE(SE_SELECT);
         sPokenav2Struct.is24HClockMode ^= 1;
+    }
+    else if (JOY_NEW(DPAD_UP))
+    {
+        if (sPokenav2Struct.currItem > 0)
+            sPokenav2Struct.currItem--;
+    }
+    else if (JOY_NEW(DPAD_DOWN))
+    {
+        if (sPokenav2Struct.currItem < gMultiuseListMenuTemplate.totalItems - 1)
+            sPokenav2Struct.currItem++;
     }
 }
 
