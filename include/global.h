@@ -527,7 +527,6 @@ struct SaveBlock2
              u16 regionMapZoom:1; // whether the map is zoomed in
              u16 expShare:1;
     /*0x18*/ struct Pokedex pokedex;
-    /*0x90*/ u8 filler_90[0x8];
     /*0x98*/ struct Time localTimeOffset;
     /*0xA0*/ struct Time lastBerryTreeUpdate;
     /*0xA8*/ u32 gcnLinkFlags; // Read by Pokemon Colosseum/XD
@@ -544,7 +543,7 @@ struct SaveBlock2
     /*0xF2C*/ struct Follower follower;
     /*0xF2C*/ u8 itemFlags[ITEM_FLAGS_COUNT];
     /*0xF2C*/ struct InGameClock inGameClock;
-    /*0xF2C*/ bool8 is24HClockMode;
+    /*0xF2C*/ bool8 is24HClockMode:1;
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
@@ -1001,7 +1000,6 @@ struct SaveBlock1
     /*0x848*/ struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
     /*0x988*/ u8 seen1[DEX_FLAGS_NO];   //52 bytes
     /*0x9BC*/ u16 berryBlenderRecords[3];
-    /*0x9C2*/ u8 unused_9C2[6];
     /*0x9C8*/ u16 trainerRematchStepCounter;    //104 bytes
     /*0x9CA*/ u8 trainerRematches[MAX_REMATCH_ENTRIES];
     /*0xA30*/ struct ObjectEvent objectEvents[OBJECT_EVENTS_COUNT];
@@ -1027,10 +1025,7 @@ struct SaveBlock1
     /*0x2B92*/ u8 outbreakLocationMapNum;
     /*0x2B93*/ u8 outbreakLocationMapGroup;
     /*0x2B94*/ u8 outbreakPokemonLevel;
-    /*0x2B95*/ u8 outbreakUnused1;
-    /*0x2B96*/ u16 outbreakUnused2;
     /*0x2B98*/ u16 outbreakPokemonMoves[MAX_MON_MOVES];
-    /*0x2BA0*/ u8 outbreakUnused3;
     /*0x2BA1*/ u8 outbreakPokemonProbability;
     /*0x2BA2*/ u16 outbreakDaysLeft;
     /*0x2BA4*/ struct GabbyAndTyData gabbyAndTyData;
@@ -1051,7 +1046,6 @@ struct SaveBlock1
     /*0x31DC*/ struct Roamer roamer;
     /*0x31F8*/ struct EnigmaBerry enigmaBerry;  //52 bytes
     /*0x322C*/ struct MysteryGiftSave mysteryGift;   //876 bytes
-    /*0x3598*/ u8 unused_3598[0x180];    //384 bytes
     /*0x3718*/ u32 trainerHillTimes[4]; //16 bytes
     /*0x3728*/ struct RamScript ramScript;
     /*0x3B14*/ struct RecordMixingGift recordMixingGift;
@@ -1059,7 +1053,6 @@ struct SaveBlock1
     /*0x3B58*/ LilycoveLady lilycoveLady;
     /*0x3B98*/ struct TrainerNameRecord trainerNameRecords[20];
     /*0x3C88*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21]; //210 bytes
-    /*0x3D5A*/ u8 unused_3D5A[10];    //10 bytes
     /*0x3D64*/ struct SaveTrainerHill trainerHill;  //12 bytes
     /*0x3D70*/ struct WaldaPhrase waldaPhrase;
     // sizeof: 0x3D88
