@@ -1360,7 +1360,7 @@ static void Task_NewGameBirchSpeech_WaitForPleaseSetTheTimeToPrint(u8 taskId)
     {
         DrawMainMenuWindowBorder(&gNewGameBirchSpeechTextWindows[3], 0xF3);
         FillWindowPixelBuffer(3, PIXEL_FILL(1));
-        AddTextPrinterParameterized(3, 1, gDaysOfWeek[sTimeSelectionData[0]], GetStringCenterAlignXOffset(1, gDaysOfWeek[sTimeSelectionData[0]], 56), 5, 0, NULL);
+        AddTextPrinterParameterized(3, 1, gText_DaysOfWeek[sTimeSelectionData[0]], GetStringCenterAlignXOffset(1, gText_DaysOfWeek[sTimeSelectionData[0]], 56), 5, 0, NULL);
         AddTextPrinterParameterized(3, 1, gStringVar1, 66, 5, 0, NULL);
         if (isAMPM)
         {
@@ -1397,7 +1397,7 @@ static void Task_NewGameBirchSpeech_CheckHandleTimeInput(u8 taskId)
                 AddTextPrinterParameterized(3, 0, gText_PM, 96, 4, 0, NULL);
             }
         }
-        AddTextPrinterParameterized(3, 1, gDaysOfWeek[sTimeSelectionData[0]], GetStringCenterAlignXOffset(1, gDaysOfWeek[sTimeSelectionData[0]], 56), 5, 0, NULL);
+        AddTextPrinterParameterized(3, 1, gText_DaysOfWeek[sTimeSelectionData[0]], GetStringCenterAlignXOffset(1, gText_DaysOfWeek[sTimeSelectionData[0]], 56), 5, 0, NULL);
         AddTextPrinterParameterized(3, 1, gStringVar1, 66, 5, 0, NULL);
     }
 }
@@ -1539,7 +1539,7 @@ static void Task_NewGameBirchSpeech_ConfirmTime(u8 taskId)
     ClearStdWindowAndFrame(3, 0);
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
     CopyWindowToVram(3, 3);
-    StringCopy(gStringVar1, gDaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
+    StringCopy(gStringVar1, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
     if (isAMPM && gSaveBlock2Ptr->inGameClock.hours < 12)
         ConvertIntToDecimalStringN(gStringVar2, gSaveBlock2Ptr->inGameClock.hours, STR_CONV_MODE_LEADING_ZEROS, 2);   
     else

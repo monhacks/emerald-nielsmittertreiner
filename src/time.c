@@ -8,7 +8,7 @@
 
 static bool8 sInGameClockRunning;
 
-const u8 *const gDaysOfWeek[] =
+const u8 *const gText_DaysOfWeek[] =
 {
     gText_Sunday,
     gText_Monday,

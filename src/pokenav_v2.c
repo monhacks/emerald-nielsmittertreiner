@@ -904,7 +904,7 @@ static void LoadAgenda(void)
 
     InitEventWindows();
 
-    StringCopy(gStringVar1, gDaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
+    StringCopy(gStringVar1, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
     AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, 1, GetStringCenterAlignXOffset(1, gStringVar1, 88), 0, sTextColorGray, 0, gStringVar1);
     FormatTimeString(gStringVar4, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes);
     AddTextPrinterParameterized(WIN_AGENDA_DATE_TIME, 0, gStringVar4, GetStringCenterAlignXOffset(1, gStringVar4, 88), 16, 0, NULL);
@@ -1442,7 +1442,7 @@ static void Task_FormatClock(u8 taskId)
     if (gSaveBlock2Ptr->inGameClock.hours && gSaveBlock2Ptr->inGameClock.minutes && gSaveBlock2Ptr->inGameClock.vblanks == 0)
     {
         FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(1), 0, 0, 88, 16);
-        StringCopy(gStringVar1, gDaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
+        StringCopy(gStringVar1, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
         AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, 1, GetStringCenterAlignXOffset(1, gStringVar1, 88), 0, sTextColorGray, 0, gStringVar1);
     }
     FormatTimeString(gStringVar4, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes);
