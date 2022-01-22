@@ -1,6 +1,6 @@
 #include "global.h"
 #ifdef DEBUG
-#include "debug/debug.h"
+#include "debug/overworld_debug.h"
 #endif
 #include "battle_setup.h"
 #include "bike.h"
@@ -23,6 +23,7 @@
 #include "metatile_behavior.h"
 #include "overworld.h"
 #include "pokemon.h"
+#include "palette.h"
 #include "safari_zone.h"
 #include "script.h"
 #include "secret_base.h"
@@ -36,6 +37,7 @@
 #include "constants/event_objects.h"
 #include "constants/field_poison.h"
 #include "constants/map_types.h"
+#include "constants/rgb.h"
 #include "constants/songs.h"
 #include "constants/trainer_hill.h"
 
@@ -204,8 +206,8 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
 #ifdef DEBUG
     if (input->input_field_1_2)
     {
-        PlaySE(SE_WIN_OPEN);
-        Debug_OpenDebugMenu();
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_WHITE);
+        SetMainCallback2(CB2_OverworldDebugMenu);
         return TRUE;
     }
 #endif

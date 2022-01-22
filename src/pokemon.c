@@ -44,6 +44,7 @@
 #include "constants/items.h"
 #include "constants/layouts.h"
 #include "constants/moves.h"
+#include "constants/party_menu.h"
 #include "constants/songs.h"
 #include "constants/trainers.h"
 #include "constants/battle_config.h"
@@ -2379,6 +2380,20 @@ void CreateMonWithEVSpread(struct Pokemon *mon, u16 species, u8 level, u8 fixedI
     }
 
     CalculateMonStats(mon);
+}
+
+void CreateShinyMon(struct Pokemon *mon, u16 species, u8 level)
+{
+    u32 personality;
+    u32 otid = gSaveBlock2Ptr->playerTrainerId[0]
+            | (gSaveBlock2Ptr->playerTrainerId[1] << 8)
+            | (gSaveBlock2Ptr->playerTrainerId[2] << 16)
+            | (gSaveBlock2Ptr->playerTrainerId[3] << 24);
+
+    personality = Random32();
+    personality = ((((Random() % 8) ^ (HIHALF(otid) ^ LOHALF(otid))) ^ LOHALF(personality)) << 16) | LOHALF(personality);
+
+    CreateMon(mon, species, level, 32, 1, personality, OT_ID_PRESET, otid);
 }
 
 void CreateBattleTowerMon(struct Pokemon *mon, struct BattleTowerPokemon *src)

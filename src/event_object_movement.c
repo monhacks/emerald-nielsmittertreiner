@@ -4627,10 +4627,13 @@ u8 GetSidewaysStairsCollision(struct ObjectEvent *objectEvent, u8 dir, u8 curren
 
 static u8 GetVanillaCollision(struct ObjectEvent *objectEvent, s16 x, s16 y, u8 direction)
 {
+    #ifdef DEBUG
+    if (gSaveBlock2Ptr->godmode && objectEvent->isPlayer)
+        return COLLISION_NONE;
+    #endif
+
     if (IsCoordOutsideObjectEventMovementRange(objectEvent, x, y))
         return COLLISION_OUTSIDE_RANGE;
-    else if (FlagGet(FLAG_DISABLE_OBJECT_COLLISION) && objectEvent->isPlayer)
-        return COLLISION_NONE;
     else if (MapGridIsImpassableAt(x, y) || GetMapBorderIdAt(x, y) == -1 || IsMetatileDirectionallyImpassable(objectEvent, x, y, direction))
         return COLLISION_IMPASSABLE;
     else if (objectEvent->trackedByCamera && !CanCameraMoveInDirection(direction))

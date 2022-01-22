@@ -196,6 +196,11 @@ bool8 CheckForTrainersWantingBattle(void)
 {
     u8 i;
 
+    #ifdef DEBUG
+    if (gSaveBlock2Ptr->godmode)
+        return FALSE;
+    #endif
+
     if (FlagGet(FLAG_DISABLE_TRAINERS))
         return FALSE;
 

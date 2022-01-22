@@ -500,7 +500,12 @@ static bool8 DoMassOutbreakEncounterTest(void)
 
 static bool8 DoWildEncounterRateDiceRoll(u16 encounterRate)
 {
-    if (FlagGet(FLAG_DISABLE_ENCOUNTERS) == TRUE)
+    #ifdef DEBUG
+    if (gSaveBlock2Ptr->godmode)
+        return FALSE;
+    #endif
+
+    if (FlagGet(FLAG_DISABLE_ENCOUNTERS))
         return FALSE;
 
     if (Random() % MAX_ENCOUNTER_RATE < encounterRate)

@@ -544,6 +544,9 @@ struct SaveBlock2
     /*0xF2C*/ u8 itemFlags[ITEM_FLAGS_COUNT];
     /*0xF2C*/ struct InGameClock inGameClock;
     /*0xF2C*/ bool8 is24HClockMode:1;
+    #ifdef DEBUG
+    /*0xF2C*/ bool8 godmode:1;
+    #endif
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;

@@ -391,11 +391,12 @@ string generate_map_constants_text(string groups_filepath, Json groups_data) {
             text << "#define " << map_id.string_value() << string((max_length - map_id.string_value().length() + 1), ' ')
                  << "(" << map_id_num++ << " | (" << group_num << " << 8))\n";
         }
-        text << "\n";
+        text << "#define MAP_GROUP_COUNT_" << group_num << " " << map_id_num << "\n\n";
 
         group_num++;
     }
 
+    text << "#define MAP_NUM_COUNT(group) MAP_GROUP_COUNT_##group\n";
     text << "#define MAP_GROUPS_COUNT " << group_num << "\n\n";
     text << "#endif // GUARD_CONSTANTS_MAP_GROUPS_H\n";
 
