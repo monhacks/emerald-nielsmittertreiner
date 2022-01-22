@@ -3,7 +3,7 @@
 
 extern struct InGameClock gInGameClock;
 
-extern const u8 *const gDaysOfWeek[];
+extern const u8 *const gText_DaysOfWeek[];
 
 void InGameClock_Start(void);
 void InGameClock_Stop(void);
