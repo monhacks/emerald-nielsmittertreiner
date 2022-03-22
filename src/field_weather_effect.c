@@ -8,11 +8,15 @@
 #include "script.h"
 #include "constants/weather.h"
 #include "constants/songs.h"
+#include "constants/rgb.h"
 #include "sound.h"
 #include "sprite.h"
 #include "task.h"
 #include "trig.h"
 #include "gpu_regs.h"
+#include "palette.h"
+
+#define SHADOW_PAL_COLOR_INDEX 0x1F9 // shadow color in gFogPalette
 
 // EWRAM
 EWRAM_DATA static u8 gCurrentAbnormalWeather = 0;
@@ -34,6 +38,15 @@ const u8 gWeatherSandstormTiles[] = INCBIN_U8("graphics/weather/sandstorm.4bpp")
 const struct SpritePalette sSpritePalette_Weather0 = {gFogPalette, 0x1201};
 const struct SpritePalette sCloudsSpritePalette = {gCloudsWeatherPalette, 0x1207};
 const struct SpritePalette sSandstormSpritePalette = {gSandstormWeatherPalette, 0x1204};
+
+static u8 UpdateShadowColor(u16 color);
+
+static u8 UpdateShadowColor(u16 color)
+{
+    gPlttBufferUnfaded[SHADOW_PAL_COLOR_INDEX] = color;
+    gPlttBufferFaded[SHADOW_PAL_COLOR_INDEX] = color;
+    return UpdateSpritePaletteWithTime(WEATHER_PALETTE_NUM);
+}
 
 //------------------------------------------------------------------------------
 // WEATHER_SUNNY_CLOUDS
@@ -1367,7 +1380,7 @@ void FogHorizontal_InitVars(void)
         gWeatherPtr->fogHScrollPosX = 0;
         Weather_SetBlendCoeffs(0, 16);
     }
-    gWeatherPtr->noShadows = TRUE; // TODO: Can fog be made compatible with shadows?
+    gWeatherPtr->noShadows = FALSE;
 }
 
 void FogHorizontal_InitAll(void)
@@ -1389,8 +1402,12 @@ void FogHorizontal_Main(void)
     {
     case 0:
         CreateFogHorizontalSprites();
+
         if (gWeatherPtr->currWeather == WEATHER_FOG_HORIZONTAL)
+        {
+            UpdateShadowColor(RGB(11, 11, 11));
             Weather_SetTargetBlendCoeffs(12, 8, 3);
+        }
         else
             Weather_SetTargetBlendCoeffs(4, 16, 0);
         gWeatherPtr->initStep++;
@@ -1429,6 +1446,7 @@ bool8 FogHorizontal_Finish(void)
         gWeatherPtr->finishStep++;
         break;
     default:
+        UpdateShadowColor(RGB_BLACK);
         return FALSE;
     }
     return TRUE;
@@ -1959,7 +1977,7 @@ void Sandstorm_InitVars(void)
 
         Weather_SetBlendCoeffs(0, 16);
     }
-    gWeatherPtr->noShadows = TRUE; // TODO: Can sandstorm be compatible with shadows?
+    gWeatherPtr->noShadows = FALSE; // TODO: Can sandstorm be compatible with shadows?
 }
 
 void Sandstorm_InitAll(void)
@@ -1984,7 +2002,8 @@ void Sandstorm_Main(void)
         gWeatherPtr->initStep++;
         break;
     case 1:
-        Weather_SetTargetBlendCoeffs(16, 0, 0);
+        Weather_SetTargetBlendCoeffs(16, 2, 0);
+        UpdateShadowColor(RGB(11, 11, 11));
         gWeatherPtr->initStep++;
         break;
     case 2:
@@ -2010,9 +2029,12 @@ bool8 Sandstorm_Finish(void)
     case 1:
         if (Weather_UpdateBlend())
             gWeatherPtr->finishStep++;
+        if (gWeatherPtr->currBlendEVB == 12)
+            UpdateShadowColor(RGB_BLACK);
         break;
     case 2:
         DestroySandstormSprites();
+        UpdateShadowColor(RGB_BLACK);
         gWeatherPtr->finishStep++;
         break;
     default:
