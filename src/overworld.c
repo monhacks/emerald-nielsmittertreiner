@@ -1628,7 +1628,7 @@ static void OverworldBasic(void)
     UpdatePaletteFade();
     UpdateTilesetAnimations();
     DoScheduledBgTilemapCopiesToVram();
-    if (!(gPaletteFade.active || (timeCounter++ % 60)))
+    if (!(gPaletteFade.active || (timeCounter++ % 3600)))
     {
         struct TimeBlendSettings cachedBlend =
         {
