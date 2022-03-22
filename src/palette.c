@@ -57,7 +57,6 @@ static u8 UpdateTimeOfDayPaletteFade(void);
 static void UpdateBlendRegisters(void);
 static bool8 IsSoftwarePaletteFadeFinishing(void);
 static void Task_BlendPalettesGradually(u8 taskId);
-static void BlendPalettesFine(u32 palettes, u16 *src, u16 *dst, u32 coeff, u32 color);
 
 // palette buffers require alignment with agbcc because
 // unaligned word reads are issued in BlendPalette otherwise
