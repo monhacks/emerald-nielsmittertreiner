@@ -8,6 +8,7 @@
 #include "field_weather.h"
 #include "main.h"
 #include "menu.h"
+#include "overworld.h"
 #include "palette.h"
 #include "random.h"
 #include "script.h"
@@ -470,10 +471,11 @@ static void ApplyGammaShift(u8 startPalIndex, u8 numPalettes, s8 gammaIndex)
         // Loop through the speficied palette range and apply necessary gamma shifts to the colors.
         while (curPalIndex < numPalettes)
         {
+            CpuFastCopy(gPlttBufferUnfaded + palOffset, gPlttBufferFaded + palOffset, 16 * sizeof(u16));
+            UpdatePalettesWithTime(1 << (palOffset >> 4));
             if (sPaletteGammaTypes[curPalIndex] == GAMMA_NONE)
             {
                 // No palette change.
-                CpuFastCopy(gPlttBufferUnfaded + palOffset, gPlttBufferFaded + palOffset, 16 * sizeof(u16));
                 palOffset += 16;
             }
             else
@@ -488,7 +490,7 @@ static void ApplyGammaShift(u8 startPalIndex, u8 numPalettes, s8 gammaIndex)
                 for (i = 0; i < 16; i++)
                 {
                     // Apply gamma shift to the original color.
-                    struct RGBColor baseColor = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                    struct RGBColor baseColor = *(struct RGBColor *)&gPlttBufferFaded[palOffset];
                     r = gammaTable[baseColor.r];
                     g = gammaTable[baseColor.g];
                     b = gammaTable[baseColor.b];
@@ -551,10 +553,11 @@ static void ApplyGammaShiftWithBlend(u8 startPalIndex, u8 numPalettes, s8 gammaI
 
     while (curPalIndex < numPalettes)
     {
+        UpdatePalettesWithTime(1 << (palOffset >> 4)); // Apply time of day blend
         if (sPaletteGammaTypes[curPalIndex] == GAMMA_NONE)
         {
             // No gamma shift. Simply blend the colors.
-            BlendPalette(palOffset, 16, blendCoeff, blendColor);
+            BlendPalettesFine(1 << (palOffset >> 4), gPlttBufferFaded, gPlttBufferFaded, blendCoeff, blendColor);
             palOffset += 16;
         }
         else
@@ -568,7 +571,7 @@ static void ApplyGammaShiftWithBlend(u8 startPalIndex, u8 numPalettes, s8 gammaI
 
             for (i = 0; i < 16; i++)
             {
-                struct RGBColor baseColor = *(struct RGBColor *)&gPlttBufferUnfaded[palOffset];
+                struct RGBColor baseColor = *(struct RGBColor *)&gPlttBufferFaded[palOffset];
                 u8 r = gammaTable[baseColor.r];
                 u8 g = gammaTable[baseColor.g];
                 u8 b = gammaTable[baseColor.b];
