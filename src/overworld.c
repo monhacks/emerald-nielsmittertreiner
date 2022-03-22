@@ -187,7 +187,7 @@ static u16 (*sPlayerKeyInterceptCallback)(u32);
 static bool8 sReceivingFromLink;
 static u8 sRfuKeepAliveTimer;
 
-static u8 timeCounter;
+static u16 sTimeUpdateCounter; // playTimeVBlanks will eventually overflow, so this is used to update TOD
 static struct TimeBlendSettings currentTimeBlend;
 
 // IWRAM common
@@ -1610,7 +1610,6 @@ void UpdatePalettesWithTime(u32 palettes)
     }
 }
 
-// TODO: Optimize this
 u8 UpdateSpritePaletteWithTime(u8 paletteNum)
 {
     UpdatePalettesWithTime(1 << (paletteNum + 16));
@@ -1628,7 +1627,7 @@ static void OverworldBasic(void)
     UpdatePaletteFade();
     UpdateTilesetAnimations();
     DoScheduledBgTilemapCopiesToVram();
-    if (!(gPaletteFade.active || (timeCounter++ % 3600)))
+    if (!(gPaletteFade.active || (++sTimeUpdateCounter % 3600)))
     {
         struct TimeBlendSettings cachedBlend =
         {
@@ -1637,7 +1636,7 @@ static void OverworldBasic(void)
             .weight = currentTimeBlend.weight,
         };
         
-        timeCounter = 0;
+        sTimeUpdateCounter = 0;
         UpdateTimeOfDay();
         
         if (cachedBlend.time0 != currentTimeBlend.time0

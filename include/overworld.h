@@ -44,7 +44,8 @@ struct LinkPlayerObjectEvent
     u8 movementMode;
 };
 
-struct __attribute__((packed)) TimeBlendSettings {
+struct __attribute__((packed)) TimeBlendSettings
+{
   u16 weight:9;
   u16 time1:3;
   u16 time0:3;
@@ -141,6 +142,7 @@ void CleanupOverworldWindowsAndTilemaps(void);
 bool32 IsOverworldLinkActive(void);
 void CB1_Overworld(void);
 void CB2_OverworldBasic(void);
+u8 UpdateTimeOfDay(void);
 void UpdatePalettesWithTime(u32);
 void CB2_Overworld(void);
 void SetMainCallback1(void (*cb)(void));
