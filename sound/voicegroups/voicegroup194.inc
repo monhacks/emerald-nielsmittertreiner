@@ -4,6 +4,20 @@ voicegroup194::
 	voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_directsound 60, 0, DirectSoundWaveData_sd90_classical_detuned_ep1_low, 255, 188, 128, 226
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_directsound 60, 0, DirectSoundWaveData_sc88pro_xylophone, 255, 235, 0, 204
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_directsound 60, 0, DirectSoundWaveData_sc88pro_organ2, 51, 0, 203, 127
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
@@ -24,21 +38,7 @@ voicegroup194::
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_directsound 60, 0, DirectSoundWaveData_sc88pro_synth_bass, 255, 252, 0, 115
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
@@ -48,7 +48,7 @@ voicegroup194::
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_directsound 60, 0, DirectSoundWaveData_sc88pro_harp, 255, 246, 0, 235
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_keysplit voicegroup006, KeySplitTable2
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
     voice_square_1 60, 0, 0, 2, 0, 0, 15, 0

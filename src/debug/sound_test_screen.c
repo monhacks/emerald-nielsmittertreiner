@@ -148,6 +148,7 @@ static void CB2_ExitSoundTestScreen(void)
     if (!UpdatePaletteFade())
     {
         Free(sSoundTestStruct);
+        sSoundTestStruct = NULL;
         SetMainCallback2(gMain.savedCallback);
     }
 }
