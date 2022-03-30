@@ -593,6 +593,7 @@ static u8 SetUpCopyrightScreen(void)
         #ifdef DEBUG
         if (JOY_NEW(START_BUTTON))
         {
+            gMain.savedCallback = CB2_InitCopyrightScreenAfterBootup;
             BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
             SetMainCallback2(CB2_GoToSoundTestScreen);
         }

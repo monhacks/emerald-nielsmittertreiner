@@ -1,13 +1,16 @@
 #ifdef DEBUG
 #include "global.h"
+#include "debug/overworld_debug.h"
 #include "debug/sound_test_screen.h"
 #include "bg.h"
 #include "gpu_regs.h"
 #include "graphics.h"
 #include "international_string_util.h"
 #include "m4a.h"
+#include "malloc.h"
 #include "main.h"
 #include "menu.h"
+#include "overworld.h"
 #include "palette.h"
 #include "text.h"
 #include "text_window.h"
@@ -31,13 +34,12 @@ struct SoundTestStruct
 {
     u8 window;
     u16 index[2];
-    u16 selection[2];
-    bool8 playingBgm;
 };
 
 static void MainCB2_SoundTestScreen(void);
 static void VBlankCB_SoundTestScreen(void);
 static bool8 CB2_SetupSoundTestScreen(void);
+static void CB2_ExitSoundTestScreen(void);
 static void InitSoundTestScreenWindows(void);
 static void Task_DrawSoundTestScreenWindows(u8 taskId);
 static void Task_HandleSoundTestScreenInput(u8 taskId);
@@ -46,14 +48,17 @@ static void Task_HandleDrawSoundTestScreenInfo(u8 taskId);
 static void HighlightSelectedWindow(s16 selectedWindow);
 static bool8 IsBGMWindow(s16 selectedWindow);
 
-static EWRAM_DATA struct SoundTestStruct sSoundTestStruct = {0};
+static struct SoundTestStruct *sSoundTestStruct = NULL;
+
+//static EWRAM_DATA struct SoundTestStruct sSoundTestStruct = {0};
 static EWRAM_DATA u8 sSoundTestHeaderWindowId = 0;
 
 static const u8 gText_SoundTestScreen[] = _("SOUND TEST SCREEN {EMOJI_NOTE}");
 static const u8 gText_DPadUpDownSelectWindow[] = _("{DPAD_UPDOWN} SELECT WINDOW");
 static const u8 gText_DPadLeftRightSelectSong[] = _("{DPAD_LEFTRIGHT} SELECT SONG");
-static const u8 gText_APlayPause[] = _("{A_BUTTON} PLAY / PAUSE");
-static const u8 gText_BExit[] = _("{B_BUTTON} EXIT");
+static const u8 gText_APlay[] = _("{A_BUTTON} PLAY");
+static const u8 gText_BStop[] = _("{B_BUTTON} STOP");
+static const u8 gText_StartExit[] = _("{START_BUTTON} EXIT");
 static const u8 gText_Music[] = _("MUSIC");
 static const u8 gText_SoundEffects[] = _("SOUND EFFECTS");
 
@@ -138,6 +143,15 @@ void CB2_InitSoundTestScreen(void)
     }
 }
 
+static void CB2_ExitSoundTestScreen(void)
+{
+    if (!UpdatePaletteFade())
+    {
+        Free(sSoundTestStruct);
+        SetMainCallback2(gMain.savedCallback);
+    }
+}
+
 static bool8 CB2_SetupSoundTestScreen(void)
 {
     switch(gMain.state)
@@ -174,6 +188,9 @@ static bool8 CB2_SetupSoundTestScreen(void)
         ShowBg(0);
         ShowBg(3);
         LoadPalette(sSoundTestScreenBg_Pal, 0, sizeof(sSoundTestScreenBg_Pal));
+
+        sSoundTestStruct = AllocZeroed(sizeof(struct SoundTestStruct));
+
         InitSoundTestScreenWindows();
         BeginNormalPaletteFade(PALETTES_BG, 0, 0x10, 0, RGB_WHITEALPHA);
         EnableInterrupts(INTR_FLAG_VBLANK);
@@ -220,29 +237,27 @@ static void Task_DrawSoundTestScreenWindows(u8 taskId)
     AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_SoundTestScreen, 3, 0, 0, 0);
     AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_DPadUpDownSelectWindow, 3, 16, 0, 0);
     AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_DPadLeftRightSelectSong, 3, 32, 0, 0);
-    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_APlayPause, 120, 16, 0, 0);
-    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_BExit, 120, 32, 0, 0);
+    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_APlay, 120, 16, 0, 0);
+    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_BStop, 120, 32, 0, 0);
+    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_StartExit, 170, 32, 0, 0);
 
     DrawStdFrameWithCustomTileAndPalette(0, TRUE, 2, 14);
     ConvertIntToDecimalStringN(gText_Index[BGM], 0, STR_CONV_MODE_LEFT_ALIGN, 2);
     AddTextPrinterParameterized(0, 1, gText_Index[BGM], 3, 16, 0, 0);
     AddTextPrinterParameterized(0, 1, gText_Music, 3, 0, 0, 0);
-    AddTextPrinterParameterized(0, 1, gBGMNames[sSoundTestStruct.index[BGM]], 32, 16, 0, 0);
+    AddTextPrinterParameterized(0, 1, gBGMNames[sSoundTestStruct->index[BGM]], 32, 16, 0, 0);
 
     DrawStdFrameWithCustomTileAndPalette(1, TRUE, 2, 14);
     ConvertIntToDecimalStringN(gText_Index[SE], 0, STR_CONV_MODE_LEFT_ALIGN, 2);
     AddTextPrinterParameterized(1, 1, gText_Index[SE], 3, 16, 0, 0);
     AddTextPrinterParameterized(1, 1, gText_SoundEffects, 3, 0, 0, 0);
-    AddTextPrinterParameterized(1, 1, gSENames[sSoundTestStruct.index[SE]], 32, 16, 0, 0);
+    AddTextPrinterParameterized(1, 1, gSENames[sSoundTestStruct->index[SE]], 32, 16, 0, 0);
 
     m4aSoundInit();
     gTasks[taskId].func = Task_HandleSoundTestScreenInput;
-    sSoundTestStruct.window = 0;
-    sSoundTestStruct.index[BGM] = 0;
-    sSoundTestStruct.index[SE] = 0;
-    sSoundTestStruct.selection[BGM] = 0;
-    sSoundTestStruct.selection[SE] = 0;
-    sSoundTestStruct.playingBgm = FALSE;
+    sSoundTestStruct->window = 0;
+    sSoundTestStruct->index[BGM] = 0;
+    sSoundTestStruct->index[SE] = 0;
 }
 
 static void Task_HandleSoundTestScreenInput(u8 taskId)
@@ -255,24 +270,24 @@ static void Task_HandleSoundTestScreenInput(u8 taskId)
 
 static void Task_HandleDrawSoundTestScreenInfo(u8 taskId)
 {
-    FillWindowPixelBuffer(sSoundTestStruct.window, PIXEL_FILL(1));
+    FillWindowPixelBuffer(sSoundTestStruct->window, PIXEL_FILL(1));
 
-    if (IsBGMWindow(sSoundTestStruct.window))
+    if (IsBGMWindow(sSoundTestStruct->window))
     {
-        ConvertIntToDecimalStringN(gText_Index[BGM], sSoundTestStruct.index[BGM], STR_CONV_MODE_LEFT_ALIGN, 3);
+        ConvertIntToDecimalStringN(gText_Index[BGM], sSoundTestStruct->index[BGM], STR_CONV_MODE_LEFT_ALIGN, 3);
         AddTextPrinterParameterized(0, 1, gText_Music, 3, 0, 0, 0);
         AddTextPrinterParameterized(0, 1, gText_Index[BGM], 3, 16, 0, 0);
-        AddTextPrinterParameterized(0, 1, gBGMNames[sSoundTestStruct.index[BGM]], 32, 16, 0, 0);
+        AddTextPrinterParameterized(0, 1, gBGMNames[sSoundTestStruct->index[BGM]], 32, 16, 0, 0);
     }
     else
     {
-        ConvertIntToDecimalStringN(gText_Index[SE], sSoundTestStruct.index[SE], STR_CONV_MODE_LEFT_ALIGN, 3);
+        ConvertIntToDecimalStringN(gText_Index[SE], sSoundTestStruct->index[SE], STR_CONV_MODE_LEFT_ALIGN, 3);
         AddTextPrinterParameterized(1, 1, gText_SoundEffects, 3, 0, 0, 0);
         AddTextPrinterParameterized(1, 1, gText_Index[SE], 3, 16, 0, 0);
-        AddTextPrinterParameterized(1, 1, gSENames[sSoundTestStruct.index[SE]], 32, 16, 0, 0);
+        AddTextPrinterParameterized(1, 1, gSENames[sSoundTestStruct->index[SE]], 32, 16, 0, 0);
     }
 
-    HighlightSelectedWindow(sSoundTestStruct.window);
+    HighlightSelectedWindow(sSoundTestStruct->window);
     gTasks[taskId].func = Task_HandleSoundTestScreenInput;
 }
 
@@ -280,74 +295,62 @@ static bool8 Task_CheckSoundTestScreenInput(u8 taskId)
 {
     if (JOY_NEW(A_BUTTON))
     {
-        if (IsBGMWindow(sSoundTestStruct.window))
+        m4aMPlayAllStop();
+        if (IsBGMWindow(sSoundTestStruct->window))
         {
-            if (sSoundTestStruct.selection[BGM] == sSoundTestStruct.index[BGM])
-            {
-                if (sSoundTestStruct.playingBgm == FALSE)
-                {
-                    m4aSongNumStartOrContinue(sSoundTestStruct.index[BGM] + 350);
-                    sSoundTestStruct.playingBgm = TRUE;
-                }
-                else
-                {
-                    m4aMPlayAllStop();
-                    sSoundTestStruct.playingBgm = FALSE;
-                }
-            }
-            else
-            {
-                m4aMPlayAllStop();
-                m4aSongNumStart(sSoundTestStruct.index[BGM] + 350);
-                sSoundTestStruct.playingBgm = TRUE;
-            }
-
-            sSoundTestStruct.selection[BGM] = sSoundTestStruct.index[BGM];
+            m4aSongNumStart(sSoundTestStruct->index[BGM] + 350);
         }
         else
-        {
-            m4aMPlayAllStop();
-            m4aSongNumStart(sSoundTestStruct.index[SE]);
-            sSoundTestStruct.playingBgm = FALSE;
+        {   
+            m4aSongNumStart(sSoundTestStruct->index[SE]);
         }
         return TRUE;
     }
     else if (JOY_NEW(B_BUTTON))
     {
-        DoSoftReset();
+        m4aMPlayAllStop();
+    }
+    else if (JOY_NEW(START_BUTTON))
+    {
+        m4aMPlayAllStop();
+        BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+        if (gMain.savedCallback == CB2_OverworldDebugMenu)
+            PlayNewMapMusic(GetCurrLocationDefaultMusic());
+
+        SetMainCallback2(CB2_ExitSoundTestScreen);
     }
     else if ((JOY_NEW(DPAD_UP)))
     {
-        sSoundTestStruct.window ^= 1;
+        sSoundTestStruct->window ^= 1;
         return TRUE;
     }
     else if ((JOY_NEW(DPAD_DOWN)))
     {
-        sSoundTestStruct.window ^= 1;
+        sSoundTestStruct->window ^= 1;
         return TRUE;
     }
     else if ((JOY_REPEAT(DPAD_LEFT)))
     {
-        if (IsBGMWindow(sSoundTestStruct.window))
+        if (IsBGMWindow(sSoundTestStruct->window))
         {
-            if (sSoundTestStruct.index[BGM] == 0)
+            if (sSoundTestStruct->index[BGM] == 0)
             {
-                sSoundTestStruct.index[BGM] = NUM_BGM;
+                sSoundTestStruct->index[BGM] = NUM_BGM;
             }
             else
             {
-                sSoundTestStruct.index[BGM]--;
+                sSoundTestStruct->index[BGM]--;
             }
         }
         else
         {
-            if (sSoundTestStruct.index[SE] == 0)
+            if (sSoundTestStruct->index[SE] == 0)
             {
-                sSoundTestStruct.index[SE] = NUM_SE;
+                sSoundTestStruct->index[SE] = NUM_SE;
             }
             else
             {
-                sSoundTestStruct.index[SE]--;
+                sSoundTestStruct->index[SE]--;
             }
 
         }
@@ -355,26 +358,26 @@ static bool8 Task_CheckSoundTestScreenInput(u8 taskId)
     }
     else if ((JOY_REPEAT(DPAD_RIGHT)))
     {
-        if (IsBGMWindow(sSoundTestStruct.window))
+        if (IsBGMWindow(sSoundTestStruct->window))
         {
-            if (sSoundTestStruct.index[BGM] == NUM_BGM)
+            if (sSoundTestStruct->index[BGM] == NUM_BGM)
             {
-                sSoundTestStruct.index[BGM] = 0;
+                sSoundTestStruct->index[BGM] = 0;
             }
             else
             {
-                sSoundTestStruct.index[BGM]++;
+                sSoundTestStruct->index[BGM]++;
             }
         }
         else
         {
-            if (sSoundTestStruct.index[SE] == NUM_SE)
+            if (sSoundTestStruct->index[SE] == NUM_SE)
             {
-                sSoundTestStruct.index[SE] = 0;
+                sSoundTestStruct->index[SE] = 0;
             }
             else
             {
-                sSoundTestStruct.index[SE]++;
+                sSoundTestStruct->index[SE]++;
             }
 
         }

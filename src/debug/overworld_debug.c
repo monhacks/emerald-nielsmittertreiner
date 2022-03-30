@@ -1,6 +1,7 @@
 #ifdef DEBUG
 #include "global.h"
 #include "debug/overworld_debug.h"
+#include "debug/sound_test_screen.h"
 #include "debug/mgba.h"
 #include "debug/printf.h"
 #include "battle_main.h"
@@ -69,6 +70,8 @@ static void Task_DebugActionSetTime(u8 taskId);
 static void Task_HandleSetTimeInput(u8 taskId);
 static void Task_DebugActionHealParty(u8 taskId);
 static void Task_DebugActionResetBerries(u8 taskId);
+static void Task_DebugActionSoundTestScreen(u8 taskId);
+static void Task_GoToSoundTestScreen(u8 taskId);
 static void Task_DebugActionGodmode(u8 taskId);
 static void Task_DebugActionBuildParty(u8 taskId);
 static void Task_HandleBuildPartyInput(u8 taskId);
@@ -137,13 +140,14 @@ enum
     LIST_ITEM_FLAGS,
     LIST_ITEM_VARS,
     LIST_ITEM_SET_TIME,
-    LIST_ITEM_HEAL_PARTY,
     LIST_ITEM_RESET_BERRIES,
+    LIST_ITEM_SOUND_TEST_SCREEN,
 };
 
 enum
 {
     LIST_ITEM_GODMODE,
+    LIST_ITEM_HEAL_PARTY,
     LIST_ITEM_BUILD_PARTY,
     LIST_ITEM_GIVE_ITEM,
     LIST_ITEM_CHANGE_GENDER,
@@ -279,10 +283,11 @@ static const u8 sText_Warp[] = _("WARP");
 static const u8 sText_Flags[] = _("FLAGS");
 static const u8 sText_Vars[] = _("VARS");
 static const u8 sText_SetTime[] = _("SET TIME");
-static const u8 sText_HealParty[] = _("HEAL PARTY");
 static const u8 sText_ResetBerries[] = _("RESET BERRIES");
+static const u8 sText_SoundTestScreen[] = _("SOUND TESTING");
 
 static const u8 sText_Godmode[] = _("GODMODE");
+static const u8 sText_HealParty[] = _("HEAL PARTY");
 static const u8 sText_BuildParty[] = _("BUILD PARTY");
 static const u8 sText_GiveItem[] = _("GIVE ITEM");
 static const u8 sText_ChangeGender[] = _("CHANGE GENDER");
@@ -300,10 +305,11 @@ static const u8 sText_WarpDesc[] = _("WARP TO ANY WARP POINT\nOR XY POSITION OF\
 static const u8 sText_FlagsDesc[] = _("TURN EVENT FLAGS ON\nOR OFF.");
 static const u8 sText_VarsDesc[] = _("MANIPULATE VARS TO\nYOUR LIKING.");
 static const u8 sText_SetTimeDesc[] = _("SET INGAME TIME TO\nYOUR LIKING.");
-static const u8 sText_HealPartyDesc[] = _("HEAL YOUR CURRENT PARTY\nBACK TO FULL HEALTH.");
 static const u8 sText_ResetBerriesDesc[] = _("REPLANT ALL BERRIES\nIN THE OVERWORLD.");
+static const u8 sText_SoundTestScreenDesc[] = _("GO TO SOUND TESTING\nSCREEN.");
 
 static const u8 sText_GodmodeDesc[] = _("WALK THROUGH WALLS,\nDISABLE ENCOUNTERS AND\nDISABLE TRAINERS.");
+static const u8 sText_HealPartyDesc[] = _("HEAL YOUR CURRENT PARTY\nBACK TO FULL HEALTH.");
 static const u8 sText_BuildPartyDesc[] = _("CREATE A CUSTOMIZED\nPARTY OF POKéMON.");
 static const u8 sText_GiveItemDesc[] = _("GIVE YOURSELF ANY\nITEM IN YOUR BAG.");
 static const u8 sText_ChangeGenderDesc[] = _("CHANGE YOUR GENDER.");
@@ -395,17 +401,18 @@ static const u8 *const sText_ListMenuDescriptions_Info[] =
 
 static const u8 *const sText_ListMenuDescriptions_Utility[] =
 {
-    [LIST_ITEM_WARP]          = sText_WarpDesc,
-    [LIST_ITEM_FLAGS]         = sText_FlagsDesc,
-    [LIST_ITEM_VARS]          = sText_VarsDesc,
-    [LIST_ITEM_SET_TIME]      = sText_SetTimeDesc,
-    [LIST_ITEM_HEAL_PARTY]    = sText_HealPartyDesc,
-    [LIST_ITEM_RESET_BERRIES] = sText_ResetBerriesDesc,
+    [LIST_ITEM_WARP]              = sText_WarpDesc,
+    [LIST_ITEM_FLAGS]             = sText_FlagsDesc,
+    [LIST_ITEM_VARS]              = sText_VarsDesc,
+    [LIST_ITEM_SET_TIME]          = sText_SetTimeDesc,
+    [LIST_ITEM_RESET_BERRIES]     = sText_ResetBerriesDesc,
+    [LIST_ITEM_SOUND_TEST_SCREEN] = sText_SoundTestScreenDesc,
 };
 
 static const u8 *const sText_ListMenuDescriptions_Player[] =
 {
     [LIST_ITEM_GODMODE]       = sText_GodmodeDesc,
+    [LIST_ITEM_HEAL_PARTY]    = sText_HealPartyDesc,
     [LIST_ITEM_BUILD_PARTY]   = sText_BuildPartyDesc,
     [LIST_ITEM_GIVE_ITEM]     = sText_GiveItemDesc,
     [LIST_ITEM_CHANGE_GENDER] = sText_ChangeGenderDesc,
@@ -439,13 +446,14 @@ static const struct ListMenuItem sListMenuItems_Utility[] =
     {sText_Flags, LIST_ITEM_FLAGS},
     {sText_Vars, LIST_ITEM_VARS},
     {sText_SetTime, LIST_ITEM_SET_TIME},
-    {sText_HealParty, LIST_ITEM_HEAL_PARTY},
     {sText_ResetBerries, LIST_ITEM_RESET_BERRIES},
+    {sText_SoundTestScreen, LIST_ITEM_SOUND_TEST_SCREEN},
 };
 
 static const struct ListMenuItem sListMenuItems_Player[] =
 {
     {sText_Godmode, LIST_ITEM_GODMODE},
+    {sText_HealParty, LIST_ITEM_HEAL_PARTY},
     {sText_BuildParty, LIST_ITEM_BUILD_PARTY},
     {sText_GiveItem, LIST_ITEM_GIVE_ITEM},
     {sText_ChangeGender, LIST_ITEM_CHANGE_GENDER},
@@ -467,17 +475,18 @@ static void (*const sDebugActions_Info[])(u8) =
 
 static void (*const sDebugActions_Utility[])(u8) = 
 {
-    [LIST_ITEM_WARP]          = Task_DebugActionWarp,
-    [LIST_ITEM_FLAGS]         = Task_DebugActionFlags,
-    [LIST_ITEM_VARS]          = Task_DebugActionVars,
-    [LIST_ITEM_SET_TIME]      = Task_DebugActionSetTime,
-    [LIST_ITEM_HEAL_PARTY]    = Task_DebugActionHealParty,
-    [LIST_ITEM_RESET_BERRIES] = Task_DebugActionResetBerries,
+    [LIST_ITEM_WARP]              = Task_DebugActionWarp,
+    [LIST_ITEM_FLAGS]             = Task_DebugActionFlags,
+    [LIST_ITEM_VARS]              = Task_DebugActionVars,
+    [LIST_ITEM_SET_TIME]          = Task_DebugActionSetTime,
+    [LIST_ITEM_RESET_BERRIES]     = Task_DebugActionResetBerries,
+    [LIST_ITEM_SOUND_TEST_SCREEN] = Task_DebugActionSoundTestScreen,
 };
 
 static void (*const sDebugActions_Player[])(u8) = 
 {
     [LIST_ITEM_GODMODE]       = Task_DebugActionGodmode,
+    [LIST_ITEM_HEAL_PARTY]    = Task_DebugActionHealParty,
     [LIST_ITEM_BUILD_PARTY]   = Task_DebugActionBuildParty,
     [LIST_ITEM_GIVE_ITEM]     = Task_DebugActionGiveItem,
     [LIST_ITEM_CHANGE_GENDER] = Task_DebugActionChangeGender,
@@ -1339,16 +1348,25 @@ static void Task_HandleSetTimeInput(u8 taskId)
 #undef tMinutes
 #undef tState
 
-static void Task_DebugActionHealParty(u8 taskId)
-{
-    PlaySE(SE_USE_ITEM);
-    HealPlayerParty();
-}
-
 static void Task_DebugActionResetBerries(u8 taskId)
 {
     PlaySE(SE_USE_ITEM);
     ScriptContext1_SetupScript(EventScript_ResetAllBerries);
+}
+
+static void Task_DebugActionSoundTestScreen(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+
+    gMain.savedCallback = CB2_OverworldDebugMenu;
+    BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+    task->func = Task_GoToSoundTestScreen;
+}
+
+static void Task_GoToSoundTestScreen(u8 taskId)
+{
+    if (!UpdatePaletteFade())
+        SetMainCallback2(CB2_InitSoundTestScreen);
 }
 
 static void Task_DebugActionGodmode(u8 taskId)
@@ -1364,6 +1382,12 @@ static void Task_DebugActionGodmode(u8 taskId)
     AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_Status);
     AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 36, 0, sTextColor_TrueFalse[gSaveBlock2Ptr->godmode], TEXT_SKIP_DRAW, sText_TrueFalse[gSaveBlock2Ptr->godmode]);
     CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
+}
+
+static void Task_DebugActionHealParty(u8 taskId)
+{
+    PlaySE(SE_USE_ITEM);
+    HealPlayerParty();
 }
 
 #define tSelectedMon data[0]
