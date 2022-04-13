@@ -252,7 +252,7 @@ static void ItemUseOnFieldCB_Bike(u8 taskId)
 {
     if (ItemId_GetSecondaryId(gSpecialVar_ItemId) == MACH_BIKE)
         GetOnOffBike(PLAYER_AVATAR_FLAG_MACH_BIKE);
-    else // ACRO_BIKE
+    else
         GetOnOffBike(PLAYER_AVATAR_FLAG_ACRO_BIKE);
     
     FollowMe_HandleBike();
@@ -951,7 +951,6 @@ bool8 CanUseDigOrEscapeRopeOnCurMap(void)
 {
     if (!CheckFollowerFlag(FOLLOWER_FLAG_CAN_LEAVE_ROUTE))
         return FALSE;
-
     if (gMapHeader.allowEscaping)
         return TRUE;
     else

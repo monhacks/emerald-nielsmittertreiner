@@ -345,17 +345,17 @@ WalkRightCall:
 	return
     
 WalkDown:
-	walk_down
-	step_end 
+    walk_down
+    step_end 
 
 WalkUp:
-	walk_up
-	step_end
+    walk_up
+    step_end
 
 WalkLeft:
-	walk_left
-	step_end
+    walk_left
+    step_end
 
 WalkRight:
-	walk_right
-	step_end
+    walk_right
+    step_end

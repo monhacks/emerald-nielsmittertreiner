@@ -485,9 +485,9 @@ static u8 DetermineFollowerState(struct ObjectEvent* follower, u8 state, u8 dire
     #ifdef MOVEMENT_ACTION_RUN_DOWN_SLOW
     case MOVEMENT_ACTION_RUN_DOWN_SLOW ... MOVEMENT_ACTION_RUN_RIGHT_SLOW:
         if (gSaveBlock2Ptr->follower.flags & FOLLOWER_FLAG_HAS_RUNNING_FRAMES)
-            RETURN_STATE(MOVEMENT_ACTION_PLAYER_RUN_DOWN, direction);
+            RETURN_STATE(MOVEMENT_ACTION_RUN_DOWN_SLOW, direction);
 
-        RETURN_STATE(MOVEMENT_ACTION_RUN_DOWN_SLOW, direction);
+        RETURN_STATE(MOVEMENT_ACTION_WALK_NORMAL_DOWN, direction);
     #endif
         
     default:
@@ -824,13 +824,13 @@ void Task_DoDoorWarp(u8 taskId)
         WarpFadeOutScreen();
         PlayRainStoppingSoundEffect();
         task->data[0] = 0;
-        task->func = Task_DoContestHallWarp;
+        task->func = Task_WarpAndLoadMap;
         break;
     case 5:
         TryFadeOutOldMapMusic();
         PlayRainStoppingSoundEffect();
         task->data[0] = 0;
-        task->func = Task_DoContestHallWarp;
+        task->func = Task_WarpAndLoadMap;
         break;
     }
 }
@@ -865,8 +865,10 @@ static void Task_FollowerOutOfDoor(u8 taskId)
     {
     case 0:
         FreezeObjectEvents();
-        PlaySE(GetDoorSoundEffect(*x, *y));
-        gTasks[taskId].data[1] = FieldAnimateDoorOpen(follower->currentCoords.x, follower->currentCoords.y);
+        task->data[1] = FieldAnimateDoorOpen(follower->currentCoords.x, follower->currentCoords.y);
+        if (task->data[1] != -1)
+            PlaySE(GetDoorSoundEffect(*x, *y)); //only play SE for animating doors
+        
         task->data[0] = 1;
         break;
     case 1:
@@ -1230,7 +1232,7 @@ static void TurnNPCIntoFollower(u8 localId, u16 followerFlags)
             follower->movementType = MOVEMENT_TYPE_NONE; //Doesn't get to move on its own anymore
             gSprites[follower->spriteId].callback = MovementType_None; //MovementType_None
             SetObjEventTemplateMovementType(localId, 0);
-            if (CheckFollowerFlag(FOLLOWER_FLAG_CUSTOM_FOLLOW_SCRIPT))
+            if (followerFlags & FOLLOWER_FLAG_CUSTOM_FOLLOW_SCRIPT)
                 script = (const u8 *)ReadWord(0);
             else
                 script = GetObjectEventScriptPointerByObjectEventId(eventObjId);

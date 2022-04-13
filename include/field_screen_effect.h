@@ -42,6 +42,6 @@ void FadeOutOrbEffect(void);
 void WriteFlashScanlineEffectBuffer(u8 flashLevel);
 bool8 IsPlayerStandingStill(void);
 void SetPlayerVisibility(bool8 visible);
-void Task_DoContestHallWarp(u8 taskId);
+void Task_WarpAndLoadMap(u8 taskId);
 
 #endif // GUARD_FIELD_SCREEN_EFFECT_H
