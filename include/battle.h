@@ -12,7 +12,7 @@
 #include "battle_util2.h"
 #include "battle_bg.h"
 #include "pokeball.h"
-#include "debug/battle_debug.h"
+#include "battle_debug.h"
 
 #define GET_BATTLER_POSITION(battler)     (gBattlerPositions[battler])
 #define GET_BATTLER_SIDE(battler)         (GetBattlerPosition(battler) & BIT_SIDE)

@@ -23,7 +23,7 @@
 #include "data.h"
 #include "pokemon_summary_screen.h"
 #include "strings.h"
-#include "debug/battle_debug.h"
+#include "battle_debug.h"
 #include "item.h"
 #include "item_icon.h"
 #include "item_use.h"
