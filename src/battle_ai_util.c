@@ -2263,9 +2263,9 @@ static u32 GetTrapDamage(u8 battlerId)
     if (gBattleMons[battlerId].status2 & STATUS2_WRAPPED)
     {
         if (holdEffect == HOLD_EFFECT_BINDING_BAND)
-            damage = gBattleMons[battlerId].maxHP / 8;
+            damage = gBattleMons[battlerId].maxHP / (B_BINDING_DAMAGE >= GEN_6) ? 6 : 8;
         else
-            damage = gBattleMons[battlerId].maxHP / 16;
+            damage = gBattleMons[battlerId].maxHP / (B_BINDING_DAMAGE >= GEN_6) ? 8 : 16;
 
         if (damage == 0)
             damage = 1;
