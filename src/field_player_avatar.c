@@ -1438,7 +1438,7 @@ void InitPlayerAvatar(s16 x, s16 y, u8 direction, u8 gender)
     SetPlayerAvatarStateMask(PLAYER_AVATAR_FLAG_CONTROLLABLE | PLAYER_AVATAR_FLAG_ON_FOOT);
     CreateFollowerAvatar();
 
-#ifdef DEBUG
+#if DEBUG
     if (FlagGet(FLAG_IS_INVISIBLE))
         objectEvent->invisible = TRUE;
 #endif
@@ -1886,7 +1886,7 @@ static bool8 Fishing_CheckForBite(struct Task *task)
     {
         if (!GetMonData(&gPlayerParty[0], MON_DATA_SANITY_IS_EGG))
         {
-            u16 ability = GetMonAbility(&gPlayerParty[0]);
+            u8 ability = GetMonAbility(&gPlayerParty[0]);
             if (ability == ABILITY_SUCTION_CUPS || ability  == ABILITY_STICKY_HOLD)
             {
                 if (Random() % 100 > 14)

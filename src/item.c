@@ -1144,26 +1144,3 @@ static void DestroyItemIconSprite(void)
         DestroySprite(&gSprites[sItemIconSpriteId2]);
     }
 }
-
-bool32 IsPinchBerryItemEffect(u16 holdEffect)
-{
-    switch (holdEffect)
-    {
-    case HOLD_EFFECT_ATTACK_UP:
-    case HOLD_EFFECT_DEFENSE_UP:
-    case HOLD_EFFECT_SPEED_UP:
-    case HOLD_EFFECT_SP_ATTACK_UP:
-    case HOLD_EFFECT_SP_DEFENSE_UP:
-    case HOLD_EFFECT_CRITICAL_UP:
-    case HOLD_EFFECT_RANDOM_STAT_UP:
-    #ifdef HOLD_EFFECT_CUSTAP_BERRY
-    case HOLD_EFFECT_CUSTAP_BERRY:
-    #endif
-    #ifdef HOLD_EFFECT_MICLE_BERRY
-    case HOLD_EFFECT_MICLE_BERRY:
-    #endif
-        return TRUE;
-    }
-
-    return FALSE;
-}

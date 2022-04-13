@@ -31,7 +31,7 @@
 
 #ifndef _PRINTF_H_
 #define _PRINTF_H_
-#ifdef DEBUG
+#if DEBUG
 
 #include <stdarg.h>
 #include <stddef.h>

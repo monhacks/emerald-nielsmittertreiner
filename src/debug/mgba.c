@@ -19,7 +19,7 @@
  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifdef DEBUG
+#if DEBUG
 #include "gba/types.h"
 #include <stdarg.h>
 #include <stdio.h>

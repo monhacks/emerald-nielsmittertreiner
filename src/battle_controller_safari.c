@@ -80,7 +80,6 @@ static void SafariHandleBattleAnimation(void);
 static void SafariHandleLinkStandbyMsg(void);
 static void SafariHandleResetActionMoveSelection(void);
 static void SafariHandleEndLinkBattle(void);
-static void SafariHandleBattleDebug(void);
 static void SafariCmdEnd(void);
 
 static void SafariBufferRunCommand(void);
@@ -145,7 +144,6 @@ static void (*const sSafariBufferCommands[CONTROLLER_CMDS_COUNT])(void) =
     [CONTROLLER_LINKSTANDBYMSG]           = SafariHandleLinkStandbyMsg,
     [CONTROLLER_RESETACTIONMOVESELECTION] = SafariHandleResetActionMoveSelection,
     [CONTROLLER_ENDLINKBATTLE]            = SafariHandleEndLinkBattle,
-    [CONTROLLER_DEBUGMENU]                = SafariHandleBattleDebug,
     [CONTROLLER_TERMINATOR_NOP]           = SafariCmdEnd
 };
 
@@ -162,8 +160,8 @@ static void SafariBufferRunCommand(void)
 {
     if (gBattleControllerExecFlags & gBitTable[gActiveBattler])
     {
-        if (gBattleResources->bufferA[gActiveBattler][0] < ARRAY_COUNT(sSafariBufferCommands))
-            sSafariBufferCommands[gBattleResources->bufferA[gActiveBattler][0]]();
+        if (gBattleBufferA[gActiveBattler][0] < ARRAY_COUNT(sSafariBufferCommands))
+            sSafariBufferCommands[gBattleBufferA[gActiveBattler][0]]();
         else
             SafariBufferExecCompleted();
     }
@@ -301,7 +299,7 @@ static void SafariBufferExecCompleted(void)
         u8 playerId = GetMultiplayerId();
 
         PrepareBufferDataTransferLink(2, 4, &playerId);
-        gBattleResources->bufferA[gActiveBattler][0] = CONTROLLER_TERMINATOR_NOP;
+        gBattleBufferA[gActiveBattler][0] = CONTROLLER_TERMINATOR_NOP;
     }
     else
     {
@@ -400,7 +398,7 @@ static void SafariHandleSuccessBallThrowAnim(void)
 
 static void SafariHandleBallThrowAnim(void)
 {
-    u8 ballThrowCaseId = gBattleResources->bufferA[gActiveBattler][1];
+    u8 ballThrowCaseId = gBattleBufferA[gActiveBattler][1];
 
     gBattleSpritesDataPtr->animationData->ballThrowCaseId = ballThrowCaseId;
     gDoingBattleAnim = TRUE;
@@ -424,7 +422,7 @@ static void SafariHandlePrintString(void)
 
     gBattle_BG0_X = 0;
     gBattle_BG0_Y = 0;
-    stringId = (u16*)(&gBattleResources->bufferA[gActiveBattler][2]);
+    stringId = (u16*)(&gBattleBufferA[gActiveBattler][2]);
     BufferStringBattle(*stringId);
     BattlePutTextOnWindow(gDisplayedStringBattle, B_WIN_MSG);
     gBattlerControllerFuncs[gActiveBattler] = CompleteOnInactiveTextPrinter;
@@ -595,20 +593,20 @@ static void SafariHandlePlaySE(void)
     else
         pan = SOUND_PAN_TARGET;
 
-    PlaySE12WithPanning(gBattleResources->bufferA[gActiveBattler][1] | (gBattleResources->bufferA[gActiveBattler][2] << 8), pan);
+    PlaySE12WithPanning(gBattleBufferA[gActiveBattler][1] | (gBattleBufferA[gActiveBattler][2] << 8), pan);
     SafariBufferExecCompleted();
 }
 
 static void SafariHandlePlayFanfareOrBGM(void)
 {
-    if (gBattleResources->bufferA[gActiveBattler][3])
+    if (gBattleBufferA[gActiveBattler][3])
     {
         BattleStopLowHpSound();
-        PlayBGM(gBattleResources->bufferA[gActiveBattler][1] | (gBattleResources->bufferA[gActiveBattler][2] << 8));
+        PlayBGM(gBattleBufferA[gActiveBattler][1] | (gBattleBufferA[gActiveBattler][2] << 8));
     }
     else
     {
-        PlayFanfare(gBattleResources->bufferA[gActiveBattler][1] | (gBattleResources->bufferA[gActiveBattler][2] << 8));
+        PlayFanfare(gBattleBufferA[gActiveBattler][1] | (gBattleBufferA[gActiveBattler][2] << 8));
     }
 
     SafariBufferExecCompleted();
@@ -624,7 +622,7 @@ static void SafariHandleFaintingCry(void)
 
 static void SafariHandleIntroSlide(void)
 {
-    HandleIntroSlide(gBattleResources->bufferA[gActiveBattler][1]);
+    HandleIntroSlide(gBattleBufferA[gActiveBattler][1]);
     gIntroSlideFlags |= 1;
     SafariBufferExecCompleted();
 }
@@ -659,8 +657,8 @@ static void SafariHandleSpriteInvisibility(void)
 
 static void SafariHandleBattleAnimation(void)
 {
-    u8 animationId = gBattleResources->bufferA[gActiveBattler][1];
-    u16 argument = gBattleResources->bufferA[gActiveBattler][2] | (gBattleResources->bufferA[gActiveBattler][3] << 8);
+    u8 animationId = gBattleBufferA[gActiveBattler][1];
+    u16 argument = gBattleBufferA[gActiveBattler][2] | (gBattleBufferA[gActiveBattler][3] << 8);
 
     if (TryHandleLaunchBattleTableAnimation(gActiveBattler, gActiveBattler, gActiveBattler, animationId, argument))
         SafariBufferExecCompleted();
@@ -680,17 +678,12 @@ static void SafariHandleResetActionMoveSelection(void)
 
 static void SafariHandleEndLinkBattle(void)
 {
-    gBattleOutcome = gBattleResources->bufferA[gActiveBattler][1];
+    gBattleOutcome = gBattleBufferA[gActiveBattler][1];
     FadeOutMapMusic(5);
     BeginFastPaletteFade(3);
     SafariBufferExecCompleted();
     if ((gBattleTypeFlags & BATTLE_TYPE_LINK) && !(gBattleTypeFlags & BATTLE_TYPE_IS_MASTER))
         gBattlerControllerFuncs[gActiveBattler] = SafariSetBattleEndCallbacks;
-}
-
-static void SafariHandleBattleDebug(void)
-{
-    SafariBufferExecCompleted();
 }
 
 static void SafariCmdEnd(void)

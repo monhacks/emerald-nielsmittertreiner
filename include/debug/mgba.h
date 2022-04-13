@@ -21,7 +21,7 @@
 
 #ifndef GUARD_MGBA_H
 #define GUARD_MGBA_H
-#ifdef DEBUG
+#if DEBUG
 
 #include "gba/types.h"
 

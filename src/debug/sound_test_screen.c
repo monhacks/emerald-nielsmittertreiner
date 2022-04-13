@@ -1,4 +1,4 @@
-#ifdef DEBUG
+#if DEBUG
 #include "global.h"
 #include "debug/overworld_debug.h"
 #include "debug/sound_test_screen.h"

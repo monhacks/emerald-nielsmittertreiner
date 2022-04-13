@@ -544,7 +544,6 @@ gSpecials::
 	def_special IsPlayerInFlashCave
 	def_special UpdateOureaCaveTides
 	def_special TryShowOureaCaveMapNamePopup
-	def_special SetTotemBoost
 	.ifdef DEBUG
 	def_special ShowEndOfCurrentBetaScreen
 	def_special HideEndOfCurrentBetaScreen

@@ -25,7 +25,7 @@
 #include "trainer_hill.h"
 #include "time.h"
 #include "constants/rgb.h"
-#ifdef DEBUG
+#if DEBUG
 #include "debug/mgba.h"
 #endif
 
@@ -113,7 +113,7 @@ void AgbMain()
     ClearDma3Requests();
     ResetBgs();
     SetDefaultFontsPointer();
-    #ifdef DEBUG
+    #if DEBUG
     mgba_open();
     #endif
     InitHeap(gHeap, HEAP_SIZE);

@@ -48,9 +48,9 @@
 #define FLAG_UNUSED_0x024               0x24 // Unused Flag
 #define FLAG_HAS_BOB_PARTY              0x25 // BSBob's Party has been given
 #define FLAG_IS_INVISIBLE               0x26 // Turns Player invisible on player sprite init
-#define FLAG_FLAG_INVERSE_BATTLE        0x27 // Inverse battles, type effectiveness is reversed
-#define FLAG_FLAG_FORCE_DOUBLE_WILD     0x28 // Force double wild battles
-#define FLAG_SMART_WILD_AI_FLAG         0x29 // Enable smart wild ai
+#define FLAG_UNUSED_0x027               0x27 // Unused Flag
+#define FLAG_UNUSED_0x028               0x28 // Unused Flag
+#define FLAG_UNUSED_0x029               0x29 // Unused Flag
 #define FLAG_UNUSED_0x02A               0x2A // Unused Flag
 #define FLAG_UNUSED_0x02B               0x2B // Unused Flag
 #define FLAG_UNUSED_0x02C               0x2C // Unused Flag

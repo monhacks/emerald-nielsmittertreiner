@@ -1698,6 +1698,7 @@ static void Task_BuildLearnableMoveList(u8 taskId)
 {
     struct Task *task = &gTasks[FindTaskIdByFunc(Task_HandleBuildPartyInput)];
     u16 species = sPartyBuilder[task->tSelectedMon]->species;
+    const u16 *learnset = gLevelUpLearnsets[species];;
     u32 i;
     u8 moveListIndex = 0;
 
@@ -1705,10 +1706,10 @@ static void Task_BuildLearnableMoveList(u8 taskId)
 
     for (i = 0; i < MAX_LEVEL_UP_MOVES; i++)
     {
-        if (gLevelUpLearnsets[species][i].move == LEVEL_UP_END)
+        if (gLevelUpLearnsets[species][i] == LEVEL_UP_END)
             break;
         
-        sPartyBuilder[task->tSelectedMon]->moveList[moveListIndex] = gLevelUpLearnsets[species][i].move;
+        sPartyBuilder[task->tSelectedMon]->moveList[moveListIndex] = gLevelUpLearnsets[species][i]  & LEVEL_UP_MOVE_ID;
         moveListIndex++;
     }
 
