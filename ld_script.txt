@@ -96,6 +96,7 @@ SECTIONS {
         src/battle_controller_opponent.o(.text);
         src/battle_ai_switch_items.o(.text);
         src/battle_controller_link_opponent.o(.text);
+        src/battle_debug.o(.text);
         src/pokemon.o(.text);
         src/trig.o(.text);
         src/random.o(.text);
@@ -342,10 +343,11 @@ SECTIONS {
 		src/pokenav_v2.o(.text);
 		src/time.o(.text);
         src/debug/overworld_debug.o(.text);
-        src/debug/battle_debug.o(.text);
         src/debug/sound_test_screen.o(.text);
         src/debug/mgba.o(.text);
 		src/debug/printf.o(.text);
+		src/pokenav_v2.o(.text);
+		src/time.o(.text);
     } =0
 
     script_data :
@@ -492,6 +494,7 @@ SECTIONS {
         src/battle_controller_opponent.o(.rodata);
         src/battle_ai_switch_items.o(.rodata);
         src/battle_controller_link_opponent.o(.rodata);
+        src/battle_debug.o(.rodata);
         src/pokemon.o(.rodata);
         src/trig.o(.rodata);
         src/util.o(.rodata);
@@ -714,6 +717,7 @@ SECTIONS {
         src/debug/battle_debug.o(.rodata);
         src/debug/sound_test_screen.o(.rodata);
         src/debug/printf.o(.rodata);
+        src/pokenav_v2.o(.rodata);
     } =0
 
     song_data :
