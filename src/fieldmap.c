@@ -63,13 +63,7 @@ static void CacheLightMetatiles(void);
 })
 
 #define AreCoordsWithinMapGridBounds(x, y) (x >= 0 && x < gBackupMapLayout.width && y >= 0 && y < gBackupMapLayout.height)
-<<<<<<< HEAD
 #define GetMapGridBlockAt(x, y) (AreCoordsWithinMapGridBounds(x, y) ? gBackupMapLayout.map[x + gBackupMapLayout.width * y] : GetBorderBlockAt(x, y))
-=======
-
-#define GetMapGridBlockAt(x, y) (AreCoordsWithinMapGridBounds(x, y) ? gBackupMapLayout.map[x + gBackupMapLayout.width * y] : GetBorderBlockAt(x, y))
-static void CacheLightMetatiles(void);
->>>>>>> a29c3c2ab8abfe5abb8d8c3e0a4080b60c33b9a0
 
 struct MapHeader const *const GetMapHeaderFromConnection(struct MapConnection *connection)
 {
