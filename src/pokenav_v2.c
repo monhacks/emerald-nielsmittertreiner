@@ -1005,13 +1005,12 @@ static void InitEventWindows(void)
 
 static void CreateEventListMenuTemplate(void)
 {
-    u8 i, size;
+    u8 size;
 
     size = sEventScheduleTable[gSaveBlock2Ptr->inGameClock.dayOfWeek].size;
     sPokenav2Struct.listMenuItems = Alloc(size * sizeof(struct ListMenuItem));
 
     gMultiuseListMenuTemplate = sTodaysEventsListMenuTemplate;
-    gMultiuseListMenuTemplate.totalItems = size;
     gMultiuseListMenuTemplate.totalItems = size;
 
     if (size < 6)
@@ -1019,7 +1018,7 @@ static void CreateEventListMenuTemplate(void)
     else
         gMultiuseListMenuTemplate.maxShowed = 6;
 
-    for (i = 0; i < size; i++)
+    for (u32 i = 0; i < size; i++)
     {
         sPokenav2Struct.listMenuItems[i].name = sPokenav2Struct.eventTextPtr[sPokenav2Struct.eventDataPtr[i].eventId].title;
         sPokenav2Struct.listMenuItems[i].id = i;
@@ -1053,14 +1052,14 @@ static void LoadMainMenu(void)
 
 static void LoadOptionAndIconSprites(void)
 {
-    u8 i, anim;
+    u8 anim;
 
     LoadSpritePalette(&gSpritePalette_OptionSprites);
     LoadSpriteSheet(&sSpriteSheet_OptionLeftTiles);
     LoadSpriteSheet(&sSpriteSheet_OptionRightTiles);
     LoadSpriteSheet(&sSpriteSheet_AgendaClockTiles);
 
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         sPokenav2Struct.spriteIds[i] = CreateSprite(&sSpriteTemplate_OptionsLeft, sPokenav2OptionLeftPositions[i][0], sPokenav2OptionLeftPositions[i][1], 2);
         sPokenav2Struct.spriteIds[i + 4] = CreateSprite(&sSpriteTemplate_OptionsRight, sPokenav2OptionRightPositions[i][0], sPokenav2OptionRightPositions[i][1], 1);
@@ -1075,7 +1074,7 @@ static void LoadOptionAndIconSprites(void)
         StartSpriteAnim(&gSprites[sPokenav2Struct.spriteIds[i + 4]], i);
     }
 
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i]];
         if (sprite->animNum == 0)
@@ -1088,7 +1087,7 @@ static void LoadOptionAndIconSprites(void)
         }
     }
 
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
@@ -1177,13 +1176,11 @@ static void UnloadMainMenu(void)
 
 static void UnloadOptionAndIconSprites(void)
 {
-    u8 i;
-
     FreeSpritePaletteByTag(TAG_PAL);
     FreeSpriteTilesByTag(TAG_OPTIONS_LEFT);
     FreeSpriteTilesByTag(TAG_OPTIONS_RIGHT);
 
-    for (i = 0; i < 9; i++)
+    for (u32 i = 0; i < ARRAY_COUNT(sPokenav2Struct.spriteIds); i++)
     {
         FreeSpriteOamMatrix(&gSprites[sPokenav2Struct.spriteIds[i]]);
         DestroySprite(&gSprites[sPokenav2Struct.spriteIds[i]]);
@@ -1292,9 +1289,7 @@ static void Task_Pokenav2_1(u8 taskId)
 
 static void Task_Pokenav2_2(u8 taskId)
 {
-    u8 i;
-
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         sprite->callback = SpriteCB_Icons;
@@ -1313,8 +1308,8 @@ static void Task_Pokenav2_3(u8 taskId)
     {
         if (sPokenav2Struct.cursorPosition & 2)
         {
-            PlaySE(SE_SELECT);
             sPokenav2Struct.cursorPosition ^= 2;
+            PlaySE(SE_DEX_SCROLL);
             UpdateOptionDescription(sPokenav2Struct.cursorPosition);
         }
     }
@@ -1323,8 +1318,8 @@ static void Task_Pokenav2_3(u8 taskId)
         if (!(sPokenav2Struct.cursorPosition & 2)
          && (sPokenav2Struct.cursorPosition ^ 2) < 4)
         {
-            PlaySE(SE_SELECT);
             sPokenav2Struct.cursorPosition ^= 2;
+            PlaySE(SE_DEX_SCROLL);
             UpdateOptionDescription(sPokenav2Struct.cursorPosition);
         }
     }
@@ -1332,8 +1327,8 @@ static void Task_Pokenav2_3(u8 taskId)
     {
         if (sPokenav2Struct.cursorPosition & 1)
         {
-            PlaySE(SE_SELECT);
             sPokenav2Struct.cursorPosition ^= 1;
+            PlaySE(SE_DEX_SCROLL);
             UpdateOptionDescription(sPokenav2Struct.cursorPosition);
         }
     }
@@ -1342,8 +1337,8 @@ static void Task_Pokenav2_3(u8 taskId)
         if (!(sPokenav2Struct.cursorPosition & 1)
          && (sPokenav2Struct.cursorPosition ^ 1) < 4)
         {
-            PlaySE(SE_SELECT);
             sPokenav2Struct.cursorPosition ^= 1;
+            PlaySE(SE_DEX_SCROLL);
             UpdateOptionDescription(sPokenav2Struct.cursorPosition);
         }
     }
@@ -1580,8 +1575,6 @@ static void Task_Radio(u8 taskId)
 
 static bool8 Task_SlideMainMenuIn(u8 taskId)
 {
-    u8 i;
-
     if (sPokenav2Struct.scrollPosition > 0)
     {
         SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokenav2Struct.scrollPosition);
@@ -1595,7 +1588,7 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
         return TRUE;
     }
 
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i]];
         if (sprite->animNum == 0)
@@ -1622,7 +1615,7 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
         }
     }
 
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
@@ -1664,8 +1657,6 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
 
 static bool8 Task_SlideMainMenuOut(u8 taskId)
 {
-    u8 i;
-
     if (sPokenav2Struct.scrollPosition < OPTION_SLIDE_Y)
     {
         SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokenav2Struct.scrollPosition);
@@ -1679,7 +1670,7 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
         return TRUE;
     }
 
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i]];
         if (sprite->animNum == 0)
@@ -1706,7 +1697,7 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
         }
     }
 
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
@@ -1798,9 +1789,7 @@ static void Task_LoadOption_1(u8 taskId)
 
 static void Task_LoadOption_2(u8 taskId)
 {
-    u8 i;
-
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         sprite->callback = SpriteCallbackDummy;
@@ -1889,9 +1878,7 @@ static void Task_ReturnToMainMenu_5(u8 taskId)
 
 static void Task_ReturnToMainMenu_6(u8 taskId)
 {
-    u8 i;
-    
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         sprite->callback = SpriteCB_Icons;
@@ -1906,9 +1893,7 @@ static void Task_ReturnToMainMenu_6(u8 taskId)
 
 static void Task_ExitPokenav2_1(u8 taskId)
 {
-    u8 i;
-
-    for (i = 0; i < 4; i++)
+    for (u32 i = 0; i < 4; i++)
     {
         struct Sprite *sprite = &gSprites[sPokenav2Struct.spriteIds[i + 4]];
         sprite->callback = SpriteCallbackDummy;
