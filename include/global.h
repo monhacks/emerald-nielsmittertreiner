@@ -9,10 +9,12 @@
 #include "constants/flags.h"
 #include "constants/vars.h"
 #include "constants/species.h"
+#include "constants/pokedex.h"
 #include "constants/berry.h"
 #include "constants/maps.h"
 #include "constants/pokemon.h"
 #include "constants/easy_chat.h"
+#include "constants/trainer_hill.h"
 
 // Prevent cross-jump optimization.
 #define BLOCK_CROSS_JUMP asm("");
@@ -127,7 +129,9 @@
 
 #define ROUND_BITS_TO_BYTES(numBits) DIV_ROUND_UP(numBits, 8)
 
-#define DEX_FLAGS_NO ROUND_BITS_TO_BYTES(NUM_SPECIES)
+// NUM_DEX_FLAG_BYTES allocates more flags than it needs to, as NUM_SPECIES includes the "old unown"
+// values that don't appear in the Pokedex. NATIONAL_DEX_COUNT does not include these values.
+#define NUM_DEX_FLAG_BYTES ROUND_BITS_TO_BYTES(NUM_SPECIES)
 #define NUM_FLAG_BYTES ROUND_BITS_TO_BYTES(FLAGS_COUNT)
 #define NUM_ADDITIONAL_PHRASE_BYTES ROUND_BITS_TO_BYTES(NUM_ADDITIONAL_PHRASES)
 
@@ -193,8 +197,8 @@ struct Pokedex
     /*0x04*/ u32 unownPersonality; // set when you first see Unown
     /*0x08*/ u32 spindaPersonality; // set when you first see Spinda
     /*0x0C*/ u32 unknown3;
-    /*0x10*/ u8 owned[DEX_FLAGS_NO];
-    /*0x44*/ u8 seen[DEX_FLAGS_NO];
+    /*0x10*/ u8 owned[NUM_DEX_FLAG_BYTES];
+    /*0x44*/ u8 seen[NUM_DEX_FLAG_BYTES];
 };
 
 struct PokemonJumpRecords
@@ -284,8 +288,6 @@ struct BattleTowerPokemon
     u8 nickname[POKEMON_NAME_LENGTH + 1];
     u8 friendship;
 };
-
-#define NULL_BATTLE_TOWER_POKEMON { .nickname = __("$$$$$$$$$$$") }
 
 struct EmeraldBattleTowerRecord
 {
@@ -851,7 +853,7 @@ struct TrainerNameRecord
     u8 trainerName[PLAYER_NAME_LENGTH + 1];
 };
 
-struct SaveTrainerHill
+struct TrainerHillSave
 {
     /*0x3D64*/ u32 timer;
     /*0x3D68*/ u32 bestTime;
@@ -863,7 +865,7 @@ struct SaveTrainerHill
     /*0x3D6E*/ u16 hasLost:1;
     /*0x3D6E*/ u16 maybeECardScanDuringChallenge:1;
     /*0x3D6E*/ u16 field_3D6E_0f:1;
-    /*0x3D6E*/ u16 tag:2;
+    /*0x3D6E*/ u16 mode:2; // HILL_MODE_*
 };
 
 struct WonderNewsMetadata
@@ -994,7 +996,7 @@ struct SaveBlock1
     /*0x790*/ struct ItemSlot bagPocket_Berries[BAG_BERRIES_COUNT];
               struct ItemSlot bagPocket_Medicine[BAG_MEDICINE_COUNT];
     /*0x848*/ struct Pokeblock pokeblocks[POKEBLOCKS_COUNT];
-    /*0x988*/ u8 seen1[DEX_FLAGS_NO];   //52 bytes
+    /*0x988*/ u8 seen1[NUM_DEX_FLAG_BYTES];
     /*0x9BC*/ u16 berryBlenderRecords[3];
     /*0x9C8*/ u16 trainerRematchStepCounter;    //104 bytes
     /*0x9CA*/ u8 trainerRematches[MAX_REMATCH_ENTRIES];
@@ -1040,16 +1042,16 @@ struct SaveBlock1
     /*0x31B3*/ struct ExternalEventData externalEventData;
     /*0x31C7*/ struct ExternalEventFlags externalEventFlags;
     /*0x31DC*/ struct Roamer roamer;
-    /*0x31F8*/ struct EnigmaBerry enigmaBerry;  //52 bytes
-    /*0x322C*/ struct MysteryGiftSave mysteryGift;   //876 bytes
-    /*0x3718*/ u32 trainerHillTimes[4]; //16 bytes
+    /*0x31F8*/ struct EnigmaBerry enigmaBerry;
+    /*0x322C*/ struct MysteryGiftSave mysteryGift;
+    /*0x3718*/ u32 trainerHillTimes[NUM_TRAINER_HILL_MODES];
     /*0x3728*/ struct RamScript ramScript;
     /*0x3B14*/ struct RecordMixingGift recordMixingGift;
-    /*0x3B24*/ u8 seen2[DEX_FLAGS_NO];  //52 bytes
+    /*0x3B24*/ u8 seen2[NUM_DEX_FLAG_BYTES];
     /*0x3B58*/ LilycoveLady lilycoveLady;
     /*0x3B98*/ struct TrainerNameRecord trainerNameRecords[20];
-    /*0x3C88*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21]; //210 bytes
-    /*0x3D64*/ struct SaveTrainerHill trainerHill;  //12 bytes
+    /*0x3C88*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21];
+    /*0x3D64*/ struct TrainerHillSave trainerHill;
     /*0x3D70*/ struct WaldaPhrase waldaPhrase;
     // sizeof: 0x3D88
 };
@@ -1060,7 +1062,7 @@ struct MapPosition
 {
     s16 x;
     s16 y;
-    s8 height;
+    s8 elevation;
 };
 
 #endif // GUARD_GLOBAL_H
