@@ -527,7 +527,7 @@ devkitARM is now installed.
 
 devkitARM is now installed.
 
-### Installing devkitARM on Arch Linux
+## Installing devkitARM on Arch Linux
         
 1. Follow [devkitPro's instructions](https://devkitpro.org/wiki/devkitPro_pacman#Customising_Existing_Pacman_Install) to configure `pacman` to download devkitPro packages.
 2. Install `gba-dev`: run the following command as root.
@@ -545,7 +545,7 @@ devkitARM is now installed.
 
 devkitARM is now installed.
 
-### Other toolchains
+## Other toolchains
 
 To build using a toolchain other than devkitARM, override the `TOOLCHAIN` environment variable with the path to your toolchain, which must contain the subdirectory `bin`.
 ```bash

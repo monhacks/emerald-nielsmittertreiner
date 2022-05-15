@@ -387,7 +387,7 @@ u32 MapGridGetMetatileBehaviorAt(int x, int y)
 static void CacheLightMetatiles(void)
 {
     u8 i = 0;
-    s16 x, y;
+    s32 x, y;
 
     for (x = 0; x < gBackupMapLayout.width; x++)
     {

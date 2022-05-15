@@ -139,11 +139,6 @@
 #define DIR_NORTHWEST   7
 #define DIR_NORTHEAST   8
 
-#define SIDEWAYS_STAIRS_IMPLEMENTED         TRUE
-#define FOLLOW_ME_IMPLEMENTED               TRUE    //for stairs movement. see ObjectMovingOnRockStairs in src/field_player_avatar.c
-#define SLOW_MOVEMENT_ON_STAIRS             FALSE
-#define POST_BATTLE_FOLLOWER_FIX            FALSE   //if you experience the follower de-syncing with the player after battle, set to TRUE
-
 #define CONNECTION_INVALID -1
 #define CONNECTION_NONE     0
 #define CONNECTION_SOUTH    1
@@ -152,5 +147,10 @@
 #define CONNECTION_EAST     4
 #define CONNECTION_DIVE     5
 #define CONNECTION_EMERGE   6
+
+#define SIDEWAYS_STAIRS_IMPLEMENTED         TRUE
+#define FOLLOW_ME_IMPLEMENTED               TRUE    //for stairs movement. see ObjectMovingOnRockStairs in src/field_player_avatar.c
+#define SLOW_MOVEMENT_ON_STAIRS             FALSE
+#define POST_BATTLE_FOLLOWER_FIX            FALSE   //if you experience the follower de-syncing with the player after battle, set to TRUE
 
 #endif // GUARD_CONSTANTS_GLOBAL_H
