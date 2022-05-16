@@ -24,49 +24,22 @@ static void ShowMapNamePopUpWindow(void);
 static void LoadMapNamePopUpWindowBg(void);
 static void HBlankCB_MapNamePopupWindow(void);
 
-// EWRAM
 static EWRAM_DATA u8 sPopupTaskId = 0;
 
 // .rodata
 static const u16 sMapPopUp_Palette[16] = INCBIN_U16("graphics/interface/map_popup_palette.gbapal");
 
-static const u8 gText_PyramidFloor1[] = _("PYRAMID FLOOR 1");
-static const u8 gText_PyramidFloor2[] = _("PYRAMID FLOOR 2");
-static const u8 gText_PyramidFloor3[] = _("PYRAMID FLOOR 3");
-static const u8 gText_PyramidFloor4[] = _("PYRAMID FLOOR 4");
-static const u8 gText_PyramidFloor5[] = _("PYRAMID FLOOR 5");
-static const u8 gText_PyramidFloor6[] = _("PYRAMID FLOOR 6");
-static const u8 gText_PyramidFloor7[] = _("PYRAMID FLOOR 7");
-static const u8 gText_Pyramid[] = _("PYRAMID");
-
-static const u8 * const gBattlePyramid_MapHeaderStrings[] =
-{
-    gText_PyramidFloor1,
-    gText_PyramidFloor2,
-    gText_PyramidFloor3,
-    gText_PyramidFloor4,
-    gText_PyramidFloor5,
-    gText_PyramidFloor6,
-    gText_PyramidFloor7,
-    gText_Pyramid,
-};
-
-// Unused
-static bool8 StartMenu_ShowMapNamePopup(void)
-{
-    HideStartMenu();
-    ShowMapNamePopup();
-    return TRUE;
-}
-
+// .text
 void ShowMapNamePopup(void)
 {
     if (FlagGet(FLAG_HIDE_MAP_NAME_POPUP) != TRUE)
     {
         if (!FuncIsActiveTask(Task_MapNamePopUpWindow))
         {
-            sPopupTaskId = CreateTask(Task_MapNamePopUpWindow, 90);
+            EnableInterrupts(INTR_FLAG_HBLANK);
+            SetHBlankCallback(HBlankCB_MapNamePopupWindow);
             SetGpuReg(REG_OFFSET_BG0VOFS, 24);
+            sPopupTaskId = CreateTask(Task_MapNamePopUpWindow, 90);
             gTasks[sPopupTaskId].data[0] = 6;
             gTasks[sPopupTaskId].data[2] = 24;
         }
@@ -137,8 +110,6 @@ static void Task_MapNamePopUpWindow(u8 taskId)
         HideMapNamePopUpWindow();
         return;
     }
-    EnableInterrupts(INTR_FLAG_HBLANK);
-    SetHBlankCallback(HBlankCB_MapNamePopupWindow);
     SetGpuReg(REG_OFFSET_BG0VOFS, task->data[2]);
 }
 
@@ -161,35 +132,16 @@ static void ShowMapNamePopUpWindow(void)
 {
     u8 mapDisplayHeader[24];
     u8 *withoutPrefixPtr;
-    u8 x;
-    const u8* mapDisplayHeaderSource;
-
+    
     SetGpuRegBits(REG_OFFSET_WININ, WININ_WIN0_CLR);
 
-    if (InBattlePyramid())
-    {
-        if (gMapHeader.mapLayoutId == LAYOUT_BATTLE_FRONTIER_BATTLE_PYRAMID_TOP)
-        {
-            withoutPrefixPtr = &(mapDisplayHeader[3]);
-            mapDisplayHeaderSource = gBattlePyramid_MapHeaderStrings[7];
-        }
-        else
-        {
-            withoutPrefixPtr = &(mapDisplayHeader[3]);
-            mapDisplayHeaderSource = gBattlePyramid_MapHeaderStrings[gSaveBlock2Ptr->frontier.curChallengeBattleNum];
-        }
-        StringCopy(withoutPrefixPtr, mapDisplayHeaderSource);
-    }
-    else
-    {
-        withoutPrefixPtr = &(mapDisplayHeader[3]);
-        GetMapName(withoutPrefixPtr, gMapHeader.regionMapSectionId, 0);
-    }
-    AddMapNamePopUpWindow();
-    LoadMapNamePopUpWindowBg();
     mapDisplayHeader[0] = EXT_CTRL_CODE_BEGIN;
     mapDisplayHeader[1] = EXT_CTRL_CODE_HIGHLIGHT;
     mapDisplayHeader[2] = TEXT_COLOR_TRANSPARENT;
+    withoutPrefixPtr = &(mapDisplayHeader[3]);
+    GetMapName(withoutPrefixPtr, gMapHeader.regionMapSectionId, 0);
+    AddMapNamePopUpWindow();
+    LoadMapNamePopUpWindowBg();
     AddTextPrinterParameterized(GetMapNamePopUpWindowId(), FONT_NARROW, mapDisplayHeader, GetStringCenterAlignXOffset(FONT_NARROW, withoutPrefixPtr, 240), 4, TEXT_SKIP_DRAW, NULL);
     CopyWindowToVram(GetMapNamePopUpWindowId(), COPYWIN_FULL);
 }
@@ -215,7 +167,7 @@ static void LoadMapNamePopUpWindowBg(void)
 static void HBlankCB_MapNamePopupWindow(void)
 {
     struct Task *task = &gTasks[sPopupTaskId];
-    s16 currentOffset = 24 - task->data[2] - 1;
+    s16 currentOffset = 24 - task->data[2];
 
     if (REG_VCOUNT < currentOffset || REG_VCOUNT > 160)
     {
