@@ -607,10 +607,12 @@ static void SetBagItemsListTemplate(void)
     {
         CopyBagItemName(gPyramidBagMenu->itemStrings[i], itemIds[i]);
         gPyramidBagMenu->bagListItems[i].name = gPyramidBagMenu->itemStrings[i];
+        gPyramidBagMenu->bagListItems[i].colors = NULL;
         gPyramidBagMenu->bagListItems[i].id = i;
     }
     StringCopy(gPyramidBagMenu->itemStrings[i], gText_CloseBag);
     gPyramidBagMenu->bagListItems[i].name = gPyramidBagMenu->itemStrings[i];
+    gPyramidBagMenu->bagListItems[i].colors = NULL;
     gPyramidBagMenu->bagListItems[i].id = LIST_CANCEL;
     gMultiuseListMenuTemplate = sListMenuTemplate;
     gMultiuseListMenuTemplate.totalItems = gPyramidBagMenu->listMenuCount;

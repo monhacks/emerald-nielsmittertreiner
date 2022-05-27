@@ -873,11 +873,13 @@ static void LoadBagItemListBuffers(u8 pocketId)
             GetItemName(sListBuffer2->name[i], pocket->itemSlots[i].itemId);
             subBuffer = sListBuffer1->subBuffers;
             subBuffer[i].name = sListBuffer2->name[i];
+            subBuffer[i].colors = NULL;
             subBuffer[i].id = i;
         }
         StringCopy(sListBuffer2->name[i], gText_CloseBag);
         subBuffer = sListBuffer1->subBuffers;
         subBuffer[i].name = sListBuffer2->name[i];
+        subBuffer[i].colors = NULL;
         subBuffer[i].id = LIST_CANCEL;
     }
     else
@@ -887,6 +889,7 @@ static void LoadBagItemListBuffers(u8 pocketId)
             GetItemName(sListBuffer2->name[i], pocket->itemSlots[i].itemId);
             subBuffer = sListBuffer1->subBuffers;
             subBuffer[i].name = sListBuffer2->name[i];
+            subBuffer[i].colors = NULL;
             subBuffer[i].id = i;
         }
     }

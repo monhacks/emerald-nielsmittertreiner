@@ -694,11 +694,11 @@ static const struct WindowTemplate sWindowTemplate_NumPlayerMode = {
 };
 
 static const struct ListMenuItem sPossibleGroupMembersListMenuItems[] = {
-    { sText_EmptyString, 0 },
-    { sText_EmptyString, 1 },
-    { sText_EmptyString, 2 },
-    { sText_EmptyString, 3 },
-    { sText_EmptyString, 4 }
+    { sText_EmptyString, NULL, 0 },
+    { sText_EmptyString, NULL, 1 },
+    { sText_EmptyString, NULL, 2 },
+    { sText_EmptyString, NULL, 3 },
+    { sText_EmptyString, NULL, 4 }
 };
 
 static const struct ListMenuTemplate sListMenuTemplate_PossibleGroupMembers = {
@@ -743,22 +743,22 @@ static const struct WindowTemplate sWindowTemplate_PlayerNameAndId = {
 };
 
 static const struct ListMenuItem sUnionRoomGroupsMenuItems[] = {
-    { sText_EmptyString,  0 },
-    { sText_EmptyString,  1 },
-    { sText_EmptyString,  2 },
-    { sText_EmptyString,  3 },
-    { sText_EmptyString,  4 },
-    { sText_EmptyString,  5 },
-    { sText_EmptyString,  6 },
-    { sText_EmptyString,  7 },
-    { sText_EmptyString,  8 },
-    { sText_EmptyString,  9 },
-    { sText_EmptyString, 10 },
-    { sText_EmptyString, 11 },
-    { sText_EmptyString, 12 },
-    { sText_EmptyString, 13 },
-    { sText_EmptyString, 14 },
-    { sText_EmptyString, 15 }
+    { sText_EmptyString, NULL,  0 },
+    { sText_EmptyString, NULL,  1 },
+    { sText_EmptyString, NULL,  2 },
+    { sText_EmptyString, NULL,  3 },
+    { sText_EmptyString, NULL,  4 },
+    { sText_EmptyString, NULL,  5 },
+    { sText_EmptyString, NULL,  6 },
+    { sText_EmptyString, NULL,  7 },
+    { sText_EmptyString, NULL,  8 },
+    { sText_EmptyString, NULL,  9 },
+    { sText_EmptyString, NULL, 10 },
+    { sText_EmptyString, NULL, 11 },
+    { sText_EmptyString, NULL, 12 },
+    { sText_EmptyString, NULL, 13 },
+    { sText_EmptyString, NULL, 14 },
+    { sText_EmptyString, NULL, 15 }
 };
 
 static const struct ListMenuTemplate sListMenuTemplate_UnionRoomGroups = {
@@ -793,10 +793,10 @@ static const struct WindowTemplate sWindowTemplate_InviteToActivity = {
 };
 
 static const struct ListMenuItem sInviteToActivityMenuItems[] = {
-    { sText_Greetings, ACTIVITY_CARD | LINK_GROUP_CAPACITY(0, 2)},
-    { sText_Battle,    ACTIVITY_BATTLE_SINGLE | IN_UNION_ROOM | LINK_GROUP_CAPACITY(0, 2)},
-    { sText_Chat2,     ACTIVITY_CHAT | IN_UNION_ROOM | LINK_GROUP_CAPACITY(0, 2)},
-    { sText_Exit,      ACTIVITY_NONE | IN_UNION_ROOM }
+    { sText_Greetings, NULL, ACTIVITY_CARD | LINK_GROUP_CAPACITY(0, 2)},
+    { sText_Battle,    NULL, ACTIVITY_BATTLE_SINGLE | IN_UNION_ROOM | LINK_GROUP_CAPACITY(0, 2)},
+    { sText_Chat2,     NULL, ACTIVITY_CHAT | IN_UNION_ROOM | LINK_GROUP_CAPACITY(0, 2)},
+    { sText_Exit,      NULL, ACTIVITY_NONE | IN_UNION_ROOM }
 };
 
 static const struct ListMenuTemplate sListMenuTemplate_InviteToActivity = {
@@ -831,9 +831,9 @@ static const struct WindowTemplate sWindowTemplate_RegisterForTrade = {
 };
 
 static const struct ListMenuItem sRegisterForTradeListMenuItems[] = {
-    { gText_Register, 1 },
-    { sText_Info, 2 },
-    { sText_Exit, 3 }
+    { gText_Register, NULL, 1 },
+    { sText_Info, NULL, 2 },
+    { sText_Exit, NULL, 3 }
 };
 
 static const struct ListMenuTemplate sListMenuTemplate_RegisterForTrade = {
@@ -868,24 +868,24 @@ static const struct WindowTemplate sWindowTemplate_TradingBoardRequestType = {
 };
 
 static const struct ListMenuItem sTradingBoardTypes[NUMBER_OF_MON_TYPES] = {
-    { gTypeNames[TYPE_NORMAL],   TYPE_NORMAL         },
-    { gTypeNames[TYPE_FIRE],     TYPE_FIRE           },
-    { gTypeNames[TYPE_WATER],    TYPE_WATER          },
-    { gTypeNames[TYPE_ELECTRIC], TYPE_ELECTRIC       },
-    { gTypeNames[TYPE_GRASS],    TYPE_GRASS          },
-    { gTypeNames[TYPE_ICE],      TYPE_ICE            },
-    { gTypeNames[TYPE_GROUND],   TYPE_GROUND         },
-    { gTypeNames[TYPE_ROCK],     TYPE_ROCK           },
-    { gTypeNames[TYPE_FLYING],   TYPE_FLYING         },
-    { gTypeNames[TYPE_PSYCHIC],  TYPE_PSYCHIC        },
-    { gTypeNames[TYPE_FIGHTING], TYPE_FIGHTING       },
-    { gTypeNames[TYPE_POISON],   TYPE_POISON         },
-    { gTypeNames[TYPE_BUG],      TYPE_BUG            },
-    { gTypeNames[TYPE_GHOST],    TYPE_GHOST          },
-    { gTypeNames[TYPE_DRAGON],   TYPE_DRAGON         },
-    { gTypeNames[TYPE_STEEL],    TYPE_STEEL          },
-    { gTypeNames[TYPE_DARK],     TYPE_DARK           },
-    { sText_Exit,                NUMBER_OF_MON_TYPES }
+    { gTypeNames[TYPE_NORMAL],   NULL, TYPE_NORMAL         },
+    { gTypeNames[TYPE_FIRE],     NULL, TYPE_FIRE           },
+    { gTypeNames[TYPE_WATER],    NULL, TYPE_WATER          },
+    { gTypeNames[TYPE_ELECTRIC], NULL, TYPE_ELECTRIC       },
+    { gTypeNames[TYPE_GRASS],    NULL, TYPE_GRASS          },
+    { gTypeNames[TYPE_ICE],      NULL, TYPE_ICE            },
+    { gTypeNames[TYPE_GROUND],   NULL, TYPE_GROUND         },
+    { gTypeNames[TYPE_ROCK],     NULL, TYPE_ROCK           },
+    { gTypeNames[TYPE_FLYING],   NULL, TYPE_FLYING         },
+    { gTypeNames[TYPE_PSYCHIC],  NULL, TYPE_PSYCHIC        },
+    { gTypeNames[TYPE_FIGHTING], NULL, TYPE_FIGHTING       },
+    { gTypeNames[TYPE_POISON],   NULL, TYPE_POISON         },
+    { gTypeNames[TYPE_BUG],      NULL, TYPE_BUG            },
+    { gTypeNames[TYPE_GHOST],    NULL, TYPE_GHOST          },
+    { gTypeNames[TYPE_DRAGON],   NULL, TYPE_DRAGON         },
+    { gTypeNames[TYPE_STEEL],    NULL, TYPE_STEEL          },
+    { gTypeNames[TYPE_DARK],     NULL, TYPE_DARK           },
+    { sText_Exit,                NULL, NUMBER_OF_MON_TYPES }
 };
 
 static const struct ListMenuTemplate sMenuTemplate_TradingBoardRequestType = {
@@ -930,16 +930,16 @@ static const struct WindowTemplate sWindowTemplate_TradingBoardMain = {
 };
 
 static const struct ListMenuItem sTradeBoardListMenuItems[] = {
-    { sText_EmptyString, -3 },
-    { sText_EmptyString,  0 },
-    { sText_EmptyString,  1 },
-    { sText_EmptyString,  2 },
-    { sText_EmptyString,  3 },
-    { sText_EmptyString,  4 },
-    { sText_EmptyString,  5 },
-    { sText_EmptyString,  6 },
-    { sText_EmptyString,  7 },
-    { sText_Exit2,  8 }
+    { sText_EmptyString, NULL, -3 },
+    { sText_EmptyString, NULL,  0 },
+    { sText_EmptyString, NULL,  1 },
+    { sText_EmptyString, NULL,  2 },
+    { sText_EmptyString, NULL,  3 },
+    { sText_EmptyString, NULL,  4 },
+    { sText_EmptyString, NULL,  5 },
+    { sText_EmptyString, NULL,  6 },
+    { sText_EmptyString, NULL,  7 },
+    { sText_Exit2, NULL,  8 }
 };
 
 static const struct ListMenuTemplate sTradeBoardListMenuTemplate = {
@@ -975,22 +975,22 @@ static const struct WindowTemplate sWindowTemplate_Unused = {
 };
 
 static const struct ListMenuItem sEmptyListMenuItems[] = {
-    { sText_EmptyString,  0 },
-    { sText_EmptyString,  1 },
-    { sText_EmptyString,  2 },
-    { sText_EmptyString,  3 },
-    { sText_EmptyString,  4 },
-    { sText_EmptyString,  5 },
-    { sText_EmptyString,  6 },
-    { sText_EmptyString,  7 },
-    { sText_EmptyString,  8 },
-    { sText_EmptyString,  9 },
-    { sText_EmptyString, 10 },
-    { sText_EmptyString, 11 },
-    { sText_EmptyString, 12 },
-    { sText_EmptyString, 13 },
-    { sText_EmptyString, 14 },
-    { sText_EmptyString, 15 }
+    { sText_EmptyString, NULL,  0 },
+    { sText_EmptyString, NULL,  1 },
+    { sText_EmptyString, NULL,  2 },
+    { sText_EmptyString, NULL,  3 },
+    { sText_EmptyString, NULL,  4 },
+    { sText_EmptyString, NULL,  5 },
+    { sText_EmptyString, NULL,  6 },
+    { sText_EmptyString, NULL,  7 },
+    { sText_EmptyString, NULL,  8 },
+    { sText_EmptyString, NULL,  9 },
+    { sText_EmptyString, NULL, 10 },
+    { sText_EmptyString, NULL, 11 },
+    { sText_EmptyString, NULL, 12 },
+    { sText_EmptyString, NULL, 13 },
+    { sText_EmptyString, NULL, 14 },
+    { sText_EmptyString, NULL, 15 }
 };
 
 // Unused

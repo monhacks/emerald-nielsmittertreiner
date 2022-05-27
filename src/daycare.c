@@ -54,9 +54,9 @@ static const struct WindowTemplate sDaycareLevelMenuWindowTemplate =
 // which is copied to VAR_0x8004 and used as an index for GetDaycareCost
 static const struct ListMenuItem sLevelMenuItems[] =
 {
-    {gText_ExpandedPlaceholder_Empty, 0},
-    {gText_ExpandedPlaceholder_Empty, 1},
-    {gText_Exit, DAYCARE_LEVEL_MENU_EXIT}
+    {gText_ExpandedPlaceholder_Empty, NULL, 0},
+    {gText_ExpandedPlaceholder_Empty, NULL, 1},
+    {gText_Exit, NULL, DAYCARE_LEVEL_MENU_EXIT}
 };
 
 static const struct ListMenuTemplate sDaycareListMenuLevelTemplate =

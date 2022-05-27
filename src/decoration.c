@@ -885,11 +885,13 @@ static void PrintDecorationItemMenuItems(u8 taskId)
     {
         CopyDecorationMenuItemName(sDecorationItemsMenu->names[i], gCurDecorationItems[i]);
         sDecorationItemsMenu->items[i].name = sDecorationItemsMenu->names[i];
+        sDecorationItemsMenu->items[i].colors = NULL;
         sDecorationItemsMenu->items[i].id = i;
     }
 
     StringCopy(sDecorationItemsMenu->names[i], gText_Cancel);
     sDecorationItemsMenu->items[i].name = sDecorationItemsMenu->names[i];
+    sDecorationItemsMenu->items[i].colors = NULL;
     sDecorationItemsMenu->items[i].id = -2;
     gMultiuseListMenuTemplate = sDecorationItemsListMenuTemplate;
     gMultiuseListMenuTemplate.windowId = sDecorMenuWindowIds[WINDOW_DECORATION_CATEGORIES];

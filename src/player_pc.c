@@ -984,12 +984,14 @@ void ItemStorage_RefreshListMenu(void)
     {
         CopyItemName_PlayerPC(&sItemStorageMenu->itemNames[i][0], gSaveBlock1Ptr->pcItems[i].itemId);
         sItemStorageMenu->listItems[i].name = &sItemStorageMenu->itemNames[i][0];
+        sItemStorageMenu->listItems[i].colors = NULL;
         sItemStorageMenu->listItems[i].id = i;
     }
 
     // Set up Cancel entry
     StringCopy(&sItemStorageMenu->itemNames[i][0], gText_Cancel2);
     sItemStorageMenu->listItems[i].name = &sItemStorageMenu->itemNames[i][0];
+    sItemStorageMenu->listItems[i].colors = NULL;
     sItemStorageMenu->listItems[i].id = LIST_CANCEL;
 
     // Set list menu data

@@ -94,17 +94,6 @@ static EWRAM_DATA struct {
 
 EWRAM_DATA struct ScrollArrowsTemplate gTempScrollArrowTemplate = {0};
 
-// IWRAM common
-struct {
-    u8 cursorPal:4;
-    u8 fillValue:4;
-    u8 cursorShadowPal:4;
-    u8 lettersSpacing:6;
-    u8 field_2_2:6; // unused
-    u8 fontId:7;
-    bool8 enabled:1;
-} gListMenuOverride;
-
 struct ListMenuTemplate gMultiuseListMenuTemplate;
 
 // const rom data
@@ -574,13 +563,6 @@ static u8 ListMenuInitInternal(struct ListMenuTemplate *listMenuTemplate, u16 sc
     list->taskId = TASK_NONE;
     list->unk_1F = 0;
 
-    gListMenuOverride.cursorPal = list->template.cursorPal;
-    gListMenuOverride.fillValue = list->template.fillValue;
-    gListMenuOverride.cursorShadowPal = list->template.cursorShadowPal;
-    gListMenuOverride.lettersSpacing = list->template.lettersSpacing;
-    gListMenuOverride.fontId = list->template.fontId;
-    gListMenuOverride.enabled = FALSE;
-
     if (list->template.totalItems < list->template.maxShowed)
         list->template.maxShowed = list->template.totalItems;
 
@@ -592,27 +574,23 @@ static u8 ListMenuInitInternal(struct ListMenuTemplate *listMenuTemplate, u16 sc
     return listTaskId;
 }
 
-static void ListMenuPrint(struct ListMenu *list, const u8 *str, u8 x, u8 y)
+static void ListMenuPrint(struct ListMenu *list, const u8 *str, const u8 *colors, u8 x, u8 y)
 {
-    u8 colors[3];
-    if (gListMenuOverride.enabled)
-    {
-        colors[0] = gListMenuOverride.fillValue;
-        colors[1] = gListMenuOverride.cursorPal;
-        colors[2] = gListMenuOverride.cursorShadowPal;
-        AddTextPrinterParameterized4(list->template.windowId,
-                                     gListMenuOverride.fontId,
-                                     x, y,
-                                     gListMenuOverride.lettersSpacing,
-                                     0, colors, TEXT_SKIP_DRAW, str);
+    u8 overrideColors[3];
 
-        gListMenuOverride.enabled = FALSE;
+    if (colors == NULL)
+    {
+        overrideColors[0] = list->template.fillValue;
+        overrideColors[1] = list->template.cursorPal;
+        overrideColors[2] = list->template.cursorShadowPal;
+        AddTextPrinterParameterized4(list->template.windowId,
+                                     list->template.fontId,
+                                     x, y,
+                                     list->template.lettersSpacing,
+                                     0, overrideColors, TEXT_SKIP_DRAW, str);
     }
     else
     {
-        colors[0] = list->template.fillValue;
-        colors[1] = list->template.cursorPal;
-        colors[2] = list->template.cursorShadowPal;
         AddTextPrinterParameterized4(list->template.windowId,
                                      list->template.fontId,
                                      x, y,
@@ -638,7 +616,7 @@ static void ListMenuPrintEntries(struct ListMenu *list, u16 startIndex, u16 yOff
         if (list->template.itemPrintFunc != NULL)
             list->template.itemPrintFunc(list->template.windowId, list->template.items[startIndex].id, y);
 
-        ListMenuPrint(list, list->template.items[startIndex].name, x, y);
+        ListMenuPrint(list, list->template.items[startIndex].name, list->template.items[startIndex].colors, x, y);
         startIndex++;
     }
 }
@@ -648,10 +626,11 @@ static void ListMenuDrawCursor(struct ListMenu *list)
     u8 yMultiplier = GetFontAttribute(list->template.fontId, FONTATTR_MAX_LETTER_HEIGHT) + list->template.itemVerticalPadding;
     u8 x = list->template.cursor_X;
     u8 y = list->selectedRow * yMultiplier + list->template.upText_Y;
+    u8 colors[3] = {list->template.fillValue, list->template.cursorPal, list->template.cursorShadowPal};
     switch (list->template.cursorKind)
     {
     case 0:
-        ListMenuPrint(list, gText_SelectorArrow2, x, y);
+        ListMenuPrint(list, gText_SelectorArrow2, colors, x, y);
         break;
     case 1:
         break;
@@ -882,15 +861,6 @@ static void ListMenuCallSelectionChangedCallback(struct ListMenu *list, u8 onIni
 {
     if (list->template.moveCursorFunc != NULL)
         list->template.moveCursorFunc(list->template.items[list->scrollOffset + list->selectedRow].id, onInit, list);
-}
-
-// unused
-void ListMenuOverrideSetColors(u8 cursorPal, u8 fillValue, u8 cursorShadowPal)
-{
-    gListMenuOverride.cursorPal = cursorPal;
-    gListMenuOverride.fillValue = fillValue;
-    gListMenuOverride.cursorShadowPal = cursorShadowPal;
-    gListMenuOverride.enabled = TRUE;
 }
 
 void ListMenuDefaultCursorMoveFunc(s32 itemIndex, bool8 onInit, struct ListMenu *list)

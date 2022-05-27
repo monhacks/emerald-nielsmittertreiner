@@ -428,35 +428,35 @@ static const u8 *const *const sText_ListMenuDescriptions[] =
 
 static const struct ListMenuItem sListMenuItems_Main[] =
 {
-    {sText_Info, LIST_ITEM_INFO},
-    {sText_Utility, LIST_ITEM_UTILITY},
-    {sText_Player, LIST_ITEM_PLAYER},
-    {sText_SoftReset, LIST_ITEM_SOFTRESET},
+    {sText_Info, NULL, LIST_ITEM_INFO},
+    {sText_Utility, NULL, LIST_ITEM_UTILITY},
+    {sText_Player, NULL, LIST_ITEM_PLAYER},
+    {sText_SoftReset, NULL, LIST_ITEM_SOFTRESET},
 };
 
 static const struct ListMenuItem sListMenuItems_Info[] =
 {
-    {sText_Credits, LIST_ITEM_CREDITS},
-    {sText_Saveblock, LIST_ITEM_SAVEBLOCK},
+    {sText_Credits, NULL, LIST_ITEM_CREDITS},
+    {sText_Saveblock, NULL, LIST_ITEM_SAVEBLOCK},
 };
 
 static const struct ListMenuItem sListMenuItems_Utility[] =
 {
-    {sText_Warp, LIST_ITEM_WARP},
-    {sText_Flags, LIST_ITEM_FLAGS},
-    {sText_Vars, LIST_ITEM_VARS},
-    {sText_SetTime, LIST_ITEM_SET_TIME},
-    {sText_ResetBerries, LIST_ITEM_RESET_BERRIES},
-    {sText_SoundTestScreen, LIST_ITEM_SOUND_TEST_SCREEN},
+    {sText_Warp, NULL, LIST_ITEM_WARP},
+    {sText_Flags, NULL, LIST_ITEM_FLAGS},
+    {sText_Vars, NULL, LIST_ITEM_VARS},
+    {sText_SetTime, NULL, LIST_ITEM_SET_TIME},
+    {sText_ResetBerries, NULL, LIST_ITEM_RESET_BERRIES},
+    {sText_SoundTestScreen, NULL, LIST_ITEM_SOUND_TEST_SCREEN},
 };
 
 static const struct ListMenuItem sListMenuItems_Player[] =
 {
-    {sText_Godmode, LIST_ITEM_GODMODE},
-    {sText_HealParty, LIST_ITEM_HEAL_PARTY},
-    {sText_BuildParty, LIST_ITEM_BUILD_PARTY},
-    {sText_GiveItem, LIST_ITEM_GIVE_ITEM},
-    {sText_ChangeGender, LIST_ITEM_CHANGE_GENDER},
+    {sText_Godmode, NULL, LIST_ITEM_GODMODE},
+    {sText_HealParty, NULL, LIST_ITEM_HEAL_PARTY},
+    {sText_BuildParty, NULL, LIST_ITEM_BUILD_PARTY},
+    {sText_GiveItem, NULL, LIST_ITEM_GIVE_ITEM},
+    {sText_ChangeGender, NULL, LIST_ITEM_CHANGE_GENDER},
 };
 
 static void (*const sDebugActions_Main[])(u8) =

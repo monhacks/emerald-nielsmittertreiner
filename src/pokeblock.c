@@ -720,11 +720,13 @@ static void UpdatePokeblockList(void)
     {
         PutPokeblockListMenuString(sPokeblockMenu->menuItemsStrings[i], i);
         sPokeblockMenu->items[i].name = sPokeblockMenu->menuItemsStrings[i];
+        sPokeblockMenu->items[i].colors = NULL;
         sPokeblockMenu->items[i].id = i;
     }
 
     StringCopy(sPokeblockMenu->menuItemsStrings[i], gText_StowCase);
     sPokeblockMenu->items[i].name = sPokeblockMenu->menuItemsStrings[i];
+    sPokeblockMenu->items[i].colors = NULL;
     sPokeblockMenu->items[i].id = LIST_CANCEL;
 
     gMultiuseListMenuTemplate = sPokeblockListMenuTemplate;

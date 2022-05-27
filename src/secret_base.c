@@ -947,12 +947,14 @@ static void BuildRegistryMenuItems(u8 taskId)
         {
             GetSecretBaseName(sRegistryMenu->names[count], i);
             sRegistryMenu->items[count].name = sRegistryMenu->names[count];
+            sRegistryMenu->items[count].colors = NULL;
             sRegistryMenu->items[count].id = i;
             count++;
         }
     }
 
     sRegistryMenu->items[count].name = gText_Cancel;
+    sRegistryMenu->items[count].colors = NULL;
     sRegistryMenu->items[count].id = -2;
     tNumBases = count + 1;
     if (tNumBases < 8)

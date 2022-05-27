@@ -689,6 +689,7 @@ static void BuyMenuBuildListMenuTemplate(void)
 
     StringCopy(sItemNames[i], gText_Cancel2);
     sListMenuItems[i].name = sItemNames[i];
+    sListMenuItems[i].colors = NULL;
     sListMenuItems[i].id = LIST_CANCEL;
 
     gMultiuseListMenuTemplate = sShopBuyMenuListTemplate;
