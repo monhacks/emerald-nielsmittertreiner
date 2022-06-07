@@ -61,7 +61,7 @@ static void task_free_buf_after_copying_tile_data_to_vram(u8 taskId);
 
 static EWRAM_DATA u8 sStartMenuWindowId = 0;
 static EWRAM_DATA u8 sMapNamePopupWindowId = 0;
-static EWRAM_DATA u8 sFieldEffectPopupWindowId = 0;
+static EWRAM_DATA u8 sPopupWindowId = 0;
 static EWRAM_DATA struct Menu sMenu = {0};
 static EWRAM_DATA u16 sTileNum = 0;
 static EWRAM_DATA u8 sPaletteNum = 0;
@@ -145,7 +145,7 @@ void InitStandardTextBoxWindows(void)
     InitWindows(sStandardTextBox_WindowTemplates);
     sStartMenuWindowId = WINDOW_NONE;
     sMapNamePopupWindowId = WINDOW_NONE;
-    sFieldEffectPopupWindowId = WINDOW_NONE;
+    sPopupWindowId = WINDOW_NONE;
 }
 
 void FreeAllOverworldWindowBuffers(void)
@@ -2169,21 +2169,21 @@ void BufferSaveMenuText(u8 textId, u8 *dest, u8 color)
 
 u8 AddFieldEffectPopUpWindow(void)
 {
-    if (sFieldEffectPopupWindowId == WINDOW_NONE)
-        sFieldEffectPopupWindowId = AddWindowParameterized(0, 0, 20, 30, 6, 14, 0x107);
-    return sFieldEffectPopupWindowId;
+    if (sPopupWindowId == WINDOW_NONE)
+        sPopupWindowId = AddWindowParameterized(0, 0, 20, 30, 6, 14, 0x107);
+    return sPopupWindowId;
 }
 
-u8 GetFieldEffectPopUpWindowId(void)
+u8 GetPopUpWindowId(void)
 {
-    return sFieldEffectPopupWindowId;
+    return sPopupWindowId;
 }
 
-void RemoveFieldEffectPopUpWindow(void)
+void RemovePopUpWindow(void)
 {
-    if (sFieldEffectPopupWindowId != WINDOW_NONE)
+    if (sPopupWindowId != WINDOW_NONE)
     {
-        RemoveWindow(sFieldEffectPopupWindowId);
-        sFieldEffectPopupWindowId = WINDOW_NONE;
+        RemoveWindow(sPopupWindowId);
+        sPopupWindowId = WINDOW_NONE;
     }
 }
