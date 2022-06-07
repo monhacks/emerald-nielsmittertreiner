@@ -1707,7 +1707,6 @@ void CB2_NewGame(void)
     NewGameInitData();
     ResetInitialPlayerAvatarState();
     PlayTimeCounter_Start();
-    InGameClock_Start();
     ScriptContext1_Init();
     ScriptContext2_Disable();
     // Disables truck animation and sounds
@@ -1907,7 +1906,6 @@ void CB2_ContinueSavedGame(void)
         InitMapFromSavedGame();
 
     PlayTimeCounter_Start();
-    InGameClock_Start();
     ScriptContext1_Init();
     ScriptContext2_Disable();
     InitMatchCallCounters();

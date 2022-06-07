@@ -3,10 +3,6 @@
 #include "string_util.h"
 #include "strings.h"
 #include "text.h"
-#include "debug/mgba.h"
-#include "debug/printf.h"
-
-static bool8 sInGameClockRunning;
 
 const u8 *const gText_DaysOfWeek[] =
 {
@@ -19,12 +15,7 @@ const u8 *const gText_DaysOfWeek[] =
     gText_Saturday
 };
 
-void InGameClock_Start(void)
-{
-    sInGameClockRunning = TRUE;
-}
-
-void InGameClock_Update(void)
+void InGameClock_Run(void)
 {
     gSaveBlock2Ptr->inGameClock.vblanks++;
 
