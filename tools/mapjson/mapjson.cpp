@@ -146,6 +146,10 @@ string generate_map_events_text(Json map_data) {
 
     ostringstream text;
 
+    text << "@\n@ DO NOT MODIFY THIS FILE! It is auto-generated from data/maps/" 
+         << map_data["name"].string_value() 
+         << "/map.json\n@\n\n";
+
     string objects_label, warps_label, coords_label, bgs_label;
 
     if (map_data["object_events"].array_items().size() > 0) {
@@ -154,7 +158,7 @@ string generate_map_events_text(Json map_data) {
         for (unsigned int i = 0; i < map_data["object_events"].array_items().size(); i++) {
             auto obj_event = map_data["object_events"].array_items()[i];
             text << "\tobject_event " << i + 1 << ", "
-                 << obj_event["graphics_id"].string_value() << ", "
+                 << obj_event["graphics_id"].string_value() << ", 0, "
                  << obj_event["x"].int_value() << ", "
                  << obj_event["y"].int_value() << ", "
                  << obj_event["elevation"].int_value() << ", "
