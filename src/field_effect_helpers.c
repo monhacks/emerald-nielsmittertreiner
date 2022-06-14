@@ -68,6 +68,8 @@ void SetUpReflection(struct ObjectEvent *objectEvent, struct Sprite *sprite, boo
 
     if (!stillReflection)
         reflectionSprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
+
+    reflectionSprite->oam.objMode = ST_OAM_OBJ_BLEND;
 }
 
 static s16 GetReflectionVerticalOffset(struct ObjectEvent *objectEvent)
