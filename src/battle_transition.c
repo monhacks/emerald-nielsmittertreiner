@@ -3702,7 +3702,12 @@ static void VBlankCB_WhiteBarsFade_Blend(void)
 
 static void HBlankCB_WhiteBarsFade(void)
 {
-    REG_BLDY = gScanlineEffectRegBuffers[1][REG_VCOUNT];
+    u16 index = REG_VCOUNT;
+
+    if (index == DISPLAY_WIDTH - 13)
+        index = 0;
+
+    REG_BLDY = gScanlineEffectRegBuffers[1][index];
 }
 
 static void SpriteCB_WhiteBarFade(struct Sprite *sprite)
@@ -4078,7 +4083,7 @@ void GetBg0TilesDst(u16 **tilemap, u16 **tileset)
 
 static void FadeScreenBlack(void)
 {
-    BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
+    BlendPalettes(PALETTES_ALL, 32, RGB_BLACK);
 }
 
 static void SetSinWave(s16 *array, s16 sinAdd, s16 index, s16 indexIncrementer, s16 amplitude, s16 arrSize)
