@@ -341,12 +341,11 @@ SECTIONS {
         src/speech_bubble.o(.text);
 		src/pokenav_v2.o(.text);
 		src/time.o(.text);
+		src/quests.o(.text);
         src/debug/overworld_debug.o(.text);
         src/debug/sound_test_screen.o(.text);
         src/debug/mgba.o(.text);
 		src/debug/printf.o(.text);
-		src/pokenav_v2.o(.text);
-		src/time.o(.text);
     } =0
 
     script_data :
@@ -711,10 +710,10 @@ SECTIONS {
         src/speech_bubble.o(.rodata);
         src/follow_me.o(.rodata);
         src/pokenav_v2.o(.rodata);
+        src/quests.o(.rodata);
         src/debug/overworld_debug.o(.rodata);
         src/debug/sound_test_screen.o(.rodata);
         src/debug/printf.o(.rodata);
-        src/pokenav_v2.o(.rodata);
     } =0
 
     song_data :
@@ -1256,7 +1255,9 @@ SECTIONS {
         sound/songs/midi/mus_celebi.o(.rodata);
         sound/songs/midi/mus_murena.o(.rodata);
         sound/songs/midi/mus_cedarred_day.o(.rodata);
-        sound/songs/midi/mus_drumtest.o(.rodata);
+        sound/songs/midi/mus_simple_town_day.o(.rodata);
+        sound/songs/midi/mus_firweald_city_night.o(.rodata);
+        sound/songs/midi/mus_litor_town_day.o(.rodata);
     } =0
 
     lib_rodata :

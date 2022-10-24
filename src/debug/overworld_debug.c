@@ -69,6 +69,7 @@ static void Task_HandleVarsInput(u8 taskId);
 static void Task_DebugActionSetTime(u8 taskId);
 static void Task_HandleSetTimeInput(u8 taskId);
 static void Task_DebugActionHealParty(u8 taskId);
+static void Task_DebugActionResetQuests(u8 taskId);
 static void Task_DebugActionResetBerries(u8 taskId);
 static void Task_DebugActionSoundTestScreen(u8 taskId);
 static void Task_GoToSoundTestScreen(u8 taskId);
@@ -140,6 +141,7 @@ enum
     LIST_ITEM_FLAGS,
     LIST_ITEM_VARS,
     LIST_ITEM_SET_TIME,
+    LIST_ITEM_RESET_QUESTS,
     LIST_ITEM_RESET_BERRIES,
     LIST_ITEM_SOUND_TEST_SCREEN,
 };
@@ -283,6 +285,7 @@ static const u8 sText_Warp[] = _("WARP");
 static const u8 sText_Flags[] = _("FLAGS");
 static const u8 sText_Vars[] = _("VARS");
 static const u8 sText_SetTime[] = _("SET TIME");
+static const u8 sText_ResetQuests[] = _("RESET QUESTS");
 static const u8 sText_ResetBerries[] = _("RESET BERRIES");
 static const u8 sText_SoundTestScreen[] = _("SOUND TESTING");
 
@@ -305,6 +308,7 @@ static const u8 sText_WarpDesc[] = _("WARP TO ANY WARP POINT\nOR XY POSITION OF\
 static const u8 sText_FlagsDesc[] = _("TURN EVENT FLAGS ON\nOR OFF.");
 static const u8 sText_VarsDesc[] = _("MANIPULATE VARS TO\nYOUR LIKING.");
 static const u8 sText_SetTimeDesc[] = _("SET INGAME TIME TO\nYOUR LIKING.");
+static const u8 sText_ResetQuestsDesc[] = _("RESET ALL QUESTS.");
 static const u8 sText_ResetBerriesDesc[] = _("REPLANT ALL BERRIES\nIN THE OVERWORLD.");
 static const u8 sText_SoundTestScreenDesc[] = _("GO TO SOUND TESTING\nSCREEN.");
 
@@ -405,6 +409,7 @@ static const u8 *const sText_ListMenuDescriptions_Utility[] =
     [LIST_ITEM_FLAGS]             = sText_FlagsDesc,
     [LIST_ITEM_VARS]              = sText_VarsDesc,
     [LIST_ITEM_SET_TIME]          = sText_SetTimeDesc,
+    [LIST_ITEM_RESET_QUESTS]      = sText_ResetQuestsDesc,
     [LIST_ITEM_RESET_BERRIES]     = sText_ResetBerriesDesc,
     [LIST_ITEM_SOUND_TEST_SCREEN] = sText_SoundTestScreenDesc,
 };
@@ -446,6 +451,7 @@ static const struct ListMenuItem sListMenuItems_Utility[] =
     {sText_Flags, NULL, LIST_ITEM_FLAGS},
     {sText_Vars, NULL, LIST_ITEM_VARS},
     {sText_SetTime, NULL, LIST_ITEM_SET_TIME},
+    {sText_ResetQuests, NULL, LIST_ITEM_RESET_QUESTS},
     {sText_ResetBerries, NULL, LIST_ITEM_RESET_BERRIES},
     {sText_SoundTestScreen, NULL, LIST_ITEM_SOUND_TEST_SCREEN},
 };
@@ -479,6 +485,7 @@ static void (*const sDebugActions_Utility[])(u8) =
     [LIST_ITEM_FLAGS]             = Task_DebugActionFlags,
     [LIST_ITEM_VARS]              = Task_DebugActionVars,
     [LIST_ITEM_SET_TIME]          = Task_DebugActionSetTime,
+    [LIST_ITEM_RESET_QUESTS]      = Task_DebugActionResetQuests,
     [LIST_ITEM_RESET_BERRIES]     = Task_DebugActionResetBerries,
     [LIST_ITEM_SOUND_TEST_SCREEN] = Task_DebugActionSoundTestScreen,
 };
@@ -1347,6 +1354,12 @@ static void Task_HandleSetTimeInput(u8 taskId)
 #undef tHours
 #undef tMinutes
 #undef tState
+
+static void Task_DebugActionResetQuests(u8 taskId)
+{
+    PlaySE(SE_PC_OFF);
+    memset(gSaveBlock1Ptr->quests, 0, sizeof(gSaveBlock1Ptr->quests));
+}
 
 static void Task_DebugActionResetBerries(u8 taskId)
 {

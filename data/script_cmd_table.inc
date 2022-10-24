@@ -235,6 +235,9 @@ gScriptCmdTable::
 	.4byte ScrCmd_hideitemdesc              @ 0xe8
 	.4byte ScrCmd_teleportcamera            @ 0xe9
 	.4byte ScrCmd_warpholecustom            @ 0xea
+	.4byte ScrCmd_enablequest               @ 0xeb
+	.4byte ScrCmd_disablequest              @ 0xec
+	.4byte ScrCmd_checkquest                @ 0xed
 
 gScriptCmdTableEnd::
 	.4byte ScrCmd_nop

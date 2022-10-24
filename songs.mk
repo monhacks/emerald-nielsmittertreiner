@@ -1281,5 +1281,12 @@ $(MID_SUBDIR)/mus_murena.s: %.s: %.mid
 $(MID_SUBDIR)/mus_cedarred_day.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G197 -v100
 
-$(MID_SUBDIR)/mus_drumtest.s: %.s: %.mid
+$(MID_SUBDIR)/mus_simple_town_day.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G198 -v100
+
+$(MID_SUBDIR)/mus_firweald_city_night.s: %.s: %.mid
+	$(MID) $< $@ -E -R$(STD_REVERB) -G199 -v100
+
+$(MID_SUBDIR)/mus_litor_town_day.s: %.s: %.mid
+	$(MID) $< $@ -E -R$(STD_REVERB) -G200 -v100
+	

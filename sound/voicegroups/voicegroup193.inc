@@ -39,9 +39,9 @@ voicegroup193::
     voice_directsound_no_resample 64, 64, DirectSoundWaveData_sd90_open_triangle, 255, 242, 103, 188
     voice_directsound_no_resample 64, 39, DirectSoundWaveData_sd90_open_triangle, 255, 242, 103, 188
     voice_directsound_no_resample 64, 89, DirectSoundWaveData_sd90_open_triangle, 255, 165, 103, 188
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
-    voice_square_1 60, 0, 0, 2, 0, 0, 15, 0
+    voice_directsound_no_resample 64, 64, DirectSoundWaveData_morgs_closed_triangle, 255, 242, 103, 188
+    voice_directsound_no_resample 64, 39, DirectSoundWaveData_morgs_closed_triangle, 255, 242, 103, 188
+    voice_directsound_no_resample 64, 89, DirectSoundWaveData_morgs_closed_triangle, 255, 165, 103, 188
     voice_directsound 64, 24, DirectSoundWaveData_sd90_ambient_tom, 255, 0, 255, 226
     voice_directsound 68, 34, DirectSoundWaveData_sd90_ambient_tom, 255, 0, 255, 226
     voice_directsound 72, 44, DirectSoundWaveData_sd90_ambient_tom, 255, 0, 255, 226

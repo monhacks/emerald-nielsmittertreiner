@@ -41,6 +41,8 @@ struct MenuAction
 };
 
 extern const u16 gStandardMenuPalette[];
+extern EWRAM_DATA u8 gPopupTaskId;
+extern const struct ScanlineEffectParams gPopUpScanlineEffectParams;
 
 void FreeAllOverworldWindowBuffers(void);
 void InitStandardTextBoxWindows(void);
@@ -103,8 +105,8 @@ void AddTextPrinterForMessage_2(bool8 allowSkippingDelayWithButtonPress);
 void RemoveStartMenuWindow(void);
 void DisplayYesNoMenuWithDefault(u8 initialCursorPos);
 void BufferSaveMenuText(u8 textId, u8 *dest, u8 color);
-void RemoveMapNamePopUpWindow(void);
-u8 GetMapNamePopUpWindowId(void);
+void RemovePrimaryPopUpWindow(void);
+u8 GetPrimaryPopUpWindowId(void);
 u8 AddMapNamePopUpWindow(void);
 void AddTextPrinterParameterized5(u8 windowId, u8 fontId, const u8 *str, u8 left, u8 top, u8 speed, void (*callback)(struct TextPrinterTemplate *, u16), u8 letterSpacing, u8 lineSpacing);
 void SetBgTilemapPalette(u8 bgId, u8 left, u8 top, u8 width, u8 height, u8 palette);
@@ -125,7 +127,10 @@ void EraseYesNoWindow(void);
 void PrintMenuActionTextsAtPos(u8 windowId, u8 fontId, u8 left, u8 top, u8 lineHeight, u8 itemCount, const struct MenuAction *strs);
 void Menu_LoadStdPal(void);
 u8 AddFieldEffectPopUpWindow(void);
-u8 GetPopUpWindowId(void);
-void RemovePopUpWindow(void);
+u8 AddWeatherPopUpWindow(void);
+u8 GetSecondaryPopUpWindowId(void);
+void RemoveSecondaryPopUpWindow(void);
+void SetDoublePopUpWindowScanlineBuffers(u8 offset);
+void HBlankCB_DoublePopupWindow(void);
 
 #endif // GUARD_MENU_H

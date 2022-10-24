@@ -24,7 +24,7 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
-#define NUM_BGM (MUS_DRUMTEST - MUS_LITTLEROOT_TEST)
+#define NUM_BGM (MUS_LITOR_TOWN_DAY - MUS_LITTLEROOT_TEST)
 #define NUM_SE (SE_SUDOWOODO_SHAKE - MUS_DUMMY)
 
 #define BGM 0
@@ -32,8 +32,9 @@
 
 struct SoundTestStruct
 {
-    u8 window;
     u16 index[2];
+    u8 window:1;
+    u8 alt:1;
 };
 
 static void MainCB2_SoundTestScreen(void);
@@ -45,24 +46,18 @@ static void Task_DrawSoundTestScreenWindows(u8 taskId);
 static void Task_HandleSoundTestScreenInput(u8 taskId);
 static bool8 Task_CheckSoundTestScreenInput(u8 taskId);
 static void Task_HandleDrawSoundTestScreenInfo(u8 taskId);
-static void HighlightSelectedWindow(s16 selectedWindow);
-static bool8 IsBGMWindow(s16 selectedWindow);
+static void HighlightSelectedWindow(u8 selectedWindow);
+static bool8 IsBGMWindow(u8 selectedWindow);
 
-static struct SoundTestStruct *sSoundTestStruct = NULL;
-
-//static EWRAM_DATA struct SoundTestStruct sSoundTestStruct = {0};
+static EWRAM_DATA struct SoundTestStruct *sSoundTestStruct = NULL;
 static EWRAM_DATA u8 sSoundTestHeaderWindowId = 0;
 
-static const u8 gText_SoundTestScreen[] = _("SOUND TEST SCREEN {EMOJI_NOTE}");
-static const u8 gText_DPadUpDownSelectWindow[] = _("{DPAD_UPDOWN} SELECT WINDOW");
-static const u8 gText_DPadLeftRightSelectSong[] = _("{DPAD_LEFTRIGHT} SELECT SONG");
-static const u8 gText_APlay[] = _("{A_BUTTON} PLAY");
-static const u8 gText_BStop[] = _("{B_BUTTON} STOP");
-static const u8 gText_StartExit[] = _("{START_BUTTON} EXIT");
-static const u8 gText_Music[] = _("MUSIC");
-static const u8 gText_SoundEffects[] = _("SOUND EFFECTS");
-
-static u8 gText_Index[2][3];
+static const u8 sText_SoundTestScreen[] = _("SOUND TEST SCREEN {EMOJI_NOTE}");
+static const u8 sText_DPadSelectWindowAndSong[] = _("{DPAD_UPDOWN} {DPAD_LEFTRIGHT} WINDOW/SONG");
+static const u8 sText_ABPlayStop[] = _("{A_BUTTON} {B_BUTTON} PLAY{CLEAR_TO 58}/STOP");
+static const u8 sText_StartExit[] = _("{START_BUTTON} EXIT");
+static const u8 sText_Music[] = _("MUSIC");
+static const u8 sText_SoundEffects[] = _("SOUND EFFECTS");
 
 static const struct BgTemplate sSoundTestBgTemplates[2] =
 {
@@ -147,8 +142,8 @@ static void CB2_ExitSoundTestScreen(void)
 {
     if (!UpdatePaletteFade())
     {
-        Free(sSoundTestStruct);
-        sSoundTestStruct = NULL;
+        FreeAllWindowBuffers();
+        FREE_AND_SET_NULL(sSoundTestStruct);
         SetMainCallback2(gMain.savedCallback);
     }
 }
@@ -224,6 +219,8 @@ static void InitSoundTestScreenWindows(void)
 
 static void Task_DrawSoundTestScreenWindows(u8 taskId)
 {
+    u8 string[4];
+
     SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG0 | WININ_WIN0_OBJ | WININ_WIN1_BG0 | WININ_WIN1_OBJ);
     SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG0 | WINOUT_WIN01_OBJ | WINOUT_WIN01_CLR);
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_EFFECT_DARKEN | BLDCNT_TGT1_BG0);
@@ -235,24 +232,22 @@ static void Task_DrawSoundTestScreenWindows(u8 taskId)
     SetGpuReg(REG_OFFSET_WIN1V, WIN_RANGE(64, 112));
 
     DrawStdFrameWithCustomTileAndPalette(sSoundTestHeaderWindowId, TRUE, 2, 14);
-    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_SoundTestScreen, 3, 0, 0, 0);
-    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_DPadUpDownSelectWindow, 3, 16, 0, 0);
-    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_DPadLeftRightSelectSong, 3, 32, 0, 0);
-    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_APlay, 120, 16, 0, 0);
-    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_BStop, 120, 32, 0, 0);
-    AddTextPrinterParameterized(sSoundTestHeaderWindowId, 1, gText_StartExit, 170, 32, 0, 0);
+    AddTextPrinterParameterized(sSoundTestHeaderWindowId, FONT_NORMAL, sText_SoundTestScreen, 3, 0, 0, 0);
+    AddTextPrinterParameterized(sSoundTestHeaderWindowId, FONT_NORMAL, sText_DPadSelectWindowAndSong, 3, 16, 0, 0);
+    AddTextPrinterParameterized(sSoundTestHeaderWindowId, FONT_NORMAL, sText_ABPlayStop, 3, 32, 0, 0);
+    AddTextPrinterParameterized(sSoundTestHeaderWindowId, FONT_NORMAL, sText_StartExit, 170, 32, 0, 0);
 
     DrawStdFrameWithCustomTileAndPalette(0, TRUE, 2, 14);
-    ConvertIntToDecimalStringN(gText_Index[BGM], 0, STR_CONV_MODE_LEFT_ALIGN, 2);
-    AddTextPrinterParameterized(0, 1, gText_Index[BGM], 3, 16, 0, 0);
-    AddTextPrinterParameterized(0, 1, gText_Music, 3, 0, 0, 0);
-    AddTextPrinterParameterized(0, 1, gBGMNames[sSoundTestStruct->index[BGM]], 32, 16, 0, 0);
+    ConvertIntToDecimalStringN(string, 0, STR_CONV_MODE_LEFT_ALIGN, 2);
+    AddTextPrinterParameterized(0, FONT_NORMAL, string, 3, 16, 0, 0);
+    AddTextPrinterParameterized(0, FONT_NORMAL, sText_Music, 3, 0, 0, 0);
+    AddTextPrinterParameterized(0, FONT_NORMAL, gBGMNames[sSoundTestStruct->index[BGM]], 32, 16, 0, 0);
 
     DrawStdFrameWithCustomTileAndPalette(1, TRUE, 2, 14);
-    ConvertIntToDecimalStringN(gText_Index[SE], 0, STR_CONV_MODE_LEFT_ALIGN, 2);
-    AddTextPrinterParameterized(1, 1, gText_Index[SE], 3, 16, 0, 0);
-    AddTextPrinterParameterized(1, 1, gText_SoundEffects, 3, 0, 0, 0);
-    AddTextPrinterParameterized(1, 1, gSENames[sSoundTestStruct->index[SE]], 32, 16, 0, 0);
+    ConvertIntToDecimalStringN(string, 0, STR_CONV_MODE_LEFT_ALIGN, 2);
+    AddTextPrinterParameterized(1, FONT_NORMAL, string, 3, 16, 0, 0);
+    AddTextPrinterParameterized(1, FONT_NORMAL, sText_SoundEffects, 3, 0, 0, 0);
+    AddTextPrinterParameterized(1, FONT_NORMAL, gSENames[sSoundTestStruct->index[SE]], 32, 16, 0, 0);
 
     m4aSoundInit();
     gTasks[taskId].func = Task_HandleSoundTestScreenInput;
@@ -271,21 +266,23 @@ static void Task_HandleSoundTestScreenInput(u8 taskId)
 
 static void Task_HandleDrawSoundTestScreenInfo(u8 taskId)
 {
+    u8 string[4];
+
     FillWindowPixelBuffer(sSoundTestStruct->window, PIXEL_FILL(1));
 
     if (IsBGMWindow(sSoundTestStruct->window))
     {
-        ConvertIntToDecimalStringN(gText_Index[BGM], sSoundTestStruct->index[BGM], STR_CONV_MODE_LEFT_ALIGN, 3);
-        AddTextPrinterParameterized(0, 1, gText_Music, 3, 0, 0, 0);
-        AddTextPrinterParameterized(0, 1, gText_Index[BGM], 3, 16, 0, 0);
-        AddTextPrinterParameterized(0, 1, gBGMNames[sSoundTestStruct->index[BGM]], 32, 16, 0, 0);
+        ConvertIntToDecimalStringN(string, sSoundTestStruct->index[BGM], STR_CONV_MODE_LEFT_ALIGN, 3);
+        AddTextPrinterParameterized(0, FONT_NORMAL, sText_Music, 3, 0, 0, 0);
+        AddTextPrinterParameterized(0, FONT_NORMAL, string, 3, 16, 0, 0);
+        AddTextPrinterParameterized(0, FONT_NORMAL, gBGMNames[sSoundTestStruct->index[BGM]], 32, 16, 0, 0);
     }
     else
     {
-        ConvertIntToDecimalStringN(gText_Index[SE], sSoundTestStruct->index[SE], STR_CONV_MODE_LEFT_ALIGN, 3);
-        AddTextPrinterParameterized(1, 1, gText_SoundEffects, 3, 0, 0, 0);
-        AddTextPrinterParameterized(1, 1, gText_Index[SE], 3, 16, 0, 0);
-        AddTextPrinterParameterized(1, 1, gSENames[sSoundTestStruct->index[SE]], 32, 16, 0, 0);
+        ConvertIntToDecimalStringN(string, sSoundTestStruct->index[SE], STR_CONV_MODE_LEFT_ALIGN, 3);
+        AddTextPrinterParameterized(1, FONT_NORMAL, sText_SoundEffects, 3, 0, 0, 0);
+        AddTextPrinterParameterized(1, FONT_NORMAL, string, 3, 16, 0, 0);
+        AddTextPrinterParameterized(1, FONT_NORMAL, gSENames[sSoundTestStruct->index[SE]], 32, 16, 0, 0);
     }
 
     HighlightSelectedWindow(sSoundTestStruct->window);
@@ -387,7 +384,7 @@ static bool8 Task_CheckSoundTestScreenInput(u8 taskId)
     return FALSE;
 }
 
-static void HighlightSelectedWindow(s16 selectedWindow)
+static void HighlightSelectedWindow(u8 selectedWindow)
 {
     switch (selectedWindow)
     {
@@ -402,7 +399,7 @@ static void HighlightSelectedWindow(s16 selectedWindow)
     }
 }
 
-static bool8 IsBGMWindow(s16 selectedWindow)
+static bool8 IsBGMWindow(u8 selectedWindow)
 {
     if (selectedWindow == 0)
     {
@@ -678,7 +675,9 @@ static bool8 IsBGMWindow(s16 selectedWindow)
     X(MUS_CELEBI, "MUS-CELEBI") \
     X(MUS_MURENA, "MUS-MURENA") \
     X(MUS_CEDARRED_DAY, "MUS-CEDARRED-DAY") \
-    X(MUS_DRUMTEST, "MUS-DRUMTEST") \
+    X(MUS_SIMPLE_TOWN_DAY, "MUS-SIMPLE-TOWN-DAY") \
+    X(MUS_FIRWEALD_CITY_NIGHT, "MUS-FIRWEALD-CITY-NIGHT") \
+    X(MUS_LITOR_TOWN_DAY, "MUS-LITOR-TOWN-DAY") \
 
 #define SOUND_LIST_SE \
     X(MUS_DUMMY, "MUS-DUMMY") \

@@ -617,7 +617,9 @@ gSongTable::
 	song mus_celebi, 0, 0
 	song mus_murena, 0, 0
 	song mus_cedarred_day, 0, 0
-	song mus_drumtest, 0, 0
+	song mus_simple_town_day, 0, 0
+	song mus_firweald_city_night, 0, 0
+	song mus_litor_town_day, 0, 0
 
 	.align 2
 dummy_song_header:

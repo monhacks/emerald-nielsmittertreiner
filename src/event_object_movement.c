@@ -434,9 +434,6 @@ const u8 gInitialMovementTypeFacingDirections[] = {
 #define OBJ_EVENT_PAL_TAG_CONSTRUCTION_WORKER     0x111E
 #define OBJ_EVENT_PAL_TAG_FISHERMAN               0x111F
 
-#define OBJ_EVENT_PAL_TAG_LIGHT                   0x8000
-#define OBJ_EVENT_PAL_TAG_LANTERN_LIGHT           OBJ_EVENT_PAL_TAG_LIGHT + 1
-
 #define OBJ_EVENT_PAL_TAG_NONE                    0x11FF
 
 #include "data/field_effects/field_effect_object_template_pointers.h"
@@ -479,7 +476,6 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_Phyllos,               OBJ_EVENT_PAL_TAG_PHYLLOS},
     {gObjectEventPal_ConstructionWorker,    OBJ_EVENT_PAL_TAG_CONSTRUCTION_WORKER},
     {gObjectEventPal_Fisherman,             OBJ_EVENT_PAL_TAG_FISHERMAN},
-    {gObjectEventPal_LanternLight,          OBJ_EVENT_PAL_TAG_LIGHT},
     {NULL,                                  0x0000},
 };
 #include "data/object_events/berry_tree_graphics_tables.h"
@@ -1494,99 +1490,6 @@ u8 CreateVirtualObject(u16 graphicsId, u8 virtualObjId, s16 x, s16 y, u8 elevati
     return spriteId;
 }
 
-// Callback for light sprites
-void UpdateLightSprite(struct Sprite *sprite)
-{
-    s16 left =   gSaveBlock1Ptr->pos.x - 2;
-    s16 right =  gSaveBlock1Ptr->pos.x + 17;
-    s16 top =    gSaveBlock1Ptr->pos.y;
-    s16 bottom = gSaveBlock1Ptr->pos.y + 15;
-    s16 x = sprite->data[6];
-    s16 y = sprite->data[7];
-    bool8 finished;
-
-    if (x >= left && x <= right &&
-        y >= top && y <= bottom)
-    {
-        if (gTimeOfDay != TIME_OF_DAY_NIGHT)
-            finished = TRUE;
-        else
-            finished = FALSE;
-    }
-    else
-    {
-        finished = TRUE;
-    }
-
-    if (finished)
-    {        
-        FieldEffectFreeTilesIfUnused(sprite->sheetTileStart);
-        FieldEffectFreePaletteIfUnused(sprite->oam.paletteNum);
-        DestroySprite(sprite);
-        return;
-    }
-
-    sprite->invisible = gSaveBlock2Ptr->inGameClock.vblanks & 1;
-}
-
-// Spawn a light at a map coordinate based on metatile behavior
-static void SpawnLightSprite(s16 x, s16 y, s16 cameraX, s16 cameraY)
-{
-    struct Sprite *sprite;
-    u8 spriteId;
-    u8 i;
-
-    for (i = 0; i < MAX_SPRITES; i++)
-    {
-        sprite = &gSprites[i];
-        if (sprite->inUse && sprite->callback == UpdateLightSprite && sprite->data[6] == x && sprite->data[7] == y)
-            return;
-    }
-
-    spriteId = CreateSprite(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_LANTERN_LIGHT], 0, 0, 0);
-    sprite = &gSprites[spriteId];
-    
-    UpdateSpritePaletteByTemplate(gFieldEffectObjectTemplatePointers[FLDEFFOBJ_LANTERN_LIGHT], sprite);
-    GetMapCoordsFromSpritePos(x + cameraX, y + cameraY, &sprite->x, &sprite->y);
-    sprite->data[6] = x;
-    sprite->data[7] = y;
-    sprite->affineAnims = gDummySpriteAffineAnimTable;
-    sprite->affineAnimBeginning = TRUE;
-    sprite->centerToCornerVecX = -(32 >> 1);
-    sprite->centerToCornerVecY = -(32 >> 1);
-    sprite->oam.priority = 1;
-    sprite->oam.objMode = ST_OAM_OBJ_NORMAL;
-    sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
-    sprite->coordOffsetEnabled = TRUE;
-    sprite->x += 8;
-    sprite->y += 22 + sprite->centerToCornerVecY;
-}
-
-void TrySpawnLightSprites(s16 cameraX, s16 cameraY)
-{
-    s16 left =   gSaveBlock1Ptr->pos.x - 2;
-    s16 right =  gSaveBlock1Ptr->pos.x + 17;
-    s16 top =    gSaveBlock1Ptr->pos.y;
-    s16 bottom = gSaveBlock1Ptr->pos.y + 16;
-    s16 x, y;
-    u32 behavior;
-    u32 i;
-
-    if (gTimeOfDay != TIME_OF_DAY_NIGHT)
-        return;
-    
-    for (i = 0; gLightMetatiles[i].x > 0; i++)
-    {
-        x = gLightMetatiles[i].x;
-        y = gLightMetatiles[i].y;
-        if (x >= left && x <= right && y >= top && y <= bottom &&
-            MetatileBehavior_IsLanternLight(MapGridGetMetatileBehaviorAt(x, y)))
-        {
-            SpawnLightSprite(x, y, cameraX, cameraY);
-        }
-    }
-}
-
 void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
 {
     u8 i;
@@ -1619,7 +1522,6 @@ void TrySpawnObjectEvents(s16 cameraX, s16 cameraY)
             }
         }
     }
-    TrySpawnLightSprites(cameraX, cameraY);
 }
 
 void RemoveObjectEventsOutsideView(void)
@@ -1671,7 +1573,6 @@ void SpawnObjectEventsOnReturnToField(s16 x, s16 y)
             SpawnObjectEventOnReturnToField(i, x, y);
     }
     CreateReflectionEffectSprites();
-    TrySpawnLightSprites(x, y);
 }
 
 static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)

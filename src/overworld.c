@@ -39,6 +39,7 @@
 #include "new_game.h"
 #include "palette.h"
 #include "play_time.h"
+#include "quests.h"
 #include "random.h"
 #include "roamer.h"
 #include "rotating_gate.h"
@@ -1112,7 +1113,20 @@ u16 GetLocationMusic(struct WarpData *warp)
     else if (IsInfiltratedWeatherInstitute(warp) == TRUE)
         return MUS_MT_CHIMNEY;
     else
-        return Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->music;
+    {
+        if (UpdateTimeOfDay() == TIME_OF_DAY_NIGHT)
+        {
+            if (Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->musicNight == MUS_NONE ||
+                Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->musicNight == MUS_DUMMY)
+            {
+                return Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->music;
+            }
+            else
+                return Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->musicNight;
+        }
+        else
+            return Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->music;
+    }
 }
 
 u16 GetCurrLocationDefaultMusic(void)
@@ -1468,6 +1482,7 @@ static void DoCB1_Overworld(u16 newKeys, u16 heldKeys)
         {
             ScriptContext2_Enable();
             HideMapNamePopUpWindow();
+            HideQuestPopUpWindow();
         }
         else
         {
@@ -1615,6 +1630,9 @@ u8 UpdateSpritePaletteWithTime(u8 paletteNum)
 
 static void OverworldBasic(void)
 {
+    u8 time;
+    u16 music;
+
     ScriptContext2_RunScript();
     RunTasks();
     AnimateSprites();
@@ -1634,7 +1652,13 @@ static void OverworldBasic(void)
         };
         
         sTimeUpdateCounter = 0;
-        UpdateTimeOfDay();
+        time = UpdateTimeOfDay();
+        if (time == TIME_OF_DAY_NIGHT || time == TIME_OF_DAY_DAY)
+        {
+            music = GetCurrLocationDefaultMusic();
+            if (GetCurrentMapMusic() != music)
+                FadeOutAndPlayNewMapMusic(music, 16);
+        }
         
         if (cachedBlend.time0 != currentTimeBlend.time0
          || cachedBlend.time1 != currentTimeBlend.time1

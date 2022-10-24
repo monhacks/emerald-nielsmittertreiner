@@ -574,6 +574,7 @@ static u8 SetUpCopyrightScreen(void)
         CpuFill16(0, (void *)(PLTT + 2), PLTT_SIZE - 2);
         ResetPaletteFade();
         LoadCopyrightGraphics(0, 0x3800, 0);
+        ScanlineEffect_Clear();
         ScanlineEffect_Stop();
         ResetTasks();
         ResetSpriteData();

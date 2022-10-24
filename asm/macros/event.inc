@@ -2022,3 +2022,21 @@
 	setvar VAR_0x8006, \item
 	special CreateEventLegalEnemyMon
 	.endm
+
+	@ Enables specified quest
+	.macro enablequest quest:req
+	.byte 0xeb
+	.2byte \quest
+	.endm
+
+	@ Disables specified quest
+	.macro disablequest quest:req
+	.byte 0xec
+	.2byte \quest
+	.endm
+
+	@ Checks if specified quest is active
+	.macro checkquest quest:req
+	.byte 0xed
+	.2byte \quest
+	.endm

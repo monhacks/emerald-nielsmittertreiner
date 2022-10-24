@@ -279,7 +279,6 @@ static void CB2_LoadCableCar(void)
         for (i = 0; i < NUM_ASH_SPRITES; i++)
             gWeatherPtr->sprites.s2.ashSprites[i] = NULL;
 
-        InitMapMusic();
         ResetMapMusic();
         ResetBgsAndClearDma3BusyFlags(0);
         InitBgsFromTemplates(0, sBgTemplates, ARRAY_COUNT(sBgTemplates));

@@ -23,8 +23,6 @@ static u8 sMapMusicState;
 static u8 sMapMusicFadeInSpeed;
 static u16 sFanfareCounter;
 
-bool8 gDisableMusic;
-
 extern struct ToneData gCryTable[];
 extern struct ToneData gCryTable_Reverse[];
 
@@ -53,12 +51,6 @@ static const struct Fanfare sFanfares[] = {
     [FANFARE_OBTAIN_SYMBOL]       = { MUS_OBTAIN_SYMBOL,       318 },
     [FANFARE_REGISTER_MATCH_CALL] = { MUS_REGISTER_MATCH_CALL, 135 },
 };
-
-void InitMapMusic(void)
-{
-    gDisableMusic = FALSE;
-    ResetMapMusic();
-}
 
 void MapMusicMain(void)
 {
@@ -203,12 +195,6 @@ bool8 WaitFanfare(bool8 stop)
     }
 }
 
-// Unused
-void StopFanfareByFanfareNum(u8 fanfareNum)
-{
-    m4aSongNumStop(sFanfares[fanfareNum].songNum);
-}
-
 void PlayFanfare(u16 songNum)
 {
     s32 i;
@@ -256,8 +242,6 @@ static void CreateFanfareTask(void)
 
 void FadeInNewBGM(u16 songNum, u8 speed)
 {
-    if (gDisableMusic)
-        songNum = 0;
     if (songNum == MUS_NONE)
         songNum = 0;
     m4aSongNumStart(songNum);
@@ -561,8 +545,6 @@ static void RestoreBGMVolumeAfterPokemonCry(void)
 
 void PlayBGM(u16 songNum)
 {
-    if (gDisableMusic)
-        songNum = 0;
     if (songNum == MUS_NONE)
         songNum = 0;
     m4aSongNumStart(songNum);
@@ -571,13 +553,6 @@ void PlayBGM(u16 songNum)
 void PlaySE(u16 songNum)
 {
     m4aSongNumStart(songNum);
-}
-
-void PlaySEWithVolume(u16 songNum, u16 volume)
-{
-    m4aSongNumStart(songNum);
-    m4aMPlayImmInit(&gMPlayInfo_SE1);
-    m4aMPlayVolumeControl(&gMPlayInfo_SE1, 0xFFFF, volume);
 }
 
 void PlaySE12WithPanning(u16 songNum, s8 pan)

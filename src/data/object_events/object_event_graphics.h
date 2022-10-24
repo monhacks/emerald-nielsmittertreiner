@@ -363,5 +363,3 @@ const u32 gObjectEventPic_Phyllos[] = INCBIN_U32("graphics/object_events/pics/pe
 const u16 gObjectEventPal_Phyllos[] = INCBIN_U16("graphics/object_events/palettes/phyllos.gbapal");
 const u32 gObjectEventPic_ConstructionWorker[] = INCBIN_U32("graphics/object_events/pics/people/construction_worker.4bpp");
 const u16 gObjectEventPal_ConstructionWorker[] = INCBIN_U16("graphics/object_events/palettes/construction_worker.gbapal");
-const u32 gFieldEffectObjectPic_LanternLight[] = INCBIN_U32("graphics/object_events/pics/misc/light.4bpp");
-const u16 gObjectEventPal_LanternLight[] = INCBIN_U16("graphics/object_events/palettes/light.gbapal");
