@@ -5063,4 +5063,26 @@ extern const u8 gMailTilemap_Retro[];
 extern const u8 gMonMarkingsMenu_Gfx[];
 extern const u16 gMonMarkingsMenu_Pal[];
 
+// Poke Gear
+extern const u32 gPokeGearHeader_Gfx[];
+extern const u32 gPokeGearHeader_Map[];
+
+extern const u32 gPokeGearPokeBall_Gfx[];
+extern const u32 gPokeGearMainMenu_Gfx[];
+extern const u32 gPokeGearMainMenu_Map[];
+extern const u32 gPokeGearMainMenu_Option_Map[];
+extern const u32 gPokeGearMainMenu_OptionBar_Map[];
+extern const u32 gPokeGearMainMenu_OptionEnd_Map[];
+extern const u32 gPokeGearMainMenu_Digits_Gfx[];
+extern const u16 gPokeGearMainMenu_Digits_Pal[];
+extern const u32 gPokeGearMainMenu_Exit_Gfx[];
+extern const u32 gPokeGearMainMenu_ClockBar_Gfx[];
+extern const u32 gPokeGearMainMenu_BarEnd_Gfx[];
+
+extern const u32 gPokeGearStyle1_Gfx[];
+extern const u32 gPokeGearStyle1_Background_Map[];
+extern const u32 gPokeGearStyle1_Foreground_Map[];
+extern const u16 gPokeGearStyle1_Pal[];
+extern const u16 gPokeGearStyle1_PokeBall_Pal[];
+
 #endif //GUARD_GRAPHICS_H

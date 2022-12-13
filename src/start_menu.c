@@ -28,6 +28,7 @@
 #include "palette.h"
 #include "party_menu.h"
 #include "pokedex.h"
+#include "pokegear.h"
 #include "pokenav.h"
 #include "safari_zone.h"
 #include "save.h"
@@ -648,7 +649,7 @@ static bool8 StartMenuBagCallback(void)
         PlayRainStoppingSoundEffect();
         RemoveExtraStartMenuWindows();
         CleanupOverworldWindowsAndTilemaps();
-        SetMainCallback2(CB2_BagMenuFromStartMenu); // Display bag menu
+        SetMainCallback2(CB2_InitPokeGear); // Display bag menu
 
         return TRUE;
     }

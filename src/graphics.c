@@ -1523,11 +1523,25 @@ const u16 gBerryCrush_Crusher_Pal[] = INCBIN_U16("graphics/berry_crush/crusher.g
 const u32 gBerryCrush_Crusher_Gfx[] = INCBIN_U32("graphics/berry_crush/crusher.4bpp.lz");
 const u32 gBerryCrush_TextWindows_Tilemap[] = INCBIN_U32("graphics/berry_crush/text_windows.bin.lz");
 
-// random garbage at the end.
-static const u8 sEmpty3[0x54BAC] = {0};
-static const u8 sUnused1[]       = {0x0D, 0x00, 0x58, 0x02};
-static const u8 sEmpty4[0x1145]  = {0};
-static const u8 sUnused2[]       = {0x02};
-static const u8 sEmpty5[0x3242]  = {0};
-static const u8 sUnused3[]       = {0x40};
-static const u8 sEmpty6[0x13]    = {0};
+// Poke Gear
+const u32 gPokeGearHeader_Gfx[] = INCBIN_U32("graphics/pokegear/header.4bpp.lz");
+const u32 gPokeGearHeader_Map[] = INCBIN_U32("graphics/pokegear/header.bin.lz");
+
+const u32 gPokeGearPokeBall_Gfx[] = INCBIN_U32("graphics/pokegear/pokeball.4bpp.lz");
+const u32 gPokeGearMainMenu_Gfx[] = INCBIN_U32("graphics/pokegear/menu.4bpp.lz");
+const u32 gPokeGearMainMenu_Map[] = INCBIN_U32("graphics/pokegear/menu.bin.lz");
+const u32 gPokeGearMainMenu_Option_Map[] = INCBIN_U32("graphics/pokegear/option.bin");
+const u32 gPokeGearMainMenu_OptionBar_Map[] = INCBIN_U32("graphics/pokegear/option_bar.bin");
+const u32 gPokeGearMainMenu_OptionEnd_Map[] = INCBIN_U32("graphics/pokegear/option_end.bin");
+const u32 gPokeGearMainMenu_Digits_Gfx[] = INCBIN_U32("graphics/pokegear/digits.4bpp.lz");
+const u16 gPokeGearMainMenu_Digits_Pal[] = INCBIN_U16("graphics/pokegear/digits.gbapal");
+const u32 gPokeGearMainMenu_Exit_Gfx[] = INCBIN_U32("graphics/pokegear/exit.4bpp.lz");
+const u32 gPokeGearMainMenu_ClockBar_Gfx[] = INCBIN_U32("graphics/pokegear/clock_bar.4bpp.lz");
+const u32 gPokeGearMainMenu_BarEnd_Gfx[] = INCBIN_U32("graphics/pokegear/bar_1.4bpp.lz");
+
+const u32 gPokeGearStyle1_Gfx[] = INCBIN_U32("graphics/pokegear/style_1/tiles.4bpp.lz");
+const u32 gPokeGearStyle1_Background_Map[] = INCBIN_U32("graphics/pokegear/style_1/background.bin.lz");
+const u32 gPokeGearStyle1_Foreground_Map[] = INCBIN_U32("graphics/pokegear/style_1/foreground.bin.lz");
+const u16 gPokeGearStyle1_Pal[] = INCBIN_U16("graphics/pokegear/style_1/tiles.gbapal");
+const u16 gPokeGearStyle1_PokeBall_Pal[] = INCBIN_U16("graphics/pokegear/pokeball.gbapal");
+

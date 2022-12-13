@@ -13,6 +13,7 @@ RAYQUAZAGFXDIR := graphics/rayquaza_scene
 ROULETTEGFXDIR := graphics/roulette
 SLOTMACHINEGFXDIR := graphics/slot_machine
 PKNAVGFXDIR := graphics/pokenav
+PKGEARGFXDIR := graphics/pokegear
 PKNAVOPTIONSGFXDIR := graphics/pokenav/options
 WALLPAPERGFXDIR := graphics/pokemon_storage/wallpapers
 OBJEVENTGFXDIR := graphics/object_events
@@ -709,4 +710,9 @@ $(POKEDEXGFXDIR)/region_map_affine.8bpp: %.8bpp: %.png
 	$(GFX) $< $@ -num_tiles 233
 
 $(STARTERGFXDIR)/birch_help.4bpp: $(STARTERGFXDIR)/birch_bag.4bpp $(STARTERGFXDIR)/birch_grass.4bpp
+	@cat $^ >$@
+
+### PokeGear ###
+$(PKGEARGFXDIR)/clock_bar.4bpp: $(PKGEARGFXDIR)/bar_0.4bpp \
+                        	  	$(PKGEARGFXDIR)/bar_1.4bpp
 	@cat $^ >$@
