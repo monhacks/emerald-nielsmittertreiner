@@ -16,6 +16,7 @@
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_SCIENTIST_2",
+      "in_connection": false,
       "x": 14,
       "y": 5,
       "elevation": 3,
@@ -29,6 +30,7 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_SCIENTIST_2",
+      "in_connection": false,
       "x": 9,
       "y": 2,
       "elevation": 3,
@@ -42,6 +44,7 @@
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_PROF_BIRCH",
+      "in_connection": false,
       "x": 3,
       "y": 8,
       "elevation": 3,
@@ -82,5 +85,6 @@
   ],
   "bg_events": [
 
-  ]
+  ],
+  "music_night": "MUS_NONE"
 }
