@@ -3,7 +3,6 @@
 
 #include "constants/sound.h"
 
-void InitMapMusic(void);
 void MapMusicMain(void);
 void ResetMapMusic(void);
 u16 GetCurrentMapMusic(void);

@@ -106,7 +106,7 @@ void AgbMain()
     RtcInit();
     CheckForFlashMemory();
     InitMainCallbacks();
-    InitMapMusic();
+    ResetMapMusic();
 #ifdef BUGFIX
     SeedRngWithRtc(); // see comment at SeedRngWithRtc definition below
 #endif
