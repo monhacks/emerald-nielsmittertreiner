@@ -49,7 +49,6 @@ static bool8 SkipCopyingMetatileFromSavedMap(u16* mapBlock, u16 mapWidth, u8 yMo
 static struct MapConnection *GetIncomingConnection(u8 direction, int x, int y);
 static bool8 IsPosInIncomingConnectingMap(u8 direction, int x, int y, struct MapConnection *connection);
 static bool8 IsCoordInIncomingConnectingMap(int coord, int srcMax, int destMax, int offset);
-static void CacheLightMetatiles(void);
 
 #define GetBorderBlockAt(x, y)({                                                                   \
     u16 block;                                                                                     \
@@ -75,7 +74,6 @@ void InitMap(void)
     InitMapLayoutData(&gMapHeader);
     SetOccupiedSecretBaseEntranceMetatiles(gMapHeader.events);
     RunOnLoadMapScript();
-    CacheLightMetatiles();
 }
 
 void InitMapFromSavedGame(void)
@@ -85,7 +83,6 @@ void InitMapFromSavedGame(void)
     SetOccupiedSecretBaseEntranceMetatiles(gMapHeader.events);
     LoadSavedMapView();
     RunOnLoadMapScript();
-    CacheLightMetatiles();
     UpdateTVScreensOnMap(gBackupMapLayout.width, gBackupMapLayout.height);
 }
 
@@ -380,30 +377,6 @@ u32 MapGridGetMetatileBehaviorAt(int x, int y)
 {
     u16 metatile = MapGridGetMetatileIdAt(x, y);
     return GetMetatileAttributesById(metatile) & METATILE_ATTR_BEHAVIOR_MASK;
-}
-
-// Caches light metatile coordinates
-// TODO: Better way to dynamically generate lights
-static void CacheLightMetatiles(void)
-{
-    u8 i = 0;
-    s32 x, y;
-
-    for (x = 0; x < gBackupMapLayout.width; x++)
-    {
-        for (y = 0; y < gBackupMapLayout.height; y++)
-        {
-            if (MetatileBehavior_IsLanternLight(MapGridGetMetatileBehaviorAt(x, y)))
-            {
-                gLightMetatiles[i].x = x;
-                gLightMetatiles[i].y = y;
-                i++;
-            }
-        }
-    }
-    
-    gLightMetatiles[i].x = -1;
-    gLightMetatiles[i].y = -1;
 }
 
 u8 MapGridGetMetatileLayerTypeAt(int x, int y)

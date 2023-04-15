@@ -23,7 +23,6 @@ bool8 MetatileBehavior_IsIce(u8);
 bool8 MetatileBehavior_IsWarpDoor(u8);
 bool8 MetatileBehavior_IsDoor(u8);
 bool8 MetatileBehavior_IsEscalator(u8);
-bool8 MetatileBehavior_IsLanternLight(u8);
 bool8 MetatileBehavior_IsLadder(u8);
 bool8 MetatileBehavior_IsNonAnimDoor(u8);
 bool8 MetatileBehavior_IsDeepSouthWarp(u8);
