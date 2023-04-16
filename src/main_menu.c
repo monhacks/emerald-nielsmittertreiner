@@ -258,7 +258,7 @@ static void MainMenu_FormatSavegameTime(void);
 static void MainMenu_FormatSavegameBadges(void);
 static void NewGameBirchSpeech_CreateDialogueWindowBorder(u8, u8, u8, u8, u8, u8);
 
-static EWRAM_DATA bool8 isAMPM;
+static EWRAM_DATA bool8 is24Hour;
 
 // .rodata
 
@@ -1322,7 +1322,7 @@ static void Task_NewGameBirchSpeech_Init(u8 taskId)
     ResetAllPicSprites();
     //AddBirchSpeechObjects(taskId);
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
-    isAMPM = TRUE;
+    is24Hour = TRUE;
     gTasks[taskId].tBG1HOFS = 0;
     gTasks[taskId].func = Task_NewGameBirchSpeech_DrawSetTimeDialogueWindow;
     gTasks[taskId].tPlayerSpriteId = SPRITE_NONE;
@@ -1346,7 +1346,7 @@ static void Task_NewGameBirchSpeech_DrawSetTimeDialogueWindow(u8 taskId)
         PutWindowTilemap(0);
         CopyWindowToVram(0, 2);
         NewGameBirchSpeech_ClearWindow(0);
-        FormatDecimalTimeWithoutSeconds(gStringVar1, sTimeSelectionData[1], sTimeSelectionData[2], isAMPM);
+        FormatDecimalTimeWithoutSeconds(gStringVar1, sTimeSelectionData[1], sTimeSelectionData[2], is24Hour);
         StringExpandPlaceholders(gStringVar4, gText_Birch_PleaseSetTheTime);
         AddTextPrinterForMessage(1);
         gTasks[taskId].func = Task_NewGameBirchSpeech_WaitForPleaseSetTheTimeToPrint;
@@ -1362,7 +1362,7 @@ static void Task_NewGameBirchSpeech_WaitForPleaseSetTheTimeToPrint(u8 taskId)
         FillWindowPixelBuffer(3, PIXEL_FILL(1));
         AddTextPrinterParameterized(3, 1, gText_DaysOfWeek[sTimeSelectionData[0]], GetStringCenterAlignXOffset(1, gText_DaysOfWeek[sTimeSelectionData[0]], 56), 5, 0, NULL);
         AddTextPrinterParameterized(3, 1, gStringVar1, 66, 5, 0, NULL);
-        if (isAMPM)
+        if (!is24Hour)
         {
             if (sTimeSelectionData[1] < 12)
             {
@@ -1384,9 +1384,9 @@ static void Task_NewGameBirchSpeech_CheckHandleTimeInput(u8 taskId)
 {
     if (Task_NewGameBirchSpeech_HandleTimeInput(taskId))
     {
-        FormatDecimalTimeWithoutSeconds(gStringVar1, sTimeSelectionData[1], sTimeSelectionData[2], isAMPM);
+        FormatDecimalTimeWithoutSeconds(gStringVar1, sTimeSelectionData[1], sTimeSelectionData[2], is24Hour);
         FillWindowPixelBuffer(3, PIXEL_FILL(1));
-        if (isAMPM)
+        if (!is24Hour)
         {
             if (sTimeSelectionData[1] < 12)
             {
@@ -1411,7 +1411,7 @@ static bool8 Task_NewGameBirchSpeech_HandleTimeInput(u8 taskId)
     }
     else if (JOY_NEW(SELECT_BUTTON))
     {
-        isAMPM ^= 1;
+        is24Hour ^= 1;
         return TRUE;
     }
     else if (JOY_REPEAT(DPAD_DOWN))
@@ -1540,13 +1540,13 @@ static void Task_NewGameBirchSpeech_ConfirmTime(u8 taskId)
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
     CopyWindowToVram(3, 3);
     StringCopy(gStringVar1, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
-    if (isAMPM && gSaveBlock2Ptr->inGameClock.hours < 12)
+    if (!is24Hour && gSaveBlock2Ptr->inGameClock.hours < 12)
         ConvertIntToDecimalStringN(gStringVar2, gSaveBlock2Ptr->inGameClock.hours, STR_CONV_MODE_LEADING_ZEROS, 2);   
     else
         ConvertIntToDecimalStringN(gStringVar2, gSaveBlock2Ptr->inGameClock.hours - 12, STR_CONV_MODE_LEADING_ZEROS, 2);
     
     dest = ConvertIntToDecimalStringN(dest, gSaveBlock2Ptr->inGameClock.minutes, STR_CONV_MODE_LEADING_ZEROS, 2);
-    if (isAMPM)
+    if (!is24Hour)
     {
         *dest++ = CHAR_SPACE;
 
@@ -1571,7 +1571,7 @@ static void Task_NewGameBirchSpeech_WaitForConfirmTimeTextprinter(u8 taskId)
         {
             PlaySE(SE_SELECT);
             ClearDialogWindowAndFrame(0, 1);
-            gSaveBlock2Ptr->is24HClockMode != isAMPM;
+            gSaveBlock2Ptr->is24HClockMode = is24Hour;
             gTasks[taskId].func = Task_NewGameBirchSpeech_InitBirchGraphics;
         }
     }

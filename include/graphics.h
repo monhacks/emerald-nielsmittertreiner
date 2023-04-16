@@ -5078,4 +5078,12 @@ extern const u16 gMonMarkingsMenu_Pal[];
 extern const u32 gSpeechBubbleTiles[];
 extern const u16 sSpeechBubblePalette[];
 
+extern const u8 gPopUpWindowBorder_Tiles[];
+extern const u16 gPopUpWindowBorder_Palette[];
+extern const u8 gQuestPopUpIconTiles[];
+extern const u16 gQuestPopUpIconPalette[];
+
+extern const u8 gQuestIconTiles[];
+extern const u16 gQuestIconPalette[];
+
 #endif //GUARD_GRAPHICS_H

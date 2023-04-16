@@ -2596,11 +2596,13 @@ static const u8 gText_MonUsedAMove[]     = _("{STR_VAR_1} USED A MOVE!");
 
 static void FieldMoveShowMonEffect_Init(struct Task *task)
 {
-    u8 popupWindowId = GetPopUpWindowId();
+    u8 popupWindowId = GetSecondaryPopUpWindowId();
     u8 x;
 
     SetGpuReg(REG_OFFSET_BG0VOFS, 0);
+    SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG0 | BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
     SetGpuRegBits(REG_OFFSET_WININ, WININ_WIN0_CLR);
+
     LoadPalette(sFieldEffectPopUp_Palette, 0xE0, sizeof(sFieldEffectPopUp_Palette));
     AddFieldEffectPopUpWindow();
     PutWindowTilemap(popupWindowId);
@@ -2696,11 +2698,11 @@ static void FieldMoveShowMonEffect_MoveWindowOffscreen(struct Task *task)
 
 static void FieldMoveShowMonEffect_DestroyGfx(struct Task *task)
 {
-    ClearStdWindowAndFrame(GetPopUpWindowId(), TRUE);
-    RemovePopUpWindow();
+    ClearStdWindowAndFrame(GetSecondaryPopUpWindowId(), TRUE);
+    RemoveSecondaryPopUpWindow();
     FreeAndDestroyMonIconSprite(&gSprites[task->tMonSpriteId]);
     SetGpuReg_ForcedBlank(REG_OFFSET_BG0VOFS, 0);
-    SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_BG1 | BLDCNT_TGT2_BG2 | BLDCNT_TGT2_BG3 | BLDCNT_TGT2_OBJ);
+    SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_BG1 | BLDCNT_TGT2_BG2 | BLDCNT_TGT2_BG3 | BLDCNT_TGT2_OBJ | BLDCNT_EFFECT_BLEND);
     SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG_ALL | WININ_WIN0_OBJ | WININ_WIN1_BG_ALL | WININ_WIN1_OBJ);
     DisableInterrupts(INTR_FLAG_HBLANK);
     SetHBlankCallback(NULL);
@@ -2725,22 +2727,12 @@ static void SpriteCB_UpdateSpritePos(struct Sprite *sprite)
 
 static void HBlankCB_FieldEffectPopupWindow(void)
 {
-    struct Task *task = &gTasks[FindTaskIdByFunc(Task_FieldMoveShowMon)];
-    s16 currentOffset = 158 - task->tWinOffset;
+    s16 offset = 158 - gTasks[FindTaskIdByFunc(Task_FieldMoveShowMon)].tWinOffset;
 
-    if (REG_VCOUNT > currentOffset)
-    {
-        REG_BLDCNT = BLDCNT_TGT1_BG0 | BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND;
+    if (REG_VCOUNT > offset)
         REG_BLDALPHA = BLDALPHA_BLEND(15, 5);
-    }
     else
-    {
-        gWeatherPtr->currBlendEVA = 8;
-        gWeatherPtr->currBlendEVB = 10;
-        gWeatherPtr->targetBlendEVA = 8;
-        gWeatherPtr->targetBlendEVB = 10;
         REG_BLDALPHA = BLDALPHA_BLEND(8, 10);
-    }
 }
 
 #undef tState
