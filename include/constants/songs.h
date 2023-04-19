@@ -547,7 +547,6 @@
 #define MUS_CELEBI                  613
 #define MUS_MURENA                  614
 #define MUS_CEDARRED_DAY            615
-#define MUS_DRUMTEST                616
 
 #define MUS_ROUTE118                0x7FFF  // Map is split into 2 music sections. controlled by GetCurrLocationDefaultMusic().
 
