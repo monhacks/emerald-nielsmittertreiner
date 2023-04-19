@@ -3072,7 +3072,8 @@ extern const u8 gText_Pokenav2_Eurus[];
 
 extern const u8 gText_Pokenav2_PlayersAgenda[];
 extern const u8 gText_Pokenav2_ClockMode[];
-extern const u8 gText_Pokenav2_TodaysEvents[];
+extern const u8 gText_Pokenav2_ActiveQuests[];
+extern const u8 gText_Pokenav2_NoActiveQuests[];
 extern const u8 gText_Pokenav2_WeatherForecast[];
 extern const u8 gText_Pokenav2_NoReport[];
 extern const u8 gText_Pokenav2_SunnyClouds[];
@@ -3087,29 +3088,6 @@ extern const u8 gText_Pokenav2_Shade[];
 extern const u8 gText_Pokenav2_Drought[];
 extern const u8 gText_Pokenav2_Downpour[];
 extern const u8 gText_Pokenav2_Abnormal[];
-
-extern const u8 gText_Pokenav2_EventDescription[];
-extern const u8 gText_Pokenav2_EventLocation[];
-extern const u8 gText_Pokenav2_EventTimes[];
-extern const u8 gText_Pokenav2_LeftArrow[];
-
-extern const u8 gText_Pokenav2_Lottery[];
-extern const u8 gText_Pokenav2_Sale[];
-extern const u8 gText_Pokenav2_WorldTournament[];
-extern const u8 gText_Pokenav2_CatchingContest[];
-extern const u8 gText_Pokenav2_TreasureHunt[];
-extern const u8 gText_Pokenav2_SafariZone[];
-extern const u8 gText_Pokenav2_CELNautilus[];
-extern const u8 gText_Pokenav2_Market[];
-
-extern const u8 gText_Pokenav2_LotteryDesc[];
-extern const u8 gText_Pokenav2_SaleDesc[];
-extern const u8 gText_Pokenav2_WorldTournamentDesc[];
-extern const u8 gText_Pokenav2_CatchingContestDesc[];
-extern const u8 gText_Pokenav2_TreasureHuntDesc[];
-extern const u8 gText_Pokenav2_SafariZoneDesc[];
-extern const u8 gText_Pokenav2_CELNautilusDesc[];
-extern const u8 gText_Pokenav2_MarketDesc[];
 
 extern const u8 gText_Pokenav2_EurusRadio[];
 

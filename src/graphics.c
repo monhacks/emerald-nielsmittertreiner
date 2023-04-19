@@ -1530,3 +1530,9 @@ const u16 sSpeechBubblePalette[] = INCBIN_U16("graphics/speech_bubble/speech_bub
 // Popup Window Border
 const u8 gPopUpWindowBorder_Tiles[] = INCBIN_U8("graphics/interface/window_popup_tiles.4bpp");\
 const u16 gPopUpWindowBorder_Palette[] = INCBIN_U16("graphics/interface/map_popup_palette.gbapal");
+const u8 gQuestPopUpIconTiles[] = INCBIN_U8("graphics/interface/quest_popup_icons.4bpp");
+const u16 gQuestPopUpIconPalette[] = INCBIN_U16("graphics/interface/quest_popup_icons.gbapal");
+
+// Pokenav V2
+const u8 gQuestIconTiles[] = INCBIN_U8("graphics/pokenav_v2/quest_icons.4bpp");
+const u16 gQuestIconPalette[] = INCBIN_U16("graphics/pokenav_v2/quest_icons.gbapal");

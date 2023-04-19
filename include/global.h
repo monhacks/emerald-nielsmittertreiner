@@ -8,6 +8,7 @@
 #include "constants/global.h"
 #include "constants/flags.h"
 #include "constants/vars.h"
+#include "constants/quests.h"
 #include "constants/species.h"
 #include "constants/pokedex.h"
 #include "constants/berry.h"
@@ -134,6 +135,7 @@
 #define NUM_DEX_FLAG_BYTES ROUND_BITS_TO_BYTES(NUM_SPECIES)
 #define NUM_FLAG_BYTES ROUND_BITS_TO_BYTES(FLAGS_COUNT)
 #define NUM_ADDITIONAL_PHRASE_BYTES ROUND_BITS_TO_BYTES(NUM_ADDITIONAL_PHRASES)
+#define NUM_QUEST_BYTES ROUND_BITS_TO_BYTES(NUM_QUESTS)
 
 struct Coords8
 {
@@ -1053,6 +1055,7 @@ struct SaveBlock1
     /*0x3C88*/ u8 registeredTexts[UNION_ROOM_KB_ROW_COUNT][21];
     /*0x3D64*/ struct TrainerHillSave trainerHill;
     /*0x3D70*/ struct WaldaPhrase waldaPhrase;
+    u8 quests[NUM_QUEST_BYTES];
     // sizeof: 0x3D88
 };
 
