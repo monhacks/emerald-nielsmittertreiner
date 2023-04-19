@@ -536,7 +536,7 @@ u8 AddMapNamePopUpWindow(void)
 {
     if (sPrimaryPopupWindowId == WINDOW_NONE)
         sPrimaryPopupWindowId = AddWindowParameterized(0, 0, 0, 30, 3, 14, 0x107);
-    return sPrimaryPopupWindowId ;
+    return sPrimaryPopupWindowId;
 }
 
 u8 GetPrimaryPopUpWindowId(void)

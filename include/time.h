@@ -2,7 +2,6 @@
 #define GUARD_TIME_H
 
 extern struct InGameClock gInGameClock;
-
 extern const u8 *const gText_DaysOfWeek[];
 
 void InGameClock_Run(void);

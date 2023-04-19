@@ -41,6 +41,7 @@ static void Task_TitleScreenPhase1(u8);
 static void Task_TitleScreenPhase2(u8);
 static void Task_TitleScreenPhase3(u8);
 static void CB2_GoToMainMenu(void);
+static void CB2_GoToContinueSavedGame(void);
 static void CB2_GoToClearSaveDataScreen(void);
 static void CB2_GoToContinueSavedGame(void);
 static void CB2_GoToResetRtcScreen(void);

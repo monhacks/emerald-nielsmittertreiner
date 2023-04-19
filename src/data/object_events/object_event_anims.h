@@ -795,7 +795,8 @@ static const union AnimCmd sAnim_HoOhStayStill[] =
     ANIMCMD_JUMP(0),
 };
 
-static const union AnimCmd *const sAnimTable_Inanimate[] = {
+static const union AnimCmd *const sAnimTable_Inanimate[] =
+{
     [ANIM_STAY_STILL] = sAnim_StayStill,
 };
 

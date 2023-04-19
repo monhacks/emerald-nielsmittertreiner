@@ -21,7 +21,7 @@
 #include "constants/rgb.h"
 #include "data/text/quest_descriptions.h"
 
-#define TAG_QUEST_ICON 0x100
+#define TAG_QUEST_ICON 0x8001
 
 static u8 *GetQuestPointer(u16 id);
 static void Task_QuestPopUpWindow(u8 taskId);
@@ -118,7 +118,6 @@ static u8 *GetQuestPointer(u16 id)
 {
     if (id > NUM_QUESTS - 1)
         return NULL;
-
     return &gSaveBlock1Ptr->quests[id / 8];
 }
 
@@ -211,8 +210,8 @@ void HideQuestPopUpWindow(void)
 {
     if (FuncIsActiveTask(Task_QuestPopUpWindow))
     {
-        //ClearStdWindowAndFrame(GetPrimaryPopUpWindowId(), TRUE);
-        //ClearStdWindowAndFrame(GetSecondaryPopUpWindowId(), TRUE);
+        ClearStdWindowAndFrame(GetPrimaryPopUpWindowId(), TRUE);
+        ClearStdWindowAndFrame(GetSecondaryPopUpWindowId(), TRUE);
         RemovePrimaryPopUpWindow();
         RemoveSecondaryPopUpWindow();
         ScanlineEffect_Stop();
@@ -278,11 +277,6 @@ static void Task_QuestPopUpWindow(u8 taskId)
         }
         break;
     case 4:
-        ClearStdWindowAndFrame(GetPrimaryPopUpWindowId(), TRUE);
-        ClearStdWindowAndFrame(GetSecondaryPopUpWindowId(), TRUE);
-        task->data[0] = 5;
-        break;
-    case 5:
         HideQuestPopUpWindow();
         return;
     }
@@ -295,7 +289,7 @@ static void ShowQuestPopUpWindow(void)
     s16 *data = gTasks[gPopupTaskId].data;
     u8 string[QUEST_NAME_LENGTH];
     u8 *txtPtr;
-
+    
     SetGpuRegBits(REG_OFFSET_WININ, WININ_WIN0_CLR);
     LoadSpritePalette(&sSpritePalette_QuestIcons);
     LoadSpriteSheet(&sSpriteSheet_QuestIcons);
@@ -345,8 +339,6 @@ static void SpriteCB_QuestIcons(struct Sprite *sprite)
     if (!FuncIsActiveTask(Task_QuestPopUpWindow))
         DestroySpriteAndFreeResources(sprite);
 }
-
-
 
 u8 QuestProgressFunc1(void)
 {
