@@ -63,6 +63,7 @@
 #include "frontier_util.h"
 #include "follow_me.h"
 #include "time.h"
+#include "debug/mgba.h"
 #include "constants/abilities.h"
 #include "constants/layouts.h"
 #include "constants/map_types.h"
@@ -1104,16 +1105,12 @@ static bool16 IsInflitratedSpaceCenter(struct WarpData *warp)
 
 u16 GetLocationMusic(struct WarpData *warp)
 {
-    if (NoMusicInSotopolisWithLegendaries(warp) == TRUE)
-        return MUS_NONE;
-    else if (ShouldLegendaryMusicPlayAtLocation(warp) == TRUE)
-        return MUS_ABNORMAL_WEATHER;
-    else if (IsInflitratedSpaceCenter(warp) == TRUE)
-        return MUS_ENCOUNTER_MAGMA;
-    else if (IsInfiltratedWeatherInstitute(warp) == TRUE)
-        return MUS_MT_CHIMNEY;
-    else
-        return Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->music;
+    u16 musicNight = Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->musicNight;
+
+    if (UpdateTimeOfDay() == TIME_OF_DAY_NIGHT && (musicNight != MUS_DUMMY || musicNight != MUS_NONE))
+        return musicNight;
+
+    return Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->music;
 }
 
 u16 GetCurrLocationDefaultMusic(void)
@@ -1617,6 +1614,10 @@ u8 UpdateSpritePaletteWithTime(u8 paletteNum)
 
 static void OverworldBasic(void)
 {
+    u8 time;
+    u16 music;
+
+    //mgba_printf(MGBA_LOG_DEBUG, "here");
     ScriptContext2_RunScript();
     RunTasks();
     AnimateSprites();
@@ -1626,7 +1627,7 @@ static void OverworldBasic(void)
     UpdatePaletteFade();
     UpdateTilesetAnimations();
     DoScheduledBgTilemapCopiesToVram();
-    if (!(gPaletteFade.active || (++sTimeUpdateCounter % 3600)))
+    if (!(gPaletteFade.active || (++sTimeUpdateCounter >= 3600)))
     {
         struct TimeBlendSettings cachedBlend =
         {
@@ -1636,7 +1637,13 @@ static void OverworldBasic(void)
         };
         
         sTimeUpdateCounter = 0;
-        UpdateTimeOfDay();
+        time = UpdateTimeOfDay();
+        if (time == TIME_OF_DAY_NIGHT || time == TIME_OF_DAY_DAY)
+        {
+            music = GetCurrLocationDefaultMusic();
+            if (GetCurrentMapMusic() != music)
+                FadeOutAndPlayNewMapMusic(music, 16);
+        }
         
         if (cachedBlend.time0 != currentTimeBlend.time0
          || cachedBlend.time1 != currentTimeBlend.time1
