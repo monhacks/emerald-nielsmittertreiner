@@ -1850,8 +1850,8 @@ const u8 gText_Thursday[] = _("THURSDAY");
 const u8 gText_Friday[] = _("FRIDAY");
 const u8 gText_Saturday[] = _("SATURDAY");
 
-const u8 gText_AM[] = _("AM");
-const u8 gText_PM[] = _("PM");
+const u8 gText_AM[] = _(" AM");
+const u8 gText_PM[] = _(" PM");
 
 // Pokénav V2
 const u8 gText_Pokenav2[] = _("POKéMON NAVIGATOR V2");
@@ -1860,8 +1860,8 @@ const u8 gText_Pokenav2_Agenda[] = _("AGENDA");
 const u8 gText_Pokenav2_Radio[] = _("RADIO");
 const u8 gText_Pokenav2_TurnOff[] = _("TURN OFF");
 
-const u8 gText_Pokenav2_MapDesc[] = _("Show the beautiful EURUS REGION\nin all its glory on a map!");
-const u8 gText_Pokenav2_AgendaDesc[] = _("Discover daily events and\ncheck out the weather forecast!");
+const u8 gText_Pokenav2_MapDesc[] = _("View the beautiful EURUS REGION\nin all its glory on a map!");
+const u8 gText_Pokenav2_AgendaDesc[] = _("Track your active quests and\ncheck out the weather forecast!");
 const u8 gText_Pokenav2_RadioDesc[] = _("Listen to your favorite radio\nstations from the EURUS REGION!");
 const u8 gText_Pokenav2_TurnOffDesc[] = _("Turn off the POKéNAV.\nReturn to the field.");
 
