@@ -319,7 +319,7 @@ static const u8 sText_GiveItemDesc[] = _("GIVE YOURSELF ANY\nITEM IN YOUR BAG.")
 static const u8 sText_ChangeGenderDesc[] = _("CHANGE YOUR GENDER.");
 
 // specifics
-static const u8 sText_VanadiumTeam[] = _("JENA197, MOXIC, SPACESAUR,\nSENNA, ETHAN, N3RL, MORGAN,\nHOUSEFISH, AQUAMARINEKNIGHT");
+static const u8 sText_VanadiumTeam[] = _("JENA197, MOXIC, SPACESAUR,\nSENNA, ETHAN, N3RL, MORGAN,\nHOUSEFISH, AQUAMARINEKNIGHT,\nEKAT");
 
 static const u8 sText_True[] = _("TRUE");
 static const u8 sText_False[] = _("FALSE");
