@@ -14,18 +14,19 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "down",
+      "map": "MAP_ROUTE402",
       "offset": 8,
-      "map": "MAP_ROUTE402"
+      "direction": "down"
     },
     {
-      "direction": "right",
+      "map": "MAP_ROUTE403",
       "offset": 4,
-      "map": "MAP_ROUTE403"
+      "direction": "right"
     }
   ],
   "object_events": [
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_EXPERT_F",
       "x": 37,
       "y": 10,
@@ -39,6 +40,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_LITTLE_GIRL",
       "x": 11,
       "y": 16,
@@ -52,6 +54,7 @@
       "flag": "FLAG_HIDE_FIRWEALD_CITY_LITTLE_GIRL"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_LASS",
       "x": 14,
       "y": 21,
@@ -65,6 +68,7 @@
       "flag": "FLAG_HIDE_FIRWEALD_CITY_LASS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_FISHERMAN",
       "x": 13,
       "y": 11,
@@ -78,6 +82,7 @@
       "flag": "FLAG_HIDE_FIRWEALD_CITY_FISHERMAN"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_RUNNING_TRIATHLETE_M",
       "x": 22,
       "y": 19,
@@ -91,6 +96,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_MANIAC",
       "x": 42,
       "y": 14,
@@ -104,6 +110,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_LITTLE_BOY",
       "x": 33,
       "y": 25,
@@ -117,6 +124,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
       "x": 4,
       "y": 13,
@@ -130,6 +138,7 @@
       "flag": "FLAG_ITEM_FIRWEALD_CITY_HYPER_POTION"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_PHYLLOS",
       "x": 37,
       "y": 16,
@@ -149,49 +158,49 @@
       "y": 7,
       "elevation": 0,
       "dest_map": "MAP_FIRWEALD_CITY_POKEMON_CENTER_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 5,
       "y": 7,
       "elevation": 0,
       "dest_map": "MAP_FIRWEALD_CITY_MART",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 26,
       "y": 16,
       "elevation": 0,
       "dest_map": "MAP_FIRWEALD_CITY_HOUSE1",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 26,
       "y": 24,
       "elevation": 0,
       "dest_map": "MAP_FIRWEALD_CITY_DUPLEX",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 29,
       "y": 24,
       "elevation": 0,
       "dest_map": "MAP_FIRWEALD_CITY_DUPLEX",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 37,
       "y": 9,
       "elevation": 0,
       "dest_map": "MAP_FOREST_TUNNEL",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 37,
       "y": 16,
       "elevation": 0,
       "dest_map": "MAP_FIRWEALD_CITY_TOURNAMENT_HALL_LOBBY",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [
@@ -279,5 +288,6 @@
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
       "script": "FirwealdCity_EventScript_CitySign"
     }
-  ]
+  ],
+  "music_night": "MUS_FIRWEALD_NIGHT"
 }
