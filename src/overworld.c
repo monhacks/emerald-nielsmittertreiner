@@ -67,6 +67,7 @@
 #include "constants/abilities.h"
 #include "constants/layouts.h"
 #include "constants/map_types.h"
+#include "constants/rgb.h"
 #include "constants/region_map_sections.h"
 #include "constants/songs.h"
 #include "constants/trainer_hill.h"
@@ -1490,19 +1491,19 @@ const struct BlendSettings gTimeOfDayBlend[] =
     [TIME_OF_DAY_NIGHT] = 
     {
         .coeff = 10,
-        .blendColor = 0x1400,
+        .blendColor = RGB(0, 0, 5),
         .isTint = FALSE,
     },
     [TIME_OF_DAY_TWILIGHT] =
     {
         .coeff = 4,
-        .blendColor = 0x15DC,
+        .blendColor = RGB(28, 14, 5),
         .isTint = TRUE,
     },
     [TIME_OF_DAY_DAY] =
     {
         .coeff = 0,
-        .blendColor = 0,
+        .blendColor = RGB(0, 0, 0),
         .isTint = FALSE,
     },
 };
