@@ -72,6 +72,7 @@ static void Task_BuildTitleScreenMenu(u8);
 static void Task_TitleScreenPhase3(u8);
 static void Task_TitleScreenHandleAPress(u8);
 static void CB2_GoToMainMenu(void);
+static void CB2_GoToContinueSavedGame(void);
 static void CB2_GoToClearSaveDataScreen(void);
 static void CB2_GoToNewGame(void);
 static void CB2_GoToContinueSavedGame(void);

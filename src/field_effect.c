@@ -2602,7 +2602,6 @@ static void FieldMoveShowMonEffect_Init(struct Task *task)
     SetGpuReg(REG_OFFSET_BG0VOFS, 0);
     SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG0 | BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
     SetGpuRegBits(REG_OFFSET_WININ, WININ_WIN0_CLR);
-
     LoadPalette(sFieldEffectPopUp_Palette, 0xE0, sizeof(sFieldEffectPopUp_Palette));
     AddFieldEffectPopUpWindow();
     PutWindowTilemap(popupWindowId);

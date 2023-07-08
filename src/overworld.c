@@ -63,7 +63,6 @@
 #include "frontier_util.h"
 #include "follow_me.h"
 #include "time.h"
-#include "debug/mgba.h"
 #include "constants/abilities.h"
 #include "constants/layouts.h"
 #include "constants/map_types.h"
@@ -1583,7 +1582,6 @@ static bool8 FadePalettesWithTime(void)
 void UpdatePalettesWithTime(u32 palettes)
 {
     u16 i;
-    u16 tempPaletteBuffer[16];
 
     // Only blend if not transitioning between times and the map type allows
     if (MapHasNaturalLight(gMapHeader.mapType))
@@ -1618,7 +1616,6 @@ static void OverworldBasic(void)
     u8 time;
     u16 music;
 
-    //mgba_printf(MGBA_LOG_DEBUG, "here");
     ScriptContext2_RunScript();
     RunTasks();
     AnimateSprites();

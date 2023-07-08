@@ -31,7 +31,6 @@ EWRAM_DATA struct MapHeader gMapHeader = {0};
 EWRAM_DATA struct Camera gCamera = {0};
 EWRAM_DATA static struct ConnectionFlags gMapConnectionFlags = {0};
 EWRAM_DATA static u32 sFiller = 0; // without this, the next file won't align properly
-EWRAM_DATA struct Coords16 gLightMetatiles[32] = {0};
 
 struct BackupMapLayout gBackupMapLayout;
 

@@ -153,6 +153,7 @@ FirwealdCity_EventScript_Fisherman_5:
 
 FirwealdCity_EventScript_Triathlete::
 	msgbox FirwealdCity_EventScript_Triathlete_Text_0, MSGBOX_NPC
+	enablequest QUEST_TEST
 	end
 
 

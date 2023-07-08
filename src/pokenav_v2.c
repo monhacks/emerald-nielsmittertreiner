@@ -1366,7 +1366,27 @@ static void Task_Agenda(u8 taskId)
                 sPokenav2Ptr->printDelayCounter--;
             }
         }
-        else
+        else if (sPokenav2Ptr->printDelayCounter == 0)
+        {
+            if (sPokenav2Ptr->numLinesPrinted == 0)
+            {
+                for (u32 i = 0; i < 2; i++)
+                    PrintQuestDescription(sPokenav2Ptr->description[i]);
+            }
+            else if (sPokenav2Ptr->numLinesPrinted < sPokenav2Ptr->numLinesMax)
+            {
+                PrintQuestDescription(sPokenav2Ptr->description[sPokenav2Ptr->numLinesPrinted]);
+            }
+            else if (sPokenav2Ptr->numLinesPrinted == sPokenav2Ptr->numLinesMax && sPokenav2Ptr->numLinesMax > 2)
+            {
+                FillWindowPixelBuffer(WIN_AGENDA_QUESTS_PROGRESS, PIXEL_FILL(0));
+                CopyWindowToVram(WIN_AGENDA_QUESTS_PROGRESS, COPYWIN_GFX);
+                sPokenav2Ptr->scrollDelayCounter = 0;
+                sPokenav2Ptr->printDelayCounter = GetFontAttribute(FONT_SHORT, FONTATTR_MAX_LETTER_HEIGHT) / 2;
+                sPokenav2Ptr->numLinesPrinted = 0;
+            }
+        }
+        else if (sPokenav2Ptr->numLinesMax > 2)
         {
             sPokenav2Ptr->scrollDelayCounter--;
         }
