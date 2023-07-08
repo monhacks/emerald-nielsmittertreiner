@@ -8,6 +8,7 @@
 #include "palette.h"
 #include "gpu_regs.h"
 #include "bg.h"
+#include "scanline_effect.h"
 #include "text_window.h"
 #include "constants/songs.h"
 #include "constants/rgb.h"
@@ -157,6 +158,8 @@ static bool8 SetupClearSaveDataScreen(void)
         ResetTasks();
         ResetSpriteData();
         ResetBgsAndClearDma3BusyFlags(0);
+        ScanlineEffect_Clear();
+        ScanlineEffect_Stop();
         InitBgsFromTemplates(0, sClearSaveBgTemplates, ARRAY_COUNT(sClearSaveBgTemplates));
         SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
         ShowBg(0);

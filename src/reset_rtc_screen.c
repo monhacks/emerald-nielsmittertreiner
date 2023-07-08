@@ -520,8 +520,8 @@ void CB2_InitResetRtcScreen(void)
     DmaFillLarge16(3, 0, (u8 *)VRAM, VRAM_SIZE, 0x1000);
     ResetOamRange(0, 128);
     LoadOam();
-    ScanlineEffect_Stop();
     ScanlineEffect_Clear();
+    ScanlineEffect_Stop();
     ResetSpriteData();
     ResetTasks();
     ResetPaletteFade();
