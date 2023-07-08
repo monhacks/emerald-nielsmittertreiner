@@ -734,26 +734,6 @@ const struct SpriteTemplate sSpriteTemplate_AgendaClockIcons =
     .callback = SpriteCallbackDummy
 };
 
-void StartBenchmark(void)
-{
-    REG_TMCNT_L(2) = 0;
-    REG_TMCNT_L(3) = 0;
-
-    REG_TMCNT_H(2) = 0;
-    REG_TMCNT_H(3) = 0;
-    
-    REG_TMCNT_H(3) = TIMER_ENABLE | 0x4;
-    REG_TMCNT_H(2) = TIMER_1CLK | TIMER_ENABLE;
-}
-
-u32 EndBenchmark(void)
-{
-    REG_TMCNT_H(2) = 0;
-    REG_TMCNT_H(3) = 0;
-
-    return REG_TMCNT_L(2) | (REG_TMCNT_L(3) << 16);
-}
-
 void CB2_InitPokenav2(void)
 {
     u32 bench;
