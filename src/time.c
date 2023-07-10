@@ -19,7 +19,7 @@ void InGameClock_Run(void)
 {
     gSaveBlock2Ptr->inGameClock.vblanks++;
 
-    // 20 vblanks for a 72 hour cycle
+    // 20 vblanks for a 8 hour cycle
     if (gSaveBlock2Ptr->inGameClock.vblanks < 10)
         return;
 
