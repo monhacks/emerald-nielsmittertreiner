@@ -2,6 +2,7 @@
 #include "overworld.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
+#include "battle_transition.h"
 #include "berry.h"
 #include "bg.h"
 #include "cable_club.h"
@@ -1625,7 +1626,8 @@ static void OverworldBasic(void)
     UpdatePaletteFade();
     UpdateTilesetAnimations();
     DoScheduledBgTilemapCopiesToVram();
-    if (!(gPaletteFade.active || (++sTimeUpdateCounter >= 3600)))
+
+    if (!gPaletteFade.active && ++sTimeUpdateCounter >= 600)
     {
         struct TimeBlendSettings cachedBlend =
         {
@@ -1636,7 +1638,7 @@ static void OverworldBasic(void)
         
         sTimeUpdateCounter = 0;
         time = UpdateTimeOfDay();
-        if (time == TIME_OF_DAY_NIGHT || time == TIME_OF_DAY_DAY)
+        if (!gIsInBattleTransition && (time == TIME_OF_DAY_NIGHT || time == TIME_OF_DAY_DAY))
         {
             music = GetCurrLocationDefaultMusic();
             if (GetCurrentMapMusic() != music)

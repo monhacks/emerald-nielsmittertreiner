@@ -288,6 +288,8 @@ static bool8 MugshotTrainerPic_Slide(struct Sprite *);
 static bool8 MugshotTrainerPic_SlideSlow(struct Sprite *);
 static bool8 MugshotTrainerPic_SlideOffscreen(struct Sprite *);
 
+EWRAM_DATA u8 gIsInBattleTransition = FALSE;
+
 static s16 sDebug_RectangularSpiralData;
 static u8 sTestingTransitionId;
 static u8 sTestingTransitionState;
@@ -1046,6 +1048,7 @@ bool8 IsBattleTransitionDone(void)
     {
         DestroyTask(taskId);
         FREE_AND_SET_NULL(sTransitionData);
+        gIsInBattleTransition = FALSE;
         return TRUE;
     }
     else

@@ -9,6 +9,7 @@ void Task_BattleTransition_Intro(u8 taskId);
 void GetBg0TilesDst(u16 **tilemap, u16 **tileset);
 
 extern const struct SpritePalette gSpritePalette_Pokeball;
+extern u8 gIsInBattleTransition;
 
 enum {
     MUGSHOT_SIDNEY,
