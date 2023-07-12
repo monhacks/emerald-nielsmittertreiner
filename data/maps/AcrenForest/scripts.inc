@@ -1,7 +1,12 @@
 AcrenForest_MapScripts::
+	map_script MAP_SCRIPT_ON_RESUME, AcrenForest_MapScripts_MAP_SCRIPT_ON_RESUME
 	map_script MAP_SCRIPT_ON_TRANSITION, AcrenForest_MapScripts_MAP_SCRIPT_ON_TRANSITION
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, AcrenForest_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE
 	.byte 0
+
+AcrenForest_MapScripts_MAP_SCRIPT_ON_RESUME:
+	callnative UpdateMovementDynamicMusic
+	return
 
 AcrenForest_MapScripts_MAP_SCRIPT_ON_TRANSITION:
 	compare VAR_ACREN_FOREST_STATE, 2
