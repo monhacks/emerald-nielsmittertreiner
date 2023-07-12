@@ -108,7 +108,7 @@ FirwealdCity_EventScript_BlockPath::
 	msgbox FirwealdCity_EventScript_BlockPath_Text_0
 	destroy_speech_bubble
 	closemessage
-	applymovement 6 FirwealdCity_Movement_PushBackPlayer
+	applymovement 6, FirwealdCity_Movement_PushBackPlayer
 	applymovement OBJ_EVENT_ID_PLAYER, FirwealdCity_Movement_WalkBack
 	waitmovement 0
 	applymovement 6, Common_Movement_WalkUp

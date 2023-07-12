@@ -126,7 +126,7 @@ script FirwealdCity_EventScript_BlockPath {
 	           "tree right here.")
         destroy_speech_bubble
         closemessage
-        applymovement(LOCALID_MANIAC FirwealdCity_Movement_PushBackPlayer)
+        applymovement(LOCALID_MANIAC, FirwealdCity_Movement_PushBackPlayer)
         applymovement(OBJ_EVENT_ID_PLAYER, FirwealdCity_Movement_WalkBack)
         waitmovement(0)
         applymovement(LOCALID_MANIAC, Common_Movement_WalkUp)
