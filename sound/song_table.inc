@@ -611,7 +611,6 @@ gSongTable::
 	song ph_nurse_blend, 2, 2
 	song ph_nurse_held, 2, 2
 	song ph_nurse_solo, 2, 2
-	song mus_acren_forest, 0, 0
 	song mus_route403, 0, 0
 	song mus_sunset, 0, 0
 	song mus_celebi, 0, 0
@@ -620,6 +619,8 @@ gSongTable::
 	song mus_simple_town_day, 0, 0
 	song mus_firweald_night, 0, 0
 	song mus_litor_day, 0, 0
+	song mus_acren_forest_day, 0, 0
+	song mus_acren_forest_night, 0, 0
 
 	.align 2
 dummy_song_header:

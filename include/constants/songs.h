@@ -541,15 +541,16 @@
 #define PH_NURSE_HELD               608
 #define PH_NURSE_SOLO               609
 
-#define MUS_ACREN_FOREST            610
-#define MUS_ROUTE403                611
-#define MUS_SUNSET                  612
-#define MUS_CELEBI                  613
-#define MUS_MURENA                  614
-#define MUS_CEDARRED_DAY            615
-#define MUS_SIMPLE_TOWN_DAY         616
-#define MUS_FIRWEALD_NIGHT          617
-#define MUS_LITOR_DAY               618
+#define MUS_ROUTE403                610
+#define MUS_SUNSET                  611
+#define MUS_CELEBI                  612
+#define MUS_MURENA                  613
+#define MUS_CEDARRED_DAY            614
+#define MUS_SIMPLE_TOWN_DAY         615
+#define MUS_FIRWEALD_NIGHT          616
+#define MUS_LITOR_DAY               617
+#define MUS_ACREN_FOREST_DAY        618
+#define MUS_ACREN_FOREST_NIGHT      619
 
 #define MUS_ROUTE118                0x7FFF  // Map is split into 2 music sections. controlled by GetCurrLocationDefaultMusic().
 

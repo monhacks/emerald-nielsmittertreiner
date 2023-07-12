@@ -1249,7 +1249,6 @@ SECTIONS {
         sound/songs/midi/ph_nurse_blend.o(.rodata);
         sound/songs/midi/ph_nurse_held.o(.rodata);
         sound/songs/midi/ph_nurse_solo.o(.rodata);
-        sound/songs/midi/mus_acren_forest.o(.rodata);
         sound/songs/midi/mus_route403.o(.rodata);
         sound/songs/midi/mus_sunset.o(.rodata);
         sound/songs/midi/mus_celebi.o(.rodata);
@@ -1258,6 +1257,8 @@ SECTIONS {
         sound/songs/midi/mus_simple_town_day.o(.rodata);
         sound/songs/midi/mus_firweald_night.o(.rodata);
         sound/songs/midi/mus_litor_day.o(.rodata);
+        sound/songs/midi/mus_acren_forest_day.o(.rodata);
+        sound/songs/midi/mus_acren_forest_night.o(.rodata);
     } =0
 
     lib_rodata :

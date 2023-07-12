@@ -1263,9 +1263,6 @@ $(MID_SUBDIR)/se_m_leer.s: %.s: %.mid
 $(MID_SUBDIR)/se_dex_search.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G127 -v100 -P5
 
-$(MID_SUBDIR)/mus_acren_forest.s: %.s: %.mid
-	$(MID) $< $@ -E -R$(STD_REVERB) -G191 -v100
-
 $(MID_SUBDIR)/mus_route403.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G192 -v100
 
@@ -1289,3 +1286,9 @@ $(MID_SUBDIR)/mus_firweald_night.s: %.s: %.mid
 
 $(MID_SUBDIR)/mus_litor_day.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G200 -v100
+
+$(MID_SUBDIR)/mus_acren_forest_day.s: %.s: %.mid
+	$(MID) $< $@ -E -R$(STD_REVERB) -G191 -v100
+
+$(MID_SUBDIR)/mus_acren_forest_night.s: %.s: %.mid
+	$(MID) $< $@ -E -R$(STD_REVERB) -G202 -v100

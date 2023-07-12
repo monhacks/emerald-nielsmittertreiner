@@ -2,7 +2,7 @@
   "id": "MAP_ACREN_FOREST",
   "name": "AcrenForest",
   "layout": "LAYOUT_ACREN_FOREST",
-  "music": "MUS_ACREN_FOREST",
+  "music": "MUS_ACREN_FOREST_DAY",
   "region_map_section": "MAPSEC_ACREN_FOREST",
   "requires_flash": false,
   "weather": "WEATHER_SHADE",
@@ -15,6 +15,7 @@
   "connections": 0,
   "object_events": [
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_CUTTABLE_TREE",
       "x": 69,
       "y": 6,
@@ -28,6 +29,7 @@
       "flag": "FLAG_TEMP_1"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_LASS",
       "x": 62,
       "y": 4,
@@ -41,6 +43,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_BUG_CATCHER",
       "x": 55,
       "y": 22,
@@ -54,6 +57,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_YOUNGSTER",
       "x": 70,
       "y": 27,
@@ -67,6 +71,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_BUG_CATCHER",
       "x": 47,
       "y": 11,
@@ -80,6 +85,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_BUG_CATCHER",
       "x": 42,
       "y": 25,
@@ -93,6 +99,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_LASS",
       "x": 44,
       "y": 9,
@@ -106,6 +113,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_BOY_3",
       "x": 52,
       "y": 27,
@@ -119,6 +127,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_M",
       "x": 38,
       "y": 10,
@@ -132,6 +141,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS_BLOCKING"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_M",
       "x": 38,
       "y": 11,
@@ -145,6 +155,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS_BLOCKING"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
       "x": 48,
       "y": 13,
@@ -158,6 +169,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
       "x": 70,
       "y": 18,
@@ -171,6 +183,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
       "x": 70,
       "y": 19,
@@ -184,6 +197,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_BERRY_TREE",
       "x": 70,
       "y": 20,
@@ -197,6 +211,7 @@
       "flag": "0"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
       "x": 68,
       "y": 4,
@@ -210,6 +225,7 @@
       "flag": "FLAG_ITEM_ACREN_FOREST_GREAT_BALL"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_ITEM_BALL",
       "x": 36,
       "y": 8,
@@ -223,6 +239,7 @@
       "flag": "FLAG_ITEM_ACREN_FOREST_POKE_BALL"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_CAMPER",
       "x": 55,
       "y": 30,
@@ -236,6 +253,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_LOGGERS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_CAMPER",
       "x": 56,
       "y": 30,
@@ -249,6 +267,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_LOGGERS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_CAMPER",
       "x": 54,
       "y": 31,
@@ -262,6 +281,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_LOGGERS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_CAMPER",
       "x": 57,
       "y": 31,
@@ -275,6 +295,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_LOGGERS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_F",
       "x": 20,
       "y": 8,
@@ -288,6 +309,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_M",
       "x": 8,
       "y": 9,
@@ -301,6 +323,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_F",
       "x": 12,
       "y": 12,
@@ -314,6 +337,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_M",
       "x": 15,
       "y": 11,
@@ -327,6 +351,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_F",
       "x": 5,
       "y": 15,
@@ -340,6 +365,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_M",
       "x": 12,
       "y": 21,
@@ -353,6 +379,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_F",
       "x": 19,
       "y": 24,
@@ -366,6 +393,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_F",
       "x": 10,
       "y": 30,
@@ -379,6 +407,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNTS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_AIRLOCK_MEMBER_M",
       "x": 6,
       "y": 28,
@@ -392,6 +421,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_GRUNT_GUARD"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_PHYLLOS",
       "x": 7,
       "y": 6,
@@ -405,6 +435,7 @@
       "flag": "FLAG_HIDE_ACREN_FOREST_PHYLLOS"
     },
     {
+      "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_PHYLLOS",
       "x": 84,
       "y": 7,
@@ -424,77 +455,77 @@
       "y": 32,
       "elevation": 0,
       "dest_map": "MAP_CEDARRED_TOWN",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 56,
       "y": 32,
       "elevation": 0,
       "dest_map": "MAP_CEDARRED_TOWN",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 68,
       "y": 16,
       "elevation": 0,
       "dest_map": "MAP_ACREN_FOREST_PLANT_SHOP",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 53,
       "y": 5,
       "elevation": 0,
       "dest_map": "MAP_ROUTE402",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 54,
       "y": 5,
       "elevation": 0,
       "dest_map": "MAP_ROUTE402",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 31,
       "y": 29,
       "elevation": 0,
       "dest_map": "MAP_ACREN_FOREST",
-      "dest_warp_id": 8
+      "dest_warp_id": "8"
     },
     {
       "x": 32,
       "y": 29,
       "elevation": 0,
       "dest_map": "MAP_ACREN_FOREST",
-      "dest_warp_id": 9
+      "dest_warp_id": "9"
     },
     {
       "x": 84,
       "y": 5,
       "elevation": 0,
       "dest_map": "MAP_FOREST_TUNNEL",
-      "dest_warp_id": 6
+      "dest_warp_id": "6"
     },
     {
       "x": 5,
       "y": 5,
       "elevation": 0,
       "dest_map": "MAP_ACREN_FOREST",
-      "dest_warp_id": 5
+      "dest_warp_id": "5"
     },
     {
       "x": 6,
       "y": 5,
       "elevation": 0,
       "dest_map": "MAP_ACREN_FOREST",
-      "dest_warp_id": 6
+      "dest_warp_id": "6"
     },
     {
       "x": 6,
       "y": 27,
       "elevation": 0,
       "dest_map": "MAP_ACREN_FOREST_ILLEGAL_CABIN",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [
@@ -620,5 +651,6 @@
       "player_facing_dir": "BG_EVENT_PLAYER_FACING_NORTH",
       "script": "AcrenForest_EventScript_CelebiShrine"
     }
-  ]
+  ],
+  "music_night": "MUS_ACREN_FOREST_NIGHT"
 }

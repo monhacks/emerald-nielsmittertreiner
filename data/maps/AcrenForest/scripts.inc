@@ -457,7 +457,7 @@ AcrenForest_EventScript_SetShrineWeatherAndSong::
 
 
 AcrenForest_EventScript_SetDefaultWeatherAndSong::
-	fadenewbgm MUS_ACREN_FOREST
+	fadenewbgm MUS_ACREN_FOREST_DAY
 	resetweather
 	doweather
 	release
