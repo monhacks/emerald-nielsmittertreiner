@@ -4,9 +4,10 @@
 #include "battle.h"
 #include "m4a.h"
 #include "main.h"
+#include "overworld.h"
 #include "pokemon.h"
-#include "constants/songs.h"
 #include "task.h"
+#include "constants/songs.h"
 
 struct Fanfare
 {
@@ -16,6 +17,7 @@ struct Fanfare
 
 EWRAM_DATA struct MusicPlayerInfo* gMPlay_PokemonCry = NULL;
 EWRAM_DATA u8 gPokemonCryBGMDuckingCounter = 0;
+EWRAM_DATA s16 gMapMusicVolume = 0;
 
 static u16 sCurrentMapMusic;
 static u16 sNextMapMusic;
@@ -272,7 +274,10 @@ void FadeInBGM(u8 speed)
 
 void FadeOutBGM(u8 speed)
 {
-    m4aMPlayFadeOut(&gMPlayInfo_BGM, speed);
+    if (FindTaskIdByFunc(Task_UpdateMovementDynamicMusic) != TASK_NONE)
+       m4aMPlayFadeOutFromVol(&gMPlayInfo_BGM, speed, gMapMusicVolume);
+    else
+        m4aMPlayFadeOut(&gMPlayInfo_BGM, speed);
 }
 
 bool8 IsBGMStopped(void)

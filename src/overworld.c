@@ -65,6 +65,7 @@
 #include "follow_me.h"
 #include "time.h"
 #include "constants/abilities.h"
+#include "constants/field_effects.h"
 #include "constants/layouts.h"
 #include "constants/map_types.h"
 #include "constants/rgb.h"
@@ -82,6 +83,12 @@ struct CableClubPlayer
     u8 facing;
     struct MapPosition pos;
     u16 metatileBehavior;
+};
+
+struct DynamicMusicData
+{
+    u16 trackBits:12;
+    u16 fadeSpeed:4;
 };
 
 #define PLAYER_LINK_STATE_IDLE 0x80
@@ -180,6 +187,7 @@ static void TransitionMapMusic(void);
 static u8 GetAdjustedInitialTransitionFlags(struct InitialPlayerAvatarState *, u16, u8);
 static u8 GetAdjustedInitialDirection(struct InitialPlayerAvatarState *, u8, u16, u8);
 static u16 GetCenterScreenMetatileBehavior(void);
+static void Task_UpdateMovementDynamicMusicWait(u8 taskId);
 
 static void *sUnusedOverworldCallback;
 static u8 sPlayerLinkStates[MAX_LINK_PLAYERS];
@@ -328,6 +336,12 @@ static const struct ScanlineEffectParams sFlashEffectParams =
     ((DMA_ENABLE | DMA_START_HBLANK | DMA_REPEAT | DMA_DEST_RELOAD) << 16) | 1,
     1,
     0,
+};
+
+static const struct DynamicMusicData sDynamicMusicData[] =
+{
+    [MUS_ACREN_FOREST_DAY] = {0b000000000001, 7},
+    [MUS_ACREN_FOREST_NIGHT] = {0b111111111101, 7},
 };
 
 static u8 MovementEventModeCB_Normal(struct LinkPlayerObjectEvent *, struct ObjectEvent *, u8);
@@ -1106,12 +1120,16 @@ static bool16 IsInflitratedSpaceCenter(struct WarpData *warp)
 
 u16 GetLocationMusic(struct WarpData *warp)
 {
-    u16 musicNight = Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->musicNight;
+    const struct MapHeader *header = Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum);
 
-    if (UpdateTimeOfDay() == TIME_OF_DAY_NIGHT && (musicNight != MUS_DUMMY || musicNight != MUS_NONE))
-        return musicNight;
+    if (UpdateTimeOfDay() == TIME_OF_DAY_NIGHT)
+    {
+        u16 music = header->musicNight;
+        if (music != MUS_DUMMY && music != MUS_NONE)
+            return music;
+    }
 
-    return Overworld_GetMapHeaderByGroupAndId(warp->mapGroup, warp->mapNum)->music;
+    return header->music;
 }
 
 u16 GetCurrLocationDefaultMusic(void)
@@ -3406,3 +3424,78 @@ static void SpriteCB_LinkPlayer(struct Sprite *sprite)
         sprite->data[7]++;
     }
 }
+
+#define tOrigMapId data[0]
+#define tWaitForFly data[1]
+
+void UpdateMovementDynamicMusic(void)
+{
+    u8 taskId;
+
+    if (FindTaskIdByFunc(Task_UpdateMovementDynamicMusicWait) != TASK_NONE || FindTaskIdByFunc(Task_UpdateMovementDynamicMusic) != TASK_NONE)
+        return;
+
+    taskId = CreateTask(Task_UpdateMovementDynamicMusicWait, 64);
+    
+    if (FieldEffectActiveListContains(FLDEFF_FLY_IN) || FieldEffectActiveListContains(FLDEFF_USE_FLY))
+        gTasks[taskId].tWaitForFly = TRUE;
+    else
+        gTasks[taskId].tWaitForFly = FALSE;
+        
+    
+    gMapMusicVolume = 0;
+    gTasks[taskId].tOrigMapId = (gSaveBlock1Ptr->location.mapGroup << 8) | (gSaveBlock1Ptr->location.mapNum);
+}
+
+void Task_UpdateMovementDynamicMusic(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+    u16 currentMapId = (gSaveBlock1Ptr->location.mapGroup << 8) | (gSaveBlock1Ptr->location.mapNum);
+    u16 trackBits = sDynamicMusicData[GetCurrentMapMusic()].trackBits;
+    u16 fadeSpeed = sDynamicMusicData[GetCurrentMapMusic()].fadeSpeed + 1;
+    
+    if (currentMapId != task->tOrigMapId)
+    {
+        m4aMPlayFadeOutFromVol(&gMPlayInfo_BGM, 8, gMapMusicVolume);
+        DestroyTask(taskId);
+        return;
+    }
+    if (gPlayerAvatar.runningState == NOT_MOVING)
+    {
+        gMapMusicVolume -= fadeSpeed;
+        if (gMapMusicVolume <= 0)
+            gMapMusicVolume = 0;
+    }
+    else if (gPlayerAvatar.runningState == MOVING)
+    {
+        gMapMusicVolume += fadeSpeed;
+        if (gMapMusicVolume >= 256)
+            gMapMusicVolume = 256;
+    }
+
+    m4aMPlayVolumeControl(&gMPlayInfo_BGM, trackBits, (u16)gMapMusicVolume);
+}
+
+static void Task_UpdateMovementDynamicMusicWait(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+    u16 trackBits = sDynamicMusicData[GetCurrentMapMusic()].trackBits;
+
+    switch (task->tWaitForFly)
+    {
+    case TRUE:
+        if (!FieldEffectActiveListContains(FLDEFF_FLY_IN))
+        {
+            task->func = Task_UpdateMovementDynamicMusic;
+            m4aMPlayVolumeControl(&gMPlayInfo_BGM, trackBits, 0);
+        }
+        break;
+    case FALSE:
+        if (BGMusicStopped())
+            task->func = Task_UpdateMovementDynamicMusic;
+        break;
+    }
+}
+
+#undef tOrigMapId
+#undef tWaitForFly

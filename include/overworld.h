@@ -174,5 +174,7 @@ bool32 Overworld_RecvKeysFromLinkIsRunning(void);
 bool32 Overworld_SendKeysToLinkIsRunning(void);
 bool32 IsSendingKeysOverCable(void);
 void ClearLinkPlayerObjectEvents(void);
+void UpdateMovementDynamicMusic(void);
+void Task_UpdateMovementDynamicMusic(u8 taskId);
 
 #endif // GUARD_OVERWORLD_H

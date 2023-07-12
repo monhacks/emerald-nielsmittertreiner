@@ -12,6 +12,10 @@ const LOCALID_PHYLLOS = 30
 const LOCALID_PHYLLOS_2 = 31
 
 mapscripts AcrenForest_MapScripts {
+    MAP_SCRIPT_ON_RESUME
+    {
+        callnative(UpdateMovementDynamicMusic)
+    }
     MAP_SCRIPT_ON_TRANSITION {
         if (var(VAR_ACREN_FOREST_STATE) == 2) {
             setobjectxyperm(LOCALID_LOGGER_1, 39, 11)

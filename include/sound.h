@@ -3,6 +3,8 @@
 
 #include "constants/sound.h"
 
+extern s16 gMapMusicVolume;
+
 void MapMusicMain(void);
 void ResetMapMusic(void);
 u16 GetCurrentMapMusic(void);
