@@ -9146,3 +9146,23 @@ bool8 MovementActionFunc_RunSlow_Step1(struct ObjectEvent *objectEvent, struct S
     }
     return FALSE;
 }
+
+s16 GetCurrentDistanceFromPlayer(u8 localId, u8 mapNum, u8 mapGroupId)
+{
+    struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent *object = &gObjectEvents[GetObjectEventIdByLocalIdAndMap(localId, mapNum, mapGroupId)];
+    s32 dx = abs(player->currentCoords.x - object->currentCoords.x);
+    s32 dy = abs(player->currentCoords.y - object->currentCoords.y);
+
+    return max(dx, dy);
+}
+
+s16 GetPreviousDistanceFromPlayer(u8 localId, u8 mapNum, u8 mapGroupId)
+{
+    struct ObjectEvent *player = &gObjectEvents[gPlayerAvatar.objectEventId];
+    struct ObjectEvent *object = &gObjectEvents[GetObjectEventIdByLocalIdAndMap(localId, mapNum, mapGroupId)];
+    s32 dx = abs(player->previousCoords.x - object->currentCoords.x);;
+    s32 dy = abs(player->previousCoords.y - object->currentCoords.y);;
+
+    return max(dx, dy);
+}

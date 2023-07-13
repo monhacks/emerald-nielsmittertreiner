@@ -5,7 +5,7 @@ AcrenForest_MapScripts::
 	.byte 0
 
 AcrenForest_MapScripts_MAP_SCRIPT_ON_RESUME:
-	callnative UpdateMovementDynamicMusic
+	dynamicmusic DYNAMIC_MUSIC_MOVEMENT
 	return
 
 AcrenForest_MapScripts_MAP_SCRIPT_ON_TRANSITION:

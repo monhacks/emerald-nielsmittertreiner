@@ -274,7 +274,7 @@ void FadeInBGM(u8 speed)
 
 void FadeOutBGM(u8 speed)
 {
-    if (FindTaskIdByFunc(Task_UpdateMovementDynamicMusic) != TASK_NONE)
+    if (FindTaskIdByFunc(Task_UpdateMovementDynamicMusic) != TASK_NONE || FindTaskIdByFunc(Task_UpdateDistanceDynamicMusic) != TASK_NONE)
        m4aMPlayFadeOutFromVol(&gMPlayInfo_BGM, speed, gMapMusicVolume);
     else
         m4aMPlayFadeOut(&gMPlayInfo_BGM, speed);

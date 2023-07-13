@@ -2040,3 +2040,10 @@
 	.byte 0xed
 	.2byte \quest
 	.endm
+
+	@ Initializes dynamic music handling for current map
+	.macro dynamicmusic type:req, localId
+	.byte 0xee
+	.byte \type
+	.byte \localId
+	.endm

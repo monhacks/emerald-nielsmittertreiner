@@ -238,6 +238,7 @@ gScriptCmdTable::
 	.4byte ScrCmd_enablequest               @ 0xeb
 	.4byte ScrCmd_disablequest              @ 0xec
 	.4byte ScrCmd_checkquest                @ 0xed
+	.4byte ScrCmd_dynamicmusic              @ 0xee
 
 gScriptCmdTableEnd::
 	.4byte ScrCmd_nop

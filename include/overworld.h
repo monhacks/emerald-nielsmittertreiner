@@ -46,9 +46,15 @@ struct LinkPlayerObjectEvent
 
 struct __attribute__((packed)) TimeBlendSettings
 {
-  u16 weight:9;
-  u16 time1:3;
-  u16 time0:3;
+    u16 weight:9;
+    u16 time1:3;
+    u16 time0:3;
+};
+
+struct DynamicMusicData
+{
+    u16 trackBits:12;
+    u16 fadeSpeed:4;
 };
 
 // Exported RAM declarations
@@ -69,7 +75,7 @@ extern struct TimeBlendSettings currentTimeBlend;
 
 // Exported ROM declarations
 extern const struct UCoords32 gDirectionToVectors[];
-
+extern const struct DynamicMusicData gDynamicMusicData[];
 
 void DoWhiteOut(void);
 void Overworld_ResetStateAfterFly(void);
@@ -176,5 +182,7 @@ bool32 IsSendingKeysOverCable(void);
 void ClearLinkPlayerObjectEvents(void);
 void UpdateMovementDynamicMusic(void);
 void Task_UpdateMovementDynamicMusic(u8 taskId);
+void UpdateDistanceDynamicMusic(u8 localId);
+void Task_UpdateDistanceDynamicMusic(u8 taskId);
 
 #endif // GUARD_OVERWORLD_H

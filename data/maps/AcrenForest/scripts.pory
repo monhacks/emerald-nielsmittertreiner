@@ -14,7 +14,7 @@ const LOCALID_PHYLLOS_2 = 31
 mapscripts AcrenForest_MapScripts {
     MAP_SCRIPT_ON_RESUME
     {
-        callnative(UpdateMovementDynamicMusic)
+        dynamicmusic(DYNAMIC_MUSIC_MOVEMENT)
     }
     MAP_SCRIPT_ON_TRANSITION {
         if (var(VAR_ACREN_FOREST_STATE) == 2) {

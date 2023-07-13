@@ -5,6 +5,7 @@
 #include "battle_transition.h"
 #include "berry.h"
 #include "bg.h"
+#include "bike.h"
 #include "cable_club.h"
 #include "clock.h"
 #include "event_data.h"
@@ -83,12 +84,6 @@ struct CableClubPlayer
     u8 facing;
     struct MapPosition pos;
     u16 metatileBehavior;
-};
-
-struct DynamicMusicData
-{
-    u16 trackBits:12;
-    u16 fadeSpeed:4;
 };
 
 #define PLAYER_LINK_STATE_IDLE 0x80
@@ -188,6 +183,7 @@ static u8 GetAdjustedInitialTransitionFlags(struct InitialPlayerAvatarState *, u
 static u8 GetAdjustedInitialDirection(struct InitialPlayerAvatarState *, u8, u16, u8);
 static u16 GetCenterScreenMetatileBehavior(void);
 static void Task_UpdateMovementDynamicMusicWait(u8 taskId);
+static void Task_UpdateDistanceDynamicMusicWait(u8 taskId);
 
 static void *sUnusedOverworldCallback;
 static u8 sPlayerLinkStates[MAX_LINK_PLAYERS];
@@ -338,10 +334,11 @@ static const struct ScanlineEffectParams sFlashEffectParams =
     0,
 };
 
-static const struct DynamicMusicData sDynamicMusicData[] =
+const struct DynamicMusicData gDynamicMusicData[] =
 {
+    [MUS_FIRWEALD_NIGHT] = {0b000010000000, 7},
     [MUS_ACREN_FOREST_DAY] = {0b000000000001, 7},
-    [MUS_ACREN_FOREST_NIGHT] = {0b111111111101, 7},
+    [MUS_ACREN_FOREST_NIGHT] = {0b111111111101, 2},
 };
 
 static u8 MovementEventModeCB_Normal(struct LinkPlayerObjectEvent *, struct ObjectEvent *, u8);
@@ -3427,6 +3424,7 @@ static void SpriteCB_LinkPlayer(struct Sprite *sprite)
 
 #define tOrigMapId data[0]
 #define tWaitForFly data[1]
+#define tLocalId data[2]
 
 void UpdateMovementDynamicMusic(void)
 {
@@ -3451,8 +3449,8 @@ void Task_UpdateMovementDynamicMusic(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
     u16 currentMapId = (gSaveBlock1Ptr->location.mapGroup << 8) | (gSaveBlock1Ptr->location.mapNum);
-    u16 trackBits = sDynamicMusicData[GetCurrentMapMusic()].trackBits;
-    u16 fadeSpeed = sDynamicMusicData[GetCurrentMapMusic()].fadeSpeed + 1;
+    u16 trackBits = gDynamicMusicData[GetCurrentMapMusic()].trackBits;
+    u16 fadeSpeed = gDynamicMusicData[GetCurrentMapMusic()].fadeSpeed + 1;
     
     if (currentMapId != task->tOrigMapId)
     {
@@ -3460,6 +3458,7 @@ void Task_UpdateMovementDynamicMusic(u8 taskId)
         DestroyTask(taskId);
         return;
     }
+
     if (gPlayerAvatar.runningState == NOT_MOVING)
     {
         gMapMusicVolume -= fadeSpeed;
@@ -3479,21 +3478,110 @@ void Task_UpdateMovementDynamicMusic(u8 taskId)
 static void Task_UpdateMovementDynamicMusicWait(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
-    u16 trackBits = sDynamicMusicData[GetCurrentMapMusic()].trackBits;
+    u16 trackBits = gDynamicMusicData[GetCurrentMapMusic()].trackBits;
 
     switch (task->tWaitForFly)
     {
-    case TRUE:
-        if (!FieldEffectActiveListContains(FLDEFF_FLY_IN))
+        case TRUE:
+            if (!FieldEffectActiveListContains(FLDEFF_FLY_IN))
+            {
+                task->func = Task_UpdateMovementDynamicMusic;
+                m4aMPlayVolumeControl(&gMPlayInfo_BGM, trackBits, 0);
+            }
+            break;
+        case FALSE:
+            if (BGMusicStopped())
+                task->func = Task_UpdateMovementDynamicMusic;
+            break;
+    }
+}
+
+void UpdateDistanceDynamicMusic(u8 localId)
+{
+    u8 taskId;
+
+    if (FindTaskIdByFunc(Task_UpdateDistanceDynamicMusicWait) != TASK_NONE || FindTaskIdByFunc(Task_UpdateDistanceDynamicMusic) != TASK_NONE)
+        return;
+
+    taskId = CreateTask(Task_UpdateDistanceDynamicMusicWait, 64);
+    
+    if (FieldEffectActiveListContains(FLDEFF_FLY_IN) || FieldEffectActiveListContains(FLDEFF_USE_FLY))
+        gTasks[taskId].tWaitForFly = TRUE;
+    else
+        gTasks[taskId].tWaitForFly = FALSE;
+
+    gMapMusicVolume = 0;
+    gTasks[taskId].tOrigMapId = (gSaveBlock1Ptr->location.mapGroup << 8) | (gSaveBlock1Ptr->location.mapNum);
+    gTasks[taskId].tLocalId = localId;
+}
+
+void Task_UpdateDistanceDynamicMusic(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+    s16 distance = GetCurrentDistanceFromPlayer(task->tLocalId, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
+    s16 prevDistance = GetPreviousDistanceFromPlayer(task->tLocalId, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup);
+    u16 currentMapId = (gSaveBlock1Ptr->location.mapGroup << 8) | (gSaveBlock1Ptr->location.mapNum);
+    u16 trackBits = gDynamicMusicData[GetCurrentMapMusic()].trackBits;
+    u16 fadeSpeed = GetPlayerSpeed() * 4;
+
+    if (currentMapId != task->tOrigMapId)
+    {
+        m4aMPlayFadeOut(&gMPlayInfo_BGM, 8);
+        DestroyTask(taskId);
+        return;
+    }
+
+    if (distance <= 2)
+    {
+        gMapMusicVolume += fadeSpeed;
+        if (gMapMusicVolume > 256)
+            gMapMusicVolume = 256;
+    }
+
+    if ((distance > 2) && (distance < 9))
+    {
+        if (distance > prevDistance)
         {
-            task->func = Task_UpdateMovementDynamicMusic;
-            m4aMPlayVolumeControl(&gMPlayInfo_BGM, trackBits, 0);
+            gMapMusicVolume -= fadeSpeed;
+            if (gMapMusicVolume <= 256 - ((distance - 2) * 36))
+                gMapMusicVolume = 256 - ((distance - 2) * 36);
         }
-        break;
-    case FALSE:
-        if (BGMusicStopped())
-            task->func = Task_UpdateMovementDynamicMusic;
-        break;
+        else
+        {
+            gMapMusicVolume += fadeSpeed;
+            if (gMapMusicVolume >= 256 - ((distance - 2) * 36))
+                gMapMusicVolume = 256 - ((distance - 2) * 36);
+        }
+    }
+
+    if (distance >= 9)
+    {
+        gMapMusicVolume -= fadeSpeed;
+        if (gMapMusicVolume < 0)
+            gMapMusicVolume = 0;
+    }
+
+    m4aMPlayVolumeControl(&gMPlayInfo_BGM, trackBits, (u16)gMapMusicVolume);
+}
+
+static void Task_UpdateDistanceDynamicMusicWait(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+    u16 trackBits = gDynamicMusicData[GetCurrentMapMusic()].trackBits;
+
+    switch (task->tWaitForFly)
+    {
+        case TRUE:
+            if (!FieldEffectActiveListContains(FLDEFF_FLY_IN))
+            {
+                task->func = Task_UpdateDistanceDynamicMusic;
+                m4aMPlayVolumeControl(&gMPlayInfo_BGM, trackBits, 0);
+            }
+            break;
+        case FALSE:
+            if (BGMusicStopped())
+                task->func = Task_UpdateDistanceDynamicMusic;
+            break;
     }
 }
 

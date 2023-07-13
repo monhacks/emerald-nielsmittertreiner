@@ -1,7 +1,12 @@
 FirwealdCity_MapScripts::
+	map_script MAP_SCRIPT_ON_RESUME, FirwealdCity_MapScripts_MAP_SCRIPT_ON_RESUME
 	map_script MAP_SCRIPT_ON_LOAD, FirwealdCity_MapScripts_MAP_SCRIPT_ON_LOAD
 	map_script MAP_SCRIPT_ON_TRANSITION, FirwealdCity_MapScripts_MAP_SCRIPT_ON_TRANSITION
 	.byte 0
+
+FirwealdCity_MapScripts_MAP_SCRIPT_ON_RESUME:
+	dynamicmusic DYNAMIC_MUSIC_DISTANCE, 3
+	return
 
 FirwealdCity_MapScripts_MAP_SCRIPT_ON_LOAD:
 	goto_if_set FLAG_PHYLLOS_LEFT_TOURNAMENT_HALL_LOBBY, FirwealdCity_MapScripts_MAP_SCRIPT_ON_LOAD_1

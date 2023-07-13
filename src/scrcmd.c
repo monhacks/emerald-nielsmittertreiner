@@ -2396,3 +2396,20 @@ bool8 ScrCmd_checkquest(struct ScriptContext *ctx)
     ctx->comparisonResult = QuestGet(ScriptReadHalfword(ctx));
     return FALSE;
 }
+
+bool8 ScrCmd_dynamicmusic(struct ScriptContext *ctx)
+{
+    u8 type = ScriptReadByte(ctx);
+    u8 localId = ScriptReadByte(ctx);
+
+    switch (type)
+    {
+        case DYNAMIC_MUSIC_MOVEMENT:
+            UpdateMovementDynamicMusic();
+            break;
+        case DYNAMIC_MUSIC_DISTANCE:
+            UpdateDistanceDynamicMusic(localId);
+            break;
+    }
+    return FALSE;
+}
