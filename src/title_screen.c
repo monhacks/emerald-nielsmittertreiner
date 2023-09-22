@@ -7,6 +7,7 @@
 #include "clear_save_data_menu.h"
 #include "decompress.h"
 #include "event_data.h"
+#include "global.h"
 #include "gpu_regs.h"
 #include "graphics.h"
 #include "international_string_util.h"
@@ -36,6 +37,7 @@
 #include "task.h"
 #include "text_window.h"
 #include "trig.h"
+#include "util.h"
 #include "window.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
@@ -49,6 +51,10 @@
 #define BLINK_TIMER 30
 #define DEOXYS_TIMER_MIN 300
 #define DEOXYS_TIMER_MAX 600
+#define BACKGROUND_DELTA_MIN 16
+#define BACKGROUND_DELTA_MAX 64
+#define BACKGROUND_TIMER_MIN 240
+#define BACKGROUND_TIMER_MAX 420
 
 #define HIDE_MENU_BUTTON_COMBO (L_BUTTON | R_BUTTON)
 #define CLEAR_SAVE_BUTTON_COMBO (B_BUTTON | SELECT_BUTTON | DPAD_UP)
@@ -56,8 +62,11 @@
 #define BERRY_UPDATE_BUTTON_COMBO (B_BUTTON | SELECT_BUTTON)
 #define A_B_START_SELECT (A_BUTTON | B_BUTTON | START_BUTTON | SELECT_BUTTON)
 
-EWRAM_DATA static bool16 sCurrActionOptionCheck = FALSE;
+EWRAM_DATA static bool8 sCurrActionOptionCheck = FALSE;
+EWRAM_DATA static bool8 sIsDeoxysSpawned = FALSE;
 EWRAM_DATA static u8 sDeoxysSpriteId;
+EWRAM_DATA static u8 sScrollTaskId;
+EWRAM_DATA static s16 sBg0HorizontalOffset = 0;
 
 static void MainCB2(void);
 static void Task_TitleScreenPhase1(u8);
@@ -114,7 +123,7 @@ static const struct BgTemplate sBgTemplates_TitleScreen[] =
         .bg = 0,
         .charBaseIndex = 2,
         .mapBaseIndex = 29,
-        .screenSize = 0,
+        .screenSize = 2,
         .paletteMode = 0,
         .priority = 3,
         .baseTile = 0,
@@ -166,6 +175,11 @@ static const u16 sCloudScrollSpeeds[][7] =
     {Q_8_8(0.375), Q_8_8(0.5), Q_8_8(0.75), Q_8_8(1.0), Q_8_8(1.25), Q_8_8(1.5), Q_8_8(1.75)},
     {Q_8_8(0.125), Q_8_8(0.25), Q_8_8(0.375), Q_8_8(0.5), Q_8_8(0.625), Q_8_8(0.75), Q_8_8(0.875)},
     {Q_8_8(0.75), Q_8_8(1.0), Q_8_8(1.5), Q_8_8(2.0), Q_8_8(2.5), Q_8_8(3.0), Q_8_8(3.5)},
+};
+
+static const u16 sCloudPanSpeeds[] =
+{
+    Q_8_8(0.5), Q_8_8(0.5), Q_8_8(0.5), Q_8_8(0.75)
 };
 
 static const u8 sDeoxysSineAmplitudes[] =
@@ -622,11 +636,9 @@ static void StartPokemonLogoShine(u8 flashBg)
 static void SpriteCB_TitleScreenDeoxys(struct Sprite *sprite)
 {
     struct Task *task = &gTasks[sprite->data[0]];
+    u16 backgroundState = gTasks[sScrollTaskId].data[9];
     u8 mosaicHorizontal;
     u8 mosaicVertical;
-
-    if (JOY_NEW(SELECT_BUTTON))
-        task->tDeoxysState = 3;
 
     switch (task->tDeoxysState)
     {
@@ -641,13 +653,18 @@ static void SpriteCB_TitleScreenDeoxys(struct Sprite *sprite)
             task->tDeoxysState++;
             break;
         case 2:
-            if (task->tDeoxysTimer != 0)
-                task->tDeoxysTimer--;
-            else
-            {
-                task->tDeoxysState++;
-                task->tDeoxysTimer = 0;
-                PlaySE(SE_M_TELEPORT);
+            if (backgroundState != 3)
+            {   
+                if (task->tDeoxysTimer != 0)
+                {
+                    task->tDeoxysTimer--;
+                }
+                else
+                {
+                    task->tDeoxysState++;
+                    task->tDeoxysTimer = 0;
+                    PlaySE(SE_M_TELEPORT);
+                }
             }
             break;
         case 3:
@@ -704,10 +721,11 @@ static void VBlankCB(void)
     TransferPlttBuffer();
 }
 
-static void Task_Titlescreen_AnimateClouds(u8 taskId)
+static void Task_Titlescreen_AnimateSky(u8 taskId)
 {
     struct Task *task = &gTasks[gSprites[sDeoxysSpriteId].data[0]];
     s16 *data = gTasks[taskId].data;
+    u16 offset;
 
     data[0] += sCloudScrollSpeeds[task->tDeoxysForm][0];
     data[1] += sCloudScrollSpeeds[task->tDeoxysForm][1];
@@ -717,39 +735,104 @@ static void Task_Titlescreen_AnimateClouds(u8 taskId)
     data[5] += sCloudScrollSpeeds[task->tDeoxysForm][5];
     data[6] += sCloudScrollSpeeds[task->tDeoxysForm][6];
 
-    for (u32 i = 84; i < 152; i++)
+    data[7] += 3;
+    data[7] &= 0x7F;
+    data[8] = gSineTable[data[7]] >> 5;
+
+    BlendPalette(234, 1, data[8], RGB(6, 4, 7));
+    BlendPalette(235, 1, data[8], RGB(6, 6, 10));
+    BlendPalette(238, 1, data[8], RGB(3, 2, 4));
+    BlendPalette(239, 1, data[8], RGB(1, 1, 1));
+
+    switch (data[9])
     {
-        if (i <= 88)
+        case 0:
+            if (task->tDeoxysState != 0 && sIsDeoxysSpawned == TRUE)
+            {
+                data[10] = (Random() % (BACKGROUND_TIMER_MAX - BACKGROUND_TIMER_MIN + 1)) + BACKGROUND_TIMER_MIN;
+                data[9]++;
+            }
+            break;
+        case 1:
+            if (data[10] != 0)
+            {
+                data[10]--;
+            }
+            else
+            {
+                data[9]++;
+                data[10] = 0;
+            }
+            break;
+        case 2:
+            u16 newTarget;
+
+            do
+            {
+                newTarget = Q_8_8(Random() % BACKGROUND_DELTA_MAX + 1);
+            }
+            while (abs(newTarget - data[11]) <= Q_8_8(BACKGROUND_DELTA_MIN));
+
+            data[11] = newTarget;
+            data[9]++;
+            break;
+        case 3:
+            if (sBg0HorizontalOffset != data[11])
+            {
+                if (sBg0HorizontalOffset < data[11])
+                    sBg0HorizontalOffset += Q_8_8(0.5);
+                else
+                    sBg0HorizontalOffset -= Q_8_8(0.5);
+
+                SetGpuReg(REG_OFFSET_BG0VOFS, 512 - Q_8_8_TO_INT(sBg0HorizontalOffset));
+            }
+            else
+            {
+                data[9] = 0;
+            }
+            break;
+    }
+
+    offset = Q_8_8_TO_INT(sBg0HorizontalOffset);
+
+    for (u32 i = 0; i < DISPLAY_HEIGHT; i++)
+    {
+        if (i <= 82 + offset)
+        {
+            gScanlineEffectRegBuffers[0][i] = 0;
+            gScanlineEffectRegBuffers[1][i] = 0;
+        }
+        else if (i <= 87 + offset)
         {
             gScanlineEffectRegBuffers[0][i] = Q_8_8_TO_INT(data[0]);
             gScanlineEffectRegBuffers[1][i] = Q_8_8_TO_INT(data[0]);
         }
-        else if (i <= 92)
+        else if (i <= 92 + offset)
         {
             gScanlineEffectRegBuffers[0][i] = Q_8_8_TO_INT(data[1]);
             gScanlineEffectRegBuffers[1][i] = Q_8_8_TO_INT(data[1]);
         }
-        else if (i <= 100)
+        else if (i <= 99 + offset)
         {
             gScanlineEffectRegBuffers[0][i] = Q_8_8_TO_INT(data[2]);
             gScanlineEffectRegBuffers[1][i] = Q_8_8_TO_INT(data[2]);
         }
-        else if (i <= 112)
+        else if (i <= 111 + offset)
         {
             gScanlineEffectRegBuffers[0][i] = Q_8_8_TO_INT(data[3]);
             gScanlineEffectRegBuffers[1][i] = Q_8_8_TO_INT(data[3]);
         }
-        else if (i <= 128)
+        else if (i <= 128 + offset)
         {
             gScanlineEffectRegBuffers[0][i] = Q_8_8_TO_INT(data[4]);
             gScanlineEffectRegBuffers[1][i] = Q_8_8_TO_INT(data[4]);
         }
-        else if (i <= 139)
+        else if (i <= 138 + offset)
         {
             gScanlineEffectRegBuffers[0][i] = Q_8_8_TO_INT(data[5]);
             gScanlineEffectRegBuffers[1][i] = Q_8_8_TO_INT(data[5]);
         }
-        else
+        else if (i <= DISPLAY_HEIGHT + offset)
         {
             gScanlineEffectRegBuffers[0][i] = Q_8_8_TO_INT(data[6]);
             gScanlineEffectRegBuffers[1][i] = Q_8_8_TO_INT(data[6]);
@@ -760,7 +843,6 @@ static void Task_Titlescreen_AnimateClouds(u8 taskId)
 void CB2_InitTitleScreen(void)
 {
     u8 taskId;
-    u8 scrollTaskId;
 
     switch (gMain.state)
     {
@@ -821,12 +903,7 @@ void CB2_InitTitleScreen(void)
     case 2:
         CpuFastFill16(0, gScanlineEffectRegBuffers, sizeof(gScanlineEffectRegBuffers));
         ScanlineEffect_SetParams(sScanlineParams_Titlescreen_Clouds);
-        scrollTaskId = CreateTask(Task_Titlescreen_AnimateClouds, 1);
-        for (u32 i = 0; i < 6; i++)
-        {
-            gTasks[scrollTaskId].data[i + 6] = sCloudScrollSpeeds[0][i];
-        }
-
+        sScrollTaskId = CreateTask(Task_Titlescreen_AnimateSky, 1);
         taskId = CreateTask(Task_TitleScreenPhase1, 0);
         gTasks[taskId].tCounter = 256;
         gTasks[taskId].tSkipToNext = FALSE;
@@ -965,6 +1042,7 @@ static void Task_TitleScreenPhase2(u8 taskId)
         gTasks[taskId].tDeoxysOldForm = 0;
         gTasks[taskId].tDeoxysForm = 0;
         gSprites[sDeoxysSpriteId].data[0] = taskId;
+        sIsDeoxysSpawned = TRUE;
         gTasks[taskId].func = Task_ContinuePressA;
     }
 
@@ -1034,7 +1112,8 @@ static void Task_TitleScreenCheckSave(u8 taskId)
 
     SetGpuReg(REG_OFFSET_BG2Y_L, 0);
     SetGpuReg(REG_OFFSET_BG2Y_H, 0);
-    //EnableMysteryEvent();
+    EnableMysteryEvent();
+    EnableMysteryGift();
 
     switch (gSaveFileStatus)
     {
@@ -1185,7 +1264,7 @@ static void Task_BuildTitleScreenMenu(u8 taskId)
 
     CopyWindowToVram(WIN_MAIN, COPYWIN_FULL);
     task->tCurrItem = 0;
-    UpdateActionSelectionCursor(&task->tCurrItem, sCurrActionOptionCheck & TRUE);
+    UpdateActionSelectionCursor(&task->tCurrItem, sCurrActionOptionCheck);
     sCurrActionOptionCheck = FALSE;
     task->func = Task_TitleScreenPhase3;
 }
