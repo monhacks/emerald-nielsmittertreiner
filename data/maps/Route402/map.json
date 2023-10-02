@@ -14,14 +14,14 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "down",
+      "map": "MAP_CEDARRED_TOWN",
       "offset": -6,
-      "map": "MAP_CEDARRED_TOWN"
+      "direction": "down"
     },
     {
-      "direction": "up",
+      "map": "MAP_FIRWEALD_CITY",
       "offset": -8,
-      "map": "MAP_FIRWEALD_CITY"
+      "direction": "up"
     }
   ],
   "object_events": [
@@ -136,14 +136,14 @@
       "y": 22,
       "elevation": 0,
       "dest_map": "MAP_ACREN_FOREST",
-      "dest_warp_id": 3
+      "dest_warp_id": "3"
     },
     {
       "x": 9,
       "y": 22,
       "elevation": 0,
       "dest_map": "MAP_ACREN_FOREST",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     }
   ],
   "coord_events": [
