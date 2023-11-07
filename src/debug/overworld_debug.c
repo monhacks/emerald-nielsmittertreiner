@@ -253,21 +253,21 @@ static const struct WindowTemplate sWindowTemplates[] =
 
 static const u8 sMapNumCount[MAP_GROUPS_COUNT] = 
 {
-    MAP_NUM_COUNT(0),
-    MAP_NUM_COUNT(1),
-    MAP_NUM_COUNT(2),
-    MAP_NUM_COUNT(3),
-    MAP_NUM_COUNT(4),
-    MAP_NUM_COUNT(5),
-    MAP_NUM_COUNT(6),
-    MAP_NUM_COUNT(7),
-    MAP_NUM_COUNT(8),
-    MAP_NUM_COUNT(9),
-    MAP_NUM_COUNT(10),
-    MAP_NUM_COUNT(11),
-    MAP_NUM_COUNT(12),
-    MAP_NUM_COUNT(13),
-    MAP_NUM_COUNT(14),
+    //MAP_NUM_COUNT(0),
+    //MAP_NUM_COUNT(1),
+    //MAP_NUM_COUNT(2),
+    //MAP_NUM_COUNT(3),
+    //MAP_NUM_COUNT(4),
+    //MAP_NUM_COUNT(5),
+    //MAP_NUM_COUNT(6),
+    //MAP_NUM_COUNT(7),
+    //MAP_NUM_COUNT(8),
+    //MAP_NUM_COUNT(9),
+    //MAP_NUM_COUNT(10),
+    //MAP_NUM_COUNT(11),
+    //MAP_NUM_COUNT(12),
+    //MAP_NUM_COUNT(13),
+    //MAP_NUM_COUNT(14),
 };
 
 static const u8 sText_VanadiumDebugMenu[] = _("POKéMON VANADIUM VERSION DEBUG MENU");
@@ -1364,7 +1364,7 @@ static void Task_DebugActionResetQuests(u8 taskId)
 static void Task_DebugActionResetBerries(u8 taskId)
 {
     PlaySE(SE_USE_ITEM);
-    ScriptContext1_SetupScript(EventScript_ResetAllBerries);
+    ScriptContext_SetupScript(EventScript_ResetAllBerries);
 }
 
 static void Task_DebugActionSoundTestScreen(u8 taskId)
@@ -1452,7 +1452,7 @@ static void Task_DebugActionBuildParty(u8 taskId)
     for (i = 0; i < MAX_MON_MOVES; i++)
         AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, (65 * (i & 1)), 60 + (6 * (i & 2)), sTextColor_Default, TEXT_SKIP_DRAW, gMoveNames[MOVE_NONE]);
     
-    AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 88, (task->tState == PARTY_BUILDER_STATE_ABILITY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gAbilityNames[gBaseStats[sPartyBuilder[0]->species].abilities[0]]);
+    AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 88, (task->tState == PARTY_BUILDER_STATE_ABILITY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gAbilityNames[gSpeciesInfo[sPartyBuilder[0]->species].abilities[0]]);
     AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 100, sTextColor_Default, TEXT_SKIP_DRAW, sText_TrueFalse[FALSE]);
 
     CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
@@ -1644,7 +1644,7 @@ static void Task_HandleBuildPartyInput(u8 taskId)
                 AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, (65 * (i & 1)), 60 + (6 * (i & 2)), (task->tSelectedMove == i && task->tState == PARTY_BUILDER_STATE_MOVES) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gMoveNames[sPartyBuilder[task->tSelectedMon]->moves[i]]);
 
             FillWindowPixelRect(WIN_DESCRIPTION, PIXEL_FILL(0), 42, 88, 64, 32);
-            AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 88, (task->tState == PARTY_BUILDER_STATE_ABILITY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gAbilityNames[gBaseStats[sPartyBuilder[task->tSelectedMon]->species].abilities[sPartyBuilder[task->tSelectedMon]->ability]]);
+            AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 88, (task->tState == PARTY_BUILDER_STATE_ABILITY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gAbilityNames[gSpeciesInfo[sPartyBuilder[task->tSelectedMon]->species].abilities[sPartyBuilder[task->tSelectedMon]->ability]]);
             AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 100, (task->tState == PARTY_BUILDER_STATE_SHINY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, sText_TrueFalse[sPartyBuilder[task->tSelectedMon]->shiny]);
 
             CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
@@ -1680,7 +1680,7 @@ static void Task_HandleBuildPartyInput(u8 taskId)
                 AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, (65 * (i & 1)), 60 + (6 * (i & 2)), (task->tSelectedMove == i && task->tState == PARTY_BUILDER_STATE_MOVES) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gMoveNames[sPartyBuilder[task->tSelectedMon]->moves[i]]);
         
             FillWindowPixelRect(WIN_DESCRIPTION, PIXEL_FILL(0), 42, 88, 64, 32);
-            AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 88, (task->tState == PARTY_BUILDER_STATE_ABILITY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gAbilityNames[gBaseStats[sPartyBuilder[task->tSelectedMon]->species].abilities[sPartyBuilder[task->tSelectedMon]->ability]]);
+            AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 88, (task->tState == PARTY_BUILDER_STATE_ABILITY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gAbilityNames[gSpeciesInfo[sPartyBuilder[task->tSelectedMon]->species].abilities[sPartyBuilder[task->tSelectedMon]->ability]]);
             AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 100, (task->tState == PARTY_BUILDER_STATE_SHINY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, sText_TrueFalse[sPartyBuilder[task->tSelectedMon]->shiny]);
 
             CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
@@ -1700,7 +1700,7 @@ static void Task_HandleBuildPartyInput(u8 taskId)
             AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, (65 * (i & 1)), 60 + (6 * (i & 2)), (task->tSelectedMove == i && task->tState == PARTY_BUILDER_STATE_MOVES) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gMoveNames[sPartyBuilder[task->tSelectedMon]->moves[i]]);
 
         FillWindowPixelRect(WIN_DESCRIPTION, PIXEL_FILL(0), 42, 88, 64, 32);
-        AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 88, (task->tState == PARTY_BUILDER_STATE_ABILITY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gAbilityNames[gBaseStats[sPartyBuilder[task->tSelectedMon]->species].abilities[sPartyBuilder[task->tSelectedMon]->ability]]);
+        AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 88, (task->tState == PARTY_BUILDER_STATE_ABILITY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, gAbilityNames[gSpeciesInfo[sPartyBuilder[task->tSelectedMon]->species].abilities[sPartyBuilder[task->tSelectedMon]->ability]]);
         AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 42, 100, (task->tState == PARTY_BUILDER_STATE_SHINY) ? sTextColor_Green : sTextColor_Default, TEXT_SKIP_DRAW, sText_TrueFalse[sPartyBuilder[task->tSelectedMon]->shiny]);
 
         CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
@@ -1769,7 +1769,7 @@ static void Task_BuildCustomParty(u8 taskId)
             SetMonMoveSlot(&mon[i], sPartyBuilder[i]->moves[j], j);
         }
 
-        SetMonData(&mon[i], MON_DATA_ABILITY_NUM, &gBaseStats[sPartyBuilder[i]->species].abilities[sPartyBuilder[i]->ability]);
+        SetMonData(&mon[i], MON_DATA_ABILITY_NUM, &gSpeciesInfo[sPartyBuilder[i]->species].abilities[sPartyBuilder[i]->ability]);
 
         SetMonData(&mon[i], MON_DATA_OT_NAME, gSaveBlock2Ptr->playerName);
         SetMonData(&mon[i], MON_DATA_OT_GENDER, &gSaveBlock2Ptr->playerGender);

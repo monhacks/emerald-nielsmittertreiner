@@ -99,7 +99,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent {
     waitse
     if (var(VAR_TOURNAMENT_HALL_ROUND) == 1 || var(VAR_TOURNAMENT_HALL_ROUND) == 2) {
         random(3)
-    } elif (var(VAR_TOURNAMENT_HALL_ROUND == 3)) {
+    } elif (var(VAR_TOURNAMENT_HALL_ROUND) == 3) {
         random(2)
     }
     copyvar(VAR_OPPONENT, VAR_RESULT)
@@ -410,7 +410,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals {
            "move, GIGA DRAIN.")
     destroy_speech_bubble
     closemessage
-    giveitem(ITEM_TM19_GIGA_DRAIN)
+    giveitem(ITEM_TM_GIGA_DRAIN)
     closemessage
     load_speech_bubble(LOCALID_OPPONENT)
     msgbox("You're truly exceptional {PLAYER},\n"

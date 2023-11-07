@@ -118,8 +118,8 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent::
 	goto_if_eq FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent_2
 	compare VAR_TOURNAMENT_HALL_ROUND, 2
 	goto_if_eq FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent_2
-	compare VAR_TOURNAMENT_HALL_ROUND == 3, 0
-	goto_if_ne FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent_3
+	compare VAR_TOURNAMENT_HALL_ROUND, 3
+	goto_if_eq FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent_3
 FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent_1:
 	copyvar VAR_TEMP_3, VAR_RESULT
 	fadescreen FADE_FROM_BLACK
@@ -443,7 +443,7 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals::
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals_Text_5
 	destroy_speech_bubble
 	closemessage
-	giveitem ITEM_TM19_GIGA_DRAIN
+	giveitem ITEM_TM_GIGA_DRAIN
 	closemessage
 	load_speech_bubble 1
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals_Text_6

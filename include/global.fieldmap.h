@@ -4,9 +4,9 @@
 // Masks/shifts for blocks in the map grid
 // Map grid blocks consist of a 10 bit metatile id, a 2 bit collision value, and a 4 bit elevation value
 // This is the data stored in each data/layouts/*/map.bin file
-#define MAPGRID_METATILE_ID_MASK 0x03FF // Bits 1-10
-#define MAPGRID_COLLISION_MASK   0x0C00 // Bits 11-12
-#define MAPGRID_ELEVATION_MASK   0xF000 // Bits 13-16
+#define MAPGRID_METATILE_ID_MASK 0x03FF // Bits 0-9
+#define MAPGRID_COLLISION_MASK   0x0C00 // Bits 10-11
+#define MAPGRID_ELEVATION_MASK   0xF000 // Bits 12-15
 #define MAPGRID_COLLISION_SHIFT  10
 #define MAPGRID_ELEVATION_SHIFT  12
 
@@ -16,8 +16,8 @@
 // Masks/shifts for metatile attributes
 // Metatile attributes consist of an 8 bit behavior value, 4 unused bits, and a 4 bit layer type value
 // This is the data stored in each data/tilesets/*/*/metatile_attributes.bin file
-#define METATILE_ATTR_BEHAVIOR_MASK 0x00FF // Bits 1-8
-#define METATILE_ATTR_LAYER_MASK    0xF000 // Bits 13-16
+#define METATILE_ATTR_BEHAVIOR_MASK 0x00FF // Bits 0-7
+#define METATILE_ATTR_LAYER_MASK    0xF000 // Bits 12-15
 #define METATILE_ATTR_LAYER_SHIFT   12
 
 enum {
@@ -41,10 +41,10 @@ struct Tileset
     /*0x01*/ bool8 isSecondary;
     /*0x02*/ u8 lightPalettes; // Bitmask determining whether a palette should be time-blended as a light
     /*0x03*/ u8 customLightColor; // Bitmask determining which light palettes have custom light colors (color 15)
-    /*0x04*/ void *tiles;
-    /*0x08*/ void *palettes;
-    /*0x0c*/ u16 *metatiles;
-    /*0x10*/ u16 *metatileAttributes;
+    /*0x04*/ const u32 *tiles;
+    /*0x08*/ const u16 (*palettes)[16];
+    /*0x0C*/ const u16 *metatiles;
+    /*0x10*/ const u16 *metatileAttributes;
     /*0x14*/ TilesetCB callback;
 };
 
@@ -52,10 +52,10 @@ struct MapLayout
 {
     /*0x00*/ s32 width;
     /*0x04*/ s32 height;
-    /*0x08*/ u16 *border;
-    /*0x0c*/ u16 *map;
-    /*0x10*/ struct Tileset *primaryTileset;
-    /*0x14*/ struct Tileset *secondaryTileset;
+    /*0x08*/ const u16 *border;
+    /*0x0C*/ const u16 *map;
+    /*0x10*/ const struct Tileset *primaryTileset;
+    /*0x14*/ const struct Tileset *secondaryTileset;
 };
 
 struct BackupMapLayout
@@ -69,17 +69,20 @@ struct ObjectEventTemplate
 {
     /*0x00*/ u8 localId;
     /*0x01*/ u16 graphicsId;
-    // /*0x02*/ u8 inConnection; // Leftover from FRLG
+    /*0x02*/ u8 kind; // Always OBJ_KIND_NORMAL in Emerald.
+    /*0x03*/ //u8 padding1;
     /*0x04*/ s16 x;
     /*0x06*/ s16 y;
     /*0x08*/ u8 elevation;
     /*0x09*/ u8 movementType;
     /*0x0A*/ u16 movementRangeX:4;
              u16 movementRangeY:4;
+             u16 padding2:8;
     /*0x0C*/ u16 trainerType;
     /*0x0E*/ u16 trainerRange_berryTreeId;
     /*0x10*/ const u8 *script;
     /*0x14*/ u16 flagId;
+    /*0x16*/ u8 padding3[2];
 };
 
 struct WarpEvent
@@ -97,7 +100,7 @@ struct CoordEvent
     u8 elevation;
     u16 trigger;
     u16 index;
-    u8 *script;
+    const u8 *script;
 };
 
 struct BgEvent
@@ -106,7 +109,7 @@ struct BgEvent
     u8 elevation;
     u8 kind; // The "kind" field determines how to access bgUnion union below.
     union {
-        u8 *script;
+        const u8 *script;
         struct {
             u16 item;
             u16 hiddenItemId;
@@ -121,10 +124,10 @@ struct MapEvents
     u8 warpCount;
     u8 coordEventCount;
     u8 bgEventCount;
-    struct ObjectEventTemplate *objectEvents;
-    struct WarpEvent *warps;
-    struct CoordEvent *coordEvents;
-    struct BgEvent *bgEvents;
+    const struct ObjectEventTemplate *objectEvents;
+    const struct WarpEvent *warps;
+    const struct CoordEvent *coordEvents;
+    const struct BgEvent *bgEvents;
 };
 
 struct MapConnection
@@ -138,7 +141,7 @@ struct MapConnection
 struct MapConnections
 {
     s32 count;
-    struct MapConnection *connections;
+    const struct MapConnection *connections;
 };
 
 struct MapHeader
@@ -194,9 +197,8 @@ struct ObjectEvent
              u32 disableJumpLandingGroundEffect:1;
              u32 fixedPriority:1;
              u32 hideReflection:1;
-             int :0;
-    /*0x04*/ u8 spriteId:7;
-    /*0x05*/ u16 graphicsId:9;
+    /*0x04*/ u8 spriteId;
+    /*0x05*/ u16 graphicsId;
     /*0x06*/ u8 movementType;
     /*0x07*/ u8 trainerType;
     /*0x08*/ u8 localId;
@@ -221,6 +223,7 @@ struct ObjectEvent
              u8 directionOverwrite:4;
     /*0x21*/ u8 directionSequenceIndex;
     /*0x22*/ u8 playerCopyableMovement; // COPY_MOVE_*
+    /*0x23*/ //u8 padding2;
     /*size = 0x24*/
 };
 
