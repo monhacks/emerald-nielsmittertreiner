@@ -350,8 +350,6 @@ SECTIONS {
         src/quests.o(.text);
         src/debug/overworld_debug.o(.text);
         src/debug/sound_test_screen.o(.text);
-        src/debug/mgba.o(.text);
-        src/debug/printf.o(.text);
     } =0
 
     script_data :

@@ -25,9 +25,6 @@
 #include "trainer_hill.h"
 #include "time.h"
 #include "constants/rgb.h"
-#if DEBUG
-#include "debug/mgba.h"
-#endif
 
 static void VBlankIntr(void);
 static void HBlankIntr(void);
@@ -115,9 +112,6 @@ void AgbMain()
     ClearDma3Requests();
     ResetBgs();
     SetDefaultFontsPointer();
-    #if DEBUG
-    mgba_open();
-    #endif
     InitHeap(gHeap, HEAP_SIZE);
 
     gSoftResetDisabled = FALSE;

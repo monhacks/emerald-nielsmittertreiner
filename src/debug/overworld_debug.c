@@ -2,8 +2,6 @@
 #include "global.h"
 #include "debug/overworld_debug.h"
 #include "debug/sound_test_screen.h"
-#include "debug/mgba.h"
-#include "debug/printf.h"
 #include "battle_main.h"
 #include "bg.h"
 #include "decompress.h"
@@ -253,21 +251,21 @@ static const struct WindowTemplate sWindowTemplates[] =
 
 static const u8 sMapNumCount[MAP_GROUPS_COUNT] = 
 {
-    //MAP_NUM_COUNT(0),
-    //MAP_NUM_COUNT(1),
-    //MAP_NUM_COUNT(2),
-    //MAP_NUM_COUNT(3),
-    //MAP_NUM_COUNT(4),
-    //MAP_NUM_COUNT(5),
-    //MAP_NUM_COUNT(6),
-    //MAP_NUM_COUNT(7),
-    //MAP_NUM_COUNT(8),
-    //MAP_NUM_COUNT(9),
-    //MAP_NUM_COUNT(10),
-    //MAP_NUM_COUNT(11),
-    //MAP_NUM_COUNT(12),
-    //MAP_NUM_COUNT(13),
-    //MAP_NUM_COUNT(14),
+    MAP_NUM_COUNT(0),
+    MAP_NUM_COUNT(1),
+    MAP_NUM_COUNT(2),
+    MAP_NUM_COUNT(3),
+    MAP_NUM_COUNT(4),
+    MAP_NUM_COUNT(5),
+    MAP_NUM_COUNT(6),
+    MAP_NUM_COUNT(7),
+    MAP_NUM_COUNT(8),
+    MAP_NUM_COUNT(9),
+    MAP_NUM_COUNT(10),
+    MAP_NUM_COUNT(11),
+    MAP_NUM_COUNT(12),
+    MAP_NUM_COUNT(13),
+    MAP_NUM_COUNT(14),
 };
 
 static const u8 sText_VanadiumDebugMenu[] = _("POKéMON VANADIUM VERSION DEBUG MENU");
@@ -1499,7 +1497,6 @@ static void Task_HandleBuildPartyInput(u8 taskId)
             {
                 PlaySE(SE_SELECT);
                 sPartyBuilder[task->tSelectedMon]->moves[task->tSelectedMove] = sPartyBuilder[task->tSelectedMon]->moveList[sPartyBuilder[task->tSelectedMon]->moveListIndex[task->tSelectedMove]++];
-                mgba_printf(MGBA_LOG_DEBUG, "%d", sPartyBuilder[task->tSelectedMon]->moveListIndex[task->tSelectedMove]);
             }
             break;
         case PARTY_BUILDER_STATE_ABILITY:
@@ -1544,7 +1541,6 @@ static void Task_HandleBuildPartyInput(u8 taskId)
             {
                 PlaySE(SE_SELECT);
                 sPartyBuilder[task->tSelectedMon]->moves[task->tSelectedMove] = sPartyBuilder[task->tSelectedMon]->moveList[sPartyBuilder[task->tSelectedMon]->moveListIndex[task->tSelectedMove]--];
-                mgba_printf(MGBA_LOG_DEBUG, "%d", sPartyBuilder[task->tSelectedMon]->moveListIndex[task->tSelectedMove]);
             }
             break;
         case PARTY_BUILDER_STATE_ABILITY:

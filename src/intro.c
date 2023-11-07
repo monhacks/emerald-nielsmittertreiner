@@ -1,8 +1,6 @@
 #include "global.h"
 #include "main.h"
 #include "debug/sound_test_screen.h"
-#include "debug/mgba.h"
-#include "debug/printf.h"
 #include "palette.h"
 #include "scanline_effect.h"
 #include "task.h"

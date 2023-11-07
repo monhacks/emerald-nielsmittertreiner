@@ -36,8 +36,6 @@
 #include "constants/songs.h"
 #include "constants/weather.h"
 #include "data/quests.h"
-#include "debug/mgba.h"
-#include "debug/printf.h"
 
 #define OPTION_SLIDE_X      128
 #define OPTION_SLIDE_Y      160
@@ -936,7 +934,6 @@ static void InitEventWindows(void)
     FillWindowPixelBuffer(WIN_AGENDA_QUESTS_PROGRESS, PIXEL_FILL(0));
     AddTextPrinterParameterized3(WIN_AGENDA_QUESTS_TITLE, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_Pokenav2_ActiveQuests, 104), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gText_Pokenav2_ActiveQuests);
 
-    mgba_printf(MGBA_LOG_DEBUG, "got here");
     if (!CreateQuestListMenuTemplate())
         AddTextPrinterParameterized3(WIN_AGENDA_QUESTS_LIST, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, gText_Pokenav2_NoActiveQuests, 104), 32, sQuestListColors[TEXT_QUEST_GRAY], 0, gText_Pokenav2_NoActiveQuests);
 
