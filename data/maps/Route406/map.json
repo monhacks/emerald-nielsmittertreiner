@@ -14,9 +14,9 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "left",
+      "map": "MAP_NAVIRE_TOWN",
       "offset": 52,
-      "map": "MAP_NAVIRE_TOWN"
+      "direction": "left"
     }
   ],
   "object_events": [
@@ -183,126 +183,126 @@
       "y": 49,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 33,
       "y": 49,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_1F",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 43,
       "y": 44,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_1F",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     },
     {
       "x": 44,
       "y": 44,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_1F",
-      "dest_warp_id": 3
+      "dest_warp_id": "3"
     },
     {
       "x": 54,
       "y": 40,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_1F",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     },
     {
       "x": 42,
       "y": 24,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B1F",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 42,
       "y": 28,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B1F",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     },
     {
       "x": 40,
       "y": 18,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B2F",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 34,
       "y": 10,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B2F",
-      "dest_warp_id": 2
+      "dest_warp_id": "2"
     },
     {
       "x": 35,
       "y": 10,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B2F",
-      "dest_warp_id": 3
+      "dest_warp_id": "3"
     },
     {
       "x": 23,
       "y": 16,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B2F",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     },
     {
       "x": 24,
       "y": 16,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B2F",
-      "dest_warp_id": 5
+      "dest_warp_id": "5"
     },
     {
       "x": 22,
       "y": 23,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B2F",
-      "dest_warp_id": 6
+      "dest_warp_id": "6"
     },
     {
       "x": 25,
       "y": 29,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B3F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 25,
       "y": 25,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B3F",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     },
     {
       "x": 35,
       "y": 14,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B3F",
-      "dest_warp_id": 4
+      "dest_warp_id": "4"
     },
     {
       "x": 36,
       "y": 14,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B3F",
-      "dest_warp_id": 5
+      "dest_warp_id": "5"
     },
     {
       "x": 74,
       "y": 43,
       "elevation": 0,
       "dest_map": "MAP_OUREA_CAVE_B4F_LOW_TIDE",
-      "dest_warp_id": 1
+      "dest_warp_id": "1"
     }
   ],
   "coord_events": [
