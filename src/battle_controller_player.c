@@ -10,6 +10,7 @@
 #include "battle_tv.h"
 #include "bg.h"
 #include "data.h"
+#include "event_object_movement.h"
 #include "item.h"
 #include "item_menu.h"
 #include "link.h"
@@ -2189,7 +2190,11 @@ static void PlayerHandleSwitchInAnim(void)
     BattleLoadPlayerMonSpriteGfx(&gPlayerParty[gBattlerPartyIndexes[gActiveBattler]], gActiveBattler);
     gActionSelectionCursor[gActiveBattler] = 0;
     gMoveSelectionCursor[gActiveBattler] = 0;
+    #ifdef BATTLE_ENGINE
+    StartSendOutAnim(gActiveBattler, gBattleResources->bufferA[gActiveBattler][2]);
+    #else
     StartSendOutAnim(gActiveBattler, gBattleBufferA[gActiveBattler][2]);
+    #endif
     gBattlerControllerFuncs[gActiveBattler] = SwitchIn_TryShinyAnimShowHealthbox;
 }
 

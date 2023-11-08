@@ -2149,6 +2149,10 @@ static const struct SpriteFrameImage sPicTable_HoOh[] = {
     overworld_frame(gObjectEventPic_HoOh, 4, 4, 1),
 };
 
+extern const struct SpriteFrameImage gFieldEffectObjectPicTable_LanternLight[];
+extern const struct SpriteFrameImage gFieldEffectObjectPicTable_MartLight[];
+extern const struct SpriteFrameImage gFieldEffectObjectPicTable_PokeCenterLight[];
+
 static const struct SpriteFrameImage sPicTable_RubySapphireBrendan[] = {
     overworld_frame(gObjectEventPic_RubySapphireBrendanNormal, 2, 4, 0),
     overworld_frame(gObjectEventPic_RubySapphireBrendanNormal, 2, 4, 1),

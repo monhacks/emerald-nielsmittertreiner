@@ -1285,25 +1285,7 @@ u16 GetPlayerAvatarGraphicsIdByStateId(u8 state)
     return GetPlayerAvatarGraphicsIdByStateIdAndGender(state, gPlayerAvatar.gender);
 }
 
-u16 unref_GetRivalAvatarGenderByGraphicsId(u8 gfxId)
-{
-    switch (gfxId)
-    {
-    case OBJ_EVENT_GFX_RIVAL_MAY_NORMAL:
-    case OBJ_EVENT_GFX_RIVAL_MAY_MACH_BIKE:
-    case OBJ_EVENT_GFX_RIVAL_MAY_ACRO_BIKE:
-    case OBJ_EVENT_GFX_RIVAL_MAY_SURFING:
-    case OBJ_EVENT_GFX_RIVAL_MAY_FIELD_MOVE:
-    case OBJ_EVENT_GFX_MAY_UNDERWATER:
-    case OBJ_EVENT_GFX_MAY_FISHING:
-    case OBJ_EVENT_GFX_MAY_WATERING:
-        return FEMALE;
-    default:
-        return MALE;
-    }
-}
-
-u8 GetPlayerAvatarGenderByGraphicsId(u16 gfxId)
+u16 GetPlayerAvatarGenderByGraphicsId(u16 gfxId)
 {
     switch (gfxId)
     {
@@ -1372,7 +1354,7 @@ void SetPlayerAvatarStateMask(u8 flags)
     gPlayerAvatar.flags |= flags;
 }
 
-static u8 GetPlayerAvatarStateTransitionByGraphicsId(u8 graphicsId, u8 gender)
+static u8 GetPlayerAvatarStateTransitionByGraphicsId(u16 graphicsId, u8 gender)
 {
     u8 i;
 

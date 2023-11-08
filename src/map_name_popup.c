@@ -55,7 +55,7 @@ void ShowMapNamePopup(void)
         {
             gPopupTaskId = CreateTask(Task_MapNamePopUpWindow, 100);
             SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG0 | BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
-            SetHBlankCallback(HBlankCB_DoublePopupWindow);
+            //SetHBlankCallback(HBlankCB_DoublePopupWindow);
             EnableInterrupts(INTR_FLAG_HBLANK);
             gTasks[gPopupTaskId].tState = STATE_PRINT;
             gTasks[gPopupTaskId].data[2] = POPUP_OFFSCREEN_Y;
@@ -159,7 +159,7 @@ static void ShowMapNamePopUpWindow(void)
     u8 mapDisplayHeader[24];
     u8 *withoutPrefixPtr;
     
-    SetGpuRegBits(REG_OFFSET_WININ, WININ_WIN0_CLR);
+    //SetGpuRegBits(REG_OFFSET_WININ, WININ_WIN0_CLR);
     AddMapNamePopUpWindow();
     AddWeatherPopUpWindow();
     LoadMapNamePopUpWindowBgs();

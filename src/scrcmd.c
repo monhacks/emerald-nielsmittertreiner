@@ -625,6 +625,12 @@ static bool8 IsPaletteNotActive(void)
         return FALSE;
 }
 
+// pauses script until palette fade inactive
+bool8 ScrFunc_WaitPaletteNotActive(struct ScriptContext *ctx) {
+    SetupNativeScript(ctx, IsPaletteNotActive);
+    return TRUE;
+}
+
 bool8 ScrCmd_fadescreen(struct ScriptContext *ctx)
 {
     FadeScreen(ScriptReadByte(ctx), 0);
@@ -645,6 +651,7 @@ bool8 ScrCmd_fadescreenspeed(struct ScriptContext *ctx)
 bool8 ScrCmd_fadescreenswapbuffers(struct ScriptContext *ctx)
 {
     u8 mode = ScriptReadByte(ctx);
+    u8 nowait = ScriptReadByte(ctx);
 
     switch (mode)
     {
@@ -661,6 +668,8 @@ bool8 ScrCmd_fadescreenswapbuffers(struct ScriptContext *ctx)
         break;
     }
 
+    if (nowait)
+        return FALSE;
     SetupNativeScript(ctx, IsPaletteNotActive);
     return TRUE;
 }
@@ -1180,7 +1189,7 @@ bool8 ScrCmd_setobjectmovementtype(struct ScriptContext *ctx)
 
 bool8 ScrCmd_createvobject(struct ScriptContext *ctx)
 {
-    u16 graphicsId = ScriptReadByte(ctx);
+    u16 graphicsId = ScriptReadByte(ctx); // Support u16 in createvobject
     u8 virtualObjId = ScriptReadByte(ctx);
     u16 x = VarGet(ScriptReadHalfword(ctx));
     u32 y = VarGet(ScriptReadHalfword(ctx));
@@ -1553,7 +1562,7 @@ bool8 ScrCmd_vmessage(struct ScriptContext *ctx)
 bool8 ScrCmd_bufferspeciesname(struct ScriptContext *ctx)
 {
     u8 stringVarIndex = ScriptReadByte(ctx);
-    u16 species = VarGet(ScriptReadHalfword(ctx));
+    u16 species = VarGet(ScriptReadHalfword(ctx)) & ((1 << 10) - 1); // ignore possible shiny / form bits
 
     StringCopy(sScriptStringVars[stringVarIndex], gSpeciesNames[species]);
     return FALSE;
@@ -2409,4 +2418,10 @@ bool8 ScrCmd_dynamicmusic(struct ScriptContext *ctx)
             break;
     }
     return FALSE;
+}
+
+bool8 ScrCmd_callfunc(struct ScriptContext *ctx)
+{
+    u32 func = ScriptReadWord(ctx);
+    return ((ScrCmdFunc) func)(ctx);
 }

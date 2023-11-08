@@ -2584,5 +2584,3 @@ static const struct SpritePalette sSpritePalettes[] =
     {gNamingScreenMenu_Pal[4], PALTAG_OK_BUTTON},
     {}
 };
-
-

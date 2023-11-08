@@ -245,6 +245,7 @@
 #define OBJ_EVENT_GFX_AIRLOCK_MEMBER_F           241
 #define OBJ_EVENT_GFX_PHYLLOS                    242
 #define OBJ_EVENT_GFX_CONSTRUCTION_WORKER        243
+#define OBJ_EVENT_GFX_LIGHT                      244
 
 // NOTE: By default, the max value for NUM_OBJ_EVENT_GFX is 239.
 //
@@ -282,7 +283,8 @@
 #define SHADOW_SIZE_S   0
 #define SHADOW_SIZE_M   1
 #define SHADOW_SIZE_L   2
-#define SHADOW_SIZE_XL  3
+#define SHADOW_SIZE_XL  3 // unused; repurposed to mean no shadow
+#define SHADOW_SIZE_NONE 3
 
 #define F_INANIMATE                        (1 << 6)
 #define F_DISABLE_REFLECTION_PALETTE_LOAD  (1 << 7)

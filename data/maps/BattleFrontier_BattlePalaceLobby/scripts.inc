@@ -215,6 +215,7 @@ BattleFrontier_BattlePalaceLobby_EventScript_CancelChallengeSaveFailed::
 
 BattleFrontier_BattlePalaceLobby_EventScript_LoadPartyAndCancelChallenge::
 	special LoadPlayerParty
+  callnative LoadPlayerParty
 BattleFrontier_BattlePalaceLobby_EventScript_CancelChallenge::
 	msgbox BattleFrontier_BattlePalaceLobby_Text_ReturnWhenFortified, MSGBOX_DEFAULT
 BattleFrontier_BattlePalaceLobby_EventScript_EndCancelChallenge::
@@ -647,4 +648,3 @@ BattleFrontier_BattlePalaceLobby_Text_ExplainRulesWhenInDanger:
 	.string "nature when it is in trouble.\p"
 	.string "If a POKéMON begins behaving oddly\n"
 	.string "in a pinch, watch it carefully.$"
-

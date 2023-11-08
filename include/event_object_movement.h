@@ -124,7 +124,9 @@ void SetSpritePosToOffsetMapCoords(s16 *x, s16 *y, s16 dx, s16 dy);
 void ObjectEventClearHeldMovement(struct ObjectEvent *);
 void ObjectEventClearHeldMovementIfActive(struct ObjectEvent *);
 u8 UpdateSpritePaletteByTemplate(const struct SpriteTemplate *template, struct Sprite *sprite);
+void UpdateLightSprite(struct Sprite *sprite);
 void TrySpawnObjectEvents(s16 cameraX, s16 cameraY);
+u8 CreateObjectGraphicsSpriteWithTag(u16 graphicsId, void (*callback)(struct Sprite *), s16 x, s16 y, u8 subpriority, u16 paletteTag);
 u8 CreateObjectGraphicsSprite(u16, void (*)(struct Sprite *), s16 x, s16 y, u8 subpriority);
 u8 TrySpawnObjectEvent(u8 localId, u8 mapNum, u8 mapGroup);
 u8 SpawnSpecialObjectEventParameterized(u16 graphicsId, u8 movementBehavior, u8 localId, s16 x, s16 y, u8 elevation);
@@ -137,6 +139,7 @@ void ObjectEventTurnByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup, u8 direc
 const struct ObjectEventGraphicsInfo *GetObjectEventGraphicsInfo(u16 graphicsId);
 void SetObjectInvisibility(u8 localId, u8 mapNum, u8 mapGroup, bool8 invisible);
 void FreeAndReserveObjectSpritePalettes(void);
+u8 LoadObjectEventPalette(u16 paletteTag);
 void SetObjectEventSpritePosByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup, s16 x, s16 y);
 void ResetObjectSubpriority(u8 localId, u8 mapNum, u8 mapGroup);
 void SetObjectSubpriority(u8 localId, u8 mapNum, u8 mapGroup, u8 subpriority);
@@ -197,7 +200,7 @@ void UpdateObjectEventsForCameraUpdate(s16 x, s16 y);
 u8 GetWalkSlowMovementAction(u32);
 u8 GetJumpMovementAction(u32);
 u8 ElevationToPriority(u8 elevation);
-void ObjectEventUpdateElevation(struct ObjectEvent *objEvent);
+void ObjectEventUpdateElevation(struct ObjectEvent *objEvent, struct Sprite *);
 void SetObjectSubpriorityByElevation(u8 elevation, struct Sprite *, u8 subpriority);
 void UnfreezeObjectEvent(struct ObjectEvent *);
 u8 FindLockedObjectEventIndex(struct ObjectEvent *);
@@ -217,7 +220,6 @@ void UpdateObjectEventSpriteInvisibility(struct Sprite *sprite, bool8 invisible)
 s16 GetFigure8XOffset(s16 idx);
 s16 GetFigure8YOffset(s16 idx);
 void CameraObjectReset2(void);
-void LoadObjectEventPalette(u16 paletteTag);
 u8 GetObjectEventBerryTreeId(u8 objectEventId);
 void SetBerryTreeJustPicked(u8 mapId, u8 mapNumber, u8 mapGroup);
 bool8 IsBerryTreeSparkling(u8 localId, u8 mapNum, u8 mapGroup);
@@ -428,6 +430,9 @@ bool8 CopyablePlayerMovement_WalkFaster(struct ObjectEvent *, struct Sprite *, u
 bool8 CopyablePlayerMovement_Slide(struct ObjectEvent *, struct Sprite *, u8, bool8(u8));
 bool8 CopyablePlayerMovement_JumpInPlace(struct ObjectEvent *, struct Sprite *, u8, bool8(u8));
 bool8 CopyablePlayerMovement_Jump(struct ObjectEvent *, struct Sprite *, u8, bool8(u8));
+
+void StartSpriteAnimInDirection(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction, u8 animNum);
+
 bool8 CopyablePlayerMovement_Jump2(struct ObjectEvent *, struct Sprite *, u8, bool8(u8));
 u8 MovementType_CopyPlayerInGrass_Step1(struct ObjectEvent *, struct Sprite *);
 u8 MovementType_Buried_Step0(struct ObjectEvent *, struct Sprite *);

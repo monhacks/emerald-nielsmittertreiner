@@ -192,7 +192,7 @@ void ShowQuestPopup(u16 id)
     {
         gPopupTaskId = CreateTask(Task_QuestPopUpWindow, 100);
         SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG0 | BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
-        SetHBlankCallback(HBlankCB_DoublePopupWindow);
+        //SetHBlankCallback(HBlankCB_DoublePopupWindow);
         EnableInterrupts(INTR_FLAG_HBLANK);
         gTasks[gPopupTaskId].data[0] = 6;
         gTasks[gPopupTaskId].data[2] = 24;
