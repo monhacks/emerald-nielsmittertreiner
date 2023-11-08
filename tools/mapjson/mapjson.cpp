@@ -449,6 +449,8 @@ string generate_map_constants_text(string groups_filepath, Json groups_data) {
     text << "#ifndef GUARD_CONSTANTS_MAP_GROUPS_H\n"
          << "#define GUARD_CONSTANTS_MAP_GROUPS_H\n\n";
 
+    text << "//\n// DO NOT MODIFY THIS FILE! It is auto-generated from data/maps/map_groups.json\n//\n\n";
+
     int group_num = 0;
 
     for (auto &group : groups_data["group_order"].array_items()) {
@@ -479,7 +481,7 @@ string generate_map_constants_text(string groups_filepath, Json groups_data) {
         group_num++;
     }
 
-    text << "#define MAP_NUM_COUNT(group) MAP_GROUP_COUNT_##group\n";
+    text << "#define MAP_GROUP_COUNT(group) MAP_GROUP_COUNT_##group\n";
     text << "#define MAP_GROUPS_COUNT " << group_num << "\n\n";
     text << "#endif // GUARD_CONSTANTS_MAP_GROUPS_H\n";
 

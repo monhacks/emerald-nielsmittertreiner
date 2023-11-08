@@ -251,21 +251,21 @@ static const struct WindowTemplate sWindowTemplates[] =
 
 static const u8 sMapNumCount[MAP_GROUPS_COUNT] = 
 {
-    MAP_NUM_COUNT(0),
-    MAP_NUM_COUNT(1),
-    MAP_NUM_COUNT(2),
-    MAP_NUM_COUNT(3),
-    MAP_NUM_COUNT(4),
-    MAP_NUM_COUNT(5),
-    MAP_NUM_COUNT(6),
-    MAP_NUM_COUNT(7),
-    MAP_NUM_COUNT(8),
-    MAP_NUM_COUNT(9),
-    MAP_NUM_COUNT(10),
-    MAP_NUM_COUNT(11),
-    MAP_NUM_COUNT(12),
-    MAP_NUM_COUNT(13),
-    MAP_NUM_COUNT(14),
+    MAP_GROUP_COUNT(0),
+    MAP_GROUP_COUNT(1),
+    MAP_GROUP_COUNT(2),
+    MAP_GROUP_COUNT(3),
+    MAP_GROUP_COUNT(4),
+    MAP_GROUP_COUNT(5),
+    MAP_GROUP_COUNT(6),
+    MAP_GROUP_COUNT(7),
+    MAP_GROUP_COUNT(8),
+    MAP_GROUP_COUNT(9),
+    MAP_GROUP_COUNT(10),
+    MAP_GROUP_COUNT(11),
+    MAP_GROUP_COUNT(12),
+    MAP_GROUP_COUNT(13),
+    MAP_GROUP_COUNT(14),
 };
 
 static const u8 sText_VanadiumDebugMenu[] = _("POKéMON VANADIUM VERSION DEBUG MENU");
