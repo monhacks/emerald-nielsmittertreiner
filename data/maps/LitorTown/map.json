@@ -14,14 +14,14 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "left",
+      "map": "MAP_ROUTE404",
       "offset": 3,
-      "map": "MAP_ROUTE404"
+      "direction": "left"
     },
     {
-      "direction": "down",
+      "map": "MAP_ROUTE405",
       "offset": 14,
-      "map": "MAP_ROUTE405"
+      "direction": "down"
     }
   ],
   "object_events": [
@@ -201,42 +201,42 @@
       "y": 11,
       "elevation": 0,
       "dest_map": "MAP_LITOR_TOWN_BAR",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 22,
       "y": 18,
       "elevation": 0,
       "dest_map": "MAP_LITOR_TOWN_POKEMON_CENTER_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 40,
       "y": 10,
       "elevation": 0,
       "dest_map": "MAP_LITOR_TOWN_MART",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 29,
       "y": 15,
       "elevation": 0,
       "dest_map": "MAP_LITOR_TOWN_HOUSE1",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 33,
       "y": 9,
       "elevation": 0,
       "dest_map": "MAP_LITOR_TOWN_HOUSE2",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 36,
       "y": 16,
       "elevation": 0,
       "dest_map": "MAP_LITOR_TOWN_HOUSE3",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

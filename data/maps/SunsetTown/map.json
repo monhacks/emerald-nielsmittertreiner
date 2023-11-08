@@ -14,9 +14,9 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "right",
+      "map": "MAP_ROUTE401",
       "offset": -2,
-      "map": "MAP_ROUTE401"
+      "direction": "right"
     }
   ],
   "object_events": [
@@ -66,28 +66,28 @@
       "y": 6,
       "elevation": 0,
       "dest_map": "MAP_SUNSET_TOWN_PLAYER_HOUSE_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 15,
       "y": 6,
       "elevation": 0,
       "dest_map": "MAP_SUNSET_TOWN_PROFESSOR_CONIFER_LAB",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 15,
       "y": 15,
       "elevation": 0,
       "dest_map": "MAP_SUNSET_TOWN_HOUSE1",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     },
     {
       "x": 6,
       "y": 15,
       "elevation": 0,
       "dest_map": "MAP_SUNSET_TOWN_JULIAS_HOUSE_1F",
-      "dest_warp_id": 0
+      "dest_warp_id": "0"
     }
   ],
   "coord_events": [

@@ -443,9 +443,6 @@
 #define METATILE_PrettyPetalFlowerShop_Shadow_Top            0x203
 #define METATILE_PrettyPetalFlowerShop_Shadow_Wall           0x20C
 
-// gTileset_RusturfTunnel
-#define METATILE_RusturfTunnel_EntranceCover  0x22D
-
 // gTileset_RSMossdeepGym
 #define METATILE_RSMossdeepGym_RedArrow_Down   0x205
 #define METATILE_RSMossdeepGym_RedArrow_Left   0x20C
@@ -457,6 +454,9 @@
 // gTileset_Rustboro
 #define METATILE_Rustboro_Door_Gray  0x21F
 #define METATILE_Rustboro_Door_Tan   0x22F
+
+// gTileset_RusturfTunnel
+#define METATILE_RusturfTunnel_EntranceCover  0x22D
 
 // gTileset_SecretBase
 #define METATILE_SecretBase_AttractMat_BottomLeft       0x313

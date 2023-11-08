@@ -14,14 +14,14 @@
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
   "connections": [
     {
-      "direction": "left",
+      "map": "MAP_MURENA_CITY",
       "offset": -29,
-      "map": "MAP_MURENA_CITY"
+      "direction": "left"
     },
     {
-      "direction": "right",
+      "map": "MAP_LITOR_TOWN",
       "offset": -3,
-      "map": "MAP_LITOR_TOWN"
+      "direction": "right"
     }
   ],
   "object_events": [
