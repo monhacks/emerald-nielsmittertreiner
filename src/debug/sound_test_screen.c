@@ -33,6 +33,9 @@
 struct SoundTestStruct
 {
     u16 index[2];
+    s16 volume;
+    u16 trackBits:12;
+    u16 fadeSpeed:4;
     u8 window:1;
     u8 alt:1;
 };
@@ -55,6 +58,7 @@ static EWRAM_DATA u8 sSoundTestHeaderWindowId = 0;
 static const u8 sText_SoundTestScreen[] = _("SOUND TEST SCREEN {EMOJI_NOTE}");
 static const u8 sText_DPadSelectWindowAndSong[] = _("{DPAD_UPDOWN} {DPAD_LEFTRIGHT} WINDOW/SONG");
 static const u8 sText_ABPlayStop[] = _("{A_BUTTON} {B_BUTTON} PLAY{CLEAR_TO 58}/STOP");
+static const u8 sText_LRVolume[] = _("{L_BUTTON} {R_BUTTON} DYN. VOLUME");
 static const u8 sText_StartExit[] = _("{START_BUTTON} EXIT");
 static const u8 sText_Music[] = _("MUSIC");
 static const u8 sText_SoundEffects[] = _("SOUND EFFECTS");
@@ -186,6 +190,7 @@ static bool8 CB2_SetupSoundTestScreen(void)
         LoadPalette(sSoundTestScreenBg_Pal, 0, sizeof(sSoundTestScreenBg_Pal));
 
         sSoundTestStruct = AllocZeroed(sizeof(struct SoundTestStruct));
+        sSoundTestStruct->volume = 256;
 
         InitSoundTestScreenWindows();
         BeginNormalPaletteFade(PALETTES_BG, 0, 0x10, 0, RGB_WHITEALPHA);
@@ -219,7 +224,7 @@ static void InitSoundTestScreenWindows(void)
 
 static void Task_DrawSoundTestScreenWindows(u8 taskId)
 {
-    u8 string[4];
+    u8 string[16];
 
     SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG0 | WININ_WIN0_OBJ | WININ_WIN1_BG0 | WININ_WIN1_OBJ);
     SetGpuReg(REG_OFFSET_WINOUT, WINOUT_WIN01_BG0 | WINOUT_WIN01_OBJ | WINOUT_WIN01_CLR);
@@ -235,6 +240,7 @@ static void Task_DrawSoundTestScreenWindows(u8 taskId)
     AddTextPrinterParameterized(sSoundTestHeaderWindowId, FONT_NORMAL, sText_SoundTestScreen, 3, 0, 0, 0);
     AddTextPrinterParameterized(sSoundTestHeaderWindowId, FONT_NORMAL, sText_DPadSelectWindowAndSong, 3, 16, 0, 0);
     AddTextPrinterParameterized(sSoundTestHeaderWindowId, FONT_NORMAL, sText_ABPlayStop, 3, 32, 0, 0);
+    AddTextPrinterParameterized(sSoundTestHeaderWindowId, FONT_NORMAL, sText_LRVolume, 120, 16, 0, 0);
     AddTextPrinterParameterized(sSoundTestHeaderWindowId, FONT_NORMAL, sText_StartExit, 170, 32, 0, 0);
 
     DrawStdFrameWithCustomTileAndPalette(0, TRUE, 2, 14);
@@ -242,6 +248,12 @@ static void Task_DrawSoundTestScreenWindows(u8 taskId)
     AddTextPrinterParameterized(0, FONT_NORMAL, string, 3, 16, 0, 0);
     AddTextPrinterParameterized(0, FONT_NORMAL, sText_Music, 3, 0, 0, 0);
     AddTextPrinterParameterized(0, FONT_NORMAL, gBGMNames[sSoundTestStruct->index[BGM]], 32, 16, 0, 0);
+    ConvertUIntToDecimalStringN(string, sSoundTestStruct->volume, STR_CONV_MODE_RIGHT_ALIGN, 3);
+    AddTextPrinterParameterized(0, FONT_SMALL, string, GetStringRightAlignXOffset(FONT_SMALL, string, 224) - 80, 1, 0, 0);
+    ConvertUIntToBinaryStringN(string, gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].trackBits, 12);
+    AddTextPrinterParameterized(0, FONT_SMALL, string, GetStringRightAlignXOffset(FONT_SMALL, string, 224) - 16, 1, 0, 0);
+    ConvertUIntToDecimalStringN(string, gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].fadeSpeed, STR_CONV_MODE_LEFT_ALIGN, 1);
+    AddTextPrinterParameterized(0, FONT_SMALL, string, GetStringRightAlignXOffset(FONT_SMALL, string, 224) - 4, 1, 0, 0);
 
     DrawStdFrameWithCustomTileAndPalette(1, TRUE, 2, 14);
     ConvertIntToDecimalStringN(string, 0, STR_CONV_MODE_LEFT_ALIGN, 2);
@@ -266,7 +278,7 @@ static void Task_HandleSoundTestScreenInput(u8 taskId)
 
 static void Task_HandleDrawSoundTestScreenInfo(u8 taskId)
 {
-    u8 string[4];
+    u8 string[16];
 
     FillWindowPixelBuffer(sSoundTestStruct->window, PIXEL_FILL(1));
 
@@ -276,6 +288,12 @@ static void Task_HandleDrawSoundTestScreenInfo(u8 taskId)
         AddTextPrinterParameterized(0, FONT_NORMAL, sText_Music, 3, 0, 0, 0);
         AddTextPrinterParameterized(0, FONT_NORMAL, string, 3, 16, 0, 0);
         AddTextPrinterParameterized(0, FONT_NORMAL, gBGMNames[sSoundTestStruct->index[BGM]], 32, 16, 0, 0);
+        ConvertUIntToDecimalStringN(string, sSoundTestStruct->volume, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        AddTextPrinterParameterized(0, FONT_SMALL, string, GetStringRightAlignXOffset(FONT_SMALL, string, 224) - 80, 1, 0, 0);
+        ConvertUIntToBinaryStringN(string, gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].trackBits, 12);
+        AddTextPrinterParameterized(0, FONT_SMALL, string, GetStringRightAlignXOffset(FONT_SMALL, string, 224) - 16, 1, 0, 0);
+        ConvertUIntToDecimalStringN(string, gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].fadeSpeed, STR_CONV_MODE_LEFT_ALIGN, 1);
+        AddTextPrinterParameterized(0, FONT_SMALL, string, GetStringRightAlignXOffset(FONT_SMALL, string, 224) - 4, 1, 0, 0); 
     }
     else
     {
@@ -291,12 +309,15 @@ static void Task_HandleDrawSoundTestScreenInfo(u8 taskId)
 
 static bool8 Task_CheckSoundTestScreenInput(u8 taskId)
 {
+    u8 string[4];
+
     if (JOY_NEW(A_BUTTON))
     {
         m4aMPlayAllStop();
         if (IsBGMWindow(sSoundTestStruct->window))
         {
             m4aSongNumStart(sSoundTestStruct->index[BGM] + 350);
+            sSoundTestStruct->volume = 256;
         }
         else
         {   
@@ -317,16 +338,18 @@ static bool8 Task_CheckSoundTestScreenInput(u8 taskId)
 
         SetMainCallback2(CB2_ExitSoundTestScreen);
     }
-    else if ((JOY_NEW(DPAD_UP)))
+    else if ((JOY_NEW(DPAD_UP)) || (JOY_NEW(DPAD_DOWN)))
     {
         sSoundTestStruct->window ^= 1;
+        sSoundTestStruct->volume = 256;
         return TRUE;
     }
-    else if ((JOY_NEW(DPAD_DOWN)))
-    {
-        sSoundTestStruct->window ^= 1;
-        return TRUE;
-    }
+    //else if ((JOY_NEW(DPAD_DOWN)))
+    //{
+    //    sSoundTestStruct->window ^= 1;
+    //    sSoundTestStruct->volume = 256;
+    //    return TRUE;
+    //}
     else if ((JOY_REPEAT(DPAD_LEFT)))
     {
         if (IsBGMWindow(sSoundTestStruct->window))
@@ -381,6 +404,29 @@ static bool8 Task_CheckSoundTestScreenInput(u8 taskId)
         }
         return TRUE;
     }
+    else if ((JOY_HELD(L_BUTTON)) && sSoundTestStruct->volume > 0 && gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].trackBits && IsBGMWindow(sSoundTestStruct->window))
+    {
+        sSoundTestStruct->volume -= gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].fadeSpeed;
+        if (sSoundTestStruct->volume <= 0)
+            sSoundTestStruct->volume = 0;
+
+        m4aMPlayVolumeControl(&gMPlayInfo_BGM, gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].trackBits, sSoundTestStruct->volume);
+
+        ConvertUIntToDecimalStringN(string, sSoundTestStruct->volume, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        AddTextPrinterParameterized(0, FONT_SMALL, string, GetStringRightAlignXOffset(FONT_SMALL, string, 224) - 80, 1, 0, 0);
+    }
+    else if ((JOY_HELD(R_BUTTON)) && sSoundTestStruct->volume <= 256 && gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].trackBits && IsBGMWindow(sSoundTestStruct->window))
+    {
+        sSoundTestStruct->volume +=  gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].fadeSpeed;
+        if (sSoundTestStruct->volume >= 256)
+            sSoundTestStruct->volume = 256;
+
+        m4aMPlayVolumeControl(&gMPlayInfo_BGM, gDynamicMusicData[sSoundTestStruct->index[BGM] + 350].trackBits, sSoundTestStruct->volume);
+
+        ConvertUIntToDecimalStringN(string, sSoundTestStruct->volume, STR_CONV_MODE_RIGHT_ALIGN, 3);
+        AddTextPrinterParameterized(0, FONT_SMALL, string, GetStringRightAlignXOffset(FONT_SMALL, string, 224) - 80, 1, 0, 0);
+    }
+
     return FALSE;
 }
 

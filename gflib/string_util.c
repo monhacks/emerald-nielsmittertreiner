@@ -333,6 +333,25 @@ u8 *ConvertIntToHexStringN(u8 *dest, s32 value, enum StringConvertMode mode, u8 
     return dest;
 }
 
+u8 *ConvertUIntToBinaryStringN(u8 *dest, u32 value, u8 n)
+{
+    u32 i;
+
+    value <<= 32 - n;
+
+    for (i = 0; i < n; ++i)
+    {
+        u8 c = sDigits[(value & (1 << 31)) >> 31];
+        u8 *out = dest++;
+
+        *out = c;
+        value <<= 1;
+    }
+
+    *dest = EOS;
+    return dest;
+}
+
 u8 *StringExpandPlaceholders(u8 *dest, const u8 *src)
 {
     for (;;)
