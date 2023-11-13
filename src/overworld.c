@@ -332,6 +332,7 @@ const struct DynamicMusicData gDynamicMusicData[] =
     [MUS_FIRWEALD_NIGHT] = {0b000010000000, 7},
     [MUS_ACREN_FOREST_DAY] = {0b000000000001, 7},
     [MUS_ACREN_FOREST_NIGHT] = {0b111111111101, 2},
+    [MUS_CEDARRED_NIGHT] = {0b000101100001, 2},
 };
 
 static u8 MovementEventModeCB_Normal(struct LinkPlayerObjectEvent *, struct ObjectEvent *, u8);

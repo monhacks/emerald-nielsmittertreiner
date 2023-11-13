@@ -1292,3 +1292,7 @@ $(MID_SUBDIR)/mus_acren_forest_day.s: %.s: %.mid
 
 $(MID_SUBDIR)/mus_acren_forest_night.s: %.s: %.mid
 	$(MID) $< $@ -E -R$(STD_REVERB) -G202 -v100
+
+$(MID_SUBDIR)/mus_cedarred_night.s: %.s: %.mid
+	$(MID) $< $@ -E -R$(STD_REVERB) -G203 -v100
+	

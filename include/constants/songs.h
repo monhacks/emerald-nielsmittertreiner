@@ -551,6 +551,7 @@
 #define MUS_LITOR_DAY               617
 #define MUS_ACREN_FOREST_DAY        618
 #define MUS_ACREN_FOREST_NIGHT      619
+#define MUS_CEDARRED_NIGHT          620
 
 #define MUS_ROUTE118                0x7FFF  // Map is split into 2 music sections. controlled by GetCurrLocationDefaultMusic().
 

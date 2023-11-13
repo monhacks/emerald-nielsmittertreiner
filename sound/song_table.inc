@@ -621,6 +621,7 @@ gSongTable::
 	song mus_litor_day, 0, 0
 	song mus_acren_forest_day, 0, 0
 	song mus_acren_forest_night, 0, 0
+	song mus_cedarred_night, 0, 0
 
 	.align 2
 dummy_song_header:

@@ -24,7 +24,7 @@
 #include "constants/rgb.h"
 #include "constants/songs.h"
 
-#define NUM_BGM (MUS_ACREN_FOREST_NIGHT - MUS_LITTLEROOT_TEST)
+#define NUM_BGM (MUS_CEDARRED_NIGHT - MUS_LITTLEROOT_TEST)
 #define NUM_SE (SE_SUDOWOODO_SHAKE - MUS_DUMMY)
 
 #define BGM 0
@@ -725,6 +725,7 @@ static bool8 IsBGMWindow(u8 selectedWindow)
     X(MUS_LITOR_DAY, "MUS-LITOR-DAY") \
     X(MUS_ACREN_FOREST_DAY, "MUS-ACREN-FOREST-DAY") \
     X(MUS_ACREN_FOREST_NIGHT, "MUS-ACREN-FOREST-NIGHT") \
+    X(MUS_CEDARRED_NIGHT, "MUS-CEDARRED-NIGHT") \
 
 #define SOUND_LIST_SE \
     X(MUS_DUMMY, "MUS-DUMMY") \
