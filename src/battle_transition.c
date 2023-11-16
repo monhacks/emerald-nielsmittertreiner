@@ -4107,7 +4107,7 @@ void GetBg0TilesDst(u16 **tilemap, u16 **tileset)
 
 static void FadeScreenBlack(void)
 {
-    BlendPalettes(PALETTES_ALL, 32, RGB_BLACK);
+    BlendPalettes(PALETTES_ALL, 16, RGB_BLACK);
 }
 
 static void SetSinWave(s16 *array, s16 sinAdd, s16 index, s16 indexIncrementer, s16 amplitude, s16 arrSize)
