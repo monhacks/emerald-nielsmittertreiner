@@ -732,12 +732,12 @@ static void Task_Scene1_Kecleon(u8 taskId)
         spriteId = CreateSprite(&sSpriteTemplate_PokeBall, DISPLAY_WIDTH - 48, 80, 0);
 
     if (gIntroFrameCounter == TIMER_KECLEON_TURN_RED)
-        BlendPalettesGradually(0x00010000, 0, 0, 16, RGB_RED, 3, 0);
+        BlendPalettesGradually(0x00010000, 0, 0, 8, RGB_RED, 3, 0);
 
     if (gIntroFrameCounter == TIMER_KECLEON_ESCAPE)
     {
         spriteId = CreateSprite(&sSpriteTemplate_Flash, gSprites[gTasks[taskId].sKecleonSpriteId].x, gSprites[gTasks[taskId].sKecleonSpriteId].y - 20, 0);
-        BlendPalettesGradually(PALETTES_ALL, 0, 0, 32, RGB_WHITEALPHA, 3, 0);
+        BlendPalettesGradually(PALETTES_ALL, 0, 0, 16, RGB_WHITEALPHA, 3, 0);
     }
 
     if (gIntroFrameCounter == TIMER_END)
