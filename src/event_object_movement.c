@@ -1665,7 +1665,7 @@ static void SpawnLightSprite(s16 x, s16 y, s16 camX, s16 camY, u32 lightType)
         sprite->oam.objMode = ST_OAM_OBJ_BLEND; // BLEND
         //sprite->oam.affineMode = ST_OAM_AFFINE_NORMAL;
         sprite->x += 8;
-        sprite->y += 36 + sprite->centerToCornerVecY;
+        sprite->y += 52 + sprite->centerToCornerVecY;
         break;
     case 1 ... 2: // Pokemon Center & Mart
         sprite->centerToCornerVecX = 3;
