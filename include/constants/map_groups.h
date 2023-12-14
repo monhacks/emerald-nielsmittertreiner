@@ -18,7 +18,6 @@
 #define MAP_ROUTE404      (9 | (0 << 8))
 #define MAP_ROUTE405      (10 | (0 << 8))
 #define MAP_ROUTE406      (11 | (0 << 8))
-#define MAP_GROUP_COUNT_0 12
 
 // gMapGroup_IndoorFirweald
 #define MAP_FIRWEALD_CITY_HOUSE1                          (0 | (1 << 8))
@@ -29,7 +28,6 @@
 #define MAP_FIRWEALD_CITY_TOURNAMENT_HALL_LOBBY           (5 | (1 << 8))
 #define MAP_FIRWEALD_CITY_TOURNAMENT_HALL_PRE_BATTLE_ROOM (6 | (1 << 8))
 #define MAP_FIRWEALD_CITY_TOURNAMENT_HALL_BATTLE_ROOM     (7 | (1 << 8))
-#define MAP_GROUP_COUNT_1 8
 
 // gMapGroup_IndoorMurena
 #define MAP_MURENA_CITY_WAILORD_FISHING_CLUB (0 | (2 << 8))
@@ -39,7 +37,6 @@
 #define MAP_MURENA_CITY_POKEMON_CENTER_1F    (4 | (2 << 8))
 #define MAP_MURENA_CITY_POKEMON_CENTER_2F    (5 | (2 << 8))
 #define MAP_MURENA_CITY_MART                 (6 | (2 << 8))
-#define MAP_GROUP_COUNT_2 7
 
 // gMapGroup_IndoorSunset
 #define MAP_SUNSET_TOWN_PLAYER_HOUSE_1F       (0 | (3 << 8))
@@ -48,7 +45,6 @@
 #define MAP_SUNSET_TOWN_HOUSE1                (3 | (3 << 8))
 #define MAP_SUNSET_TOWN_JULIAS_HOUSE_1F       (4 | (3 << 8))
 #define MAP_SUNSET_TOWN_JULIAS_HOUSE_2F       (5 | (3 << 8))
-#define MAP_GROUP_COUNT_3 6
 
 // gMapGroup_IndoorCedarred
 #define MAP_CEDARRED_TOWN_HOUSE1            (0 | (4 << 8))
@@ -57,7 +53,6 @@
 #define MAP_CEDARRED_TOWN_LOGGERS_CABIN     (3 | (4 << 8))
 #define MAP_CEDARRED_TOWN_POKEMON_CENTER_1F (4 | (4 << 8))
 #define MAP_CEDARRED_TOWN_POKEMON_CENTER_2F (5 | (4 << 8))
-#define MAP_GROUP_COUNT_4 6
 
 // gMapGroup_IndoorLitor
 #define MAP_LITOR_TOWN_BAR               (0 | (5 << 8))
@@ -67,7 +62,6 @@
 #define MAP_LITOR_TOWN_MART              (4 | (5 << 8))
 #define MAP_LITOR_TOWN_POKEMON_CENTER_1F (5 | (5 << 8))
 #define MAP_LITOR_TOWN_POKEMON_CENTER_2F (6 | (5 << 8))
-#define MAP_GROUP_COUNT_5 7
 
 // gMapGroup_IndoorNavire
 #define MAP_NAVIRE_TOWN_POKEMON_CENTER_1F (0 | (6 << 8))
@@ -76,7 +70,6 @@
 #define MAP_NAVIRE_TOWN_HOUSE1            (3 | (6 << 8))
 #define MAP_NAVIRE_TOWN_HOUSE2            (4 | (6 << 8))
 #define MAP_NAVIRE_TOWN_HOUSE3            (5 | (6 << 8))
-#define MAP_GROUP_COUNT_6 6
 
 // gMapGroup_Dungeons
 #define MAP_ACREN_FOREST               (0 | (7 << 8))
@@ -88,12 +81,10 @@
 #define MAP_OUREA_CAVE_B4F_LOW_TIDE    (6 | (7 << 8))
 #define MAP_OUREA_CAVE_B4F_HIGH_TIDE   (7 | (7 << 8))
 #define MAP_OUREA_CAVE_B4F_HIDDEN_ROOM (8 | (7 << 8))
-#define MAP_GROUP_COUNT_7 9
 
 // gMapGroup_SpecialArea
 #define MAP_ACREN_FOREST_PLANT_SHOP    (0 | (8 << 8))
 #define MAP_ACREN_FOREST_ILLEGAL_CABIN (1 | (8 << 8))
-#define MAP_GROUP_COUNT_8 2
 
 // gMapGroup_OriginalMaps1
 #define MAP_PETALBURG_CITY      (0 | (9 << 8))
@@ -153,7 +144,6 @@
 #define MAP_UNDERWATER_ROUTE129 (54 | (9 << 8))
 #define MAP_UNDERWATER_ROUTE105 (55 | (9 << 8))
 #define MAP_UNDERWATER_ROUTE125 (56 | (9 << 8))
-#define MAP_GROUP_COUNT_9 57
 
 // gMapGroup_OriginalMaps2
 #define MAP_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F        (0 | (10 << 8))
@@ -325,7 +315,6 @@
 #define MAP_EVER_GRANDE_CITY_POKEMON_CENTER_1F       (166 | (10 << 8))
 #define MAP_EVER_GRANDE_CITY_POKEMON_CENTER_2F       (167 | (10 << 8))
 #define MAP_EVER_GRANDE_CITY_POKEMON_LEAGUE_2F       (168 | (10 << 8))
-#define MAP_GROUP_COUNT_10 169
 
 // gMapGroup_OriginalMaps3
 #define MAP_ROUTE104_MR_BRINEYS_HOUSE                    (0 | (11 << 8))
@@ -362,7 +351,6 @@
 #define MAP_ROUTE119_WEATHER_INSTITUTE_2F                (31 | (11 << 8))
 #define MAP_ROUTE119_HOUSE                               (32 | (11 << 8))
 #define MAP_ROUTE124_DIVING_TREASURE_HUNTERS_HOUSE       (33 | (11 << 8))
-#define MAP_GROUP_COUNT_11 34
 
 // gMapGroup_OriginalDungeons
 #define MAP_METEOR_FALLS_1F_1R                       (0 | (12 << 8))
@@ -473,7 +461,6 @@
 #define MAP_TERRA_CAVE_END                           (105 | (12 << 8))
 #define MAP_ALTERING_CAVE                            (106 | (12 << 8))
 #define MAP_METEOR_FALLS_STEVENS_CAVE                (107 | (12 << 8))
-#define MAP_GROUP_COUNT_12 108
 
 // gMapGroup_OriginalSpecialArea
 #define MAP_SAFARI_ZONE_NORTHWEST                           (0 | (13 << 8))
@@ -565,7 +552,6 @@
 #define MAP_NAVEL_ROCK_DOWN11                               (86 | (13 << 8))
 #define MAP_NAVEL_ROCK_BOTTOM                               (87 | (13 << 8))
 #define MAP_TRAINER_HILL_ELEVATOR                           (88 | (13 << 8))
-#define MAP_GROUP_COUNT_13 89
 
 // gMapGroup_OriginalDynamic
 #define MAP_SECRET_BASE_RED_CAVE1    (0 | (14 << 8))
@@ -629,9 +615,7 @@
 #define MAP_BATTLE_PYRAMID_SQUARE15  (58 | (14 << 8))
 #define MAP_BATTLE_PYRAMID_SQUARE16  (59 | (14 << 8))
 #define MAP_UNION_ROOM               (60 | (14 << 8))
-#define MAP_GROUP_COUNT_14 61
 
-#define MAP_GROUP_COUNT(group) MAP_GROUP_COUNT_##group
 #define MAP_GROUPS_COUNT 15
 
 #endif // GUARD_CONSTANTS_MAP_GROUPS_H
