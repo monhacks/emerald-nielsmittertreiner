@@ -994,7 +994,7 @@ static void MainCB2(void)
     UpdatePaletteFade();
 }
 
-// Shine the Pokemon logo two more times, and fade in the version banner
+// Shine the Pokémon logo two more times, and fade in the version banner
 static void Task_TitleScreenPhase1(u8 taskId)
 {
     // Skip to next phase when A, B, Start, or Select is pressed
@@ -1043,7 +1043,7 @@ static void Task_TitleScreenPhase1(u8 taskId)
 #undef sParentTaskId
 #undef sAlphaBlendIdx
 
-// Create "Press Start" and copyright banners, and slide Pokemon logo up
+// Create "Press Start" and copyright banners, and slide Pokémon logo up
 static void Task_TitleScreenPhase2(u8 taskId)
 {
     u32 yPos;
