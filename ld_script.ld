@@ -1255,7 +1255,7 @@ SECTIONS {
         sound/songs/midi/mus_route403.o(.rodata);
         sound/songs/midi/mus_sunset.o(.rodata);
         sound/songs/midi/mus_celebi.o(.rodata);
-        sound/songs/midi/mus_murena.o(.rodata);
+        sound/songs/midi/mus_murena_day.o(.rodata);
         sound/songs/midi/mus_cedarred_day.o(.rodata);
         sound/songs/midi/mus_simple_town_day.o(.rodata);
         sound/songs/midi/mus_firweald_night.o(.rodata);

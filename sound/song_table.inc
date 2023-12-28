@@ -614,7 +614,7 @@ gSongTable::
 	song mus_route403, 0, 0
 	song mus_sunset, 0, 0
 	song mus_celebi, 0, 0
-	song mus_murena, 0, 0
+	song mus_murena_day, 0, 0
 	song mus_cedarred_day, 0, 0
 	song mus_simple_town_day, 0, 0
 	song mus_firweald_night, 0, 0

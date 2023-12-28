@@ -544,7 +544,7 @@
 #define MUS_ROUTE403                610
 #define MUS_SUNSET                  611
 #define MUS_CELEBI                  612
-#define MUS_MURENA                  613
+#define MUS_MURENA_DAY              613
 #define MUS_CEDARRED_DAY            614
 #define MUS_SIMPLE_TOWN_DAY         615
 #define MUS_FIRWEALD_NIGHT          616
