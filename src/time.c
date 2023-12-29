@@ -6,13 +6,13 @@
 
 const u8 *const gText_DaysOfWeek[] =
 {
-    gText_Sunday,
     gText_Monday,
     gText_Tuesday,
     gText_Wednesday,
     gText_Thursday,
     gText_Friday,
-    gText_Saturday
+    gText_Saturday,
+    gText_Sunday,
 };
 
 void InGameClock_Run(void)
