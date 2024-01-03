@@ -86,7 +86,9 @@ struct OverworldDebugMenu
     u8 listTaskId;
     u8 arrowTaskId;
     u8 activeListMenu;
-    u16 cursorPosition;
+    u8 cursorPosition;
+    u8 cursorStack[3];
+    u8 cursorStackDepth;
     u8 spriteId;
 };
 
@@ -637,7 +639,13 @@ static void Task_DebugMenuProcessInput(u8 taskId)
     if (JOY_NEW(A_BUTTON))
     {
         if ((sOverworldDebugMenu->func = sDebugActions[sOverworldDebugMenu->activeListMenu][input]) != NULL)
+        {
+            sOverworldDebugMenu->cursorStack[sOverworldDebugMenu->cursorStackDepth] = sOverworldDebugMenu->cursorPosition;
+            sOverworldDebugMenu->cursorStackDepth++;
+            MgbaPrintf(MGBA_LOG_DEBUG, "{%d, %d, %d}", sOverworldDebugMenu->cursorStack[0], sOverworldDebugMenu->cursorStack[1], sOverworldDebugMenu->cursorStack[2]);
+            MgbaPrintf(MGBA_LOG_DEBUG, "depth: %d, pos: %d", sOverworldDebugMenu->cursorStackDepth, sOverworldDebugMenu->cursorPosition);
             sOverworldDebugMenu->func(taskId);
+        }
     }
     else if (JOY_NEW(B_BUTTON))
     {
@@ -651,6 +659,7 @@ static void Task_DebugMenuProcessInput(u8 taskId)
         else
         {
             PlaySE(SE_SELECT);
+            sOverworldDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_MAIN);
         }
     }
@@ -667,6 +676,8 @@ static void Task_DebugMenuProcessInput(u8 taskId)
 
     if (JOY_NEW(DPAD_ANY))
     {
+        MgbaPrintf(MGBA_LOG_DEBUG, "{%d, %d, %d}", sOverworldDebugMenu->cursorStack[0], sOverworldDebugMenu->cursorStack[1], sOverworldDebugMenu->cursorStack[2]);
+        MgbaPrintf(MGBA_LOG_DEBUG, "depth: %d, cur: %d", sOverworldDebugMenu->cursorStackDepth, sOverworldDebugMenu->cursorPosition);
         FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
         AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_ListMenuDescriptions[sOverworldDebugMenu->activeListMenu][sOverworldDebugMenu->cursorPosition]);
         CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
@@ -677,6 +688,7 @@ static void BuildDebugListMenuData(u8 activeListMenu)
 {
     const struct ListMenuItem *items;
     u8 totalItems;
+    u8 cursorPos = sOverworldDebugMenu->cursorStack[sOverworldDebugMenu->cursorStackDepth];
 
     switch (activeListMenu)
     {
@@ -699,26 +711,23 @@ static void BuildDebugListMenuData(u8 activeListMenu)
     }
 
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
-    AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_ListMenuDescriptions[activeListMenu][0]);
+    AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_ListMenuDescriptions[activeListMenu][cursorPos]);
     CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
 
     gMultiuseListMenuTemplate = sListMenuTemplate;
     gMultiuseListMenuTemplate.items = items;
     gMultiuseListMenuTemplate.totalItems = totalItems;
-    sOverworldDebugMenu->listTaskId = ListMenuInit(&gMultiuseListMenuTemplate, 0, 0);
+    sOverworldDebugMenu->listTaskId = ListMenuInit(&gMultiuseListMenuTemplate, 0, cursorPos);
     sOverworldDebugMenu->activeListMenu = activeListMenu;
-    sOverworldDebugMenu->cursorPosition = 0;
+    sOverworldDebugMenu->cursorPosition = cursorPos;
 
     if (sOverworldDebugMenu->spriteId != SPRITE_NONE)
         DestroySpriteAndFreeResources(&gSprites[sOverworldDebugMenu->spriteId]);
 
     if (sOverworldDebugMenu->arrowTaskId != TASK_NONE)
-    {
         RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
-    }
     
-    sOverworldDebugMenu->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 39, 28, 148, gMultiuseListMenuTemplate.totalItems - 1, TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, &sOverworldDebugMenu->cursorPosition);
-
+    sOverworldDebugMenu->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 39, 28, 148, gMultiuseListMenuTemplate.totalItems - 1, TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, (u16 *)&sOverworldDebugMenu->cursorPosition);
 }
 
 static void Task_DebugActionBuildListMenuInfo(u8 taskId)
@@ -914,6 +923,7 @@ static void Task_HandleWarpInput(u8 taskId)
     {
         if (task->tState == WARP_STATE_GROUP)
         {
+            sOverworldDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_UTILITY);
             task->func = Task_DebugMenuProcessInput;
         }
@@ -1048,6 +1058,7 @@ static void Task_HandleFlagsInput(u8 taskId)
     }
     else if (JOY_NEW(B_BUTTON))
     {
+        sOverworldDebugMenu->cursorStackDepth--;
         BuildDebugListMenuData(ACTIVE_LIST_UTILITY);
         task->func = Task_DebugMenuProcessInput;
     }
@@ -1194,6 +1205,7 @@ static void Task_HandleVarsInput(u8 taskId)
         switch (task->tState)
         {
         case 0:
+            sOverworldDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_UTILITY);
             task->func = Task_DebugMenuProcessInput;
             break;
@@ -1328,6 +1340,7 @@ static void Task_HandleSetTimeInput(u8 taskId)
     }
     else if (JOY_NEW(B_BUTTON))
     {
+        sOverworldDebugMenu->cursorStackDepth--;
         BuildDebugListMenuData(ACTIVE_LIST_UTILITY);
         task->func = Task_DebugMenuProcessInput;
     }
@@ -1658,6 +1671,7 @@ static void Task_HandleBuildPartyInput(u8 taskId)
 
             FreeMonIconPalettes();
 
+            sOverworldDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_PLAYER);
             task->func = Task_DebugMenuProcessInput;
         }
@@ -1707,9 +1721,9 @@ static void Task_BuildLearnableMoveList(u8 taskId)
 {
     struct Task *task = &gTasks[FindTaskIdByFunc(Task_HandleBuildPartyInput)];
     u16 species = sPartyBuilder[task->tSelectedMon]->species;
-    const u16 *learnset = gLevelUpLearnsets[species];;
-    u32 i;
+    const u16 *learnset = gLevelUpLearnsets[species];
     u8 moveListIndex = 0;
+    u32 i;
 
     sPartyBuilder[task->tSelectedMon]->moveList = AllocZeroed((MAX_LEVEL_UP_MOVES + NUM_TECHNICAL_MACHINES + NUM_HIDDEN_MACHINES) * sizeof(u16));
 
@@ -1782,6 +1796,7 @@ static void Task_BuildCustomParty(u8 taskId)
 
     FreeMonIconPalettes();
 
+    sOverworldDebugMenu->cursorStackDepth--;
     BuildDebugListMenuData(ACTIVE_LIST_PLAYER);
     task->func = Task_DebugMenuProcessInput;
 }
@@ -1876,6 +1891,7 @@ static void Task_HandleGiveItemInput(u8 taskId)
         switch (task->tState)
         {
         case 0:
+            sOverworldDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_PLAYER);
             task->func = Task_DebugMenuProcessInput;
             break;
