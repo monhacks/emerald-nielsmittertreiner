@@ -540,41 +540,43 @@ struct Follower
 
 struct SaveBlock2
 {
-    u8 playerName[PLAYER_NAME_LENGTH + 1];
-    u8 playerGender; // MALE, FEMALE
-    u8 specialSaveWarpFlags;
-    u8 playerTrainerId[TRAINER_ID_LENGTH];
-    u16 playTimeHours;
-    u8 playTimeMinutes;
-    u8 playTimeSeconds;
-    u8 playTimeVBlanks;
-    u8 optionsButtonMode;  // OPTIONS_BUTTON_MODE_[NORMAL/LR/L_EQUALS_A]
-    u16 optionsTextSpeed:3; // OPTIONS_TEXT_SPEED_[SLOW/MID/FAST]
-    u16 optionsWindowFrameType:5; // Specifies one of the 20 decorative borders for text boxes
-    u16 optionsSound:1; // OPTIONS_SOUND_[MONO/STEREO]
-    u16 optionsBattleStyle:1; // OPTIONS_BATTLE_STYLE_[SHIFT/SET]
-    u16 optionsBattleSceneOff:1; // whether battle animations are disabled
-    u16 is24HClockMode:1;
-    u16 regionMapZoom:1; // whether the map is zoomed in
-    u16 expShare:1;
+    /*0x00*/ u8 playerName[PLAYER_NAME_LENGTH + 1];
+    /*0x08*/ u8 playerGender; // MALE, FEMALE
+    /*0x09*/ u8 specialSaveWarpFlags;
+    /*0x0A*/ u8 playerTrainerId[TRAINER_ID_LENGTH];
+    /*0x0E*/ u16 playTimeHours;
+    /*0x10*/ u8 playTimeMinutes;
+    /*0x11*/ u8 playTimeSeconds;
+    /*0x12*/ u8 playTimeVBlanks;
+    /*0x13*/ u8 optionsButtonMode;  // OPTIONS_BUTTON_MODE_[NORMAL/LR/L_EQUALS_A]
+    /*0x14*/ u16 optionsTextSpeed:3; // OPTIONS_TEXT_SPEED_[SLOW/MID/FAST]
+             u16 optionsWindowFrameType:5; // Specifies one of the 20 decorative borders for text boxes
+             u16 optionsSound:1; // OPTIONS_SOUND_[MONO/STEREO]
+             u16 optionsBattleStyle:1; // OPTIONS_BATTLE_STYLE_[SHIFT/SET]
+             u16 optionsBattleSceneOff:1; // whether battle animations are disabled
+             u16 regionMapZoom:1; // whether the map is zoomed in
+             u16 expShare:1;
+    /*0x18*/ struct Pokedex pokedex;
+    /*0x98*/ struct Time localTimeOffset;
+    /*0xA0*/ struct Time lastBerryTreeUpdate;
+    /*0xA8*/ u32 gcnLinkFlags; // Read by Pokémon Colosseum/XD
+    /*0xAC*/ u32 encryptionKey;
+    /*0xB0*/ struct PlayersApprentice playerApprentice;
+    /*0xDC*/ struct Apprentice apprentices[APPRENTICE_COUNT];   //272 bytes
+    /*0x1EC*/ struct BerryCrush berryCrush;
+    /*0x1FC*/ struct PokemonJumpRecords pokeJump;   //16 bytes
+    /*0x20C*/ struct BerryPickingResults berryPick;
+    /*0x21C*/ struct RankingHall1P hallRecords1P[HALL_FACILITIES_COUNT][FRONTIER_LVL_MODE_COUNT][HALL_RECORDS_COUNT]; // From record mixing.
+    /*0x57C*/ struct RankingHall2P hallRecords2P[FRONTIER_LVL_MODE_COUNT][HALL_RECORDS_COUNT]; // From record mixing.
+    /*0x624*/ u16 contestLinkResults[CONTEST_CATEGORIES_COUNT][CONTESTANT_COUNT];
+    /*0x64C*/ struct BattleFrontier frontier;
+    /*0xF2C*/ struct Follower follower;
+    /*0xF2C*/ u8 itemFlags[ITEM_FLAGS_COUNT];
+    /*0xF2C*/ struct InGameClock inGameClock;
+    /*0xF2C*/ bool8 is24HClockMode:1;
     #ifdef DEBUG
-    u16 godmode:1;
+    /*0xF2C*/ bool8 godmode:1;
     #endif
-    struct Pokedex pokedex;
-    struct Time localTimeOffset;
-    struct Time lastBerryTreeUpdate;
-    u32 gcnLinkFlags; // Read by Pokémon Colosseum/XD
-    u32 encryptionKey;
-    struct PlayersApprentice playerApprentice;
-    struct Apprentice apprentices[APPRENTICE_COUNT];   //272 bytes
-    struct BerryCrush berryCrush;
-    struct PokemonJumpRecords pokeJump;   //16 bytes
-    struct BerryPickingResults berryPick;
-    u16 contestLinkResults[CONTEST_CATEGORIES_COUNT][CONTESTANT_COUNT];
-    struct BattleFrontier frontier;
-    struct Follower follower;
-    u8 itemFlags[ITEM_FLAGS_COUNT];
-    struct InGameClock inGameClock;
 }; // sizeof=0xF2C
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;
