@@ -779,11 +779,11 @@ static void Task_DebugActionSaveblock(u8 taskId)
     
     strPtr = ConvertIntToDecimalStringN(str[0], sizeof(struct SaveBlock1), STR_CONV_MODE_LEFT_ALIGN, 6);
     *(strPtr)++ = CHAR_SLASH;
-    strPtr = ConvertIntToDecimalStringN(strPtr, SECTOR_DATA_SIZE * 4, STR_CONV_MODE_LEFT_ALIGN, 6);
+    strPtr = ConvertIntToDecimalStringN(strPtr, SECTOR_DATA_SIZE * (SECTOR_ID_SAVEBLOCK1_END - SECTOR_ID_SAVEBLOCK1_START + 1), STR_CONV_MODE_LEFT_ALIGN, 6);
 
     strPtr = ConvertIntToDecimalStringN(str[1], sizeof(struct SaveBlock2), STR_CONV_MODE_LEFT_ALIGN, 6);
     *(strPtr)++ = CHAR_SLASH;
-    strPtr = ConvertIntToDecimalStringN(strPtr, SECTOR_DATA_SIZE, STR_CONV_MODE_LEFT_ALIGN, 6);
+    strPtr = ConvertIntToDecimalStringN(strPtr, SECTOR_DATA_SIZE * (SECTOR_ID_SAVEBLOCK2_END - SECTOR_ID_SAVEBLOCK2_START + 1), STR_CONV_MODE_LEFT_ALIGN, 6);
 
     for (i = 0; i < 2; i++)
     {
