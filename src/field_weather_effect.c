@@ -100,7 +100,7 @@ static const struct SpriteTemplate sCloudSpriteTemplate =
 
 void Clouds_InitVars(void)
 {
-    Weather_SetBlendCoeffs(8, 12);
+    Weather_SetBlendCoeffs(8, 10);
     gWeatherPtr->targetColorMapIndex = 0;
     gWeatherPtr->colorMapStepDelay = 20;
     gWeatherPtr->noShadows = FALSE;
@@ -162,7 +162,7 @@ void Sunny_InitVars(void)
 {
     gWeatherPtr->targetColorMapIndex = 0;
     gWeatherPtr->colorMapStepDelay = 20;
-    Weather_SetBlendCoeffs(8, 12);
+    Weather_SetBlendCoeffs(8, 10);
     gWeatherPtr->noShadows = FALSE;
 }
 
