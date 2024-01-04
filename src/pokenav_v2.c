@@ -895,11 +895,11 @@ static void LoadOptionData(u8 option)
         InitEventWindows();
 
         AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek], 64), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
-        FormatDecimalTimeWithoutSeconds(gStringVar1, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->is24HClockMode);
+        FormatDecimalTimeWithoutSeconds(gStringVar1, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->optionsClockMode);
         AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, gStringVar1, 64), 16, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gStringVar1);
         if (sPokenav2Ptr->timeColonInvisible)
         {
-            if (gSaveBlock2Ptr->is24HClockMode)
+            if (gSaveBlock2Ptr->optionsClockMode)
                 FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(1), 28, 16, 6, 12);
             else
                 FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(1), 21, 16, 6, 12);
@@ -1286,12 +1286,12 @@ static void Task_Agenda(u8 taskId)
     {
         FillWindowPixelBuffer(WIN_AGENDA_DATE_TIME, PIXEL_FILL(0));
         AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek], 64), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
-        FormatDecimalTimeWithoutSeconds(text, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->is24HClockMode);
+        FormatDecimalTimeWithoutSeconds(text, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->optionsClockMode);
         AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, text, 64), 16, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, text);
 
         if (sPokenav2Ptr->timeColonInvisible)
         {
-            if (gSaveBlock2Ptr->is24HClockMode)
+            if (gSaveBlock2Ptr->optionsClockMode)
                 FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(0), 28, 16, 6, 12);
             else
                 FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(0), 23, 16, 6, 12);
@@ -1396,7 +1396,7 @@ static void Task_Agenda(u8 taskId)
     else if (JOY_NEW(START_BUTTON))
     {
         PlaySE(SE_SELECT);
-        gSaveBlock2Ptr->is24HClockMode ^= 1;
+        gSaveBlock2Ptr->optionsClockMode ^= 1;
         sPokenav2Ptr->timeColonRedraw = TRUE;
     }
     else if (JOY_NEW(DPAD_UP))

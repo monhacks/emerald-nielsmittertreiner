@@ -28,6 +28,7 @@
 enum
 {
     MENUITEM_TEXTSPEED,
+    MENUITEM_CLOCKMODE,
     MENUITEM_BATTLESCENE,
     MENUITEM_BATTLESTYLE,
     MENUITEM_SOUND,
@@ -55,28 +56,22 @@ static void Task_OptionMenuProcessInput(u8 taskId);
 static void Task_OptionMenuSave(u8 taskId);
 static void Task_OptionMenuFadeOut(u8 taskId);
 static void HighlightOptionMenuItem(int cursor);
-
 static u8 TextSpeed_ProcessInput(u8 selection);
 static void TextSpeed_DrawChoices(u8 selection, u8 y);
-
+static u8 ClockMode_ProcessInput(u8 selection);
+static void ClockMode_DrawChoices(u8 selection, u8 y);
 static u8 BattleScene_ProcessInput(u8 selection);
 static void BattleScene_DrawChoices(u8 selection, u8 y);
-
 static u8 BattleStyle_ProcessInput(u8 selection);
 static void BattleStyle_DrawChoices(u8 selection, u8 y);
-
 static u8 Healthbox_ProcessInput(u8 selection);
 static void Healthbox_DrawChoices(u8 selection, u8 y);
-
 static u8 Sound_ProcessInput(u8 selection);
 static void Sound_DrawChoices(u8 selection, u8 y);
-
 static u8 FrameType_ProcessInput(u8 selection);
 static void FrameType_DrawChoices(u8 selection, u8 y);
-
 static u8 ButtonMode_ProcessInput(u8 selection);
 static void ButtonMode_DrawChoices(u8 selection, u8 y);
-
 static void DrawTextOption(void);
 static void DrawHeaderText(void);
 static void DrawOptionMenuTexts(void);
@@ -91,6 +86,7 @@ struct
 static const sItemFunctions[MENUITEM_COUNT] =
 {
     [MENUITEM_TEXTSPEED]     = {TextSpeed_DrawChoices, TextSpeed_ProcessInput},
+    [MENUITEM_CLOCKMODE]     = {ClockMode_DrawChoices, ClockMode_ProcessInput},
     [MENUITEM_BATTLESCENE]   = {BattleScene_DrawChoices, BattleScene_ProcessInput},
     [MENUITEM_BATTLESTYLE]   = {BattleStyle_DrawChoices, BattleStyle_ProcessInput},
     [MENUITEM_SOUND]         = {Sound_DrawChoices, Sound_ProcessInput},
@@ -109,6 +105,7 @@ static const u8 sEqualSignGfx[] = INCBIN_U8("graphics/interface/option_menu_equa
 static const u8 *const sOptionMenuItemsNames[MENUITEM_COUNT] =
 {
     [MENUITEM_TEXTSPEED]     = gText_TextSpeed,
+    [MENUITEM_CLOCKMODE]     = gText_ClockMode,
     [MENUITEM_BATTLESCENE]   = gText_BattleScene,
     [MENUITEM_BATTLESTYLE]   = gText_BattleStyle,
     [MENUITEM_SOUND]         = gText_Sound,
@@ -265,6 +262,7 @@ void CB2_InitOptionMenu(void)
 
         sOptions = AllocZeroed(sizeof(*sOptions));
         sOptions->selection[MENUITEM_TEXTSPEED] = gSaveBlock2Ptr->optionsTextSpeed;
+        sOptions->selection[MENUITEM_CLOCKMODE] = gSaveBlock2Ptr->optionsClockMode;
         sOptions->selection[MENUITEM_BATTLESCENE] = gSaveBlock2Ptr->optionsBattleSceneOff;
         sOptions->selection[MENUITEM_BATTLESTYLE] = gSaveBlock2Ptr->optionsBattleStyle;
         sOptions->selection[MENUITEM_SOUND] = gSaveBlock2Ptr->optionsSound;
@@ -422,6 +420,7 @@ static void Task_OptionMenuProcessInput(u8 taskId)
 static void Task_OptionMenuSave(u8 taskId)
 {
     gSaveBlock2Ptr->optionsTextSpeed = sOptions->selection[MENUITEM_TEXTSPEED];
+    gSaveBlock2Ptr->optionsClockMode = sOptions->selection[MENUITEM_CLOCKMODE];
     gSaveBlock2Ptr->optionsBattleSceneOff = sOptions->selection[MENUITEM_BATTLESCENE];
     gSaveBlock2Ptr->optionsBattleStyle = sOptions->selection[MENUITEM_BATTLESTYLE];
     gSaveBlock2Ptr->optionsSound = sOptions->selection[MENUITEM_SOUND];
@@ -490,6 +489,7 @@ static void DrawOptionMenuChoice(const u8 *text, u8 x, u8 y, u8 style)
 
     dst[i] = EOS;
     AddTextPrinterParameterized(WIN_OPTIONS, FONT_NORMAL, dst, x, y + 1, TEXT_SKIP_DRAW, NULL);
+    CopyWindowToVram(WIN_OPTIONS, COPYWIN_FULL);
 }
 
 static u8 TextSpeed_ProcessInput(u8 selection)
@@ -532,6 +532,23 @@ static void TextSpeed_DrawChoices(u8 selection, u8 y)
     DrawOptionMenuChoice(gText_TextSpeedMid, xMid, y, styles[1]);
 
     DrawOptionMenuChoice(gText_TextSpeedFast, GetStringRightAlignXOffset(FONT_NORMAL, gText_TextSpeedFast, 198), y, styles[2]);
+}
+
+static u8 ClockMode_ProcessInput(u8 selection)
+{
+    if (JOY_NEW(DPAD_LEFT | DPAD_RIGHT))
+        selection ^= 1;
+
+    return selection;
+}
+
+static void ClockMode_DrawChoices(u8 selection, u8 y)
+{
+    u8 styles[2] = {0, 0};
+
+    styles[selection] = 1;
+    DrawOptionMenuChoice(gText_ClockMode12Hour, 104, y, styles[0]);
+    DrawOptionMenuChoice(gText_ClockMode24Hour, GetStringRightAlignXOffset(FONT_NORMAL, gText_ClockMode24Hour, 198), y, styles[1]);
 }
 
 static u8 BattleScene_ProcessInput(u8 selection)

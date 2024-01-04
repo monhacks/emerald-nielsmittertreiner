@@ -173,7 +173,7 @@ static void ShowMapNamePopUpWindow(void)
     AddTextPrinterParameterized(GetPrimaryPopUpWindowId(), FONT_SHORT, mapDisplayHeader, 8, 4, TEXT_SKIP_DRAW, NULL);
 
     withoutPrefixPtr = &(mapDisplayHeader[3]);
-    FormatDecimalTimeWithoutSeconds(withoutPrefixPtr, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->is24HClockMode);
+    FormatDecimalTimeWithoutSeconds(withoutPrefixPtr, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->optionsClockMode);
 
     //GetStringRightAlignXOffset(FONT_SMALL, mapDisplayHeader, DISPLAY_WIDTH);
     AddTextPrinterParameterized(GetSecondaryPopUpWindowId(), FONT_SMALL, mapDisplayHeader, GetStringRightAlignXOffset(FONT_SMALL, mapDisplayHeader, DISPLAY_WIDTH) - 8, 6, TEXT_SKIP_DRAW, NULL);
