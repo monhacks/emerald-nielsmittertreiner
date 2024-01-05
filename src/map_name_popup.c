@@ -54,9 +54,6 @@ void ShowMapNamePopup(void)
         if (!FuncIsActiveTask(Task_MapNamePopUpWindow))
         {
             gPopupTaskId = CreateTask(Task_MapNamePopUpWindow, 100);
-            SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG0 | BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
-            //SetHBlankCallback(HBlankCB_DoublePopupWindow);
-            EnableInterrupts(INTR_FLAG_HBLANK);
             gTasks[gPopupTaskId].tState = STATE_PRINT;
             gTasks[gPopupTaskId].data[2] = POPUP_OFFSCREEN_Y;
         }
@@ -103,7 +100,7 @@ static void Task_MapNamePopUpWindow(u8 taskId)
             task->tState = STATE_SLIDE_OUT;
         }
         break;
-    case 2:
+    case STATE_SLIDE_OUT:
         task->tYOffset += POPUP_SLIDE_SPEED;
         if (task->tYOffset >= POPUP_OFFSCREEN_Y)
         {
@@ -123,7 +120,7 @@ static void Task_MapNamePopUpWindow(u8 taskId)
             }
         }
         break;
-    case 4:
+    case STATE_ERASE:
         ClearStdWindowAndFrame(GetPrimaryPopUpWindowId(), TRUE);
         ClearStdWindowAndFrame(GetSecondaryPopUpWindowId(), TRUE);
         task->tState = STATE_END;
@@ -145,11 +142,6 @@ void HideMapNamePopUpWindow(void)
         RemoveSecondaryPopUpWindow();
         ScanlineEffect_Stop();
         SetGpuReg_ForcedBlank(REG_OFFSET_BG0VOFS, 0);
-        SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG_ALL | WININ_WIN0_OBJ | WININ_WIN1_BG_ALL | WININ_WIN1_OBJ);
-        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_BG1 | BLDCNT_TGT2_BG2 | BLDCNT_TGT2_BG3 | BLDCNT_TGT2_OBJ | BLDCNT_EFFECT_BLEND);
-        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(8, 10));
-        DisableInterrupts(INTR_FLAG_HBLANK);
-        SetHBlankCallback(NULL);
         DestroyTask(gPopupTaskId);
     }
 }
@@ -197,6 +189,8 @@ static void LoadMapNamePopUpWindowBgs(void)
 
     PutWindowTilemap(mapNamePopUpWindowId);
     PutWindowTilemap(weatherPopUpWindowId);
-    BlitBitmapRectToWindow(mapNamePopUpWindowId, gPopUpWindowBorder_Tiles, 0, 0, DISPLAY_WIDTH, 24, 0, 0, DISPLAY_WIDTH, 24);
-    BlitBitmapRectToWindow(weatherPopUpWindowId, gPopUpWindowBorder_Tiles, 0, 24, DISPLAY_WIDTH, 24, 0, 0, DISPLAY_WIDTH, 24);
+    CpuFastCopy((u8*)gPopUpWindowBorder_Tiles, gWindows[mapNamePopUpWindowId].tileData, ((8 * gWindows[mapNamePopUpWindowId].window.width) * (8 * gWindows[mapNamePopUpWindowId].window.height) / 2));
+    CpuFastCopy((u8*)gPopUpWindowBorder_Tiles + ((gWindows[weatherPopUpWindowId].window.width * gWindows[weatherPopUpWindowId].window.height) * TILE_SIZE_4BPP), gWindows[weatherPopUpWindowId].tileData, (8 * gWindows[weatherPopUpWindowId].window.width) * (8 * gWindows[weatherPopUpWindowId].window.height) / 2);
+    //BlitBitmapRectToWindow(mapNamePopUpWindowId, gPopUpWindowBorder_Tiles, 0, 0, DISPLAY_WIDTH, 24, 0, 0, DISPLAY_WIDTH, 24);
+    //BlitBitmapRectToWindow(weatherPopUpWindowId, gPopUpWindowBorder_Tiles, 0, 24, DISPLAY_WIDTH, 24, 0, 0, DISPLAY_WIDTH, 24);
 }

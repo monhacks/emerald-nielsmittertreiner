@@ -131,6 +131,5 @@ u8 AddWeatherPopUpWindow(void);
 u8 GetSecondaryPopUpWindowId(void);
 void RemoveSecondaryPopUpWindow(void);
 void SetDoublePopUpWindowScanlineBuffers(u8 offset);
-void HBlankCB_DoublePopupWindow(void);
 
 #endif // GUARD_MENU_H

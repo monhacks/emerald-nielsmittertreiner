@@ -21,7 +21,29 @@
 #include "constants/rgb.h"
 #include "data/text/quest_descriptions.h"
 
-#define TAG_QUEST_ICON 0x8001
+// States and data defines for Task_MapNamePopUpWindow
+enum {
+    STATE_SLIDE_IN,
+    STATE_WAIT,
+    STATE_SLIDE_OUT,
+    STATE_UNUSED,
+    STATE_ERASE,
+    STATE_END,
+    STATE_PRINT, // For some reason the first state is numerically last.
+};
+
+#define TAG_QUEST_ICON      0x8001
+#define POPUP_ONSCREEN_TIME 120
+#define POPUP_OFFSCREEN_Y   24
+#define POPUP_SLIDE_SPEED   2
+
+#define tState         data[0]
+#define tOnscreenTimer data[1]
+#define tYOffset       data[2]
+#define tIncomingPopUp data[3]
+#define tPrintTimer    data[4]
+#define tSpriteId      data[5]
+#define tQuestId       data[6]
 
 static u8 *GetQuestPointer(u16 id);
 static void Task_QuestPopUpWindow(u8 taskId);
@@ -191,18 +213,15 @@ void ShowQuestPopup(u16 id)
     if (!FuncIsActiveTask(Task_QuestPopUpWindow))
     {
         gPopupTaskId = CreateTask(Task_QuestPopUpWindow, 100);
-        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT1_BG0 | BLDCNT_TGT2_ALL | BLDCNT_EFFECT_BLEND);
-        //SetHBlankCallback(HBlankCB_DoublePopupWindow);
-        EnableInterrupts(INTR_FLAG_HBLANK);
-        gTasks[gPopupTaskId].data[0] = 6;
-        gTasks[gPopupTaskId].data[2] = 24;
-        gTasks[gPopupTaskId].data[6] = id;
+        gTasks[gPopupTaskId].tState = STATE_PRINT;
+        gTasks[gPopupTaskId].tYOffset = POPUP_OFFSCREEN_Y;
+        gTasks[gPopupTaskId].tQuestId = id;
     }
     else
     {
-        if (gTasks[gPopupTaskId].data[0] != 2)
-            gTasks[gPopupTaskId].data[0] = 2;
-        gTasks[gPopupTaskId].data[3] = 1;
+        if (gTasks[gPopupTaskId].tState != STATE_SLIDE_OUT)
+            gTasks[gPopupTaskId].tState = STATE_SLIDE_OUT;
+        gTasks[gPopupTaskId].tIncomingPopUp = TRUE;
     }
 }
 
@@ -216,11 +235,6 @@ void HideQuestPopUpWindow(void)
         RemoveSecondaryPopUpWindow();
         ScanlineEffect_Stop();
         SetGpuReg_ForcedBlank(REG_OFFSET_BG0VOFS, 0);
-        SetGpuReg(REG_OFFSET_WININ, WININ_WIN0_BG_ALL | WININ_WIN0_OBJ | WININ_WIN1_BG_ALL | WININ_WIN1_OBJ);
-        SetGpuReg(REG_OFFSET_BLDCNT, BLDCNT_TGT2_BG1 | BLDCNT_TGT2_BG2 | BLDCNT_TGT2_BG3 | BLDCNT_TGT2_OBJ | BLDCNT_EFFECT_BLEND);
-        SetGpuReg(REG_OFFSET_BLDALPHA, BLDALPHA_BLEND(8, 10));
-        DisableInterrupts(INTR_FLAG_HBLANK);
-        SetHBlankCallback(NULL);
         DestroyTask(gPopupTaskId);
     }
 }
@@ -229,88 +243,90 @@ static void Task_QuestPopUpWindow(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
 
-    switch (task->data[0])
+    switch (task->tState)
     {
-    case 6:
-        task->data[4]++;
-        if (task->data[4] > 30)
+    case STATE_PRINT:
+        task->tPrintTimer++;
+        if (task->tPrintTimer > 30)
         {
-            task->data[0] = 0;
-            task->data[4] = 0;
+            task->tState = STATE_SLIDE_IN;
+            task->tPrintTimer = 0;
             ShowQuestPopUpWindow();
             ScanlineEffect_SetParams(gPopUpScanlineEffectParams);
         }
         break;
-    case 0:
-        task->data[2] -= 2;
-        if (task->data[2] <= 0 )
+    case STATE_SLIDE_IN:
+        task->tYOffset -= POPUP_SLIDE_SPEED;
+        if (task->tYOffset <= 0 )
         {
-            task->data[2] = 0;
-            task->data[0] = 1;
-            gTasks[gPopupTaskId].data[1] = 0;
+            task->tYOffset = 0;
+            task->tState = STATE_WAIT;
+            gTasks[gPopupTaskId].tOnscreenTimer = 0;
         }
         break;
-    case 1:
-        task->data[1]++;
-        if (task->data[1] > 120 )
+    case STATE_WAIT:
+        task->tOnscreenTimer++;
+        if (task->tOnscreenTimer > POPUP_ONSCREEN_TIME)
         {
-            task->data[1] = 0;
-            task->data[0] = 2;
+            task->tOnscreenTimer = 0;
+            task->tState = STATE_SLIDE_OUT;
         }
         break;
-    case 2:
-        task->data[2] += 2;
-        if (task->data[2] > 23)
+    case STATE_SLIDE_OUT:
+        task->tYOffset += POPUP_SLIDE_SPEED;
+        if (task->tYOffset > POPUP_OFFSCREEN_Y - 1)
         {
-            task->data[2] = 24;
-            if (task->data[3])
+            task->tYOffset = POPUP_OFFSCREEN_Y;
+            if (task->tIncomingPopUp)
             {
-                task->data[0] = 6;
-                task->data[4] = 0;
-                task->data[3] = 0;
+                task->tState = STATE_PRINT;
+                task->tPrintTimer = 0;
+                task->tIncomingPopUp = FALSE;
             }
             else
             {
-                task->data[0] = 4;
+                task->tState = STATE_ERASE;
                 return;
             }
         }
         break;
-    case 4:
+    case STATE_ERASE:
+        ClearStdWindowAndFrame(GetPrimaryPopUpWindowId(), TRUE);
+        ClearStdWindowAndFrame(GetSecondaryPopUpWindowId(), TRUE);
+        task->tState = STATE_END;
+        break;
+    case STATE_END:
         HideQuestPopUpWindow();
         return;
     }
 
-    SetDoublePopUpWindowScanlineBuffers(task->data[2]);
+    SetDoublePopUpWindowScanlineBuffers(task->tYOffset);
 }
 
 static void ShowQuestPopUpWindow(void)
 {
-    s16 *data = gTasks[gPopupTaskId].data;
     u8 string[QUEST_NAME_LENGTH];
     u8 *txtPtr;
+    u8 primaryWindowId = AddMapNamePopUpWindow();
+    u8 secondaryWindowId = AddWeatherPopUpWindow();
     
-    SetGpuRegBits(REG_OFFSET_WININ, WININ_WIN0_CLR);
     LoadSpritePalette(&sSpritePalette_QuestIcons);
     LoadSpriteSheet(&sSpriteSheet_QuestIcons);
-    AddMapNamePopUpWindow();
-    AddWeatherPopUpWindow();
     LoadQuestPopUpWindowBgs();
     LoadPalette(gPopUpWindowBorder_Palette, 0xE0, 32);
 
-    data[5] = CreateSprite(&sSpriteTemplate_QuestIcons, 10, 12, 0);
+    gTasks[gPopupTaskId].tSpriteId = CreateSprite(&sSpriteTemplate_QuestIcons, 10, 12, 0);
 
     string[0] = EXT_CTRL_CODE_BEGIN;
     string[1] = EXT_CTRL_CODE_HIGHLIGHT;
     string[2] = TEXT_COLOR_TRANSPARENT;
     txtPtr = &(string[3]);
 
-    StringCopy(txtPtr, QuestGetName(data[6]));
-    AddTextPrinterParameterized(GetPrimaryPopUpWindowId(), FONT_SHORT, string, 20, 4, TEXT_SKIP_DRAW, NULL);
-    AddTextPrinterParameterized(GetSecondaryPopUpWindowId(), FONT_SMALL, sText_NewQuestUnlocked, 144, 8, TEXT_SKIP_DRAW, NULL);
-
-    CopyWindowToVram(GetPrimaryPopUpWindowId(), COPYWIN_FULL);
-    CopyWindowToVram(GetSecondaryPopUpWindowId(), COPYWIN_FULL);
+    StringCopy(txtPtr, QuestGetName(gTasks[gPopupTaskId].tQuestId));
+    AddTextPrinterParameterized(primaryWindowId, FONT_SHORT, string, 20, 4, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized(secondaryWindowId, FONT_SMALL, sText_NewQuestUnlocked, 144, 8, TEXT_SKIP_DRAW, NULL);
+    CopyWindowToVram(primaryWindowId, COPYWIN_FULL);
+    CopyWindowToVram(secondaryWindowId, COPYWIN_FULL);
 }
 
 static void LoadQuestPopUpWindowBgs(void)
@@ -318,17 +334,17 @@ static void LoadQuestPopUpWindowBgs(void)
     u8 primaryWindowId = GetPrimaryPopUpWindowId();
     u8 secondaryWindowId = GetSecondaryPopUpWindowId();
 
-    BlitBitmapRectToWindow(primaryWindowId, gPopUpWindowBorder_Tiles, 0, 0, DISPLAY_WIDTH, 24, 0, 0, DISPLAY_WIDTH, 24);
-    BlitBitmapRectToWindow(secondaryWindowId, gPopUpWindowBorder_Tiles, 0, 24, DISPLAY_WIDTH, 24, 0, 0, DISPLAY_WIDTH, 24);
     PutWindowTilemap(primaryWindowId);
     PutWindowTilemap(secondaryWindowId);
+    CpuFastCopy((u8*)gPopUpWindowBorder_Tiles, gWindows[primaryWindowId].tileData, ((8 * gWindows[primaryWindowId].window.width) * (8 * gWindows[primaryWindowId].window.height) / 2));
+    CpuFastCopy((u8*)gPopUpWindowBorder_Tiles + ((gWindows[secondaryWindowId].window.width * gWindows[secondaryWindowId].window.height) * TILE_SIZE_4BPP), gWindows[secondaryWindowId].tileData, (8 * gWindows[secondaryWindowId].window.width) * (8 * gWindows[secondaryWindowId].window.height) / 2);
 }
 
 static void SpriteCB_QuestIcons(struct Sprite *sprite)
 {
     struct Task *task = &gTasks[gPopupTaskId];
 
-    sprite->animNum = QuestGetType(task->data[6]);
+    sprite->animNum = QuestGetType(task->tQuestId);
     sprite->y2 = -task->data[2];
     sprite->data[0] += 4;
     sprite->data[0] &= 0x7F;
