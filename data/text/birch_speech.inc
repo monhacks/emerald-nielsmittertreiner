@@ -7,7 +7,7 @@ gText_Birch_IsThisTimeCorrect::
 
 gText_Birch_TimeHasBeenSet::
 	.string "The time has been set to:\n"
-	.string "{STR_VAR_1}, {STR_VAR_2}:{STR_VAR_3}.$"
+	.string "{STR_VAR_1}, {STR_VAR_2}.$"
 
 gText_Birch_Welcome::
 	.string "Hi! Sorry to keep you waiting!\p"

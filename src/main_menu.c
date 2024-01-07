@@ -1534,30 +1534,11 @@ static void Task_NewGameBirchSpeech_ProcessTimeYesNoMenu(u8 taskId)
 
 static void Task_NewGameBirchSpeech_ConfirmTime(u8 taskId)
 {
-    u8 *dest = gStringVar3;
-
     ClearStdWindowAndFrame(3, 0);
     FillWindowPixelBuffer(0, PIXEL_FILL(1));
     CopyWindowToVram(3, 3);
     StringCopy(gStringVar1, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
-    if (gSaveBlock2Ptr->optionsClockMode == OPTIONS_CLOCK_12H && gSaveBlock2Ptr->inGameClock.hours < 12)
-        ConvertIntToDecimalStringN(gStringVar2, gSaveBlock2Ptr->inGameClock.hours, STR_CONV_MODE_LEADING_ZEROS, 2);   
-    else
-        ConvertIntToDecimalStringN(gStringVar2, gSaveBlock2Ptr->inGameClock.hours - 12, STR_CONV_MODE_LEADING_ZEROS, 2);
-    
-    dest = ConvertIntToDecimalStringN(dest, gSaveBlock2Ptr->inGameClock.minutes, STR_CONV_MODE_LEADING_ZEROS, 2);
-    if (gSaveBlock2Ptr->optionsClockMode == OPTIONS_CLOCK_12H)
-    {
-        *dest++ = CHAR_SPACE;
-
-        if (gSaveBlock2Ptr->inGameClock.hours < 12)
-            *dest++ = CHAR_A;
-        else
-            *dest++ = CHAR_P;
-
-        *dest++ = CHAR_M;
-        *dest++ = EOS;
-    }
+    FormatDecimalTimeWithoutSeconds(gStringVar2, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->optionsClockMode);
     StringExpandPlaceholders(gStringVar4, gText_Birch_TimeHasBeenSet);
     AddTextPrinterForMessage(1);
     gTasks[taskId].func = Task_NewGameBirchSpeech_WaitForConfirmTimeTextprinter;

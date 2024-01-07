@@ -57,16 +57,16 @@ void InGameClock_SetTime(s8 dayOfWeek, s8 hour, s8 minute)
     gSaveBlock2Ptr->inGameClock.minutes = minute;
 }
 
-void FormatDecimalTimeWithoutSeconds(u8 *dest, s8 hour, s8 minute, bool8 is24Hour)
+void FormatDecimalTimeWithoutSeconds(u8 *dest, s8 hour, s8 minute, u16 clockMode)
 {
-    switch (is24Hour)
+    switch (clockMode)
     {
-    case TRUE:
+    case OPTIONS_CLOCK_12H:
         dest = ConvertIntToDecimalStringN(dest, hour, STR_CONV_MODE_LEADING_ZEROS, 2);
         *dest++ = CHAR_COLON;
         dest = ConvertIntToDecimalStringN(dest, minute, STR_CONV_MODE_LEADING_ZEROS, 2);
         break;
-    case FALSE:
+    case OPTIONS_CLOCK_24H:
         if (hour < 13)
             dest = ConvertIntToDecimalStringN(dest, hour, STR_CONV_MODE_LEADING_ZEROS, 2);
         else
