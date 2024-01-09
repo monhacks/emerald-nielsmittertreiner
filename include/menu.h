@@ -42,7 +42,6 @@ struct MenuAction
 
 extern const u16 gStandardMenuPalette[];
 extern EWRAM_DATA u8 gPopupTaskId;
-extern const struct ScanlineEffectParams gPopUpScanlineEffectParams;
 
 void FreeAllOverworldWindowBuffers(void);
 void InitStandardTextBoxWindows(void);
@@ -130,6 +129,6 @@ u8 AddFieldEffectPopUpWindow(void);
 u8 AddWeatherPopUpWindow(void);
 u8 GetSecondaryPopUpWindowId(void);
 void RemoveSecondaryPopUpWindow(void);
-void SetDoublePopUpWindowScanlineBuffers(u8 offset);
+void HBlankCB_DoublePopupWindow(void);
 
 #endif // GUARD_MENU_H

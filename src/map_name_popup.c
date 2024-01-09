@@ -11,7 +11,6 @@
 #include "map_name_popup.h"
 #include "palette.h"
 #include "region_map.h"
-#include "scanline_effect.h"
 #include "start_menu.h"
 #include "string_util.h"
 #include "task.h"
@@ -79,7 +78,8 @@ static void Task_MapNamePopUpWindow(u8 taskId)
             task->tState = STATE_SLIDE_IN;
             task->tPrintTimer = 0;
             ShowMapNamePopUpWindow();
-            ScanlineEffect_SetParams(gPopUpScanlineEffectParams);
+            EnableInterrupts(INTR_FLAG_HBLANK);
+            SetHBlankCallback(HBlankCB_DoublePopupWindow);
         }
         break;
     case STATE_SLIDE_IN:
@@ -89,7 +89,7 @@ static void Task_MapNamePopUpWindow(u8 taskId)
         {
             task->tYOffset = 0;
             task->tState = STATE_WAIT;
-            gTasks[gPopupTaskId].data[1] = 0;
+            gTasks[gPopupTaskId].tOnscreenTimer = 0;
         }
         break;
     case STATE_WAIT:
@@ -129,7 +129,6 @@ static void Task_MapNamePopUpWindow(u8 taskId)
         HideMapNamePopUpWindow();
         return;
     }
-    SetDoublePopUpWindowScanlineBuffers(task->tYOffset);
 }
 
 void HideMapNamePopUpWindow(void)
@@ -140,7 +139,8 @@ void HideMapNamePopUpWindow(void)
         ClearStdWindowAndFrame(GetSecondaryPopUpWindowId(), TRUE);
         RemovePrimaryPopUpWindow();
         RemoveSecondaryPopUpWindow();
-        ScanlineEffect_Stop();
+        DisableInterrupts(INTR_FLAG_HBLANK);
+        SetHBlankCallback(NULL);
         SetGpuReg_ForcedBlank(REG_OFFSET_BG0VOFS, 0);
         DestroyTask(gPopupTaskId);
     }
@@ -150,10 +150,9 @@ static void ShowMapNamePopUpWindow(void)
 {
     u8 mapDisplayHeader[24];
     u8 *withoutPrefixPtr;
-    
-    //SetGpuRegBits(REG_OFFSET_WININ, WININ_WIN0_CLR);
-    AddMapNamePopUpWindow();
-    AddWeatherPopUpWindow();
+    u8 mapNamePopUpWindowId = AddMapNamePopUpWindow();
+    u8 weatherPopUpWindowId = AddWeatherPopUpWindow();
+
     LoadMapNamePopUpWindowBgs();
     LoadPalette(gPopUpWindowBorder_Palette, 0xE0, 32);
 
@@ -162,15 +161,15 @@ static void ShowMapNamePopUpWindow(void)
     mapDisplayHeader[2] = TEXT_COLOR_TRANSPARENT;
     withoutPrefixPtr = &(mapDisplayHeader[3]);
     GetMapName(withoutPrefixPtr, gMapHeader.regionMapSectionId, 0);
-    AddTextPrinterParameterized(GetPrimaryPopUpWindowId(), FONT_SHORT, mapDisplayHeader, 8, 4, TEXT_SKIP_DRAW, NULL);
+    AddTextPrinterParameterized(mapNamePopUpWindowId, FONT_SHORT, mapDisplayHeader, 8, 4, TEXT_SKIP_DRAW, NULL);
 
     withoutPrefixPtr = &(mapDisplayHeader[3]);
     FormatDecimalTimeWithoutSeconds(withoutPrefixPtr, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->optionsClockMode);
 
     //GetStringRightAlignXOffset(FONT_SMALL, mapDisplayHeader, DISPLAY_WIDTH);
-    AddTextPrinterParameterized(GetSecondaryPopUpWindowId(), FONT_SMALL, mapDisplayHeader, GetStringRightAlignXOffset(FONT_SMALL, mapDisplayHeader, DISPLAY_WIDTH) - 8, 6, TEXT_SKIP_DRAW, NULL);
-    CopyWindowToVram(GetPrimaryPopUpWindowId(), COPYWIN_FULL);
-    CopyWindowToVram(GetSecondaryPopUpWindowId(), COPYWIN_FULL);
+    AddTextPrinterParameterized(weatherPopUpWindowId, FONT_SMALL, mapDisplayHeader, GetStringRightAlignXOffset(FONT_SMALL, mapDisplayHeader, DISPLAY_WIDTH) - 8, 6, TEXT_SKIP_DRAW, NULL);
+    CopyWindowToVram(mapNamePopUpWindowId, COPYWIN_FULL);
+    CopyWindowToVram(weatherPopUpWindowId, COPYWIN_FULL);
 }
 
 static void LoadMapNamePopUpWindowBgs(void)

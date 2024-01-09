@@ -79,11 +79,6 @@ static EWRAM_DATA void *sTempTileDataBuffer[0x20] = {NULL};
 
 const u16 gStandardMenuPalette[] = INCBIN_U16("graphics/interface/std_menu.gbapal");
 
-const struct ScanlineEffectParams gPopUpScanlineEffectParams =
-{
-    (void *)REG_ADDR_BG0VOFS, SCANLINE_EFFECT_DMACNT_16BIT, 1
-};
-
 static const u8 sTextSpeedFrameDelays[] = 
 { 
     [OPTIONS_TEXT_SPEED_SLOW] = 4, 
@@ -2185,19 +2180,13 @@ void RemoveSecondaryPopUpWindow(void)
     }
 }
 
-void SetDoublePopUpWindowScanlineBuffers(u8 offset)
+void HBlankCB_DoublePopupWindow(void)
 {
-    for (u32 i = 0; i < DISPLAY_HEIGHT; i++)
-    {
-        if (i < 80)
-        {
-            gScanlineEffectRegBuffers[0][i] = offset;
-            gScanlineEffectRegBuffers[1][i] = offset;
-        }
-        else
-        {
-            gScanlineEffectRegBuffers[0][i] = -offset;
-            gScanlineEffectRegBuffers[1][i] = -offset;
-        }
-    }
+    u16 offset = gTasks[gPopupTaskId].data[2];
+    u16 scanline = REG_VCOUNT;
+
+    if (scanline < 80 || scanline > 160)
+        REG_BG0VOFS = offset;
+    else
+        REG_BG0VOFS = 512 - offset;
 }

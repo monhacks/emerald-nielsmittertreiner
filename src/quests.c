@@ -8,7 +8,6 @@
 #include "quests.h"
 #include "international_string_util.h"
 #include "item.h"
-#include "scanline_effect.h"
 #include "sprite.h"
 #include "string_util.h"
 #include "text.h"
@@ -233,7 +232,8 @@ void HideQuestPopUpWindow(void)
         ClearStdWindowAndFrame(GetSecondaryPopUpWindowId(), TRUE);
         RemovePrimaryPopUpWindow();
         RemoveSecondaryPopUpWindow();
-        ScanlineEffect_Stop();
+        DisableInterrupts(INTR_FLAG_HBLANK);
+        SetHBlankCallback(NULL);
         SetGpuReg_ForcedBlank(REG_OFFSET_BG0VOFS, 0);
         DestroyTask(gPopupTaskId);
     }
@@ -252,7 +252,8 @@ static void Task_QuestPopUpWindow(u8 taskId)
             task->tState = STATE_SLIDE_IN;
             task->tPrintTimer = 0;
             ShowQuestPopUpWindow();
-            ScanlineEffect_SetParams(gPopUpScanlineEffectParams);
+            EnableInterrupts(INTR_FLAG_HBLANK);
+            SetHBlankCallback(HBlankCB_DoublePopupWindow);
         }
         break;
     case STATE_SLIDE_IN:
@@ -299,8 +300,6 @@ static void Task_QuestPopUpWindow(u8 taskId)
         HideQuestPopUpWindow();
         return;
     }
-
-    SetDoublePopUpWindowScanlineBuffers(task->tYOffset);
 }
 
 static void ShowQuestPopUpWindow(void)
