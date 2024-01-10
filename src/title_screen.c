@@ -772,19 +772,22 @@ static void Task_Titlescreen_AnimateSky(u8 taskId)
     data[5] += sCloudScrollSpeeds[task->tDeoxysForm][5];
     data[6] += sCloudScrollSpeeds[task->tDeoxysForm][6];
 
-    data[7] += 3;
-    data[8] += 3;
-    data[13] += 3;
-    data[14] += 3;
-    data[7] &= 0x7F;
-    data[8] &= 0x7F;
-    data[13] &= 0x7F;
-    data[14] &= 0x7F;
+    if (data[15])
+    {
+        data[7] += 3;
+        data[8] += 3;
+        data[13] += 3;
+        data[14] += 3;
+        data[7] &= 0x7F;
+        data[8] &= 0x7F;
+        data[13] &= 0x7F;
+        data[14] &= 0x7F;
 
-    BlendPalette(234, 1, gSineTable[data[7]] >> 5, RGB(6, 4, 7));
-    BlendPalette(235, 1, gSineTable[data[8]] >> 5, RGB(6, 6, 10));
-    BlendPalette(238, 1, gSineTable[data[13]] >> 5, RGB(3, 2, 4));
-    BlendPalette(239, 1, gSineTable[data[14]] >> 5, RGB(1, 1, 1));
+        BlendPalette(234, 1, gSineTable[data[7]] >> 5, RGB(6, 4, 7));
+        BlendPalette(235, 1, gSineTable[data[8]] >> 5, RGB(6, 6, 10));
+        BlendPalette(238, 1, gSineTable[data[13]] >> 5, RGB(3, 2, 4));
+        BlendPalette(239, 1, gSineTable[data[14]] >> 5, RGB(1, 1, 1));
+    }
 
     switch (data[9])
     {
@@ -943,6 +946,8 @@ void CB2_InitTitleScreen(void)
         gMain.state = 2;
         break;
     case 2:
+        sIsDeoxysSpawned = FALSE;
+        sBg0HorizontalOffset = 0;
         CpuFastFill16(0, gScanlineEffectRegBuffers, sizeof(gScanlineEffectRegBuffers));
         ScanlineEffect_SetParams(sScanlineParams_Titlescreen_Clouds);
         sScrollTaskId = CreateTask(Task_Titlescreen_AnimateSky, 1);
@@ -950,6 +955,7 @@ void CB2_InitTitleScreen(void)
         gTasks[sScrollTaskId].data[8] = 32;
         gTasks[sScrollTaskId].data[13] = 64;
         gTasks[sScrollTaskId].data[14] = 96;
+        gTasks[sScrollTaskId].data[15] = TRUE;
         taskId = CreateTask(Task_TitleScreenPhase1, 0);
         gTasks[taskId].tCounter = 256;
         gTasks[taskId].tSkipToNext = FALSE;
@@ -1329,6 +1335,7 @@ static void Task_TitleScreenPhase3(u8 taskId)
         FadeOutBGM(2);
         PlaySE(SE_SELECT);
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+        gTasks[sScrollTaskId].data[15] = FALSE;
         task->func = Task_TitleScreenHandleAPress;
     }
     else if (JOY_NEW(DPAD_LEFT))
