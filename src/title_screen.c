@@ -1180,6 +1180,18 @@ static void Task_TitleScreenCheckSave(u8 taskId)
             task->tMenuType = HAS_NO_SAVED_GAME;
             task->func = Task_WaitForTitleScreenSaveErrorMessage;
             break;
+        case SAVE_STATUS_OUTDATED:
+            CreateTitleScreenErrorWindow(gText_SaveFileOutdated, 12);
+            task->tMenuType = HAS_NO_SAVED_GAME;
+            task->func = Task_WaitForTitleScreenSaveErrorMessage;
+            break;
+        case SAVE_STATUS_UPDATED:
+            CreateTitleScreenErrorWindow(gText_SaveFileUpdated, 12);
+            task->tMenuType = HAS_SAVED_GAME;
+            if (IsMysteryEventEnabled())
+                task->tMenuType++;
+            task->func = Task_WaitForTitleScreenSaveErrorMessage;
+            break;
         case SAVE_STATUS_ERROR:
             CreateTitleScreenErrorWindow(gText_SaveFileCorrupted, 2);
             task->func = Task_WaitForTitleScreenSaveErrorMessage;

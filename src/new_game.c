@@ -154,6 +154,8 @@ void NewGameInitData(void)
         RtcReset();
 
     gDifferentSaveFile = TRUE;
+    gSaveBlock2Ptr->saveSentinel = 0xFF;
+    gSaveBlock2Ptr->saveVersion = SAVE_VERSION;
     gSaveBlock2Ptr->encryptionKey = 0;
     ZeroPlayerPartyMons();
     ZeroEnemyPartyMons();

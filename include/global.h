@@ -16,6 +16,7 @@
 #include "constants/pokemon.h"
 #include "constants/easy_chat.h"
 #include "constants/trainer_hill.h"
+#include "constants/items.h"
 
 // Prevent cross-jump optimization.
 #define BLOCK_CROSS_JUMP asm("");
@@ -142,6 +143,7 @@
 #define NUM_DEX_FLAG_BYTES ROUND_BITS_TO_BYTES(NUM_SPECIES)
 #define NUM_FLAG_BYTES ROUND_BITS_TO_BYTES(FLAGS_COUNT)
 #define NUM_TRENDY_SAYING_BYTES ROUND_BITS_TO_BYTES(NUM_TRENDY_SAYINGS)
+#define ITEM_FLAGS_COUNT ROUND_BITS_TO_BYTES(ITEMS_COUNT)
 #define NUM_QUEST_BYTES ROUND_BITS_TO_BYTES(NUM_QUESTS)
 
 // This returns the number of arguments passed to it (up to 8).
@@ -535,11 +537,11 @@ struct Follower
     /*0x15*/ u8 locked;
 }; /* size = 0x18 */
 
-#include "constants/items.h"
-#define ITEM_FLAGS_COUNT ((ITEMS_COUNT / 8) + ((ITEMS_COUNT % 8) ? 1 : 0))
-
 struct SaveBlock2
 {
+    u8 saveSentinel; // 0xFF means readable save, if not, it is save v0
+    u8 godmode:1;
+    u16 saveVersion;
     u8 playerName[PLAYER_NAME_LENGTH + 1];
     u8 playerGender; // MALE, FEMALE
     u8 specialSaveWarpFlags;
@@ -574,9 +576,6 @@ struct SaveBlock2
     struct Follower follower;
     u8 itemFlags[ITEM_FLAGS_COUNT];
     struct InGameClock inGameClock;
-    #ifdef DEBUG
-    bool8 godmode:1;
-    #endif
 };
 
 extern struct SaveBlock2 *gSaveBlock2Ptr;

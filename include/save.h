@@ -31,6 +31,8 @@
 #define SAVE_STATUS_OK       1
 #define SAVE_STATUS_CORRUPT  2
 #define SAVE_STATUS_NO_FLASH 4
+#define SAVE_STATUS_OUTDATED 0xF0
+#define SAVE_STATUS_UPDATED  0xFE
 #define SAVE_STATUS_ERROR    0xFF
 
 // Special sector id value for certain save functions to
@@ -94,6 +96,7 @@ void ClearSaveData(void);
 void Save_ResetSaveCounters(void);
 u8 HandleSavingData(u8 saveType);
 u8 TrySavingData(u8 saveType);
+bool8 TryUpdatingSaveData(void);
 bool8 LinkFullSave_Init(void);
 bool8 LinkFullSave_WriteSector(void);
 bool8 LinkFullSave_ReplaceLastSector(void);

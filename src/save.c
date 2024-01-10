@@ -9,6 +9,8 @@
 #include "overworld.h"
 #include "pokemon_storage_system.h"
 #include "main.h"
+#include "malloc.h"
+#include "save_update.h"
 #include "trainer_hill.h"
 #include "link.h"
 #include "constants/game_stat.h"
@@ -488,6 +490,12 @@ static u8 TryLoadSaveSlot(u16 sectorId, struct SaveSectorLocation *locations)
         CopySaveSlotData(FULL_SAVE_SLOT, locations);
     }
 
+    if (status == SAVE_STATUS_OK)
+    {
+        if (gSaveBlock2Ptr->saveSentinel != 0xFF || gSaveBlock2Ptr->saveVersion != SAVE_VERSION)
+            status = SAVE_STATUS_OUTDATED;
+    }
+
     return status;
 }
 
@@ -506,7 +514,7 @@ static u8 CopySaveSlotData(u16 sectorId, struct SaveSectorLocation *locations)
         if (id == 0)
             gLastWrittenSector = i;
 
-        checksum = CalculateChecksum(gReadWriteSector->data, locations[id].size);
+        checksum = CalculateChecksum(gReadWriteSector->data, SECTOR_DATA_SIZE);
 
         // Only copy data for sectors whose signature and checksum fields are correct
         if (gReadWriteSector->signature == SECTOR_SIGNATURE && gReadWriteSector->checksum == checksum)
@@ -535,7 +543,7 @@ static u8 GetSaveValidStatus(const struct SaveSectorLocation *locations)
         if (gReadWriteSector->signature == SECTOR_SIGNATURE)
         {
             signatureValid = TRUE;
-            checksum = CalculateChecksum(gReadWriteSector->data, locations[gReadWriteSector->id].size);
+            checksum = CalculateChecksum(gReadWriteSector->data, SECTOR_DATA_SIZE);
             if (gReadWriteSector->checksum == checksum)
             {
                 saveSlotCounter = gReadWriteSector->counter;
@@ -565,7 +573,7 @@ static u8 TryLoadSaveSector(u8 sectorId, u8 *data, u16 size)
     ReadFlashSector(sectorId, sector);
     if (sector->signature == SECTOR_SIGNATURE)
     {
-        u16 checksum = CalculateChecksum(sector->data, size);
+        u16 checksum = CalculateChecksum(sector->data, SECTOR_DATA_SIZE);
         if (sector->id == checksum)
         {
             // Signature and checksum are correct, copy data
@@ -630,6 +638,14 @@ static void UpdateSaveAddresses(void)
         gRamSaveSectorLocations[i].data = (void *)(gPokemonStoragePtr) + sSaveSlotLayout[i].offset;
         gRamSaveSectorLocations[i].size = sSaveSlotLayout[i].size;
     }
+}
+
+static u16 DetermineSaveVersion(void)
+{
+    if (gSaveBlock2Ptr->saveSentinel != 0xFF)
+        return SAVE_VERSION_0;
+
+    return gSaveBlock2Ptr->saveVersion;
 }
 
 u8 HandleSavingData(u8 saveType)
@@ -710,6 +726,62 @@ u8 TrySavingData(u8 saveType)
         gSaveAttemptStatus = SAVE_STATUS_ERROR;
         return SAVE_STATUS_ERROR;
     }
+}
+
+bool8 TryUpdatingSaveData(void)
+{
+    u16 version = DetermineSaveVersion();
+    u8 *oldSaveSlotLayoutPtr;
+    u8 *oldSaveBlock2Ptr;
+    u8 *oldSaveBlock1Ptr;
+    u8 *oldPokemonStoragePtr;
+    bool8 result = TRUE;
+    u32 i;
+
+    oldSaveSlotLayoutPtr = AllocZeroed(SECTOR_DATA_SIZE * NUM_SECTORS_PER_SLOT);
+    oldSaveBlock2Ptr = oldSaveSlotLayoutPtr;
+    oldSaveBlock1Ptr = oldSaveSlotLayoutPtr;
+    oldPokemonStoragePtr = oldSaveSlotLayoutPtr;
+
+    for (i = SECTOR_ID_SAVEBLOCK2_START; i <= SECTOR_ID_SAVEBLOCK2_END; i++)
+    {
+        gRamSaveSectorLocations[i].data = (void *)(oldSaveBlock2Ptr) + sSaveSlotLayout[i].offset;
+        gRamSaveSectorLocations[i].size = sSaveSlotLayout[i].size;
+        oldSaveBlock1Ptr += sSaveSlotLayout[i].size;
+        oldPokemonStoragePtr += sSaveSlotLayout[i].size;
+    }
+
+    for (i = SECTOR_ID_SAVEBLOCK1_START; i <= SECTOR_ID_SAVEBLOCK1_END; i++)
+    {
+        gRamSaveSectorLocations[i].data = (void *)(oldSaveBlock1Ptr) + sSaveSlotLayout[i].offset;
+        gRamSaveSectorLocations[i].size = sSaveSlotLayout[i].size;
+        oldPokemonStoragePtr += sSaveSlotLayout[i].size;
+    }
+
+    for (i = SECTOR_ID_PKMN_STORAGE_START; i <= SECTOR_ID_PKMN_STORAGE_END; i++)
+    {
+        gRamSaveSectorLocations[i].data = (void *)(oldPokemonStoragePtr) + sSaveSlotLayout[i].offset;
+        gRamSaveSectorLocations[i].size = sSaveSlotLayout[i].size;
+    }
+
+    CopySaveSlotData(FULL_SAVE_SLOT, gRamSaveSectorLocations);
+    CpuFill16(0, &gSaveblock2, sizeof(struct SaveBlock2ASLR));
+    CpuFill16(0, &gSaveblock1, sizeof(struct SaveBlock1ASLR));
+    CpuFill16(0, &gPokemonStorage, sizeof(struct PokemonStorageASLR));
+
+    switch (version)
+    {
+    case SAVE_VERSION_0:
+        result = DoUpdateSaveDataV0(gRamSaveSectorLocations);
+        break;
+    default:
+        result = FALSE;
+        break;
+    }
+
+    FREE_AND_SET_NULL(oldSaveSlotLayoutPtr);
+    CopyPartyAndObjectsFromSave();
+    return result;
 }
 
 bool8 LinkFullSave_Init(void)
