@@ -946,8 +946,10 @@ static bool8 CreateQuestListMenuTemplate(void)
 
     for (u32 i = 0; i < NUM_QUESTS; i++)
     {
-        if (QuestGet(i))
+        if (QuestGet(i) && QuestGetProgress(i) != QUEST_COMPLETED)
+        {
             sPokenav2Ptr->numQuests++;
+        }
     }
 
     if (sPokenav2Ptr->numQuests)
@@ -959,7 +961,7 @@ static bool8 CreateQuestListMenuTemplate(void)
 
         for (u32 i = 0; i < NUM_QUESTS; i++)
         {
-            if (QuestGet(i))
+            if (QuestGet(i) && QuestGetProgress(i) != QUEST_COMPLETED)
             {
                 sPokenav2Ptr->listMenuItems[questIndex].name = QuestGetName(i);
                 sPokenav2Ptr->listMenuItems[questIndex].id = i;
