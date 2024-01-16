@@ -335,8 +335,8 @@ static void LoadQuestPopUpWindowBgs(void)
 
     PutWindowTilemap(primaryWindowId);
     PutWindowTilemap(secondaryWindowId);
-    CpuFastCopy((u8*)gPopUpWindowBorder_Tiles, gWindows[primaryWindowId].tileData, ((8 * gWindows[primaryWindowId].window.width) * (8 * gWindows[primaryWindowId].window.height) / 2));
-    CpuFastCopy((u8*)gPopUpWindowBorder_Tiles + ((gWindows[secondaryWindowId].window.width * gWindows[secondaryWindowId].window.height) * TILE_SIZE_4BPP), gWindows[secondaryWindowId].tileData, (8 * gWindows[secondaryWindowId].window.width) * (8 * gWindows[secondaryWindowId].window.height) / 2);
+    CopyToWindowPixelBuffer(primaryWindowId, gPopUpWindowBorderTop_Tiles, 2880, 0);
+    CopyToWindowPixelBuffer(secondaryWindowId, gPopUpWindowBorderBottom_Tiles, 2880, 0);
 }
 
 static void SpriteCB_QuestIcons(struct Sprite *sprite)

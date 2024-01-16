@@ -188,8 +188,6 @@ static void LoadMapNamePopUpWindowBgs(void)
 
     PutWindowTilemap(mapNamePopUpWindowId);
     PutWindowTilemap(weatherPopUpWindowId);
-    CpuFastCopy((u8*)gPopUpWindowBorder_Tiles, gWindows[mapNamePopUpWindowId].tileData, ((8 * gWindows[mapNamePopUpWindowId].window.width) * (8 * gWindows[mapNamePopUpWindowId].window.height) / 2));
-    CpuFastCopy((u8*)gPopUpWindowBorder_Tiles + ((gWindows[weatherPopUpWindowId].window.width * gWindows[weatherPopUpWindowId].window.height) * TILE_SIZE_4BPP), gWindows[weatherPopUpWindowId].tileData, (8 * gWindows[weatherPopUpWindowId].window.width) * (8 * gWindows[weatherPopUpWindowId].window.height) / 2);
-    //BlitBitmapRectToWindow(mapNamePopUpWindowId, gPopUpWindowBorder_Tiles, 0, 0, DISPLAY_WIDTH, 24, 0, 0, DISPLAY_WIDTH, 24);
-    //BlitBitmapRectToWindow(weatherPopUpWindowId, gPopUpWindowBorder_Tiles, 0, 24, DISPLAY_WIDTH, 24, 0, 0, DISPLAY_WIDTH, 24);
+    CopyToWindowPixelBuffer(mapNamePopUpWindowId, gPopUpWindowBorderTop_Tiles, 2880, 0);
+    CopyToWindowPixelBuffer(weatherPopUpWindowId, gPopUpWindowBorderBottom_Tiles, 2880, 0);
 }
