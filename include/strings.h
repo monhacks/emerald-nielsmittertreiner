@@ -3069,38 +3069,38 @@ extern const u8 gText_AM[];
 extern const u8 gText_PM[];
 
 // Pokénav V2
-extern const u8 gText_Pokenav2[];
-extern const u8 gText_Pokenav2_Map[];
-extern const u8 gText_Pokenav2_Agenda[];
-extern const u8 gText_Pokenav2_Radio[];
-extern const u8 gText_Pokenav2_TurnOff[];
+extern const u8 gText_PokeNav2[];
+extern const u8 gText_PokeNav2_Map[];
+extern const u8 gText_PokeNav2_Agenda[];
+extern const u8 gText_PokeNav2_Radio[];
+extern const u8 gText_PokeNav2_TurnOff[];
 
-extern const u8 gText_Pokenav2_MapDesc[];
-extern const u8 gText_Pokenav2_AgendaDesc[];
-extern const u8 gText_Pokenav2_RadioDesc[];
-extern const u8 gText_Pokenav2_TurnOffDesc[];
+extern const u8 gText_PokeNav2_MapDesc[];
+extern const u8 gText_PokeNav2_AgendaDesc[];
+extern const u8 gText_PokeNav2_RadioDesc[];
+extern const u8 gText_PokeNav2_TurnOffDesc[];
 
-extern const u8 gText_Pokenav2_Eurus[];
+extern const u8 gText_PokeNav2_Eurus[];
 
-extern const u8 gText_Pokenav2_PlayersAgenda[];
-extern const u8 gText_Pokenav2_ClockMode[];
-extern const u8 gText_Pokenav2_ActiveQuests[];
-extern const u8 gText_Pokenav2_NoActiveQuests[];
-extern const u8 gText_Pokenav2_WeatherForecast[];
-extern const u8 gText_Pokenav2_NoReport[];
-extern const u8 gText_Pokenav2_SunnyClouds[];
-extern const u8 gText_Pokenav2_Clear[];
-extern const u8 gText_Pokenav2_Rain[];
-extern const u8 gText_Pokenav2_Snow[];
-extern const u8 gText_Pokenav2_Thunderstorm[];
-extern const u8 gText_Pokenav2_Fog[];
-extern const u8 gText_Pokenav2_Ash[];
-extern const u8 gText_Pokenav2_Sandstorm[];
-extern const u8 gText_Pokenav2_Shade[];
-extern const u8 gText_Pokenav2_Drought[];
-extern const u8 gText_Pokenav2_Downpour[];
-extern const u8 gText_Pokenav2_Abnormal[];
+extern const u8 gText_PokeNav2_PlayersAgenda[];
+extern const u8 gText_PokeNav2_ClockMode[];
+extern const u8 gText_PokeNav2_ActiveQuests[];
+extern const u8 gText_PokeNav2_NoActiveQuests[];
+extern const u8 gText_PokeNav2_WeatherForecast[];
+extern const u8 gText_PokeNav2_NoReport[];
+extern const u8 gText_PokeNav2_SunnyClouds[];
+extern const u8 gText_PokeNav2_Clear[];
+extern const u8 gText_PokeNav2_Rain[];
+extern const u8 gText_PokeNav2_Snow[];
+extern const u8 gText_PokeNav2_Thunderstorm[];
+extern const u8 gText_PokeNav2_Fog[];
+extern const u8 gText_PokeNav2_Ash[];
+extern const u8 gText_PokeNav2_Sandstorm[];
+extern const u8 gText_PokeNav2_Shade[];
+extern const u8 gText_PokeNav2_Drought[];
+extern const u8 gText_PokeNav2_Downpour[];
+extern const u8 gText_PokeNav2_Abnormal[];
 
-extern const u8 gText_Pokenav2_EurusRadio[];
+extern const u8 gText_PokeNav2_EurusRadio[];
 
 #endif // GUARD_STRINGS_H

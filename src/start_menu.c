@@ -689,7 +689,7 @@ static bool8 StartMenuPokeNavCallback(void)
         PlayRainStoppingSoundEffect();
         RemoveExtraStartMenuWindows();
         CleanupOverworldWindowsAndTilemaps();
-        SetMainCallback2(CB2_InitPokenav2);  // Display PokeNav
+        SetMainCallback2(CB2_InitPokeNav2);  // Display PokeNav
 
         return TRUE;
     }

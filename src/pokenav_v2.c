@@ -101,7 +101,7 @@ enum
     MAIN_MENU
 };
 
-struct Pokenav2Struct
+struct PokeNav2Struct
 {
     struct ListMenuTemplate *listMenuTemplate;
     struct ListMenuItem *listMenuItems;
@@ -130,8 +130,8 @@ struct WeatherReportText
     const u8 *color;
 };
 
-static void VBlankCB_Pokenav2(void);
-static void CB2_Pokenav2(void);
+static void VBlankCB_PokeNav2(void);
+static void CB2_PokeNav2(void);
 static void LoadOptionBgs(u8 option);
 static void LoadOptionData(u8 option);
 static bool8 CreateQuestListMenuTemplate(void);
@@ -142,7 +142,7 @@ static void UnloadOptionData(u8 option);
 static void UnloadMainMenuSprites(void);
 
 static void SpriteCB_Icons(struct Sprite *sprite);
-static void Task_Pokenav2(u8 taskId);
+static void Task_PokeNav2(u8 taskId);
 static void Task_MainMenu(u8 taskId);
 static void Task_RegionMap(u8 taskId);
 static void Task_Agenda(u8 taskId);
@@ -158,30 +158,30 @@ static bool8 Task_SlideOptionOut(u8 taskId);
 
 static void Task_LoadOptionData(u8 taskId);
 static void Task_ReturnToMainMenu(u8 taskId);
-static void Task_ExitPokenav2(u8 taskId);
+static void Task_ExitPokeNav2(u8 taskId);
 
 // ewram
-static EWRAM_DATA struct Pokenav2Struct *sPokenav2Ptr = NULL;
+static EWRAM_DATA struct PokeNav2Struct *sPokeNav2Ptr = NULL;
 
 // .rodata
-static const u32 sPokenav2GridTiles[] = INCBIN_U32("graphics/pokenav_v2/grid.4bpp.lz");
-static const u32 sPokenav2GridTilemap[] = INCBIN_U32("graphics/pokenav_v2/grid.bin.lz");
-static const u16 sPokenav2GridPalette[] = INCBIN_U16("graphics/pokenav_v2/grid.gbapal");
+static const u32 sPokeNav2GridTiles[] = INCBIN_U32("graphics/pokenav_v2/grid.4bpp.lz");
+static const u32 sPokeNav2GridTilemap[] = INCBIN_U32("graphics/pokenav_v2/grid.bin.lz");
+static const u16 sPokeNav2GridPalette[] = INCBIN_U16("graphics/pokenav_v2/grid.gbapal");
 
-static const u32 sPokenav2WindowFrameTiles[] = INCBIN_U32("graphics/pokenav_v2/window.4bpp.lz");
-static const u16 sPokenav2WindowFramePalette[] = INCBIN_U16("graphics/pokenav_v2/window.gbapal");
+static const u32 sPokeNav2WindowFrameTiles[] = INCBIN_U32("graphics/pokenav_v2/window.4bpp.lz");
+static const u16 sPokeNav2WindowFramePalette[] = INCBIN_U16("graphics/pokenav_v2/window.gbapal");
 
-static const u32 sPokenav2DescTilemap[] = INCBIN_U32("graphics/pokenav_v2/desc.bin.lz");
-static const u32 sPokenav2RegionMapFrameTilemap[] = INCBIN_U32("graphics/pokenav_v2/map.bin.lz");
-static const u32 sPokenav2AgendaTilemap[] = INCBIN_U32("graphics/pokenav_v2/agenda.bin.lz");
-static const u32 sPokenav2RadioTilemap[] = INCBIN_U32("graphics/pokenav_v2/radio.bin.lz");
+static const u32 sPokeNav2DescTilemap[] = INCBIN_U32("graphics/pokenav_v2/desc.bin.lz");
+static const u32 sPokeNav2RegionMapFrameTilemap[] = INCBIN_U32("graphics/pokenav_v2/map.bin.lz");
+static const u32 sPokeNav2AgendaTilemap[] = INCBIN_U32("graphics/pokenav_v2/agenda.bin.lz");
+static const u32 sPokeNav2RadioTilemap[] = INCBIN_U32("graphics/pokenav_v2/radio.bin.lz");
 
-static const u8 sPokenav2OptionsLeft[] = INCBIN_U8("graphics/pokenav_v2/options_left.4bpp");
-static const u8 sPokenav2OptionsRight[] = INCBIN_U8("graphics/pokenav_v2/options_right.4bpp");
-static const u8 sPokenav2AgendaClockIcons[] = INCBIN_U8("graphics/pokenav_v2/agenda.4bpp");
-static const u16 sPokenav2SpritePalette[] = INCBIN_U16("graphics/pokenav_v2/icons.gbapal");
+static const u8 sPokeNav2OptionsLeft[] = INCBIN_U8("graphics/pokenav_v2/options_left.4bpp");
+static const u8 sPokeNav2OptionsRight[] = INCBIN_U8("graphics/pokenav_v2/options_right.4bpp");
+static const u8 sPokeNav2AgendaClockIcons[] = INCBIN_U8("graphics/pokenav_v2/agenda.4bpp");
+static const u16 sPokeNav2SpritePalette[] = INCBIN_U16("graphics/pokenav_v2/icons.gbapal");
 
-static const u8 sPokenav2OptionLeftPositions[][2] =
+static const u8 sPokeNav2OptionLeftPositions[][2] =
 {
     {48, 48},
     {48, 88},
@@ -189,7 +189,7 @@ static const u8 sPokenav2OptionLeftPositions[][2] =
     {192, 88},
 };
 
-static const u8 sPokenav2OptionRightPositions[][2] =
+static const u8 sPokeNav2OptionRightPositions[][2] =
 {
     {88, 48},
     {88, 88},
@@ -197,7 +197,7 @@ static const u8 sPokenav2OptionRightPositions[][2] =
     {152, 88},
 };
 
-static const u8 sPokenav2TextColors[][3] =
+static const u8 sPokeNav2TextColors[][3] =
 {
     [TEXT_COLORS_TRANSPARENT] = {0, 0, 0},
     [TEXT_COLORS_GRAY]        = {0, 2, 3},
@@ -215,20 +215,20 @@ static const u8 sQuestListColors[][3] =
 
 static const u8 *const sMenuDescriptions[] =
 {
-    gText_Pokenav2_MapDesc,
-    gText_Pokenav2_AgendaDesc,
-    gText_Pokenav2_RadioDesc,
-    gText_Pokenav2_TurnOffDesc
+    gText_PokeNav2_MapDesc,
+    gText_PokeNav2_AgendaDesc,
+    gText_PokeNav2_RadioDesc,
+    gText_PokeNav2_TurnOffDesc
 };
 
-static const void (*const sPokenav2Funcs[])(u8) =
+static const void (*const sPokeNav2Funcs[])(u8) =
 {
     Task_RegionMap,
     Task_Agenda,
     Task_Radio,
 };
 
-static const struct BgTemplate sPokenav2BgTemplates[] =
+static const struct BgTemplate sPokeNav2BgTemplates[] =
 {
     {
         .bg = 0,
@@ -264,7 +264,7 @@ static const struct BgTemplate sPokenav2BgTemplates[] =
     },
 };
 
-static const struct WindowTemplate sPokenav2WindowTemplates[] =
+static const struct WindowTemplate sPokeNav2WindowTemplates[] =
 {
     [WIN_HEADER] = 
     {
@@ -403,109 +403,109 @@ static const struct WeatherReportText sWeatherReportText[] =
 {
     [WEATHER_NONE] =
     {
-        .string = gText_Pokenav2_NoReport,
-        .color = sPokenav2TextColors[TEXT_COLORS_BLUE],
+        .string = gText_PokeNav2_NoReport,
+        .color = sPokeNav2TextColors[TEXT_COLORS_BLUE],
     },
     [WEATHER_SUNNY_CLOUDS] =
     {
-        .string = gText_Pokenav2_SunnyClouds,
-        .color = sPokenav2TextColors[TEXT_COLORS_GREEN],
+        .string = gText_PokeNav2_SunnyClouds,
+        .color = sPokeNav2TextColors[TEXT_COLORS_GREEN],
     },
     [WEATHER_SUNNY] =
     {
-        .string = gText_Pokenav2_Clear,
-        .color = sPokenav2TextColors[TEXT_COLORS_GREEN],
+        .string = gText_PokeNav2_Clear,
+        .color = sPokeNav2TextColors[TEXT_COLORS_GREEN],
     },
     [WEATHER_RAIN] =
     {
-        .string = gText_Pokenav2_Rain,
-        .color = sPokenav2TextColors[TEXT_COLORS_BLUE],
+        .string = gText_PokeNav2_Rain,
+        .color = sPokeNav2TextColors[TEXT_COLORS_BLUE],
     },
     [WEATHER_SNOW] =
     {
-        .string = gText_Pokenav2_Snow,
-        .color = sPokenav2TextColors[TEXT_COLORS_BLUE],
+        .string = gText_PokeNav2_Snow,
+        .color = sPokeNav2TextColors[TEXT_COLORS_BLUE],
     },
     [WEATHER_RAIN_THUNDERSTORM] =
     {
-        .string = gText_Pokenav2_Thunderstorm,
-        .color = sPokenav2TextColors[TEXT_COLORS_RED],
+        .string = gText_PokeNav2_Thunderstorm,
+        .color = sPokeNav2TextColors[TEXT_COLORS_RED],
     },
     [WEATHER_FOG_HORIZONTAL] =
     {
-        .string = gText_Pokenav2_Fog,
-        .color = sPokenav2TextColors[TEXT_COLORS_BLUE],
+        .string = gText_PokeNav2_Fog,
+        .color = sPokeNav2TextColors[TEXT_COLORS_BLUE],
     },
     [WEATHER_VOLCANIC_ASH] =
     {
-        .string = gText_Pokenav2_Ash,
-        .color = sPokenav2TextColors[TEXT_COLORS_RED],
+        .string = gText_PokeNav2_Ash,
+        .color = sPokeNav2TextColors[TEXT_COLORS_RED],
     },
     [WEATHER_SANDSTORM] =
     {
-        .string = gText_Pokenav2_Sandstorm,
-        .color = sPokenav2TextColors[TEXT_COLORS_RED],
+        .string = gText_PokeNav2_Sandstorm,
+        .color = sPokeNav2TextColors[TEXT_COLORS_RED],
     },
     [WEATHER_FOG_DIAGONAL] =
     {
-        .string = gText_Pokenav2_Fog,
-        .color = sPokenav2TextColors[TEXT_COLORS_BLUE],
+        .string = gText_PokeNav2_Fog,
+        .color = sPokeNav2TextColors[TEXT_COLORS_BLUE],
     },
     [WEATHER_UNDERWATER] =
     {
-        .string = gText_Pokenav2_NoReport,
-        .color = sPokenav2TextColors[TEXT_COLORS_BLUE],
+        .string = gText_PokeNav2_NoReport,
+        .color = sPokeNav2TextColors[TEXT_COLORS_BLUE],
     },
     [WEATHER_SHADE] =
     {
-        .string = gText_Pokenav2_Shade,
-        .color = sPokenav2TextColors[TEXT_COLORS_BLUE],
+        .string = gText_PokeNav2_Shade,
+        .color = sPokeNav2TextColors[TEXT_COLORS_BLUE],
     },
     [WEATHER_DROUGHT] =
     {
-        .string = gText_Pokenav2_Drought,
-        .color = sPokenav2TextColors[TEXT_COLORS_RED],
+        .string = gText_PokeNav2_Drought,
+        .color = sPokeNav2TextColors[TEXT_COLORS_RED],
     },
     [WEATHER_DOWNPOUR] =
     {
-        .string = gText_Pokenav2_Downpour,
-        .color = sPokenav2TextColors[TEXT_COLORS_RED],
+        .string = gText_PokeNav2_Downpour,
+        .color = sPokeNav2TextColors[TEXT_COLORS_RED],
     },
     [WEATHER_UNDERWATER_BUBBLES] =
     {
-        .string = gText_Pokenav2_NoReport,
-        .color = sPokenav2TextColors[TEXT_COLORS_BLUE],
+        .string = gText_PokeNav2_NoReport,
+        .color = sPokeNav2TextColors[TEXT_COLORS_BLUE],
     },
     [WEATHER_ABNORMAL] =
     {
-        .string = gText_Pokenav2_Abnormal,
-        .color = sPokenav2TextColors[TEXT_COLORS_RED],
+        .string = gText_PokeNav2_Abnormal,
+        .color = sPokeNav2TextColors[TEXT_COLORS_RED],
     },
 };
 
 const struct SpritePalette sSpritePalette_OptionSprites =
 {
-    .data = sPokenav2SpritePalette,
+    .data = sPokeNav2SpritePalette,
     .tag = TAG_PAL
 };
 
 static const struct SpriteSheet sSpriteSheet_OptionLeftTiles =
 {
-    .data = sPokenav2OptionsLeft,
+    .data = sPokeNav2OptionsLeft,
     .size = 0xE00,
     .tag = TAG_OPTIONS_LEFT,
 };
 
 static const struct SpriteSheet sSpriteSheet_OptionRightTiles =
 {
-    .data = sPokenav2OptionsRight,
+    .data = sPokeNav2OptionsRight,
     .size = 0xE00,
     .tag = TAG_OPTIONS_RIGHT,
 };
 
 static const struct SpriteSheet sSpriteSheet_AgendaClockTiles =
 {
-    .data = sPokenav2AgendaClockIcons,
+    .data = sPokeNav2AgendaClockIcons,
     .size = 0x1C00,
     .tag = TAG_AGENDA_ICONS,
 };
@@ -732,7 +732,7 @@ const struct SpriteTemplate sSpriteTemplate_AgendaClockIcons =
     .callback = SpriteCallbackDummy
 };
 
-void CB2_InitPokenav2(void)
+void CB2_InitPokeNav2(void)
 {
     u32 bench;
 
@@ -766,31 +766,31 @@ void CB2_InitPokenav2(void)
     ResetSpriteData();
     ResetTasks();
 
-    InitBgsFromTemplates(0, sPokenav2BgTemplates, ARRAY_COUNT(sPokenav2BgTemplates));
-    InitWindows(sPokenav2WindowTemplates);
-    sPokenav2Ptr = AllocZeroed(sizeof(struct Pokenav2Struct));
-    sPokenav2Ptr->tilemapBuffers[0] = AllocZeroed(BG_SCREEN_SIZE);
-    sPokenav2Ptr->tilemapBuffers[1] = AllocZeroed(BG_SCREEN_SIZE * 2);
-    sPokenav2Ptr->tilemapBuffers[2] = AllocZeroed(BG_SCREEN_SIZE * 2);
-    sPokenav2Ptr->tilemapBuffers[3] = AllocZeroed(BG_SCREEN_SIZE);
-    SetBgTilemapBuffer(0, sPokenav2Ptr->tilemapBuffers[0]);
-    SetBgTilemapBuffer(1, sPokenav2Ptr->tilemapBuffers[1]);
-    SetBgTilemapBuffer(2, sPokenav2Ptr->tilemapBuffers[2]);
-    SetBgTilemapBuffer(3, sPokenav2Ptr->tilemapBuffers[3]);
+    InitBgsFromTemplates(0, sPokeNav2BgTemplates, ARRAY_COUNT(sPokeNav2BgTemplates));
+    InitWindows(sPokeNav2WindowTemplates);
+    sPokeNav2Ptr = AllocZeroed(sizeof(struct PokeNav2Struct));
+    sPokeNav2Ptr->tilemapBuffers[0] = AllocZeroed(BG_SCREEN_SIZE);
+    sPokeNav2Ptr->tilemapBuffers[1] = AllocZeroed(BG_SCREEN_SIZE * 2);
+    sPokeNav2Ptr->tilemapBuffers[2] = AllocZeroed(BG_SCREEN_SIZE * 2);
+    sPokeNav2Ptr->tilemapBuffers[3] = AllocZeroed(BG_SCREEN_SIZE);
+    SetBgTilemapBuffer(0, sPokeNav2Ptr->tilemapBuffers[0]);
+    SetBgTilemapBuffer(1, sPokeNav2Ptr->tilemapBuffers[1]);
+    SetBgTilemapBuffer(2, sPokeNav2Ptr->tilemapBuffers[2]);
+    SetBgTilemapBuffer(3, sPokeNav2Ptr->tilemapBuffers[3]);
 
-    LZ77UnCompVram(sPokenav2GridTiles, (u16 *)BG_CHAR_ADDR(3));
-    LZ77UnCompWram(sPokenav2GridTilemap, sPokenav2Ptr->tilemapBuffers[3]);
-    LoadPalette(sPokenav2GridPalette, 0, sizeof(sPokenav2GridPalette));
+    LZ77UnCompVram(sPokeNav2GridTiles, (u16 *)BG_CHAR_ADDR(3));
+    LZ77UnCompWram(sPokeNav2GridTilemap, sPokeNav2Ptr->tilemapBuffers[3]);
+    LoadPalette(sPokeNav2GridPalette, 0, sizeof(sPokeNav2GridPalette));
     LoadPalette(GetOverworldTextboxPalettePtr(), 240, 32);
     CopyBgTilemapBufferToVram(3);
     
     LoadOptionBgs(MAIN_MENU);
     BeginNormalPaletteFade(PALETTES_ALL, 0, 16, 0, RGB_BLACK);
     EnableInterrupts(INTR_FLAG_VBLANK);
-    SetVBlankCallback(VBlankCB_Pokenav2);
-    SetMainCallback2(CB2_Pokenav2);
-    CreateTask(Task_Pokenav2, 1);
-    sPokenav2Ptr->bgOffset = OPTION_SLIDE_Y;
+    SetVBlankCallback(VBlankCB_PokeNav2);
+    SetMainCallback2(CB2_PokeNav2);
+    CreateTask(Task_PokeNav2, 1);
+    sPokeNav2Ptr->bgOffset = OPTION_SLIDE_Y;
     
     ShowBg(0);
     ShowBg(1);
@@ -800,7 +800,7 @@ void CB2_InitPokenav2(void)
     PlaySE(SE_POKENAV_ON);
 }
 
-static void VBlankCB_Pokenav2(void)
+static void VBlankCB_PokeNav2(void)
 {
     LoadOam();
     ProcessSpriteCopyRequests();
@@ -809,7 +809,7 @@ static void VBlankCB_Pokenav2(void)
     ChangeBgX(3, 96, BG_COORD_SUB);
 }
 
-static void CB2_Pokenav2(void)
+static void CB2_PokeNav2(void)
 {
     RunTasks();
     AnimateSprites();
@@ -824,45 +824,45 @@ static void LoadOptionBgs(u8 option)
     DmaClear16(3, BG_CHAR_ADDR(2), BG_CHAR_SIZE);
     DmaClear16(3, BG_SCREEN_ADDR(26), BG_SCREEN_SIZE);
     DmaClear16(3, BG_SCREEN_ADDR(28), BG_SCREEN_SIZE);
-    DmaClear16(3, sPokenav2Ptr->tilemapBuffers[1], BG_SCREEN_SIZE * 2);
-    DmaClear16(3, sPokenav2Ptr->tilemapBuffers[2], BG_SCREEN_SIZE * 2);
+    DmaClear16(3, sPokeNav2Ptr->tilemapBuffers[1], BG_SCREEN_SIZE * 2);
+    DmaClear16(3, sPokeNav2Ptr->tilemapBuffers[2], BG_SCREEN_SIZE * 2);
 
     switch (option)
     {
     case REGION_MAP:
-        sPokenav2Ptr->regionMap = AllocZeroed(sizeof(struct RegionMap));
-        LZ77UnCompVram(sPokenav2WindowFrameTiles, (u16 *)BG_CHAR_ADDR(1));
-        LZ77UnCompWram(sPokenav2RegionMapFrameTilemap, sPokenav2Ptr->tilemapBuffers[1]);
-        InitRegionMap(sPokenav2Ptr->regionMap, FALSE);
+        sPokeNav2Ptr->regionMap = AllocZeroed(sizeof(struct RegionMap));
+        LZ77UnCompVram(sPokeNav2WindowFrameTiles, (u16 *)BG_CHAR_ADDR(1));
+        LZ77UnCompWram(sPokeNav2RegionMapFrameTilemap, sPokeNav2Ptr->tilemapBuffers[1]);
+        InitRegionMap(sPokeNav2Ptr->regionMap, FALSE);
         ClearWindowTilemap(WIN_HEADER);
-        LoadPalette(sPokenav2WindowFramePalette, 16, 32);
+        LoadPalette(sPokeNav2WindowFramePalette, 16, 32);
         CopyBgTilemapBufferToVram(1);
         break;
     case AGENDA:
-        LZ77UnCompVram(sPokenav2WindowFrameTiles, (u16 *)BG_CHAR_ADDR(1));
-        LZ77UnCompWram(sPokenav2AgendaTilemap, sPokenav2Ptr->tilemapBuffers[1]);
+        LZ77UnCompVram(sPokeNav2WindowFrameTiles, (u16 *)BG_CHAR_ADDR(1));
+        LZ77UnCompWram(sPokeNav2AgendaTilemap, sPokeNav2Ptr->tilemapBuffers[1]);
         FillWindowPixelBuffer(WIN_HEADER, PIXEL_FILL(8));
-        StringExpandPlaceholders(gStringVar1, gText_Pokenav2_PlayersAgenda);
-        AddTextPrinterParameterized3(WIN_HEADER, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gStringVar1, DISPLAY_WIDTH), 0, sPokenav2TextColors[TEXT_COLORS_WHITE], 0, gStringVar1);
-        AddTextPrinterParameterized3(WIN_HEADER, FONT_SMALL, GetStringRightAlignXOffset(FONT_SMALL, gText_Pokenav2_ClockMode, DISPLAY_WIDTH) - 8, 0, sPokenav2TextColors[TEXT_COLORS_WHITE], 0, gText_Pokenav2_ClockMode);
-        LoadPalette(sPokenav2WindowFramePalette, 16, 32);
+        StringExpandPlaceholders(gStringVar1, gText_PokeNav2_PlayersAgenda);
+        AddTextPrinterParameterized3(WIN_HEADER, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gStringVar1, DISPLAY_WIDTH), 0, sPokeNav2TextColors[TEXT_COLORS_WHITE], 0, gStringVar1);
+        AddTextPrinterParameterized3(WIN_HEADER, FONT_SMALL, GetStringRightAlignXOffset(FONT_SMALL, gText_PokeNav2_ClockMode, DISPLAY_WIDTH) - 8, 0, sPokeNav2TextColors[TEXT_COLORS_WHITE], 0, gText_PokeNav2_ClockMode);
+        LoadPalette(sPokeNav2WindowFramePalette, 16, 32);
         LoadPalette(gQuestIconPalette, 224, 32);
         CopyBgTilemapBufferToVram(1);
         break;
     case RADIO:
-        LZ77UnCompVram(sPokenav2WindowFrameTiles, (u16 *)BG_CHAR_ADDR(1));
-        LZ77UnCompWram(sPokenav2RadioTilemap, sPokenav2Ptr->tilemapBuffers[1]);
+        LZ77UnCompVram(sPokeNav2WindowFrameTiles, (u16 *)BG_CHAR_ADDR(1));
+        LZ77UnCompWram(sPokeNav2RadioTilemap, sPokeNav2Ptr->tilemapBuffers[1]);
         FillWindowPixelBuffer(WIN_HEADER, PIXEL_FILL(8));
-        AddTextPrinterParameterized3(WIN_HEADER, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_Pokenav2_EurusRadio, DISPLAY_WIDTH), 0, sPokenav2TextColors[TEXT_COLORS_WHITE], 0, gText_Pokenav2_EurusRadio);
+        AddTextPrinterParameterized3(WIN_HEADER, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_PokeNav2_EurusRadio, DISPLAY_WIDTH), 0, sPokeNav2TextColors[TEXT_COLORS_WHITE], 0, gText_PokeNav2_EurusRadio);
         CopyBgTilemapBufferToVram(1);
         break;
     case MAIN_MENU:
-        LZ77UnCompVram(sPokenav2WindowFrameTiles, (u16 *)BG_CHAR_ADDR(2));
-        LZ77UnCompWram(sPokenav2DescTilemap, sPokenav2Ptr->tilemapBuffers[2]);
+        LZ77UnCompVram(sPokeNav2WindowFrameTiles, (u16 *)BG_CHAR_ADDR(2));
+        LZ77UnCompWram(sPokeNav2DescTilemap, sPokeNav2Ptr->tilemapBuffers[2]);
         PutWindowTilemap(WIN_HEADER);
         FillWindowPixelBuffer(WIN_HEADER, PIXEL_FILL(8));
-        AddTextPrinterParameterized3(WIN_HEADER, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_Pokenav2, DISPLAY_WIDTH), 0, sPokenav2TextColors[TEXT_COLORS_WHITE], 0, gText_Pokenav2);
-        LoadPalette(sPokenav2WindowFramePalette, 16, 32);
+        AddTextPrinterParameterized3(WIN_HEADER, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_PokeNav2, DISPLAY_WIDTH), 0, sPokeNav2TextColors[TEXT_COLORS_WHITE], 0, gText_PokeNav2);
+        LoadPalette(sPokeNav2WindowFramePalette, 16, 32);
         LoadMainMenuSprites();
         CopyBgTilemapBufferToVram(2);
         break;
@@ -880,11 +880,11 @@ static void LoadOptionData(u8 option)
         CreateRegionMapPlayerIcon(1, 1);
         PutWindowTilemap(WIN_REGION_MAP_TITLE);
         PutWindowTilemap(WIN_REGION_MAP_SECTION);
-        AddTextPrinterParameterized3(WIN_REGION_MAP_TITLE, FONT_SMALL, GetStringRightAlignXOffset(FONT_SMALL, gText_Pokenav2_Eurus, 24), 1, sPokenav2TextColors[TEXT_COLORS_WHITE], 0, gText_Pokenav2_Eurus);
-        AddTextPrinterParameterized3(WIN_REGION_MAP_SECTION, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, sPokenav2Ptr->regionMap->mapSecName, DISPLAY_WIDTH), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, sPokenav2Ptr->regionMap->mapSecName);
+        AddTextPrinterParameterized3(WIN_REGION_MAP_TITLE, FONT_SMALL, GetStringRightAlignXOffset(FONT_SMALL, gText_PokeNav2_Eurus, 24), 1, sPokeNav2TextColors[TEXT_COLORS_WHITE], 0, gText_PokeNav2_Eurus);
+        AddTextPrinterParameterized3(WIN_REGION_MAP_SECTION, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, sPokeNav2Ptr->regionMap->mapSecName, DISPLAY_WIDTH), 0, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, sPokeNav2Ptr->regionMap->mapSecName);
         break;
     case AGENDA:
-        sPokenav2Ptr->currItem = 0;
+        sPokeNav2Ptr->currItem = 0;
 
         PutWindowTilemap(WIN_AGENDA_QUESTS_TITLE);
         PutWindowTilemap(WIN_AGENDA_QUESTS_LIST);
@@ -894,10 +894,10 @@ static void LoadOptionData(u8 option)
 
         InitEventWindows();
 
-        AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek], 64), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
+        AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek], 64), 0, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
         FormatDecimalTimeWithoutSeconds(gStringVar1, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->optionsClockMode);
-        AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, gStringVar1, 64), 16, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gStringVar1);
-        if (sPokenav2Ptr->timeColonInvisible)
+        AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, gStringVar1, 64), 16, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, gStringVar1);
+        if (sPokeNav2Ptr->timeColonInvisible)
         {
             if (gSaveBlock2Ptr->optionsClockMode)
                 FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(1), 28, 16, 6, 12);
@@ -905,7 +905,7 @@ static void LoadOptionData(u8 option)
                 FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(1), 21, 16, 6, 12);
         }
 
-        AddTextPrinterParameterized3(WIN_AGENDA_WEATHER, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, gText_Pokenav2_WeatherForecast, 88), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gText_Pokenav2_WeatherForecast);
+        AddTextPrinterParameterized3(WIN_AGENDA_WEATHER, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, gText_PokeNav2_WeatherForecast, 88), 0, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, gText_PokeNav2_WeatherForecast);
         AddTextPrinterParameterized3(WIN_AGENDA_WEATHER, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, sWeatherReportText[GetSavedWeather()].string, 88), 16, sWeatherReportText[GetSavedWeather()].color, 0, sWeatherReportText[GetSavedWeather()].string);
         break;
     case RADIO:
@@ -916,11 +916,11 @@ static void LoadOptionData(u8 option)
         PutWindowTilemap(WIN_OPTION_BOTTOM_LEFT);
         PutWindowTilemap(WIN_OPTION_TOP_RIGHT);
         PutWindowTilemap(WIN_OPTION_BOTTOM_RIGHT);
-        AddTextPrinterParameterized(WIN_OPTION_TOP_LEFT, FONT_NORMAL, gText_Pokenav2_Map, 4, 0, 0, NULL);
-        AddTextPrinterParameterized(WIN_OPTION_BOTTOM_LEFT, FONT_NORMAL, gText_Pokenav2_Agenda, 4, 0, 0, NULL);
-        AddTextPrinterParameterized(WIN_OPTION_TOP_RIGHT, FONT_NORMAL, gText_Pokenav2_Radio, 0, 0, 0, NULL);
-        AddTextPrinterParameterized(WIN_OPTION_BOTTOM_RIGHT, FONT_NORMAL, gText_Pokenav2_TurnOff, 0, 0, 0, NULL);
-        AddTextPrinterParameterized3(WIN_DESC, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, sMenuDescriptions[sPokenav2Ptr->cursor], 176), 4, sPokenav2TextColors[TEXT_COLORS_WHITE], 0, sMenuDescriptions[sPokenav2Ptr->cursor]);
+        AddTextPrinterParameterized(WIN_OPTION_TOP_LEFT, FONT_NORMAL, gText_PokeNav2_Map, 4, 0, 0, NULL);
+        AddTextPrinterParameterized(WIN_OPTION_BOTTOM_LEFT, FONT_NORMAL, gText_PokeNav2_Agenda, 4, 0, 0, NULL);
+        AddTextPrinterParameterized(WIN_OPTION_TOP_RIGHT, FONT_NORMAL, gText_PokeNav2_Radio, 0, 0, 0, NULL);
+        AddTextPrinterParameterized(WIN_OPTION_BOTTOM_RIGHT, FONT_NORMAL, gText_PokeNav2_TurnOff, 0, 0, 0, NULL);
+        AddTextPrinterParameterized3(WIN_DESC, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, sMenuDescriptions[sPokeNav2Ptr->cursor], 176), 4, sPokeNav2TextColors[TEXT_COLORS_WHITE], 0, sMenuDescriptions[sPokeNav2Ptr->cursor]);
         break;
     }
 
@@ -932,10 +932,10 @@ static void InitEventWindows(void)
     FillWindowPixelBuffer(WIN_AGENDA_QUESTS_TITLE, PIXEL_FILL(0));
     FillWindowPixelBuffer(WIN_AGENDA_QUESTS_LIST, PIXEL_FILL(0));
     FillWindowPixelBuffer(WIN_AGENDA_QUESTS_PROGRESS, PIXEL_FILL(0));
-    AddTextPrinterParameterized3(WIN_AGENDA_QUESTS_TITLE, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_Pokenav2_ActiveQuests, 104), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gText_Pokenav2_ActiveQuests);
+    AddTextPrinterParameterized3(WIN_AGENDA_QUESTS_TITLE, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_PokeNav2_ActiveQuests, 104), 0, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, gText_PokeNav2_ActiveQuests);
 
     if (!CreateQuestListMenuTemplate())
-        AddTextPrinterParameterized3(WIN_AGENDA_QUESTS_LIST, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, gText_Pokenav2_NoActiveQuests, 104), 32, sQuestListColors[TEXT_QUEST_GRAY], 0, gText_Pokenav2_NoActiveQuests);
+        AddTextPrinterParameterized3(WIN_AGENDA_QUESTS_LIST, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, gText_PokeNav2_NoActiveQuests, 104), 32, sQuestListColors[TEXT_QUEST_GRAY], 0, gText_PokeNav2_NoActiveQuests);
 
     CopyWindowToVram(WIN_AGENDA_QUESTS_PROGRESS, COPYWIN_GFX);
 }
@@ -948,63 +948,63 @@ static bool8 CreateQuestListMenuTemplate(void)
     {
         if (QuestGet(i) && QuestGetProgress(i) != QUEST_COMPLETED)
         {
-            sPokenav2Ptr->numQuests++;
+            sPokeNav2Ptr->numQuests++;
         }
     }
 
-    if (sPokenav2Ptr->numQuests)
+    if (sPokeNav2Ptr->numQuests)
     {
-        sPokenav2Ptr->listMenuTemplate = Alloc(sizeof(struct ListMenuTemplate));
-        sPokenav2Ptr->listMenuItems = Alloc(sPokenav2Ptr->numQuests * sizeof(struct ListMenuItem));
-        sPokenav2Ptr->spriteIds = AllocZeroed(NUM_AGENDA_SPRITES * sizeof(u8));
-        sPokenav2Ptr->taskIds = AllocZeroed(NUM_AGENDA_TASKS * sizeof(u8));
+        sPokeNav2Ptr->listMenuTemplate = Alloc(sizeof(struct ListMenuTemplate));
+        sPokeNav2Ptr->listMenuItems = Alloc(sPokeNav2Ptr->numQuests * sizeof(struct ListMenuItem));
+        sPokeNav2Ptr->spriteIds = AllocZeroed(NUM_AGENDA_SPRITES * sizeof(u8));
+        sPokeNav2Ptr->taskIds = AllocZeroed(NUM_AGENDA_TASKS * sizeof(u8));
 
         for (u32 i = 0; i < NUM_QUESTS; i++)
         {
             if (QuestGet(i) && QuestGetProgress(i) != QUEST_COMPLETED)
             {
-                sPokenav2Ptr->listMenuItems[questIndex].name = QuestGetName(i);
-                sPokenav2Ptr->listMenuItems[questIndex].id = i;
+                sPokeNav2Ptr->listMenuItems[questIndex].name = QuestGetName(i);
+                sPokeNav2Ptr->listMenuItems[questIndex].id = i;
 
                 if (QuestGetProgress(i) == QUEST_READY)
-                    sPokenav2Ptr->listMenuItems[questIndex].colors = sQuestListColors[TEXT_QUEST_GREEN];
+                    sPokeNav2Ptr->listMenuItems[questIndex].colors = sQuestListColors[TEXT_QUEST_GREEN];
                 else
-                    sPokenav2Ptr->listMenuItems[questIndex].colors = sQuestListColors[TEXT_QUEST_GRAY];
+                    sPokeNav2Ptr->listMenuItems[questIndex].colors = sQuestListColors[TEXT_QUEST_GRAY];
 
                 questIndex++;
             }
         }
 
-        sPokenav2Ptr->listMenuTemplate->items = sPokenav2Ptr->listMenuItems;
-        sPokenav2Ptr->listMenuTemplate->moveCursorFunc = QuestListMenuCursorMoveFunc;
-        sPokenav2Ptr->listMenuTemplate->itemPrintFunc = QuestListMenuItemPrintFunc;
-        sPokenav2Ptr->listMenuTemplate->totalItems = sPokenav2Ptr->numQuests;
+        sPokeNav2Ptr->listMenuTemplate->items = sPokeNav2Ptr->listMenuItems;
+        sPokeNav2Ptr->listMenuTemplate->moveCursorFunc = QuestListMenuCursorMoveFunc;
+        sPokeNav2Ptr->listMenuTemplate->itemPrintFunc = QuestListMenuItemPrintFunc;
+        sPokeNav2Ptr->listMenuTemplate->totalItems = sPokeNav2Ptr->numQuests;
 
-        if (sPokenav2Ptr->numQuests > 5)
-            sPokenav2Ptr->listMenuTemplate->maxShowed = 5;
+        if (sPokeNav2Ptr->numQuests > 5)
+            sPokeNav2Ptr->listMenuTemplate->maxShowed = 5;
         else
-            sPokenav2Ptr->listMenuTemplate->maxShowed = sPokenav2Ptr->numQuests;
+            sPokeNav2Ptr->listMenuTemplate->maxShowed = sPokeNav2Ptr->numQuests;
 
-        sPokenav2Ptr->listMenuTemplate->windowId = WIN_AGENDA_QUESTS_LIST;
-        sPokenav2Ptr->listMenuTemplate->header_X = 0;
-        sPokenav2Ptr->listMenuTemplate->item_X = 8;
-        sPokenav2Ptr->listMenuTemplate->cursor_X = 0;
-        sPokenav2Ptr->listMenuTemplate->upText_Y = 0;
-        sPokenav2Ptr->listMenuTemplate->cursorPal = 2;
-        sPokenav2Ptr->listMenuTemplate->fillValue = 0;
-        sPokenav2Ptr->listMenuTemplate->cursorShadowPal = 3;
-        sPokenav2Ptr->listMenuTemplate->lettersSpacing = 1;
-        sPokenav2Ptr->listMenuTemplate->itemVerticalPadding = 1;
-        sPokenav2Ptr->listMenuTemplate->scrollMultiple = LIST_NO_MULTIPLE_SCROLL;
-        sPokenav2Ptr->listMenuTemplate->fontId = FONT_SMALL;
-        sPokenav2Ptr->listMenuTemplate->cursorKind = 0;
+        sPokeNav2Ptr->listMenuTemplate->windowId = WIN_AGENDA_QUESTS_LIST;
+        sPokeNav2Ptr->listMenuTemplate->header_X = 0;
+        sPokeNav2Ptr->listMenuTemplate->item_X = 8;
+        sPokeNav2Ptr->listMenuTemplate->cursor_X = 0;
+        sPokeNav2Ptr->listMenuTemplate->upText_Y = 0;
+        sPokeNav2Ptr->listMenuTemplate->cursorPal = 2;
+        sPokeNav2Ptr->listMenuTemplate->fillValue = 0;
+        sPokeNav2Ptr->listMenuTemplate->cursorShadowPal = 3;
+        sPokeNav2Ptr->listMenuTemplate->lettersSpacing = 1;
+        sPokeNav2Ptr->listMenuTemplate->itemVerticalPadding = 1;
+        sPokeNav2Ptr->listMenuTemplate->scrollMultiple = LIST_NO_MULTIPLE_SCROLL;
+        sPokeNav2Ptr->listMenuTemplate->fontId = FONT_SMALL;
+        sPokeNav2Ptr->listMenuTemplate->cursorKind = 0;
 
-        sPokenav2Ptr->taskIds[0] = ListMenuInit(sPokenav2Ptr->listMenuTemplate, sPokenav2Ptr->currItem, 0);
-        sPokenav2Ptr->taskIds[1] = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 68, 20, 148 - 40, sPokenav2Ptr->listMenuTemplate->totalItems - 1, TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, &sPokenav2Ptr->currItem);
-        sPokenav2Ptr->taskIds[2] = CreateTask(Task_FadeQuestTypeBadgePalette, 2);
+        sPokeNav2Ptr->taskIds[0] = ListMenuInit(sPokeNav2Ptr->listMenuTemplate, sPokeNav2Ptr->currItem, 0);
+        sPokeNav2Ptr->taskIds[1] = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 68, 20, 148 - 40, sPokeNav2Ptr->listMenuTemplate->totalItems - 1, TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, &sPokeNav2Ptr->currItem);
+        sPokeNav2Ptr->taskIds[2] = CreateTask(Task_FadeQuestTypeBadgePalette, 2);
     }
 
-    return sPokenav2Ptr->numQuests;
+    return sPokeNav2Ptr->numQuests;
 }
 
 static void LoadMainMenuSprites(void)
@@ -1016,31 +1016,31 @@ static void LoadMainMenuSprites(void)
     LoadSpriteSheet(&sSpriteSheet_OptionRightTiles);
     LoadSpriteSheet(&sSpriteSheet_AgendaClockTiles);
 
-    sPokenav2Ptr->spriteIds = AllocZeroed(NUM_MENU_SPRITES * sizeof(u8));
+    sPokeNav2Ptr->spriteIds = AllocZeroed(NUM_MENU_SPRITES * sizeof(u8));
 
     for (u32 i = 0; i < 4; i++)
     {
-        sPokenav2Ptr->spriteIds[i] = CreateSprite(&sSpriteTemplate_OptionsLeft, (s16)sPokenav2OptionLeftPositions[i][0], (s16)sPokenav2OptionLeftPositions[i][1], 2);
-        sPokenav2Ptr->spriteIds[i + 4] = CreateSprite(&sSpriteTemplate_OptionsRight, (s16)sPokenav2OptionRightPositions[i][0], (s16)sPokenav2OptionRightPositions[i][1], 1);
-        StartSpriteAnim(&gSprites[sPokenav2Ptr->spriteIds[i]], (i < 2 ? 0 : 1));
-        StartSpriteAnim(&gSprites[sPokenav2Ptr->spriteIds[i + 4]], i);
+        sPokeNav2Ptr->spriteIds[i] = CreateSprite(&sSpriteTemplate_OptionsLeft, (s16)sPokeNav2OptionLeftPositions[i][0], (s16)sPokeNav2OptionLeftPositions[i][1], 2);
+        sPokeNav2Ptr->spriteIds[i + 4] = CreateSprite(&sSpriteTemplate_OptionsRight, (s16)sPokeNav2OptionRightPositions[i][0], (s16)sPokeNav2OptionRightPositions[i][1], 1);
+        StartSpriteAnim(&gSprites[sPokeNav2Ptr->spriteIds[i]], (i < 2 ? 0 : 1));
+        StartSpriteAnim(&gSprites[sPokeNav2Ptr->spriteIds[i + 4]], i);
     }
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i]];
         sprite->x2 = sprite->animNum == 0 ? -OPTION_SLIDE_X : OPTION_SLIDE_X;
     }
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i + 4]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i + 4]];
         sprite->x2 = sprite->animNum == 0 || sprite->animNum == 1 ? -OPTION_SLIDE_X : OPTION_SLIDE_X;
     }
 
-    sPokenav2Ptr->spriteIds[8] = CreateSprite(&sSpriteTemplate_AgendaClockIcons, 88, 87, 0);
-    StartSpriteAnim(&gSprites[sPokenav2Ptr->spriteIds[8]], gSaveBlock2Ptr->inGameClock.hours < 12 ? gSaveBlock2Ptr->inGameClock.hours : gSaveBlock2Ptr->inGameClock.hours - 12);
-    sprite = &gSprites[sPokenav2Ptr->spriteIds[8]];
+    sPokeNav2Ptr->spriteIds[8] = CreateSprite(&sSpriteTemplate_AgendaClockIcons, 88, 87, 0);
+    StartSpriteAnim(&gSprites[sPokeNav2Ptr->spriteIds[8]], gSaveBlock2Ptr->inGameClock.hours < 12 ? gSaveBlock2Ptr->inGameClock.hours : gSaveBlock2Ptr->inGameClock.hours - 12);
+    sprite = &gSprites[sPokeNav2Ptr->spriteIds[8]];
     sprite->x2 = -OPTION_SLIDE_X;
 }
 
@@ -1052,7 +1052,7 @@ static void UnloadOptionData(u8 option)
         ClearWindowTilemap(WIN_REGION_MAP_TITLE);
         ClearWindowTilemap(WIN_REGION_MAP_SECTION);
         FreeRegionMapIconResources();
-        FREE_AND_SET_NULL(sPokenav2Ptr->regionMap);
+        FREE_AND_SET_NULL(sPokeNav2Ptr->regionMap);
         break;
     case AGENDA:
         ClearWindowTilemap(WIN_AGENDA_QUESTS_TITLE);
@@ -1061,17 +1061,17 @@ static void UnloadOptionData(u8 option)
         ClearWindowTilemap(WIN_AGENDA_DATE_TIME);
         ClearWindowTilemap(WIN_AGENDA_WEATHER);
         
-        if (sPokenav2Ptr->numQuests)
+        if (sPokeNav2Ptr->numQuests)
         {
-            DestroyListMenuTask(sPokenav2Ptr->taskIds[0], &sPokenav2Ptr->currItem, NULL);
-            RemoveScrollIndicatorArrowPair(sPokenav2Ptr->taskIds[1]);
-            DestroyTask(sPokenav2Ptr->taskIds[2]);
-            DestroySprite(&gSprites[sPokenav2Ptr->spriteIds[0]]);
-            FREE_AND_SET_NULL(sPokenav2Ptr->listMenuTemplate);
-            FREE_AND_SET_NULL(sPokenav2Ptr->listMenuItems);
-            FREE_AND_SET_NULL(sPokenav2Ptr->spriteIds);
-            FREE_AND_SET_NULL(sPokenav2Ptr->taskIds);
-            sPokenav2Ptr->numQuests = 0;
+            DestroyListMenuTask(sPokeNav2Ptr->taskIds[0], &sPokeNav2Ptr->currItem, NULL);
+            RemoveScrollIndicatorArrowPair(sPokeNav2Ptr->taskIds[1]);
+            DestroyTask(sPokeNav2Ptr->taskIds[2]);
+            DestroySprite(&gSprites[sPokeNav2Ptr->spriteIds[0]]);
+            FREE_AND_SET_NULL(sPokeNav2Ptr->listMenuTemplate);
+            FREE_AND_SET_NULL(sPokeNav2Ptr->listMenuItems);
+            FREE_AND_SET_NULL(sPokeNav2Ptr->spriteIds);
+            FREE_AND_SET_NULL(sPokeNav2Ptr->taskIds);
+            sPokeNav2Ptr->numQuests = 0;
         }
         break;
     case RADIO:
@@ -1095,14 +1095,14 @@ static void UnloadMainMenuSprites(void)
     FreeSpriteTilesByTag(TAG_OPTIONS_RIGHT);
 
     for (u32 i = 0; i < NUM_MENU_SPRITES; i++)
-        DestroySprite(&gSprites[sPokenav2Ptr->spriteIds[i]]);
+        DestroySprite(&gSprites[sPokeNav2Ptr->spriteIds[i]]);
 
-    FREE_AND_SET_NULL(sPokenav2Ptr->spriteIds);
+    FREE_AND_SET_NULL(sPokeNav2Ptr->spriteIds);
 }
 
 static void SpriteCB_Icons(struct Sprite *sprite)
 {
-    if (sprite->animNum == sPokenav2Ptr->cursor)
+    if (sprite->animNum == sPokeNav2Ptr->cursor)
     {
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
@@ -1140,7 +1140,7 @@ static void SpriteCB_Icons(struct Sprite *sprite)
 
 static void SpriteCB_Agenda(struct Sprite *sprite)
 {
-    if (sPokenav2Ptr->cursor == 1)
+    if (sPokeNav2Ptr->cursor == 1)
     {
         if (sprite->x2 < 8)
             sprite->x2 += 2;
@@ -1159,45 +1159,45 @@ static void SpriteCB_Agenda(struct Sprite *sprite)
 static void UpdateOptionDescription(u8 option)
 {
     FillWindowPixelBuffer(WIN_DESC, PIXEL_FILL(0));
-    AddTextPrinterParameterized3(WIN_DESC, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, sMenuDescriptions[option], 176), 4, sPokenav2TextColors[TEXT_COLORS_WHITE], 0, sMenuDescriptions[option]);
+    AddTextPrinterParameterized3(WIN_DESC, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, sMenuDescriptions[option], 176), 4, sPokeNav2TextColors[TEXT_COLORS_WHITE], 0, sMenuDescriptions[option]);
 }
 
 static void Task_MainMenu(u8 taskId)
 {
     if (JOY_NEW(DPAD_LEFT))
     {
-        if (sPokenav2Ptr->cursor & 2)
+        if (sPokeNav2Ptr->cursor & 2)
         {
-            sPokenav2Ptr->cursor ^= 2;
+            sPokeNav2Ptr->cursor ^= 2;
             PlaySE(SE_DEX_SCROLL);
-            UpdateOptionDescription(sPokenav2Ptr->cursor);
+            UpdateOptionDescription(sPokeNav2Ptr->cursor);
         }
     }
     else if (JOY_NEW(DPAD_RIGHT))
     {
-        if (!(sPokenav2Ptr->cursor & 2) && (sPokenav2Ptr->cursor ^ 2) < 4)
+        if (!(sPokeNav2Ptr->cursor & 2) && (sPokeNav2Ptr->cursor ^ 2) < 4)
         {
-            sPokenav2Ptr->cursor ^= 2;
+            sPokeNav2Ptr->cursor ^= 2;
             PlaySE(SE_DEX_SCROLL);
-            UpdateOptionDescription(sPokenav2Ptr->cursor);
+            UpdateOptionDescription(sPokeNav2Ptr->cursor);
         }
     }
     else if (JOY_NEW(DPAD_UP))
     {
-        if (sPokenav2Ptr->cursor & 1)
+        if (sPokeNav2Ptr->cursor & 1)
         {
-            sPokenav2Ptr->cursor ^= 1;
+            sPokeNav2Ptr->cursor ^= 1;
             PlaySE(SE_DEX_SCROLL);
-            UpdateOptionDescription(sPokenav2Ptr->cursor);
+            UpdateOptionDescription(sPokeNav2Ptr->cursor);
         }
     }
     else if (JOY_NEW(DPAD_DOWN))
     {
-        if (!(sPokenav2Ptr->cursor & 1) && (sPokenav2Ptr->cursor ^ 1) < 4)
+        if (!(sPokeNav2Ptr->cursor & 1) && (sPokeNav2Ptr->cursor ^ 1) < 4)
         {
-            sPokenav2Ptr->cursor ^= 1;
+            sPokeNav2Ptr->cursor ^= 1;
             PlaySE(SE_DEX_SCROLL);
-            UpdateOptionDescription(sPokenav2Ptr->cursor);
+            UpdateOptionDescription(sPokeNav2Ptr->cursor);
         }
     }
     else if (JOY_NEW(A_BUTTON))
@@ -1206,32 +1206,32 @@ static void Task_MainMenu(u8 taskId)
     }
     else if (JOY_NEW(B_BUTTON))
     {
-        gTasks[taskId].func = Task_ExitPokenav2;
+        gTasks[taskId].func = Task_ExitPokeNav2;
         PlaySE(SE_POKENAV_OFF);
     }
 }
 
-static void Task_Pokenav2_2(u8 taskId)
+static void Task_PokeNav2_2(u8 taskId)
 {
     struct Sprite *sprite;
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i + 4]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i + 4]];
         sprite->callback = SpriteCB_Icons;
     }
 
-    sprite = &gSprites[sPokenav2Ptr->spriteIds[8]];
+    sprite = &gSprites[sPokeNav2Ptr->spriteIds[8]];
     sprite->callback = SpriteCB_Agenda;
 
     LoadOptionData(MAIN_MENU);
     gTasks[taskId].func = Task_MainMenu;
 }
 
-static void Task_Pokenav2(u8 taskId)
+static void Task_PokeNav2(u8 taskId)
 {
     if (Task_SlideMainMenuIn(taskId))
-        gTasks[taskId].func = Task_Pokenav2_2;
+        gTasks[taskId].func = Task_PokeNav2_2;
 }
 
 static void Task_RegionMap(u8 taskId)
@@ -1240,10 +1240,10 @@ static void Task_RegionMap(u8 taskId)
     {
         case MAP_INPUT_MOVE_END:
             FillWindowPixelBuffer(WIN_REGION_MAP_SECTION, PIXEL_FILL(0));
-            if (sPokenav2Ptr->regionMap->mapSecType != MAPSECTYPE_NONE)
-                AddTextPrinterParameterized3(WIN_REGION_MAP_SECTION, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, sPokenav2Ptr->regionMap->mapSecName, DISPLAY_WIDTH), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, sPokenav2Ptr->regionMap->mapSecName);
+            if (sPokeNav2Ptr->regionMap->mapSecType != MAPSECTYPE_NONE)
+                AddTextPrinterParameterized3(WIN_REGION_MAP_SECTION, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, sPokeNav2Ptr->regionMap->mapSecName, DISPLAY_WIDTH), 0, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, sPokeNav2Ptr->regionMap->mapSecName);
             else
-                AddTextPrinterParameterized3(WIN_REGION_MAP_SECTION, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_ThreeDashes, DISPLAY_WIDTH), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gText_ThreeDashes);
+                AddTextPrinterParameterized3(WIN_REGION_MAP_SECTION, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_ThreeDashes, DISPLAY_WIDTH), 0, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, gText_ThreeDashes);
             
             CopyBgTilemapBufferToVram(0);
             break;
@@ -1261,51 +1261,51 @@ static void PrintQuestDescription(const u8 *string)
     u8 description[QUEST_DESC_LINE_LENGTH];
     u8 y;
 
-    if (sPokenav2Ptr->numLinesPrinted)
+    if (sPokeNav2Ptr->numLinesPrinted)
         y = lineHeight;
 
     StringExpandPlaceholders(description, string);
-    AddTextPrinterParameterized3(WIN_AGENDA_QUESTS_PROGRESS, FONT_SHORT, 4, y, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, description);
-    sPokenav2Ptr->numLinesPrinted++;
+    AddTextPrinterParameterized3(WIN_AGENDA_QUESTS_PROGRESS, FONT_SHORT, 4, y, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, description);
+    sPokeNav2Ptr->numLinesPrinted++;
 
-    sPokenav2Ptr->scrollDelayCounter = QUEST_SCROLL_DELAY_FULL;
-    sPokenav2Ptr->windowScrollDistance = lineHeight / 2;
+    sPokeNav2Ptr->scrollDelayCounter = QUEST_SCROLL_DELAY_FULL;
+    sPokeNav2Ptr->windowScrollDistance = lineHeight / 2;
 }
 
 static void Task_Agenda(u8 taskId)
 {
-    u8 input = ListMenu_ProcessInput(sPokenav2Ptr->taskIds[0]);
+    u8 input = ListMenu_ProcessInput(sPokeNav2Ptr->taskIds[0]);
     u8 text[8];
 
-    if (--sPokenav2Ptr->timeColonBlinkTimer == 0)
+    if (--sPokeNav2Ptr->timeColonBlinkTimer == 0)
     {
-        sPokenav2Ptr->timeColonBlinkTimer = TIME_COLON_BLINK;
-        sPokenav2Ptr->timeColonInvisible ^= 1;
-        sPokenav2Ptr->timeColonRedraw = TRUE;
+        sPokeNav2Ptr->timeColonBlinkTimer = TIME_COLON_BLINK;
+        sPokeNav2Ptr->timeColonInvisible ^= 1;
+        sPokeNav2Ptr->timeColonRedraw = TRUE;
     }
 
-    if (sPokenav2Ptr->timeColonRedraw)
+    if (sPokeNav2Ptr->timeColonRedraw)
     {
         FillWindowPixelBuffer(WIN_AGENDA_DATE_TIME, PIXEL_FILL(0));
-        AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek], 64), 0, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
+        AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_NORMAL, GetStringCenterAlignXOffset(FONT_NORMAL, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek], 64), 0, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, gText_DaysOfWeek[gSaveBlock2Ptr->inGameClock.dayOfWeek]);
         FormatDecimalTimeWithoutSeconds(text, gSaveBlock2Ptr->inGameClock.hours, gSaveBlock2Ptr->inGameClock.minutes, gSaveBlock2Ptr->optionsClockMode);
-        AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, text, 64), 16, sPokenav2TextColors[TEXT_COLORS_GRAY], 0, text);
+        AddTextPrinterParameterized3(WIN_AGENDA_DATE_TIME, FONT_SMALL, GetStringCenterAlignXOffset(FONT_SMALL, text, 64), 16, sPokeNav2TextColors[TEXT_COLORS_GRAY], 0, text);
 
-        if (sPokenav2Ptr->timeColonInvisible)
+        if (sPokeNav2Ptr->timeColonInvisible)
         {
             if (gSaveBlock2Ptr->optionsClockMode)
                 FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(0), 28, 16, 6, 12);
             else
                 FillWindowPixelRect(WIN_AGENDA_DATE_TIME, PIXEL_FILL(0), 23, 16, 6, 12);
         }
-        sPokenav2Ptr->timeColonRedraw = FALSE;
+        sPokeNav2Ptr->timeColonRedraw = FALSE;
     }
 
-    if (sPokenav2Ptr->numQuests)
+    if (sPokeNav2Ptr->numQuests)
     {
-        if (sPokenav2Ptr->numLinesMax > 2)
+        if (sPokeNav2Ptr->numLinesMax > 2)
         {
-            switch (sPokenav2Ptr->scrollDelayCounter)
+            switch (sPokeNav2Ptr->scrollDelayCounter)
             {
             case QUEST_SCROLL_DELAY_FULL:
                 FillBgTilemapBufferRect(1, 17, 14, 17, 1, 1, 1);
@@ -1332,62 +1332,62 @@ static void Task_Agenda(u8 taskId)
             }
         }    
 
-        if (sPokenav2Ptr->scrollDelayCounter == 0)
+        if (sPokeNav2Ptr->scrollDelayCounter == 0)
         {
-            if (sPokenav2Ptr->numLinesPrinted > 1 && sPokenav2Ptr->windowScrollDistance && sPokenav2Ptr->numLinesMax > 2 && sPokenav2Ptr->numLinesPrinted < sPokenav2Ptr->numLinesMax)
+            if (sPokeNav2Ptr->numLinesPrinted > 1 && sPokeNav2Ptr->windowScrollDistance && sPokeNav2Ptr->numLinesMax > 2 && sPokeNav2Ptr->numLinesPrinted < sPokeNav2Ptr->numLinesMax)
             {
                 ScrollWindow(WIN_AGENDA_QUESTS_PROGRESS, 0, 2, PIXEL_FILL(0));
                 CopyWindowToVram(WIN_AGENDA_QUESTS_PROGRESS, COPYWIN_GFX);
-                sPokenav2Ptr->windowScrollDistance--;
+                sPokeNav2Ptr->windowScrollDistance--;
             }
-            else if (sPokenav2Ptr->printDelayCounter == 0)
+            else if (sPokeNav2Ptr->printDelayCounter == 0)
             {
-                if (sPokenav2Ptr->numLinesPrinted == 0)
+                if (sPokeNav2Ptr->numLinesPrinted == 0)
                 {
                     for (u32 i = 0; i < 2; i++)
-                        PrintQuestDescription(sPokenav2Ptr->description[i]);
+                        PrintQuestDescription(sPokeNav2Ptr->description[i]);
                 }
-                else if (sPokenav2Ptr->numLinesPrinted < sPokenav2Ptr->numLinesMax)
+                else if (sPokeNav2Ptr->numLinesPrinted < sPokeNav2Ptr->numLinesMax)
                 {
-                    PrintQuestDescription(sPokenav2Ptr->description[sPokenav2Ptr->numLinesPrinted]);
+                    PrintQuestDescription(sPokeNav2Ptr->description[sPokeNav2Ptr->numLinesPrinted]);
                 }
-                else if (sPokenav2Ptr->numLinesPrinted == sPokenav2Ptr->numLinesMax && sPokenav2Ptr->numLinesMax > 2)
+                else if (sPokeNav2Ptr->numLinesPrinted == sPokeNav2Ptr->numLinesMax && sPokeNav2Ptr->numLinesMax > 2)
                 {
                     FillWindowPixelBuffer(WIN_AGENDA_QUESTS_PROGRESS, PIXEL_FILL(0));
                     CopyWindowToVram(WIN_AGENDA_QUESTS_PROGRESS, COPYWIN_GFX);
-                    sPokenav2Ptr->scrollDelayCounter = 0;
-                    sPokenav2Ptr->printDelayCounter = GetFontAttribute(FONT_SHORT, FONTATTR_MAX_LETTER_HEIGHT) / 2;
-                    sPokenav2Ptr->numLinesPrinted = 0;
+                    sPokeNav2Ptr->scrollDelayCounter = 0;
+                    sPokeNav2Ptr->printDelayCounter = GetFontAttribute(FONT_SHORT, FONTATTR_MAX_LETTER_HEIGHT) / 2;
+                    sPokeNav2Ptr->numLinesPrinted = 0;
                 }
             }
-            else if (sPokenav2Ptr->numLinesMax > 2)
+            else if (sPokeNav2Ptr->numLinesMax > 2)
             {
-                sPokenav2Ptr->printDelayCounter--;
+                sPokeNav2Ptr->printDelayCounter--;
             }
         }
-        else if (sPokenav2Ptr->printDelayCounter == 0)
+        else if (sPokeNav2Ptr->printDelayCounter == 0)
         {
-            if (sPokenav2Ptr->numLinesPrinted == 0)
+            if (sPokeNav2Ptr->numLinesPrinted == 0)
             {
                 for (u32 i = 0; i < 2; i++)
-                    PrintQuestDescription(sPokenav2Ptr->description[i]);
+                    PrintQuestDescription(sPokeNav2Ptr->description[i]);
             }
-            else if (sPokenav2Ptr->numLinesPrinted < sPokenav2Ptr->numLinesMax)
+            else if (sPokeNav2Ptr->numLinesPrinted < sPokeNav2Ptr->numLinesMax)
             {
-                PrintQuestDescription(sPokenav2Ptr->description[sPokenav2Ptr->numLinesPrinted]);
+                PrintQuestDescription(sPokeNav2Ptr->description[sPokeNav2Ptr->numLinesPrinted]);
             }
-            else if (sPokenav2Ptr->numLinesPrinted == sPokenav2Ptr->numLinesMax && sPokenav2Ptr->numLinesMax > 2)
+            else if (sPokeNav2Ptr->numLinesPrinted == sPokeNav2Ptr->numLinesMax && sPokeNav2Ptr->numLinesMax > 2)
             {
                 FillWindowPixelBuffer(WIN_AGENDA_QUESTS_PROGRESS, PIXEL_FILL(0));
                 CopyWindowToVram(WIN_AGENDA_QUESTS_PROGRESS, COPYWIN_GFX);
-                sPokenav2Ptr->scrollDelayCounter = 0;
-                sPokenav2Ptr->printDelayCounter = GetFontAttribute(FONT_SHORT, FONTATTR_MAX_LETTER_HEIGHT) / 2;
-                sPokenav2Ptr->numLinesPrinted = 0;
+                sPokeNav2Ptr->scrollDelayCounter = 0;
+                sPokeNav2Ptr->printDelayCounter = GetFontAttribute(FONT_SHORT, FONTATTR_MAX_LETTER_HEIGHT) / 2;
+                sPokeNav2Ptr->numLinesPrinted = 0;
             }
         }
-        else if (sPokenav2Ptr->numLinesMax > 2)
+        else if (sPokeNav2Ptr->numLinesMax > 2)
         {
-            sPokenav2Ptr->scrollDelayCounter--;
+            sPokeNav2Ptr->scrollDelayCounter--;
         }
     }
 
@@ -1399,41 +1399,41 @@ static void Task_Agenda(u8 taskId)
     {
         PlaySE(SE_SELECT);
         gSaveBlock2Ptr->optionsClockMode ^= 1;
-        sPokenav2Ptr->timeColonRedraw = TRUE;
+        sPokeNav2Ptr->timeColonRedraw = TRUE;
     }
     else if (JOY_NEW(DPAD_UP))
     {
-        if (sPokenav2Ptr->currItem > 0)
-            sPokenav2Ptr->currItem--;
+        if (sPokeNav2Ptr->currItem > 0)
+            sPokeNav2Ptr->currItem--;
     }
     else if (JOY_NEW(DPAD_DOWN))
     {
-        if (sPokenav2Ptr->currItem < sPokenav2Ptr->listMenuTemplate->totalItems - 1)
-            sPokenav2Ptr->currItem++;
+        if (sPokeNav2Ptr->currItem < sPokeNav2Ptr->listMenuTemplate->totalItems - 1)
+            sPokeNav2Ptr->currItem++;
     }
 }
 
 static void QuestListMenuCursorMoveFunc(s32 itemIndex, bool8 onInit, struct ListMenu *list)
 {
-    u16 id = sPokenav2Ptr->listMenuItems[itemIndex].id;
+    u16 id = sPokeNav2Ptr->listMenuItems[itemIndex].id;
 
     if (!onInit)
         PlaySE(SE_DEX_SCROLL);
 
     FillWindowPixelBuffer(WIN_AGENDA_QUESTS_PROGRESS, PIXEL_FILL(0));
-    sPokenav2Ptr->numLinesPrinted = 0;
-    sPokenav2Ptr->scrollDelayCounter = 0;
-    sPokenav2Ptr->printDelayCounter = 0;
-    sPokenav2Ptr->numLinesMax = QuestGetLines(id);
-    sPokenav2Ptr->description = QuestGetDescription(id);
+    sPokeNav2Ptr->numLinesPrinted = 0;
+    sPokeNav2Ptr->scrollDelayCounter = 0;
+    sPokeNav2Ptr->printDelayCounter = 0;
+    sPokeNav2Ptr->numLinesMax = QuestGetLines(id);
+    sPokeNav2Ptr->description = QuestGetDescription(id);
 
     FillBgTilemapBufferRect(1, 2, 14, 17, 1, 1, 1);
     CopyBgTilemapBufferToVram(1);
 
-    DestroySprite(&gSprites[sPokenav2Ptr->spriteIds[0]]);
-    sPokenav2Ptr->spriteIds[0] = CreateObjectGraphicsSprite(QuestGetGraphicsId(id), SpriteCallbackDummy, 134, 124, 0);
-    gSprites[sPokenav2Ptr->spriteIds[0]].oam.priority = 0;
-    StartSpriteAnim(&gSprites[sPokenav2Ptr->spriteIds[0]], GetMoveDirectionAnimNum(DIR_SOUTH));
+    DestroySprite(&gSprites[sPokeNav2Ptr->spriteIds[0]]);
+    sPokeNav2Ptr->spriteIds[0] = CreateObjectGraphicsSprite(QuestGetGraphicsId(id), SpriteCallbackDummy, 134, 124, 0);
+    gSprites[sPokeNav2Ptr->spriteIds[0]].oam.priority = 0;
+    StartSpriteAnim(&gSprites[sPokeNav2Ptr->spriteIds[0]], GetMoveDirectionAnimNum(DIR_SOUTH));
 }
 
 static void QuestListMenuItemPrintFunc(u8 windowId, u32 itemId, u8 y)
@@ -1467,11 +1467,11 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
 {
     struct Sprite *sprite;
 
-    if (sPokenav2Ptr->bgOffset > 0)
+    if (sPokeNav2Ptr->bgOffset > 0)
     {
-        SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokenav2Ptr->bgOffset);
-        SetGpuReg(REG_OFFSET_BG2VOFS, 512 - sPokenav2Ptr->bgOffset);
-        sPokenav2Ptr->bgOffset -= OPTION_SLIDE_SPEED;
+        SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokeNav2Ptr->bgOffset);
+        SetGpuReg(REG_OFFSET_BG2VOFS, 512 - sPokeNav2Ptr->bgOffset);
+        sPokeNav2Ptr->bgOffset -= OPTION_SLIDE_SPEED;
     }
     else
     {
@@ -1482,7 +1482,7 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i]];
         if (sprite->animNum == 0)
         {
             if (sprite->x2 < 0)
@@ -1501,7 +1501,7 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i + 4]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
             if (sprite->x2 < 0)
@@ -1518,7 +1518,7 @@ static bool8 Task_SlideMainMenuIn(u8 taskId)
         }
     }
 
-    sprite = &gSprites[sPokenav2Ptr->spriteIds[8]];
+    sprite = &gSprites[sPokeNav2Ptr->spriteIds[8]];
     if (sprite->x2 < 0)
         sprite->x2 += OPTION_SLIDE_SPEED;
     else
@@ -1531,11 +1531,11 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
 {
     struct Sprite *sprite;
 
-    if (sPokenav2Ptr->bgOffset < OPTION_SLIDE_Y)
+    if (sPokeNav2Ptr->bgOffset < OPTION_SLIDE_Y)
     {
-        SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokenav2Ptr->bgOffset);
-        SetGpuReg(REG_OFFSET_BG2VOFS, 512 - sPokenav2Ptr->bgOffset);
-        sPokenav2Ptr->bgOffset += OPTION_SLIDE_SPEED;
+        SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokeNav2Ptr->bgOffset);
+        SetGpuReg(REG_OFFSET_BG2VOFS, 512 - sPokeNav2Ptr->bgOffset);
+        sPokeNav2Ptr->bgOffset += OPTION_SLIDE_SPEED;
     }
     else
     {
@@ -1546,7 +1546,7 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i]];
         if (sprite->animNum == 0)
         {
             if (sprite->x2 > -OPTION_SLIDE_X)
@@ -1565,7 +1565,7 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i + 4]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i + 4]];
         if (sprite->animNum == 0 || sprite->animNum == 1)
         {
             if (sprite->x2 > -OPTION_SLIDE_X)
@@ -1582,7 +1582,7 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
         }
     }
 
-    sprite = &gSprites[sPokenav2Ptr->spriteIds[8]];
+    sprite = &gSprites[sPokeNav2Ptr->spriteIds[8]];
     if (sprite->x2 > -OPTION_SLIDE_X)
         sprite->x2 -= OPTION_SLIDE_SPEED;
     else
@@ -1593,11 +1593,11 @@ static bool8 Task_SlideMainMenuOut(u8 taskId)
 
 static bool8 Task_SlideOptionIn(u8 taskId)
 {
-    if (sPokenav2Ptr->bgOffset > 0)
+    if (sPokeNav2Ptr->bgOffset > 0)
     {
-        SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokenav2Ptr->bgOffset);
-        SetGpuReg(REG_OFFSET_BG2VOFS, 512 - sPokenav2Ptr->bgOffset);
-        sPokenav2Ptr->bgOffset -= OPTION_SLIDE_SPEED;
+        SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokeNav2Ptr->bgOffset);
+        SetGpuReg(REG_OFFSET_BG2VOFS, 512 - sPokeNav2Ptr->bgOffset);
+        sPokeNav2Ptr->bgOffset -= OPTION_SLIDE_SPEED;
     }
     else
     {
@@ -1611,11 +1611,11 @@ static bool8 Task_SlideOptionIn(u8 taskId)
 
 static bool8 Task_SlideOptionOut(u8 taskId)
 {
-    if (sPokenav2Ptr->bgOffset < OPTION_SLIDE_Y)
+    if (sPokeNav2Ptr->bgOffset < OPTION_SLIDE_Y)
     {
-        SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokenav2Ptr->bgOffset);
-        SetGpuReg(REG_OFFSET_BG2VOFS, 512 - sPokenav2Ptr->bgOffset);
-        sPokenav2Ptr->bgOffset += OPTION_SLIDE_SPEED;
+        SetGpuReg(REG_OFFSET_BG1VOFS, 512 - sPokeNav2Ptr->bgOffset);
+        SetGpuReg(REG_OFFSET_BG2VOFS, 512 - sPokeNav2Ptr->bgOffset);
+        sPokeNav2Ptr->bgOffset += OPTION_SLIDE_SPEED;
     }
     else
     {
@@ -1629,8 +1629,8 @@ static bool8 Task_SlideOptionOut(u8 taskId)
 
 static void Task_LoadOption_7(u8 taskId)
 {
-    LoadOptionData(sPokenav2Ptr->cursor);
-    gTasks[taskId].func = sPokenav2Funcs[sPokenav2Ptr->cursor];
+    LoadOptionData(sPokeNav2Ptr->cursor);
+    gTasks[taskId].func = sPokeNav2Funcs[sPokeNav2Ptr->cursor];
 }
 
 static void Task_LoadOption_6(u8 taskId)
@@ -1644,8 +1644,8 @@ static void Task_LoadOption_6(u8 taskId)
 static void Task_LoadOption_5(u8 taskId)
 {
     PlaySE(SE_BALL_TRAY_ENTER);
-    LoadOptionBgs(sPokenav2Ptr->cursor);
-    sPokenav2Ptr->bgOffset = OPTION_SLIDE_Y;
+    LoadOptionBgs(sPokeNav2Ptr->cursor);
+    sPokeNav2Ptr->bgOffset = OPTION_SLIDE_Y;
     gTasks[taskId].func = Task_LoadOption_6;
 }
 
@@ -1669,11 +1669,11 @@ static void Task_LoadOption_2(u8 taskId)
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i + 4]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i + 4]];
         sprite->callback = SpriteCallbackDummy;
     }
 
-    sprite = &gSprites[sPokenav2Ptr->spriteIds[8]];
+    sprite = &gSprites[sPokeNav2Ptr->spriteIds[8]];
     sprite->callback = SpriteCallbackDummy;
 
     UnloadOptionData(MAIN_MENU);
@@ -1683,10 +1683,10 @@ static void Task_LoadOption_2(u8 taskId)
 
 static void Task_LoadOptionData(u8 taskId)
 {
-    if (sPokenav2Ptr->cursor == 3)
+    if (sPokeNav2Ptr->cursor == 3)
     {
         PlaySE(SE_POKENAV_OFF);
-        gTasks[taskId].func = Task_ExitPokenav2;
+        gTasks[taskId].func = Task_ExitPokeNav2;
     }
     else
     {
@@ -1701,11 +1701,11 @@ static void Task_ReturnToMainMenu_6(u8 taskId)
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i + 4]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i + 4]];
         sprite->callback = SpriteCB_Icons;
     }
 
-    sprite = &gSprites[sPokenav2Ptr->spriteIds[8]];
+    sprite = &gSprites[sPokeNav2Ptr->spriteIds[8]];
     sprite->callback = SpriteCB_Agenda;
 
     LoadOptionData(MAIN_MENU);
@@ -1743,12 +1743,12 @@ static void Task_ReturnToMainMenu_2(u8 taskId)
 static void Task_ReturnToMainMenu(u8 taskId)
 {
     PlaySE(SE_BALL_TRAY_ENTER);
-    UnloadOptionData(sPokenav2Ptr->cursor);
-    sPokenav2Ptr->bgOffset = 0;
+    UnloadOptionData(sPokeNav2Ptr->cursor);
+    sPokeNav2Ptr->bgOffset = 0;
     gTasks[taskId].func = Task_ReturnToMainMenu_2;
 }
 
-static void Task_ExitPokenav2_4(u8 taskId)
+static void Task_ExitPokeNav2_4(u8 taskId)
 {
     void *tilemapBuffers;
 
@@ -1765,34 +1765,34 @@ static void Task_ExitPokenav2_4(u8 taskId)
     }
 }
 
-static void Task_ExitPokenav2_3(u8 taskId)
+static void Task_ExitPokeNav2_3(u8 taskId)
 {
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 16, RGB_BLACK);
-    gTasks[taskId].func = Task_ExitPokenav2_4;
+    gTasks[taskId].func = Task_ExitPokeNav2_4;
 }
 
-static void Task_ExitPokenav2_2(u8 taskId)
+static void Task_ExitPokeNav2_2(u8 taskId)
 {
     if (Task_SlideMainMenuOut(taskId))
     {
-        gTasks[taskId].func = Task_ExitPokenav2_3;
+        gTasks[taskId].func = Task_ExitPokeNav2_3;
     }
 }
 
-static void Task_ExitPokenav2(u8 taskId)
+static void Task_ExitPokeNav2(u8 taskId)
 {
     struct Sprite *sprite;
 
     for (u32 i = 0; i < 4; i++)
     {
-        sprite = &gSprites[sPokenav2Ptr->spriteIds[i + 4]];
+        sprite = &gSprites[sPokeNav2Ptr->spriteIds[i + 4]];
         sprite->callback = SpriteCallbackDummy;
     }
 
-    sprite = &gSprites[sPokenav2Ptr->spriteIds[8]];
+    sprite = &gSprites[sPokeNav2Ptr->spriteIds[8]];
     sprite->callback = SpriteCallbackDummy;
 
     UnloadOptionData(MAIN_MENU);
-    sPokenav2Ptr->cursor = 0;
-    gTasks[taskId].func = Task_ExitPokenav2_2;
+    sPokeNav2Ptr->cursor = 0;
+    gTasks[taskId].func = Task_ExitPokeNav2_2;
 }
