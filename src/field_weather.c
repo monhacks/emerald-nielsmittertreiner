@@ -488,7 +488,7 @@ static void ApplyColorMap(u8 startPalIndex, u8 numPalettes, s8 colorMapIndex)
         palOffset = PLTT_ID(startPalIndex);
         UpdateAltBgPalettes(palettes & PALETTES_BG);
         // Thunder gamma-shift looks bad on night-blended palettes, so ignore time blending in some situations
-        if (!(colorMapIndex > 3) && MapHasNaturalLight(gMapHeader.mapType))
+        if (!(colorMapIndex > 3 && gWeatherPtr->currWeather == WEATHER_RAIN_THUNDERSTORM) && MapHasNaturalLight(gMapHeader.mapType))
           UpdatePalettesWithTime(palettes);
         else
           CpuFastCopy(gPlttBufferUnfaded + palOffset, gPlttBufferFaded + palOffset, PLTT_SIZE_4BPP * numPalettes);
