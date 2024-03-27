@@ -8,6 +8,7 @@
 #include "data.h"
 #include "event_data.h"
 #include "field_screen_effect.h"
+#include "field_weather.h"
 #include "gpu_regs.h"
 #include "international_string_util.h"
 #include "item.h"
@@ -43,9 +44,7 @@
 #include "constants/party_menu.h"
 #include "constants/rgb.h"
 #include "constants/songs.h"
-
-#define TAG_SCROLL_ARROW 1000
-#define TAG_ITEM_ICON    1001
+#include "constants/weather.h"
 
 // this file's functions
 static void Task_DebugMenuFadeIn(u8 taskId);
@@ -53,8 +52,10 @@ static void Task_DebugMenuProcessInput(u8 taskId);
 static void Task_DebugMenuFadeOut(u8 taskId);
 static void BuildDebugListMenuData(u8 listMenuId);
 static void Task_DebugActionBuildListMenuInfo(u8 taskId);
-static void Task_DebugActionBuildListMenuUtility(u8 taskId);
+static void Task_DebugActionBuildListMenuWorld(u8 taskId);
 static void Task_DebugActionBuildListMenuPlayer(u8 taskId);
+static void Task_DebugActionSoundTestScreen(u8 taskId);
+static void Task_GoToSoundTestScreen(u8 taskId);
 static void Task_DebugActionSoftReset(u8 taskId);
 static void Task_DebugActionCredits(u8 taskId);
 static void Task_DebugActionSaveblock(u8 taskId);
@@ -66,11 +67,11 @@ static void Task_DebugActionVars(u8 taskId);
 static void Task_HandleVarsInput(u8 taskId);
 static void Task_DebugActionSetTime(u8 taskId);
 static void Task_HandleSetTimeInput(u8 taskId);
+static void Task_DebugActionSetWeather(u8 taskId);
+static void Task_HandleSetWeatherInput(u8 taskId);
 static void Task_DebugActionHealParty(u8 taskId);
 static void Task_DebugActionResetQuests(u8 taskId);
 static void Task_DebugActionResetBerries(u8 taskId);
-static void Task_DebugActionSoundTestScreen(u8 taskId);
-static void Task_GoToSoundTestScreen(u8 taskId);
 static void Task_DebugActionGodmode(u8 taskId);
 static void Task_DebugActionBuildParty(u8 taskId);
 static void Task_HandleBuildPartyInput(u8 taskId);
@@ -83,12 +84,12 @@ static void Task_DebugActionChangeGender(u8 taskId);
 struct OverworldDebugMenu
 {
     void (*func)(u8);
+    u16 cursorPosition;
+    u16 cursorStack[3];
+    u8 cursorStackDepth;
+    u8 activeListMenu;
     u8 listTaskId;
     u8 arrowTaskId;
-    u8 activeListMenu;
-    u8 cursorPosition;
-    u8 cursorStack[3];
-    u8 cursorStackDepth;
     u8 spriteId;
 };
 
@@ -108,6 +109,12 @@ struct PartyBuilder
 
 enum
 {
+    TAG_SCROLL_ARROW,
+    TAG_ITEM_ICON,
+};
+
+enum
+{
     WIN_HEADER,
     WIN_LIST_MENU,
     WIN_DESCRIPTION,
@@ -117,15 +124,16 @@ enum
 {
     ACTIVE_LIST_MAIN,
     ACTIVE_LIST_INFO,
-    ACTIVE_LIST_UTILITY,
+    ACTIVE_LIST_WORLD,
     ACTIVE_LIST_PLAYER,
 };
 
 enum
 {
     LIST_ITEM_INFO,
-    LIST_ITEM_UTILITY,
+    LIST_ITEM_WORLD,
     LIST_ITEM_PLAYER,
+    LIST_ITEM_SOUND_TEST_SCREEN,
     LIST_ITEM_SOFTRESET,
 };
 
@@ -140,10 +148,10 @@ enum
     LIST_ITEM_WARP,
     LIST_ITEM_FLAGS,
     LIST_ITEM_VARS,
-    LIST_ITEM_SET_TIME,
+    LIST_ITEM_TIME,
+    LIST_ITEM_WEATHER,
     LIST_ITEM_RESET_QUESTS,
     LIST_ITEM_RESET_BERRIES,
-    LIST_ITEM_SOUND_TEST_SCREEN,
 };
 
 enum
@@ -180,8 +188,9 @@ enum
     SET_TIME_STATE_DAY_OF_WEEK,
 };
 
-static EWRAM_DATA struct OverworldDebugMenu *sOverworldDebugMenu = NULL;
-static EWRAM_DATA struct PartyBuilder *sPartyBuilder[PARTY_SIZE] = {NULL};
+EWRAM_DATA static struct OverworldDebugMenu *sOverworldDebugMenu = NULL;
+EWRAM_DATA static struct PartyBuilder *sPartyBuilder[PARTY_SIZE] = {NULL};
+EWRAM_DATA static bool8 sChangedWeatherDebug = FALSE;
 
 // .rodata
 static const u32 sDebugTiles[] = INCBIN_U32("graphics/interface/debug_tiles.4bpp.lz");
@@ -274,8 +283,9 @@ static const u8 sText_VanadiumDebugMenu[] = _("POKéMON VANADIUM VERSION DEBUG M
 
 // options
 static const u8 sText_Info[] = _("INFO");
-static const u8 sText_Utility[] = _("UTILITY");
+static const u8 sText_World[] = _("WORLD");
 static const u8 sText_Player[] = _("PLAYER");
+static const u8 sText_SoundTestScreen[] = _("SOUND TESTING");
 static const u8 sText_SoftReset[] = _("SOFT RESET");
 
 static const u8 sText_Credits[] = _("CREDITS");
@@ -285,9 +295,9 @@ static const u8 sText_Warp[] = _("WARP");
 static const u8 sText_Flags[] = _("FLAGS");
 static const u8 sText_Vars[] = _("VARS");
 static const u8 sText_SetTime[] = _("SET TIME");
+static const u8 sText_SetWeather[] = _("SET WEATHER");
 static const u8 sText_ResetQuests[] = _("RESET QUESTS");
 static const u8 sText_ResetBerries[] = _("RESET BERRIES");
-static const u8 sText_SoundTestScreen[] = _("SOUND TESTING");
 
 static const u8 sText_Godmode[] = _("GODMODE");
 static const u8 sText_HealParty[] = _("HEAL PARTY");
@@ -296,9 +306,9 @@ static const u8 sText_GiveItem[] = _("GIVE ITEM");
 static const u8 sText_ChangeGender[] = _("CHANGE GENDER");
 
 // descriptions
-static const u8 sText_InfoDesc[] = _("GENERAL AND DEBUGGING\nINFORMATION.");
-static const u8 sText_UtilityDesc[] = _("VIEW UTILITARIAN\nDEBUG OPTIONS.");
-static const u8 sText_PlayerDesc[] = _("PLAYER RELATED\nDEBUGGING FUNCTIONS.");
+static const u8 sText_InfoDesc[] = _("DEBUGGING INFORMATION.");
+static const u8 sText_WorldDesc[] = _("VIEW WORLD\nDEBUG OPTIONS.");
+static const u8 sText_PlayerDesc[] = _("VIEW PLAYER\nDEBUG OPTIONS.");
 static const u8 sText_SoftResetDesc[] = _("SOFT RESETS THE SYSTEM.\nCAN BE USEFUL ON HARDWARE.");
 
 static const u8 sText_CreditsDesc[] = _("VIEW THE TEAM BEHIND\nPOKéMON: VANADIUM VERSION.");
@@ -308,6 +318,7 @@ static const u8 sText_WarpDesc[] = _("WARP TO ANY WARP POINT\nOR XY POSITION OF\
 static const u8 sText_FlagsDesc[] = _("TURN EVENT FLAGS ON\nOR OFF.");
 static const u8 sText_VarsDesc[] = _("MANIPULATE VARS TO\nYOUR LIKING.");
 static const u8 sText_SetTimeDesc[] = _("SET INGAME TIME TO\nYOUR LIKING.");
+static const u8 sText_SetWeatherDesc[] = _("SET INGAME WEATHER TO\nYOUR LIKING.");
 static const u8 sText_ResetQuestsDesc[] = _("RESET ALL QUESTS.");
 static const u8 sText_ResetBerriesDesc[] = _("REPLANT ALL BERRIES\nIN THE OVERWORLD.");
 static const u8 sText_SoundTestScreenDesc[] = _("GO TO SOUND TESTING\nSCREEN.");
@@ -351,6 +362,24 @@ static const u8 sText_Shiny[] = _("SHINY: ");
 static const u8 sText_Time[] = _("TIME: ");
 static const u8 sText_DayOfWeek[] = _("DAY OF WEEK: ");
 
+static const u8 sText_Weather[] = _("WEATHER: ");
+static const u8 sText_WeatherNone[] = _("NONE");
+static const u8 sText_WeatherSunnyClouds[] = _("SUNNY CLOUDS");
+static const u8 sText_WeatherSunny[] = _("SUNNY");
+static const u8 sText_WeatherRain[] = _("RAIN");
+static const u8 sText_WeatherSnow[] = _("SNOW");
+static const u8 sText_WeatherRainThunderstorm[] = _("RAIN THUNDERSTORM");
+static const u8 sText_WeatherFogHorizontal[] = _("FOG HORIZONTAL");
+static const u8 sText_WeatherVolcanicAsh[] = _("VOLCANIC ASH");
+static const u8 sText_WeatherSandstorm[] = _("SANDSTORM");
+static const u8 sText_WeatherFogDiagonal[] = _("FOG DIAGONAL");
+static const u8 sText_WeatherUnderwater[] = _("UNDERWATER");
+static const u8 sText_WeatherShade[] = _("SHADE");
+static const u8 sText_WeatherDrought[] = _("DROUGHT");
+static const u8 sText_WeatherDownpour[] = _("DOWNPOUR");
+static const u8 sText_WeatherUnderwaterBubbles[] = _("UNDERWATER BUBBLES");
+static const u8 sText_WeatherAbnormal[] = _("ABNORMAL");
+
 static const u8 sText_Gender[] = _("GENDER: ");
 static const u8 sText_Male[] = _("MALE");
 static const u8 sText_Female[] = _("FEMALE");
@@ -389,12 +418,33 @@ static const u8 *const sText_MapGroupNumWarp[] =
     sText_Y,
 };
 
+static const u8 *const sText_WeatherTypes[] =
+{
+    sText_WeatherNone,
+    sText_WeatherSunnyClouds,
+    sText_WeatherSunny,
+    sText_WeatherRain,
+    sText_WeatherSnow,
+    sText_WeatherRainThunderstorm,
+    sText_WeatherFogHorizontal,
+    sText_WeatherVolcanicAsh,
+    sText_WeatherSandstorm,
+    sText_WeatherFogDiagonal,
+    sText_WeatherUnderwater,
+    sText_WeatherShade,
+    sText_WeatherDrought,
+    sText_WeatherDownpour,
+    sText_WeatherUnderwaterBubbles,
+    sText_WeatherAbnormal,
+};
+
 static const u8 *const sText_ListMenuDescriptions_Main[] =
 {
-    [LIST_ITEM_INFO]      = sText_InfoDesc,
-    [LIST_ITEM_UTILITY]   = sText_UtilityDesc,
-    [LIST_ITEM_PLAYER]    = sText_PlayerDesc,
-    [LIST_ITEM_SOFTRESET] = sText_SoftResetDesc,
+    [LIST_ITEM_INFO]              = sText_InfoDesc,
+    [LIST_ITEM_WORLD]             = sText_WorldDesc,
+    [LIST_ITEM_PLAYER]            = sText_PlayerDesc,
+    [LIST_ITEM_SOUND_TEST_SCREEN] = sText_SoundTestScreenDesc,
+    [LIST_ITEM_SOFTRESET]         = sText_SoftResetDesc,
 };
 
 static const u8 *const sText_ListMenuDescriptions_Info[] =
@@ -403,15 +453,15 @@ static const u8 *const sText_ListMenuDescriptions_Info[] =
     [LIST_ITEM_SAVEBLOCK] = sText_SaveblockDesc,
 };
 
-static const u8 *const sText_ListMenuDescriptions_Utility[] =
+static const u8 *const sText_ListMenuDescriptions_World[] =
 {
-    [LIST_ITEM_WARP]              = sText_WarpDesc,
-    [LIST_ITEM_FLAGS]             = sText_FlagsDesc,
-    [LIST_ITEM_VARS]              = sText_VarsDesc,
-    [LIST_ITEM_SET_TIME]          = sText_SetTimeDesc,
-    [LIST_ITEM_RESET_QUESTS]      = sText_ResetQuestsDesc,
-    [LIST_ITEM_RESET_BERRIES]     = sText_ResetBerriesDesc,
-    [LIST_ITEM_SOUND_TEST_SCREEN] = sText_SoundTestScreenDesc,
+    [LIST_ITEM_WARP]          = sText_WarpDesc,
+    [LIST_ITEM_FLAGS]         = sText_FlagsDesc,
+    [LIST_ITEM_VARS]          = sText_VarsDesc,
+    [LIST_ITEM_TIME]          = sText_SetTimeDesc,
+    [LIST_ITEM_WEATHER]       = sText_SetWeatherDesc,
+    [LIST_ITEM_RESET_QUESTS]  = sText_ResetQuestsDesc,
+    [LIST_ITEM_RESET_BERRIES] = sText_ResetBerriesDesc,
 };
 
 static const u8 *const sText_ListMenuDescriptions_Player[] =
@@ -425,17 +475,18 @@ static const u8 *const sText_ListMenuDescriptions_Player[] =
 
 static const u8 *const *const sText_ListMenuDescriptions[] =
 {
-    [ACTIVE_LIST_MAIN]    = sText_ListMenuDescriptions_Main,
-    [ACTIVE_LIST_INFO]    = sText_ListMenuDescriptions_Info,
-    [ACTIVE_LIST_UTILITY] = sText_ListMenuDescriptions_Utility,
-    [ACTIVE_LIST_PLAYER]  = sText_ListMenuDescriptions_Player,
+    [ACTIVE_LIST_MAIN]   = sText_ListMenuDescriptions_Main,
+    [ACTIVE_LIST_INFO]   = sText_ListMenuDescriptions_Info,
+    [ACTIVE_LIST_WORLD]  = sText_ListMenuDescriptions_World,
+    [ACTIVE_LIST_PLAYER] = sText_ListMenuDescriptions_Player,
 };
 
 static const struct ListMenuItem sListMenuItems_Main[] =
 {
     {sText_Info, NULL, LIST_ITEM_INFO},
-    {sText_Utility, NULL, LIST_ITEM_UTILITY},
+    {sText_World, NULL, LIST_ITEM_WORLD},
     {sText_Player, NULL, LIST_ITEM_PLAYER},
+    {sText_SoundTestScreen, NULL, LIST_ITEM_SOUND_TEST_SCREEN},
     {sText_SoftReset, NULL, LIST_ITEM_SOFTRESET},
 };
 
@@ -445,15 +496,15 @@ static const struct ListMenuItem sListMenuItems_Info[] =
     {sText_Saveblock, NULL, LIST_ITEM_SAVEBLOCK},
 };
 
-static const struct ListMenuItem sListMenuItems_Utility[] =
+static const struct ListMenuItem sListMenuItems_World[] =
 {
     {sText_Warp, NULL, LIST_ITEM_WARP},
     {sText_Flags, NULL, LIST_ITEM_FLAGS},
     {sText_Vars, NULL, LIST_ITEM_VARS},
-    {sText_SetTime, NULL, LIST_ITEM_SET_TIME},
+    {sText_SetTime, NULL, LIST_ITEM_TIME},
+    {sText_SetWeather, NULL, LIST_ITEM_WEATHER},
     {sText_ResetQuests, NULL, LIST_ITEM_RESET_QUESTS},
     {sText_ResetBerries, NULL, LIST_ITEM_RESET_BERRIES},
-    {sText_SoundTestScreen, NULL, LIST_ITEM_SOUND_TEST_SCREEN},
 };
 
 static const struct ListMenuItem sListMenuItems_Player[] =
@@ -467,10 +518,11 @@ static const struct ListMenuItem sListMenuItems_Player[] =
 
 static void (*const sDebugActions_Main[])(u8) =
 {
-    [LIST_ITEM_INFO]      = Task_DebugActionBuildListMenuInfo,
-    [LIST_ITEM_UTILITY]   = Task_DebugActionBuildListMenuUtility,
-    [LIST_ITEM_PLAYER]    = Task_DebugActionBuildListMenuPlayer,
-    [LIST_ITEM_SOFTRESET] = Task_DebugActionSoftReset,
+    [LIST_ITEM_INFO]              = Task_DebugActionBuildListMenuInfo,
+    [LIST_ITEM_WORLD]             = Task_DebugActionBuildListMenuWorld,
+    [LIST_ITEM_PLAYER]            = Task_DebugActionBuildListMenuPlayer,
+    [LIST_ITEM_SOUND_TEST_SCREEN] = Task_DebugActionSoundTestScreen,
+    [LIST_ITEM_SOFTRESET]         = Task_DebugActionSoftReset,
 };
 
 static void (*const sDebugActions_Info[])(u8) = 
@@ -479,15 +531,15 @@ static void (*const sDebugActions_Info[])(u8) =
     [LIST_ITEM_SAVEBLOCK] = Task_DebugActionSaveblock,
 };
 
-static void (*const sDebugActions_Utility[])(u8) = 
+static void (*const sDebugActions_World[])(u8) = 
 {
-    [LIST_ITEM_WARP]              = Task_DebugActionWarp,
-    [LIST_ITEM_FLAGS]             = Task_DebugActionFlags,
-    [LIST_ITEM_VARS]              = Task_DebugActionVars,
-    [LIST_ITEM_SET_TIME]          = Task_DebugActionSetTime,
-    [LIST_ITEM_RESET_QUESTS]      = Task_DebugActionResetQuests,
-    [LIST_ITEM_RESET_BERRIES]     = Task_DebugActionResetBerries,
-    [LIST_ITEM_SOUND_TEST_SCREEN] = Task_DebugActionSoundTestScreen,
+    [LIST_ITEM_WARP]          = Task_DebugActionWarp,
+    [LIST_ITEM_FLAGS]         = Task_DebugActionFlags,
+    [LIST_ITEM_VARS]          = Task_DebugActionVars,
+    [LIST_ITEM_TIME]          = Task_DebugActionSetTime,
+    [LIST_ITEM_WEATHER]       = Task_DebugActionSetWeather,
+    [LIST_ITEM_RESET_QUESTS]  = Task_DebugActionResetQuests,
+    [LIST_ITEM_RESET_BERRIES] = Task_DebugActionResetBerries,
 };
 
 static void (*const sDebugActions_Player[])(u8) = 
@@ -503,7 +555,7 @@ static void (*const *const sDebugActions[])(u8) =
 {
     [ACTIVE_LIST_MAIN]    = sDebugActions_Main,
     [ACTIVE_LIST_INFO]    = sDebugActions_Info,
-    [ACTIVE_LIST_UTILITY] = sDebugActions_Utility,
+    [ACTIVE_LIST_WORLD]   = sDebugActions_World,
     [ACTIVE_LIST_PLAYER]  = sDebugActions_Player,
 };
 
@@ -545,6 +597,14 @@ static void VBlankCB(void)
     LoadOam();
     ProcessSpriteCopyRequests();
     TransferPlttBuffer();
+}
+
+bool8 GetAndResetChangedWeatherDebug(void)
+{
+    bool8 changed = sChangedWeatherDebug;
+
+    sChangedWeatherDebug = FALSE;
+    return changed;
 }
 
 void CB2_OverworldDebugMenu(void)
@@ -641,9 +701,6 @@ static void Task_DebugMenuProcessInput(u8 taskId)
         if ((sOverworldDebugMenu->func = sDebugActions[sOverworldDebugMenu->activeListMenu][input]) != NULL)
         {
             sOverworldDebugMenu->cursorStack[sOverworldDebugMenu->cursorStackDepth] = sOverworldDebugMenu->cursorPosition;
-            sOverworldDebugMenu->cursorStackDepth++;
-            MgbaPrintf(MGBA_LOG_DEBUG, "{%d, %d, %d}", sOverworldDebugMenu->cursorStack[0], sOverworldDebugMenu->cursorStack[1], sOverworldDebugMenu->cursorStack[2]);
-            MgbaPrintf(MGBA_LOG_DEBUG, "depth: %d, pos: %d", sOverworldDebugMenu->cursorStackDepth, sOverworldDebugMenu->cursorPosition);
             sOverworldDebugMenu->func(taskId);
         }
     }
@@ -659,6 +716,7 @@ static void Task_DebugMenuProcessInput(u8 taskId)
         else
         {
             PlaySE(SE_SELECT);
+            sOverworldDebugMenu->cursorStack[sOverworldDebugMenu->cursorStackDepth] = 0;
             sOverworldDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_MAIN);
         }
@@ -676,8 +734,6 @@ static void Task_DebugMenuProcessInput(u8 taskId)
 
     if (JOY_NEW(DPAD_ANY))
     {
-        MgbaPrintf(MGBA_LOG_DEBUG, "{%d, %d, %d}", sOverworldDebugMenu->cursorStack[0], sOverworldDebugMenu->cursorStack[1], sOverworldDebugMenu->cursorStack[2]);
-        MgbaPrintf(MGBA_LOG_DEBUG, "depth: %d, cur: %d", sOverworldDebugMenu->cursorStackDepth, sOverworldDebugMenu->cursorPosition);
         FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
         AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_ListMenuDescriptions[sOverworldDebugMenu->activeListMenu][sOverworldDebugMenu->cursorPosition]);
         CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
@@ -700,9 +756,9 @@ static void BuildDebugListMenuData(u8 activeListMenu)
         items = sListMenuItems_Info;
         totalItems = ARRAY_COUNT(sListMenuItems_Info);
         break;
-    case ACTIVE_LIST_UTILITY:
-        items = sListMenuItems_Utility;
-        totalItems = ARRAY_COUNT(sListMenuItems_Utility);
+    case ACTIVE_LIST_WORLD:
+        items = sListMenuItems_World;
+        totalItems = ARRAY_COUNT(sListMenuItems_World);
         break;
     case ACTIVE_LIST_PLAYER:
         items = sListMenuItems_Player;
@@ -727,25 +783,43 @@ static void BuildDebugListMenuData(u8 activeListMenu)
     if (sOverworldDebugMenu->arrowTaskId != TASK_NONE)
         RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
     
-    sOverworldDebugMenu->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 39, 28, 148, gMultiuseListMenuTemplate.totalItems - 1, TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, (u16 *)&sOverworldDebugMenu->cursorPosition);
+    sOverworldDebugMenu->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 39, 28, 148, totalItems - 1, TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, &sOverworldDebugMenu->cursorPosition);
 }
 
 static void Task_DebugActionBuildListMenuInfo(u8 taskId)
 {
     PlaySE(SE_SELECT);
+    sOverworldDebugMenu->cursorStackDepth++;
     BuildDebugListMenuData(ACTIVE_LIST_INFO);
 }
 
-static void Task_DebugActionBuildListMenuUtility(u8 taskId)
+static void Task_DebugActionBuildListMenuWorld(u8 taskId)
 {
     PlaySE(SE_SELECT);
-    BuildDebugListMenuData(ACTIVE_LIST_UTILITY);
+    sOverworldDebugMenu->cursorStackDepth++;
+    BuildDebugListMenuData(ACTIVE_LIST_WORLD);
 }
 
 static void Task_DebugActionBuildListMenuPlayer(u8 taskId)
 {
     PlaySE(SE_SELECT);
+    sOverworldDebugMenu->cursorStackDepth++;
     BuildDebugListMenuData(ACTIVE_LIST_PLAYER);
+}
+
+static void Task_DebugActionSoundTestScreen(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+
+    gMain.savedCallback = CB2_OverworldDebugMenu;
+    BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
+    task->func = Task_GoToSoundTestScreen;
+}
+
+static void Task_GoToSoundTestScreen(u8 taskId)
+{
+    if (!UpdatePaletteFade())
+        SetMainCallback2(CB2_InitSoundTestScreen);
 }
 
 static void Task_DebugActionSoftReset(u8 taskId)
@@ -832,7 +906,9 @@ static void Task_DebugActionWarp(u8 taskId)
     task->tWarpId = 0;
     task->tXPos = 0;
     task->tYPos = 0;
-    task->tState = 0;
+    task->tState = WARP_STATE_GROUP;
+
+    sOverworldDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleWarpInput(u8 taskId)
@@ -924,7 +1000,7 @@ static void Task_HandleWarpInput(u8 taskId)
         if (task->tState == WARP_STATE_GROUP)
         {
             sOverworldDebugMenu->cursorStackDepth--;
-            BuildDebugListMenuData(ACTIVE_LIST_UTILITY);
+            BuildDebugListMenuData(ACTIVE_LIST_WORLD);
             task->func = Task_DebugMenuProcessInput;
         }
         else
@@ -1007,6 +1083,8 @@ static void Task_DebugActionFlags(u8 taskId)
     task->func = Task_HandleFlagsInput;
     task->tSelectedFlag = 1;
     task->tSelectedDigit = 0;
+
+    sOverworldDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleFlagsInput(u8 taskId)
@@ -1059,7 +1137,7 @@ static void Task_HandleFlagsInput(u8 taskId)
     else if (JOY_NEW(B_BUTTON))
     {
         sOverworldDebugMenu->cursorStackDepth--;
-        BuildDebugListMenuData(ACTIVE_LIST_UTILITY);
+        BuildDebugListMenuData(ACTIVE_LIST_WORLD);
         task->func = Task_DebugMenuProcessInput;
     }
 
@@ -1117,6 +1195,8 @@ static void Task_DebugActionVars(u8 taskId)
     task->tSelectedVar = VARS_START;
     task->tVarValue = VarGet(VARS_START);
     task->tSelectedDigit = 0;
+
+    sOverworldDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleVarsInput(u8 taskId)
@@ -1206,7 +1286,7 @@ static void Task_HandleVarsInput(u8 taskId)
         {
         case 0:
             sOverworldDebugMenu->cursorStackDepth--;
-            BuildDebugListMenuData(ACTIVE_LIST_UTILITY);
+            BuildDebugListMenuData(ACTIVE_LIST_WORLD);
             task->func = Task_DebugMenuProcessInput;
             break;
         case 1:
@@ -1280,7 +1360,9 @@ static void Task_DebugActionSetTime(u8 taskId)
     task->tHours = gSaveBlock2Ptr->inGameClock.hours;
     task->tMinutes = gSaveBlock2Ptr->inGameClock.minutes;
     task->tDayOfWeek = gSaveBlock2Ptr->inGameClock.dayOfWeek;
-    task->tState = 0;
+    task->tState = SET_TIME_STATE_HOURS;
+
+    sOverworldDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleSetTimeInput(u8 taskId)
@@ -1341,7 +1423,7 @@ static void Task_HandleSetTimeInput(u8 taskId)
     else if (JOY_NEW(B_BUTTON))
     {
         sOverworldDebugMenu->cursorStackDepth--;
-        BuildDebugListMenuData(ACTIVE_LIST_UTILITY);
+        BuildDebugListMenuData(ACTIVE_LIST_WORLD);
         task->func = Task_DebugMenuProcessInput;
     }
 
@@ -1364,7 +1446,77 @@ static void Task_HandleSetTimeInput(u8 taskId)
 
 #undef tHours
 #undef tMinutes
+#undef tDayOfWeek
 #undef tState
+
+#define tWeather data[0]
+
+static void Task_DebugActionSetWeather(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+    u8 weather = GetCurrentWeather();
+    u8 str[8];
+
+    PlaySE(SE_SELECT);
+    RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
+    sOverworldDebugMenu->arrowTaskId = TASK_NONE;
+
+    FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
+
+    AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_Weather);
+    AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 8, 16, sTextColor_Green, TEXT_SKIP_DRAW, sText_WeatherTypes[weather]);
+
+    CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
+
+    task->tWeather = weather;
+    task->func = Task_HandleSetWeatherInput;
+
+    sOverworldDebugMenu->cursorStackDepth++;
+}
+
+static void Task_HandleSetWeatherInput(u8 taskId)
+{
+    struct Task *task = &gTasks[taskId];
+    u8 str[8];
+
+    if (JOY_REPEAT(DPAD_UP))
+    {
+        if (task->tWeather < WEATHER_ABNORMAL)
+        {
+            PlaySE(SE_SELECT);
+            task->tWeather++;
+        }
+    }
+    else if (JOY_REPEAT(DPAD_DOWN))
+    {
+        if (task->tWeather > 0)
+        {
+            PlaySE(SE_SELECT);
+            task->tWeather--;
+        }
+    }
+    else if (JOY_NEW(A_BUTTON))
+    {
+        PlaySE(SE_SUCCESS);
+        SetWeather(task->tWeather);
+        sChangedWeatherDebug = TRUE;
+    }
+    else if (JOY_NEW(B_BUTTON))
+    {
+        sOverworldDebugMenu->cursorStackDepth--;
+        BuildDebugListMenuData(ACTIVE_LIST_WORLD);
+        task->func = Task_DebugMenuProcessInput;
+    }
+
+    if (JOY_REPEAT(DPAD_ANY))
+    {
+        FillWindowPixelRect(WIN_DESCRIPTION, PIXEL_FILL(0), 8, 16, 88, 16);
+        AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 8, 16, sTextColor_Green, TEXT_SKIP_DRAW, sText_WeatherTypes[task->tWeather]);
+        CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
+    }
+}
+
+#undef tWeather
 
 static void Task_DebugActionResetQuests(u8 taskId)
 {
@@ -1376,21 +1528,6 @@ static void Task_DebugActionResetBerries(u8 taskId)
 {
     PlaySE(SE_USE_ITEM);
     ScriptContext_SetupScript(EventScript_ResetAllBerries);
-}
-
-static void Task_DebugActionSoundTestScreen(u8 taskId)
-{
-    struct Task *task = &gTasks[taskId];
-
-    gMain.savedCallback = CB2_OverworldDebugMenu;
-    BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
-    task->func = Task_GoToSoundTestScreen;
-}
-
-static void Task_GoToSoundTestScreen(u8 taskId)
-{
-    if (!UpdatePaletteFade())
-        SetMainCallback2(CB2_InitSoundTestScreen);
 }
 
 static void Task_DebugActionGodmode(u8 taskId)
@@ -1473,6 +1610,8 @@ static void Task_DebugActionBuildParty(u8 taskId)
     task->tSelectedMove = 0;
     task->tMoveIndex = 0;
     task->tState = PARTY_BUILDER_STATE_MON;
+
+    sOverworldDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleBuildPartyInput(u8 taskId)
@@ -1843,6 +1982,8 @@ static void Task_DebugActionGiveItem(u8 taskId)
     task->tItem = 1;
     task->tQuantity = 1;
     task->tState = 0;
+
+    sOverworldDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleGiveItemInput(u8 taskId)

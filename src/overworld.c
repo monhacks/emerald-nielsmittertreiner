@@ -1,4 +1,7 @@
 #include "global.h"
+#ifdef DEBUG
+#include "debug/overworld_debug.h"
+#endif
 #include "overworld.h"
 #include "battle_pyramid.h"
 #include "battle_setup.h"
@@ -827,7 +830,12 @@ void LoadMapFromCameraTransition(u8 mapGroup, u8 mapNum)
     RestartWildEncounterImmunitySteps();
     TryUpdateRandomTrainerRematches(mapGroup, mapNum);
     DoTimeBasedEvents();
+#if DEBUG
+    if (!GetAndResetChangedWeatherDebug())
+        SetSavedWeatherFromCurrMapHeader();
+#else
     SetSavedWeatherFromCurrMapHeader();
+#endif
     ChooseAmbientCrySpecies();
     SetDefaultFlashLevel();
     Overworld_ClearSavedMusic();
@@ -877,7 +885,12 @@ static void LoadMapFromWarp(bool32 a1)
     TryUpdateRandomTrainerRematches(gSaveBlock1Ptr->location.mapGroup, gSaveBlock1Ptr->location.mapNum);
     if (a1 != TRUE)
         DoTimeBasedEvents();
+#if DEBUG
+    if (!GetAndResetChangedWeatherDebug())
+        SetSavedWeatherFromCurrMapHeader();
+#else
     SetSavedWeatherFromCurrMapHeader();
+#endif
     ChooseAmbientCrySpecies();
     if (isOutdoors)
         FlagClear(FLAG_SYS_USE_FLASH);
