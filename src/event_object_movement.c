@@ -1880,7 +1880,7 @@ static u8 UpdateSpritePalette(const struct SpritePalette *spritePalette, struct 
     if (IndexOfSpritePaletteTag(spritePalette->tag) == 0xFF)
     {
         sprite->oam.paletteNum = LoadSpritePalette(spritePalette);
-        UpdateSpritePaletteWithWeather(sprite->oam.paletteNum);
+        UpdateSpritePaletteWithWeather(sprite->oam.paletteNum, FALSE);
     }
     else
     {
@@ -2119,7 +2119,7 @@ static u8 LoadSpritePaletteIfTagExists(const struct SpritePalette *spritePalette
     paletteNum = LoadSpritePalette(spritePalette);
 
     if (paletteNum != 0xFF)
-        UpdateSpritePaletteWithWeather(paletteNum);
+        UpdateSpritePaletteWithWeather(paletteNum, FALSE);
         
     return paletteNum;
 }
