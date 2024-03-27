@@ -319,7 +319,6 @@ bool16 AddTextPrinter(struct TextPrinterTemplate *printerTemplate, u8 speed, voi
 void RunTextPrinters(void)
 {
     int i;
-    int j;
 
     if (!gDisableTextPrinters)
     {
