@@ -179,10 +179,10 @@ static void LoadObjectRegularReflectionPalette(struct ObjectEvent *objectEvent, 
     u16 paletteTag = REFLECTION_PAL_TAG(baseTag, mainSprite->oam.paletteNum);
     u8 paletteNum = IndexOfSpritePaletteTag(paletteTag);
 
-    if (paletteNum <= 16)
-    { // Load filtered palette
+    if (paletteNum <= 16) // Load filtered palette
+    {
         u16 filteredData[16];
-        struct SpritePalette filteredPal = {.tag = paletteTag, .data = filteredData};
+        struct SpritePalette filteredPal = {filteredData, paletteTag};
 
         if (sprite->sIsStillReflection == FALSE)
             ApplyPondReflectionFilter(mainSprite->oam.paletteNum, filteredData);
@@ -190,7 +190,7 @@ static void LoadObjectRegularReflectionPalette(struct ObjectEvent *objectEvent, 
             ApplyIceReflectionFilter(mainSprite->oam.paletteNum, filteredData);
 
         paletteNum = LoadSpritePalette(&filteredPal);
-        UpdateSpritePaletteWithWeather(paletteNum);
+        UpdateSpritePaletteWithWeather(paletteNum, TRUE);
     }
     sprite->oam.paletteNum = paletteNum;
     sprite->oam.objMode = ST_OAM_OBJ_BLEND;
@@ -205,7 +205,7 @@ static void LoadObjectHighBridgeReflectionPalette(struct ObjectEvent *objectEven
 
     CpuFill16(0x55C9, blueData, PLTT_SIZE_4BPP);
     sprite->oam.paletteNum = LoadSpritePalette(&bluePalette);
-    UpdateSpritePaletteWithWeather(sprite->oam.paletteNum);
+    UpdateSpritePaletteWithWeather(sprite->oam.paletteNum, TRUE);
 }
 
 static void UpdateObjectReflectionSprite(struct Sprite *reflectionSprite)
@@ -231,7 +231,7 @@ static void UpdateObjectReflectionSprite(struct Sprite *reflectionSprite)
         if (paletteNum >= 16) // Build filtered palette
         {
             u16 filteredData[16];
-            struct SpritePalette filteredPal = {.tag = paletteTag, .data = filteredData};
+            struct SpritePalette filteredPal = {filteredData, paletteTag};
             // Free palette if unused
             reflectionSprite->inUse = FALSE;
             FieldEffectFreePaletteIfUnused(reflectionSprite->oam.paletteNum);
@@ -243,7 +243,7 @@ static void UpdateObjectReflectionSprite(struct Sprite *reflectionSprite)
                 ApplyIceReflectionFilter(mainSprite->oam.paletteNum, filteredData);
     
             paletteNum = LoadSpritePalette(&filteredPal);
-            UpdateSpritePaletteWithWeather(paletteNum);
+            UpdateSpritePaletteWithWeather(paletteNum, TRUE);
         }
         reflectionSprite->oam.paletteNum = paletteNum;
     }
