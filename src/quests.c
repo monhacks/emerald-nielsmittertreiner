@@ -306,13 +306,13 @@ static void ShowQuestPopUpWindow(void)
 {
     u8 string[QUEST_NAME_LENGTH];
     u8 *txtPtr;
-    u8 primaryWindowId = AddMapNamePopUpWindow();
-    u8 secondaryWindowId = AddWeatherPopUpWindow();
+    u8 primaryWindowId = AddPrimaryPopUpWindow();
+    u8 secondaryWindowId = AddSecondaryPopUpWindow();
     
     LoadSpritePalette(&sSpritePalette_QuestIcons);
     LoadSpriteSheet(&sSpriteSheet_QuestIcons);
     LoadQuestPopUpWindowBgs();
-    LoadPalette(gPopUpWindowBorder_Palette, 0xE0, 32);
+    LoadPalette(gPopUpWindowBorder_Palette, BG_PLTT_ID(14), PLTT_SIZE_4BPP);
 
     gTasks[gPopupTaskId].tSpriteId = CreateSprite(&sSpriteTemplate_QuestIcons, 10, 12, 0);
 

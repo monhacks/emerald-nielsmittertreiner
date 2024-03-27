@@ -1530,10 +1530,10 @@ const u32 gSpeechBubbleTiles[] = INCBIN_U32("graphics/speech_bubble/speech_bubbl
 const u16 sSpeechBubblePalette[] = INCBIN_U16("graphics/speech_bubble/speech_bubble_tail.gbapal");
 
 // Popup Window Border
-const u8 gPopUpWindowBorderTop_Tiles[] = INCBIN_U8("graphics/interface/window_popup_top_tiles.4bpp");
-const u8 gPopUpWindowBorderBottom_Tiles[] = INCBIN_U8("graphics/interface/window_popup_bottom_tiles.4bpp");
-const u16 gPopUpWindowBorder_Palette[] = INCBIN_U16("graphics/interface/map_popup_palette.gbapal");
-const u8 gQuestPopUpIconTiles[] = INCBIN_U8("graphics/interface/quest_popup_icons.4bpp");
+const u32 gPopUpWindowBorderTop_Tiles[] = INCBIN_U32("graphics/interface/window_popup_top_tiles.4bpp");
+const u32 gPopUpWindowBorderBottom_Tiles[] = INCBIN_U32("graphics/interface/window_popup_bottom_tiles.4bpp");
+const u16 gPopUpWindowBorder_Palette[] = INCBIN_U16("graphics/map_popup/map_popup_palette.gbapal");
+const u32 gQuestPopUpIconTiles[] = INCBIN_U32("graphics/interface/quest_popup_icons.4bpp");
 const u16 gQuestPopUpIconPalette[] = INCBIN_U16("graphics/interface/quest_popup_icons.gbapal");
 
 // Pokenav V2

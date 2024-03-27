@@ -524,7 +524,7 @@ static u16 UNUSED GetStandardFrameBaseTileNum(void)
     return STD_WINDOW_BASE_TILE_NUM;
 }
 
-u8 AddMapNamePopUpWindow(void)
+u8 AddPrimaryPopUpWindow(void)
 {
     if (sPrimaryPopupWindowId == WINDOW_NONE)
         sPrimaryPopupWindowId = AddWindowParameterized(0, 0, 0, 30, 3, 14, 0x107);
@@ -2159,7 +2159,7 @@ u8 AddFieldEffectPopUpWindow(void)
     return sSecondaryPopupWindowId;
 }
 
-u8 AddWeatherPopUpWindow(void)
+u8 AddSecondaryPopUpWindow(void)
 {
     if (sSecondaryPopupWindowId == WINDOW_NONE)
         sSecondaryPopupWindowId = AddWindowParameterized(0, 0, 17, 30, 3, 14, 0x161);

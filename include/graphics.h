@@ -5082,10 +5082,10 @@ extern const u16 gMonMarkingsMenu_Pal[];
 extern const u32 gSpeechBubbleTiles[];
 extern const u16 sSpeechBubblePalette[];
 
-extern const u8 gPopUpWindowBorderTop_Tiles[];
-extern const u8 gPopUpWindowBorderBottom_Tiles[];
+extern const u32 gPopUpWindowBorderTop_Tiles[];
+extern const u32 gPopUpWindowBorderBottom_Tiles[];
 extern const u16 gPopUpWindowBorder_Palette[];
-extern const u8 gQuestPopUpIconTiles[];
+extern const u32 gQuestPopUpIconTiles[];
 extern const u16 gQuestPopUpIconPalette[];
 
 extern const u8 gQuestIconTiles[];
