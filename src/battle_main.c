@@ -470,8 +470,6 @@ const u8 gTypeNames[NUMBER_OF_MON_TYPES][TYPE_NAME_LENGTH + 1] =
     [TYPE_DARK] = _("DARK"),
 };
 
-
-
 // This is a factor in how much money you get for beating a trainer.
 const struct TrainerMoney gTrainerMoneyTable[] =
 {
@@ -2137,7 +2135,7 @@ static u8 CreateNPCTrainerParty(struct Pokemon *party, u16 trainerNum, bool8 fir
                 if (gTrainerBallTable[j].classId == gTrainers[trainerNum].trainerClass)
                     break;
             }
-            SetMonData(&party[i], MON_DATA_POKEBALL, &gTrainerBallTable[j].Ball);
+            SetMonData(&party[i], MON_DATA_POKEBALL, &gTrainerBallTable[j].ball);
         }
 
         gBattleTypeFlags |= gTrainers[trainerNum].doubleBattle;

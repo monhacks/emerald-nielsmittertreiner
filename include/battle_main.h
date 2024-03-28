@@ -1,16 +1,16 @@
 #ifndef GUARD_BATTLE_MAIN_H
 #define GUARD_BATTLE_MAIN_H
 
-struct TrainerBall
-{
-    u8 classId;
-    u8 Ball; // make this a u16 if needed
-};
-
 struct TrainerMoney
 {
     u8 classId;
     u8 value;
+};
+
+struct TrainerBall
+{
+    u8 classId;
+    u8 ball;
 };
 
 // For displaying a multi battle partner's Pokémon in the party menu
