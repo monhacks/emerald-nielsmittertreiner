@@ -1686,8 +1686,8 @@ static void OverworldBasic(void)
     UpdateTilesetAnimations();
     DoScheduledBgTilemapCopiesToVram();
 
-        // Every in-game minute if no palette fade is active, update TOD blending as needed
-    if (!gPaletteFade.active && ++gTimeUpdateCounter >= 600)
+    // Every in-game minute if no palette fade is active, update TOD blending as needed
+    if (!gPaletteFade.active && ++gTimeUpdateCounter >= 300)
     {
         struct TimeBlendSettings cachedBlend =
         {
