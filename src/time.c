@@ -20,7 +20,7 @@ void InGameClock_Run(void)
     gSaveBlock2Ptr->inGameClock.vblanks++;
 
     // 20 vblanks for a 8 hour cycle
-    if (gSaveBlock2Ptr->inGameClock.vblanks < 10)
+    if (gSaveBlock2Ptr->inGameClock.vblanks < 5)
         return;
 
     gSaveBlock2Ptr->inGameClock.vblanks = 0;
@@ -62,11 +62,6 @@ void FormatDecimalTimeWithoutSeconds(u8 *dest, s8 hour, s8 minute, u16 clockMode
     switch (clockMode)
     {
     case OPTIONS_CLOCK_12H:
-        dest = ConvertIntToDecimalStringN(dest, hour, STR_CONV_MODE_LEADING_ZEROS, 2);
-        *dest++ = CHAR_COLON;
-        dest = ConvertIntToDecimalStringN(dest, minute, STR_CONV_MODE_LEADING_ZEROS, 2);
-        break;
-    case OPTIONS_CLOCK_24H:
         if (hour < 13)
             dest = ConvertIntToDecimalStringN(dest, hour, STR_CONV_MODE_LEADING_ZEROS, 2);
         else
@@ -79,6 +74,11 @@ void FormatDecimalTimeWithoutSeconds(u8 *dest, s8 hour, s8 minute, u16 clockMode
             dest = StringAppend(dest, gText_AM);
         else
             dest = StringAppend(dest, gText_PM);
+        break;
+    case OPTIONS_CLOCK_24H:
+        dest = ConvertIntToDecimalStringN(dest, hour, STR_CONV_MODE_LEADING_ZEROS, 2);
+        *dest++ = CHAR_COLON;
+        dest = ConvertIntToDecimalStringN(dest, minute, STR_CONV_MODE_LEADING_ZEROS, 2);
         break;
     }
 
