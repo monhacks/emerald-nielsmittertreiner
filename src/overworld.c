@@ -1,6 +1,6 @@
 #include "global.h"
 #ifdef DEBUG
-#include "debug/overworld_debug.h"
+#include "debug/debug.h"
 #endif
 #include "overworld.h"
 #include "battle_pyramid.h"

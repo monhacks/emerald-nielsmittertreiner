@@ -346,7 +346,7 @@ SECTIONS {
         src/pokenav_v2.o(.text);
         src/time.o(.text);
         src/quests.o(.text);
-        src/debug/overworld_debug.o(.text);
+        src/debug/debug.o(.text);
         src/debug/sound_test_screen.o(.text);
     } > ROM =0
 
@@ -714,7 +714,7 @@ SECTIONS {
         src/follow_me.o(.rodata);
         src/pokenav_v2.o(.rodata);
         src/quests.o(.rodata);
-        src/debug/overworld_debug.o(.rodata);
+        src/debug/debug.o(.rodata);
         src/debug/sound_test_screen.o(.rodata);
         src/debug/printf.o(.rodata);
     } > ROM =0

@@ -1,6 +1,6 @@
 #include "global.h"
 #ifdef DEBUG
-#include "debug/overworld_debug.h"
+#include "debug/debug.h"
 #endif
 #include "battle_setup.h"
 #include "bike.h"
@@ -207,7 +207,7 @@ int ProcessPlayerFieldInput(struct FieldInput *input)
     if (input->input_field_1_2)
     {
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_WHITE);
-        SetMainCallback2(CB2_OverworldDebugMenu);
+        SetMainCallback2(CB2_DebugMenu);
         return TRUE;
     }
 #endif

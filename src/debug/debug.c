@@ -1,6 +1,6 @@
 #ifdef DEBUG
 #include "global.h"
-#include "debug/overworld_debug.h"
+#include "debug/debug.h"
 #include "debug/sound_test_screen.h"
 #include "battle_main.h"
 #include "bg.h"
@@ -81,7 +81,7 @@ static void Task_DebugActionGiveItem(u8 taskId);
 static void Task_HandleGiveItemInput(u8 taskId);
 static void Task_DebugActionChangeGender(u8 taskId);
 
-struct OverworldDebugMenu
+struct DebugMenu
 {
     void (*func)(u8);
     u16 cursorPosition;
@@ -188,9 +188,10 @@ enum
     SET_TIME_STATE_DAY_OF_WEEK,
 };
 
-EWRAM_DATA static struct OverworldDebugMenu *sOverworldDebugMenu = NULL;
+EWRAM_DATA static struct DebugMenu *sDebugMenu = NULL;
 EWRAM_DATA static struct PartyBuilder *sPartyBuilder[PARTY_SIZE] = {NULL};
 EWRAM_DATA static bool8 sChangedWeatherDebug = FALSE;
+EWRAM_DATA bool8 gGodMode = FALSE;
 
 // .rodata
 static const u32 sDebugTiles[] = INCBIN_U32("graphics/interface/debug_tiles.4bpp.lz");
@@ -607,7 +608,7 @@ bool8 GetAndResetChangedWeatherDebug(void)
     return changed;
 }
 
-void CB2_OverworldDebugMenu(void)
+void CB2_DebugMenu(void)
 {
     u32 i;
     u8 taskId;
@@ -662,9 +663,9 @@ void CB2_OverworldDebugMenu(void)
         break;
     case 3:
         taskId = CreateTask(Task_DebugMenuFadeIn, 0);
-        sOverworldDebugMenu = AllocZeroed(sizeof(struct OverworldDebugMenu));
-        sOverworldDebugMenu->arrowTaskId = TASK_NONE;
-        sOverworldDebugMenu->spriteId = SPRITE_NONE;
+        sDebugMenu = AllocZeroed(sizeof(struct DebugMenu));
+        sDebugMenu->arrowTaskId = TASK_NONE;
+        sDebugMenu->spriteId = SPRITE_NONE;
 
         gMultiuseListMenuTemplate = sListMenuTemplate;
         BuildDebugListMenuData(ACTIVE_LIST_MAIN);
@@ -694,19 +695,19 @@ static void Task_DebugMenuFadeIn(u8 taskId)
 
 static void Task_DebugMenuProcessInput(u8 taskId)
 {
-    u32 input = ListMenu_ProcessInput(sOverworldDebugMenu->listTaskId);
+    u32 input = ListMenu_ProcessInput(sDebugMenu->listTaskId);
 
     if (JOY_NEW(A_BUTTON))
     {
-        if ((sOverworldDebugMenu->func = sDebugActions[sOverworldDebugMenu->activeListMenu][input]) != NULL)
+        if ((sDebugMenu->func = sDebugActions[sDebugMenu->activeListMenu][input]) != NULL)
         {
-            sOverworldDebugMenu->cursorStack[sOverworldDebugMenu->cursorStackDepth] = sOverworldDebugMenu->cursorPosition;
-            sOverworldDebugMenu->func(taskId);
+            sDebugMenu->cursorStack[sDebugMenu->cursorStackDepth] = sDebugMenu->cursorPosition;
+            sDebugMenu->func(taskId);
         }
     }
     else if (JOY_NEW(B_BUTTON))
     {
-        if (sOverworldDebugMenu->activeListMenu == ACTIVE_LIST_MAIN)
+        if (sDebugMenu->activeListMenu == ACTIVE_LIST_MAIN)
         {
             PlaySE(SE_PC_OFF);
             BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
@@ -716,26 +717,26 @@ static void Task_DebugMenuProcessInput(u8 taskId)
         else
         {
             PlaySE(SE_SELECT);
-            sOverworldDebugMenu->cursorStack[sOverworldDebugMenu->cursorStackDepth] = 0;
-            sOverworldDebugMenu->cursorStackDepth--;
+            sDebugMenu->cursorStack[sDebugMenu->cursorStackDepth] = 0;
+            sDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_MAIN);
         }
     }
     else if (JOY_NEW(DPAD_UP))
     {
-        if (sOverworldDebugMenu->cursorPosition > 0)
-            sOverworldDebugMenu->cursorPosition--;
+        if (sDebugMenu->cursorPosition > 0)
+            sDebugMenu->cursorPosition--;
     }
     else if (JOY_NEW(DPAD_DOWN))
     {
-        if (sOverworldDebugMenu->cursorPosition < gMultiuseListMenuTemplate.totalItems - 1)
-            sOverworldDebugMenu->cursorPosition++;
+        if (sDebugMenu->cursorPosition < gMultiuseListMenuTemplate.totalItems - 1)
+            sDebugMenu->cursorPosition++;
     }
 
     if (JOY_NEW(DPAD_ANY))
     {
         FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
-        AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_ListMenuDescriptions[sOverworldDebugMenu->activeListMenu][sOverworldDebugMenu->cursorPosition]);
+        AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_ListMenuDescriptions[sDebugMenu->activeListMenu][sDebugMenu->cursorPosition]);
         CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
     }
 }
@@ -744,7 +745,7 @@ static void BuildDebugListMenuData(u8 activeListMenu)
 {
     const struct ListMenuItem *items;
     u8 totalItems;
-    u8 cursorPos = sOverworldDebugMenu->cursorStack[sOverworldDebugMenu->cursorStackDepth];
+    u8 cursorPos = sDebugMenu->cursorStack[sDebugMenu->cursorStackDepth];
 
     switch (activeListMenu)
     {
@@ -773,37 +774,37 @@ static void BuildDebugListMenuData(u8 activeListMenu)
     gMultiuseListMenuTemplate = sListMenuTemplate;
     gMultiuseListMenuTemplate.items = items;
     gMultiuseListMenuTemplate.totalItems = totalItems;
-    sOverworldDebugMenu->listTaskId = ListMenuInit(&gMultiuseListMenuTemplate, 0, cursorPos);
-    sOverworldDebugMenu->activeListMenu = activeListMenu;
-    sOverworldDebugMenu->cursorPosition = cursorPos;
+    sDebugMenu->listTaskId = ListMenuInit(&gMultiuseListMenuTemplate, 0, cursorPos);
+    sDebugMenu->activeListMenu = activeListMenu;
+    sDebugMenu->cursorPosition = cursorPos;
 
-    if (sOverworldDebugMenu->spriteId != SPRITE_NONE)
-        DestroySpriteAndFreeResources(&gSprites[sOverworldDebugMenu->spriteId]);
+    if (sDebugMenu->spriteId != SPRITE_NONE)
+        DestroySpriteAndFreeResources(&gSprites[sDebugMenu->spriteId]);
 
-    if (sOverworldDebugMenu->arrowTaskId != TASK_NONE)
-        RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
+    if (sDebugMenu->arrowTaskId != TASK_NONE)
+        RemoveScrollIndicatorArrowPair(sDebugMenu->arrowTaskId);
     
-    sOverworldDebugMenu->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 39, 28, 148, totalItems - 1, TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, &sOverworldDebugMenu->cursorPosition);
+    sDebugMenu->arrowTaskId = AddScrollIndicatorArrowPairParameterized(SCROLL_ARROW_UP, 39, 28, 148, totalItems - 1, TAG_SCROLL_ARROW, TAG_SCROLL_ARROW, &sDebugMenu->cursorPosition);
 }
 
 static void Task_DebugActionBuildListMenuInfo(u8 taskId)
 {
     PlaySE(SE_SELECT);
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
     BuildDebugListMenuData(ACTIVE_LIST_INFO);
 }
 
 static void Task_DebugActionBuildListMenuWorld(u8 taskId)
 {
     PlaySE(SE_SELECT);
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
     BuildDebugListMenuData(ACTIVE_LIST_WORLD);
 }
 
 static void Task_DebugActionBuildListMenuPlayer(u8 taskId)
 {
     PlaySE(SE_SELECT);
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
     BuildDebugListMenuData(ACTIVE_LIST_PLAYER);
 }
 
@@ -811,7 +812,7 @@ static void Task_DebugActionSoundTestScreen(u8 taskId)
 {
     struct Task *task = &gTasks[taskId];
 
-    gMain.savedCallback = CB2_OverworldDebugMenu;
+    gMain.savedCallback = CB2_DebugMenu;
     BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
     task->func = Task_GoToSoundTestScreen;
 }
@@ -882,8 +883,8 @@ static void Task_DebugActionWarp(u8 taskId)
     u32 i;
 
     PlaySE(SE_SELECT);
-    RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
-    sOverworldDebugMenu->arrowTaskId = TASK_NONE;
+    RemoveScrollIndicatorArrowPair(sDebugMenu->arrowTaskId);
+    sDebugMenu->arrowTaskId = TASK_NONE;
 
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
     ConvertIntToDecimalStringN(str, 0, STR_CONV_MODE_LEFT_ALIGN, 3);
@@ -908,7 +909,7 @@ static void Task_DebugActionWarp(u8 taskId)
     task->tYPos = 0;
     task->tState = WARP_STATE_GROUP;
 
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleWarpInput(u8 taskId)
@@ -999,7 +1000,7 @@ static void Task_HandleWarpInput(u8 taskId)
     {
         if (task->tState == WARP_STATE_GROUP)
         {
-            sOverworldDebugMenu->cursorStackDepth--;
+            sDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_WORLD);
             task->func = Task_DebugMenuProcessInput;
         }
@@ -1065,8 +1066,8 @@ static void Task_DebugActionFlags(u8 taskId)
     u8 str[8];
 
     PlaySE(SE_SELECT);
-    RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
-    sOverworldDebugMenu->arrowTaskId = TASK_NONE;
+    RemoveScrollIndicatorArrowPair(sDebugMenu->arrowTaskId);
+    sDebugMenu->arrowTaskId = TASK_NONE;
 
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
 
@@ -1084,7 +1085,7 @@ static void Task_DebugActionFlags(u8 taskId)
     task->tSelectedFlag = 1;
     task->tSelectedDigit = 0;
 
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleFlagsInput(u8 taskId)
@@ -1136,7 +1137,7 @@ static void Task_HandleFlagsInput(u8 taskId)
     }
     else if (JOY_NEW(B_BUTTON))
     {
-        sOverworldDebugMenu->cursorStackDepth--;
+        sDebugMenu->cursorStackDepth--;
         BuildDebugListMenuData(ACTIVE_LIST_WORLD);
         task->func = Task_DebugMenuProcessInput;
     }
@@ -1172,8 +1173,8 @@ static void Task_DebugActionVars(u8 taskId)
     u8 str[8];
 
     PlaySE(SE_SELECT);
-    RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
-    sOverworldDebugMenu->arrowTaskId = TASK_NONE;
+    RemoveScrollIndicatorArrowPair(sDebugMenu->arrowTaskId);
+    sDebugMenu->arrowTaskId = TASK_NONE;
 
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
 
@@ -1196,7 +1197,7 @@ static void Task_DebugActionVars(u8 taskId)
     task->tVarValue = VarGet(VARS_START);
     task->tSelectedDigit = 0;
 
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleVarsInput(u8 taskId)
@@ -1285,7 +1286,7 @@ static void Task_HandleVarsInput(u8 taskId)
         switch (task->tState)
         {
         case 0:
-            sOverworldDebugMenu->cursorStackDepth--;
+            sDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_WORLD);
             task->func = Task_DebugMenuProcessInput;
             break;
@@ -1338,8 +1339,8 @@ static void Task_DebugActionSetTime(u8 taskId)
     u8 str[8];
 
     PlaySE(SE_SELECT);
-    RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
-    sOverworldDebugMenu->arrowTaskId = TASK_NONE;
+    RemoveScrollIndicatorArrowPair(sDebugMenu->arrowTaskId);
+    sDebugMenu->arrowTaskId = TASK_NONE;
 
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
 
@@ -1362,7 +1363,7 @@ static void Task_DebugActionSetTime(u8 taskId)
     task->tDayOfWeek = gSaveBlock2Ptr->inGameClock.dayOfWeek;
     task->tState = SET_TIME_STATE_HOURS;
 
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleSetTimeInput(u8 taskId)
@@ -1422,7 +1423,7 @@ static void Task_HandleSetTimeInput(u8 taskId)
     }
     else if (JOY_NEW(B_BUTTON))
     {
-        sOverworldDebugMenu->cursorStackDepth--;
+        sDebugMenu->cursorStackDepth--;
         BuildDebugListMenuData(ACTIVE_LIST_WORLD);
         task->func = Task_DebugMenuProcessInput;
     }
@@ -1458,8 +1459,8 @@ static void Task_DebugActionSetWeather(u8 taskId)
     u8 str[8];
 
     PlaySE(SE_SELECT);
-    RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
-    sOverworldDebugMenu->arrowTaskId = TASK_NONE;
+    RemoveScrollIndicatorArrowPair(sDebugMenu->arrowTaskId);
+    sDebugMenu->arrowTaskId = TASK_NONE;
 
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
 
@@ -1471,7 +1472,7 @@ static void Task_DebugActionSetWeather(u8 taskId)
     task->tWeather = weather;
     task->func = Task_HandleSetWeatherInput;
 
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleSetWeatherInput(u8 taskId)
@@ -1503,7 +1504,7 @@ static void Task_HandleSetWeatherInput(u8 taskId)
     }
     else if (JOY_NEW(B_BUTTON))
     {
-        sOverworldDebugMenu->cursorStackDepth--;
+        sDebugMenu->cursorStackDepth--;
         BuildDebugListMenuData(ACTIVE_LIST_WORLD);
         task->func = Task_DebugMenuProcessInput;
     }
@@ -1532,16 +1533,16 @@ static void Task_DebugActionResetBerries(u8 taskId)
 
 static void Task_DebugActionGodmode(u8 taskId)
 {
-    gSaveBlock2Ptr->godmode ^= 1;
+    gGodMode ^= 1;
 
-    if (gSaveBlock2Ptr->godmode)
+    if (gGodMode)
         PlaySE(SE_PC_LOGIN);
     else
         PlaySE(SE_PC_OFF);
 
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
     AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_Status);
-    AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 36, 0, sTextColor_TrueFalse[gSaveBlock2Ptr->godmode], TEXT_SKIP_DRAW, sText_TrueFalse[gSaveBlock2Ptr->godmode]);
+    AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 36, 0, sTextColor_TrueFalse[gGodMode], TEXT_SKIP_DRAW, sText_TrueFalse[gGodMode]);
     CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
 }
 
@@ -1564,8 +1565,8 @@ static void Task_DebugActionBuildParty(u8 taskId)
     u32 i, j;
 
     PlaySE(SE_SELECT);
-    RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
-    sOverworldDebugMenu->arrowTaskId = TASK_NONE;
+    RemoveScrollIndicatorArrowPair(sDebugMenu->arrowTaskId);
+    sDebugMenu->arrowTaskId = TASK_NONE;
 
     LoadMonIconPalettes(); 
 
@@ -1611,7 +1612,7 @@ static void Task_DebugActionBuildParty(u8 taskId)
     task->tMoveIndex = 0;
     task->tState = PARTY_BUILDER_STATE_MON;
 
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleBuildPartyInput(u8 taskId)
@@ -1810,7 +1811,7 @@ static void Task_HandleBuildPartyInput(u8 taskId)
 
             FreeMonIconPalettes();
 
-            sOverworldDebugMenu->cursorStackDepth--;
+            sDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_PLAYER);
             task->func = Task_DebugMenuProcessInput;
         }
@@ -1935,7 +1936,7 @@ static void Task_BuildCustomParty(u8 taskId)
 
     FreeMonIconPalettes();
 
-    sOverworldDebugMenu->cursorStackDepth--;
+    sDebugMenu->cursorStackDepth--;
     BuildDebugListMenuData(ACTIVE_LIST_PLAYER);
     task->func = Task_DebugMenuProcessInput;
 }
@@ -1955,8 +1956,8 @@ static void Task_DebugActionGiveItem(u8 taskId)
     u8 str[8];
 
     PlaySE(SE_SELECT);
-    RemoveScrollIndicatorArrowPair(sOverworldDebugMenu->arrowTaskId);
-    sOverworldDebugMenu->arrowTaskId = TASK_NONE;
+    RemoveScrollIndicatorArrowPair(sDebugMenu->arrowTaskId);
+    sDebugMenu->arrowTaskId = TASK_NONE;
 
     FillWindowPixelBuffer(WIN_DESCRIPTION, PIXEL_FILL(0));
     AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 0, 0, sTextColor_Default, TEXT_SKIP_DRAW, sText_ItemId);
@@ -1973,17 +1974,17 @@ static void Task_DebugActionGiveItem(u8 taskId)
 
     CopyWindowToVram(WIN_DESCRIPTION, COPYWIN_GFX);
 
-    sOverworldDebugMenu->spriteId = AddItemIconSprite(TAG_ITEM_ICON, TAG_ITEM_ICON, 1);
-    gSprites[sOverworldDebugMenu->spriteId].x = 220;
-    gSprites[sOverworldDebugMenu->spriteId].y = 48;
-    gSprites[sOverworldDebugMenu->spriteId].oam.priority = 0;
+    sDebugMenu->spriteId = AddItemIconSprite(TAG_ITEM_ICON, TAG_ITEM_ICON, 1);
+    gSprites[sDebugMenu->spriteId].x = 220;
+    gSprites[sDebugMenu->spriteId].y = 48;
+    gSprites[sDebugMenu->spriteId].oam.priority = 0;
 
     task->func = Task_HandleGiveItemInput;
     task->tItem = 1;
     task->tQuantity = 1;
     task->tState = 0;
 
-    sOverworldDebugMenu->cursorStackDepth++;
+    sDebugMenu->cursorStackDepth++;
 }
 
 static void Task_HandleGiveItemInput(u8 taskId)
@@ -2032,7 +2033,7 @@ static void Task_HandleGiveItemInput(u8 taskId)
         switch (task->tState)
         {
         case 0:
-            sOverworldDebugMenu->cursorStackDepth--;
+            sDebugMenu->cursorStackDepth--;
             BuildDebugListMenuData(ACTIVE_LIST_PLAYER);
             task->func = Task_DebugMenuProcessInput;
             break;
@@ -2058,11 +2059,11 @@ static void Task_HandleGiveItemInput(u8 taskId)
         AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 32, 16, sTextColor_Default, TEXT_SKIP_DRAW, ItemId_GetName(task->tItem));
         AddTextPrinterParameterized3(WIN_DESCRIPTION, FONT_SMALL, 4, 44, sTextColor_Default, TEXT_SKIP_DRAW, ItemId_GetDescription(task->tItem));
 
-        DestroySpriteAndFreeResources(&gSprites[sOverworldDebugMenu->spriteId]);
-        sOverworldDebugMenu->spriteId = AddItemIconSprite(TAG_ITEM_ICON, TAG_ITEM_ICON, task->tItem);
-        gSprites[sOverworldDebugMenu->spriteId].x = 220;
-        gSprites[sOverworldDebugMenu->spriteId].y = 48;
-        gSprites[sOverworldDebugMenu->spriteId].oam.priority = 0;
+        DestroySpriteAndFreeResources(&gSprites[sDebugMenu->spriteId]);
+        sDebugMenu->spriteId = AddItemIconSprite(TAG_ITEM_ICON, TAG_ITEM_ICON, task->tItem);
+        gSprites[sDebugMenu->spriteId].x = 220;
+        gSprites[sDebugMenu->spriteId].y = 48;
+        gSprites[sDebugMenu->spriteId].oam.priority = 0;
 
         FillWindowPixelRect(WIN_DESCRIPTION, PIXEL_FILL(0), 48, 88, 16, 16);
         ConvertIntToDecimalStringN(str, task->tQuantity, STR_CONV_MODE_LEADING_ZEROS, 2);
@@ -2095,7 +2096,7 @@ static void Task_DebugMenuFadeOut(u8 taskId)
     if (!gPaletteFade.active)
     {
         DestroyTask(taskId);
-        Free(sOverworldDebugMenu);
+        Free(sDebugMenu);
         FreeAllWindowBuffers();
         SetMainCallback2(CB2_ReturnToFieldContestHall);
         gFieldCallback = FieldCB_ReturnToFieldNoScriptCheckMusic;

@@ -1,4 +1,7 @@
 #include "global.h"
+#if DEBUG
+#include "debug/debug.h"
+#endif
 #include "bike.h"
 #include "event_object_movement.h"
 #include "field_player_avatar.h"
@@ -887,6 +890,12 @@ static u8 GetBikeCollision(u8 direction)
 {
     u8 metatileBehavior;
     struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+
+#if DEBUG
+    if (gGodMode)
+        return COLLISION_NONE;
+#endif
+
     s16 x = playerObjEvent->currentCoords.x;
     s16 y = playerObjEvent->currentCoords.y;
     MoveCoords(direction, &x, &y);

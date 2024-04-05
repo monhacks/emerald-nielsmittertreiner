@@ -1,4 +1,7 @@
 #include "global.h"
+#if DEBUG
+#include "debug/debug.h"
+#endif
 #include "main.h"
 #include "bike.h"
 #include "event_data.h"
@@ -669,6 +672,11 @@ static u8 CheckForPlayerAvatarCollision(u8 direction)
 {
     s16 x, y;
     struct ObjectEvent *playerObjEvent = &gObjectEvents[gPlayerAvatar.objectEventId];
+
+#if DEBUG
+    if (gGodMode)
+        return COLLISION_NONE;
+#endif
 
     x = playerObjEvent->currentCoords.x;
     y = playerObjEvent->currentCoords.y;

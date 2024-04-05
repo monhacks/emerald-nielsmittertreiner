@@ -1,4 +1,7 @@
 #include "global.h"
+#if DEBUG
+#include "debug/debug.h"
+#endif
 #include "battle_setup.h"
 #include "event_data.h"
 #include "event_object_movement.h"
@@ -196,10 +199,10 @@ bool8 CheckForTrainersWantingBattle(void)
 {
     u8 i;
 
-    #ifdef DEBUG
-    if (gSaveBlock2Ptr->godmode)
+#ifdef DEBUG
+    if (gGodMode)
         return FALSE;
-    #endif
+#endif
 
     if (FlagGet(FLAG_DISABLE_TRAINERS))
         return FALSE;

@@ -1,4 +1,7 @@
 #include "global.h"
+#if DEBUG
+#include "debug/debug.h"
+#endif
 #include "wild_encounter.h"
 #include "pokemon.h"
 #include "metatile_behavior.h"
@@ -492,10 +495,10 @@ static bool8 DoMassOutbreakEncounterTest(void)
 
 static bool8 EncounterOddsCheck(u16 encounterRate)
 {
-    #ifdef DEBUG
-    if (gSaveBlock2Ptr->godmode)
+#ifdef DEBUG
+    if (gGodMode)
         return FALSE;
-    #endif
+#endif
 
     if (FlagGet(FLAG_DISABLE_ENCOUNTERS))
         return FALSE;

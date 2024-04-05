@@ -541,7 +541,6 @@ struct Follower
 struct SaveBlock2
 {
     u8 saveSentinel; // 0xFF means readable save, if not, it is save v0
-    u8 godmode:1;
     u16 saveVersion;
     u8 playerName[PLAYER_NAME_LENGTH + 1];
     u8 playerGender; // MALE, FEMALE

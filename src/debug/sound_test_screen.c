@@ -1,6 +1,6 @@
 #if DEBUG
 #include "global.h"
-#include "debug/overworld_debug.h"
+#include "debug/debug.h"
 #include "debug/sound_test_screen.h"
 #include "bg.h"
 #include "gpu_regs.h"
@@ -333,7 +333,7 @@ static bool8 Task_CheckSoundTestScreenInput(u8 taskId)
     {
         m4aMPlayAllStop();
         BeginNormalPaletteFade(PALETTES_ALL, 0, 0, 0x10, RGB_BLACK);
-        if (gMain.savedCallback == CB2_OverworldDebugMenu)
+        if (gMain.savedCallback == CB2_DebugMenu)
             PlayNewMapMusic(GetCurrLocationDefaultMusic());
 
         SetMainCallback2(CB2_ExitSoundTestScreen);
