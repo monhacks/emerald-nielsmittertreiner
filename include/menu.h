@@ -49,6 +49,8 @@ void InitTextBoxGfxAndPrinters(void);
 u16 RunTextPrintersAndIsPrinter0Active(void);
 void LoadMessageBoxAndBorderGfx(void);
 void DrawDialogueFrame(u8 windowId, bool8 copyToVram);
+void DrawMiniDialogueFrame(u8 windowId, bool8 copyToVram);
+void ClearMiniDialogueWindowAndFrame(u8 windowId, bool8 copyToVram);
 void ClearStdWindowAndFrame(u8 windowId, bool8 copyToVram);
 u16 AddTextPrinterParameterized2(u8 windowId, u8 fontId, const u8 *str, u8 speed, void (*callback)(struct TextPrinterTemplate *, u16), u8 fgColor, u8 bgColor, u8 shadowColor);
 void PrintPlayerNameOnWindow(u8, const u8 *, u16, u16);
@@ -130,5 +132,11 @@ u8 AddSecondaryPopUpWindow(void);
 u8 GetSecondaryPopUpWindowId(void);
 void RemoveSecondaryPopUpWindow(void);
 void HBlankCB_DoublePopupWindow(void);
+u8 AddMiniWindow(u8 x, u8 y, u8 width);
+u8 GetMiniWindowId(u8 index);
+u8 GetFirstMiniWindowId(void);
+u8 GetLastMiniWindowId(void);
+void RemoveMiniWindow(u8 windowId);
+void RemoveAllMiniWindows(void);
 
 #endif // GUARD_MENU_H

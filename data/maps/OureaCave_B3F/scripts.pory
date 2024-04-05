@@ -60,12 +60,12 @@ script OureaCave_B3F_EventScript_KarateChopTutor {
         }
         lock
         faceplayer
-        load_speech_bubble(LOCALID_BLACK_BELT_1)
+        loadspeechtail(FALSE, LOCALID_BLACK_BELT_1)
         msgbox("Wow kid! You broke that rock like a twig!\n"
                "Maybe we can learn something from you?\p"
                "You know what, I can teach one of your\n"
                "POKéMON KARATE CHOP. Right?", MSGBOX_YESNO)
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         if (var(VAR_RESULT) == NO) {
             goto(OureaCave_B3F_EventScript_KarateChopDeclined)
@@ -74,10 +74,10 @@ script OureaCave_B3F_EventScript_KarateChopTutor {
         if (var(VAR_RESULT) == NO) {
             goto(OureaCave_B3F_EventScript_KarateChopDeclined)
         }
-        load_speech_bubble(LOCALID_BLACK_BELT_1)
+        loadspeechtail(FALSE, LOCALID_BLACK_BELT_1)
         msgbox("Which POKéMON shall I teach\n"
                "KARATE CHOP, hmmm?")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         setvar(VAR_0x8005, TUTOR_MOVE_KARATE_CHOP)
         call(MoveTutor_EventScript_OpenPartyMenu)
@@ -85,12 +85,12 @@ script OureaCave_B3F_EventScript_KarateChopTutor {
             goto(OureaCave_B3F_EventScript_KarateChopDeclined)
         }
         setflag(FLAG_MOVE_TUTOR_TAUGHT_KARATE_CHOP)
-        load_speech_bubble(LOCALID_BLACK_BELT_1)
+        loadspeechtail(FALSE, LOCALID_BLACK_BELT_1)
         msgbox("FIGHTING-type moves are super-\n"
                "effective against ROCK- and\l"
                "GROUND-types!\p"
                "This move will crush them.")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         release
         end

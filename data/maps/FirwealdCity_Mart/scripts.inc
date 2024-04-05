@@ -5,11 +5,11 @@ FirwealdCity_Mart_MapScripts::
 FirwealdCity_Mart_EventScript_Clerk::
 	lock
 	faceplayer
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	message gText_HowMayIServeYou
 	waitmessage
 	pokemart FirwealdCity_Mart_Pokemart
-	destroy_speech_bubble
+	destroyspeechtail
 	msgbox gText_PleaseComeAgain, MSGBOX_NPC
 	release
 	end
@@ -37,18 +37,18 @@ FirwealdCity_Mart_EventScript_Fisherman::
 	applymovement 2, Common_Movement_ExclamationMark
 	waitmovement 0
 	faceplayer
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox FirwealdCity_Mart_EventScript_Fisherman_Text_0, MSGBOX_DEFAULT
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_FACING, DIR_NORTH
 	goto_if_eq FirwealdCity_Mart_EventScript_Fisherman_2
 FirwealdCity_Mart_EventScript_Fisherman_1:
 	applymovement 2, FirwealdCity_Mart_Movement_FishermanWalkToEmployee
 	waitmovement 0
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox FirwealdCity_Mart_EventScript_Fisherman_Text_1, MSGBOX_DEFAULT
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	turnobject 1, DIR_SOUTH
 	applymovement 2, FirwealdCity_Mart_Movement_FishermanWalkToExit

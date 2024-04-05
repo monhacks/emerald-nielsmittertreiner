@@ -31,10 +31,10 @@ script CedarredTown_EventScript_AcrenForestSign {
 script CedarredTown_EventScript_LoreMan {
     lock
     faceplayer
-    load_speech_bubble(LOCALID_LOREMAN)
+    loadspeechtail(FALSE, LOCALID_LOREMAN)
     msgbox("Did you know this part of the EURUS\n"
 	       "region is famous for two things?", MSGBOX_YESNO)
-    destroy_speech_bubble
+    destroyspeechtail
     if (var(VAR_RESULT) == 1)
     {
         msgbox("Fantastic!\p"
@@ -81,12 +81,12 @@ script CedarredTown_EventScript_ShowLoggersCabin {
     applymovement(OBJ_EVENT_ID_FOLLOWER, Common_Movement_ExclamationMark)
     waitmovement(0)
     facefollower
-    load_speech_bubble(OBJ_EVENT_ID_FOLLOWER)
+    loadspeechtail(FALSE, OBJ_EVENT_ID_FOLLOWER)
     msgbox("Ah, we're here!\n"
 	       "This is CEDARRED TOWN\p"
 	       "The LOGGERS CABIN should be at the\n"
 	       "far EAST of town.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     getplayerxy(VAR_TEMP_0, VAR_TEMP_1)
     special(SpawnCameraObject)
@@ -132,12 +132,12 @@ script CedarredTown_EventScript_EnterLoggersCabin {
     applymovement(OBJ_EVENT_ID_FOLLOWER, Common_Movement_ExclamationMark)
     waitmovement(0)
     facefollower
-    load_speech_bubble(OBJ_EVENT_ID_FOLLOWER)
+    loadspeechtail(FALSE, OBJ_EVENT_ID_FOLLOWER)
     msgbox("Remember {PLAYER}, we're here to help\n"
 	       "the LOGGERS with a problem in\l"
 	       "the ACREN FOREST.\p"
 	       "Let's head in and see what happened.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     getplayerxy(VAR_TEMP_0, VAR_TEMP_1)
     switch (var(VAR_TEMP_0))
@@ -176,11 +176,11 @@ script CedarredTown_EventScript_PreventWander {
     applymovement(OBJ_EVENT_ID_FOLLOWER, Common_Movement_ExclamationMark)
     waitmovement(0)
     facefollower
-    load_speech_bubble(OBJ_EVENT_ID_FOLLOWER)
+    loadspeechtail(FALSE, OBJ_EVENT_ID_FOLLOWER)
     msgbox("We should be going to the LOGGERS\n"
 	       "CABIN, {PLAYER}.\p"
 	       "Let's move!")
-    destroy_speech_bubble
+    destroyspeechtail
     applymovement(OBJ_EVENT_ID_PLAYER, CedarredTown_Movement_WalkDown)
     waitmovement(0)
     turnobject(OBJ_EVENT_ID_FOLLOWER, DIR_SOUTH)

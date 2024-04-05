@@ -28,7 +28,7 @@
 #include "save.h"
 #include "scanline_effect.h"
 #include "sound.h"
-#include "speech_bubble.h"
+#include "speech_tail.h"
 #include "sprite.h"
 #include "strings.h"
 #include "string_util.h"
@@ -1589,7 +1589,7 @@ static void Task_NewGameBirchSpeech_WaitForSpriteFadeInWelcome(u8 taskId)
         }
         else
         {
-            LoadTail(140, 50);
+            LoadTail(FALSE, 140, 50);
             InitWindows(sNewGameBirchSpeechTextWindows);
             LoadMainMenuWindowFrameTiles(0, 0xF3);
             LoadMessageBoxGfx(0, 0xFC, BG_PLTT_ID(15));
@@ -1956,7 +1956,7 @@ static void Task_NewGameBirchSpeech_LoadTailAfterGenderAndName(u8 taskId)
 {
     if (gTasks[taskId].tIsDoneFadingSprites)
     {
-        LoadTail(140, 50);
+        LoadTail(FALSE, 140, 50);
         gTasks[taskId].func = Task_NewGameBirchSpeech_WaitForSpriteFadeInAndTextPrinter;
     }
 }

@@ -16,13 +16,13 @@ script AcrenForest_PlantShop_EventScript_ShopOwner {
         applymovement(LOCALID_JULIA, AcrenForest_PlantShop_Movement_JuliaWalkToPlayer)
         waitmovement(0)
         turnobject(OBJ_EVENT_ID_PLAYER, DIR_SOUTH)
-        load_speech_bubble(LOCALID_JULIA)
+        loadspeechtail(FALSE, LOCALID_JULIA)
         msgbox("Oh hi there, my name is Julia.\n"
                "I haven't seen you around here before…\p"
                "Uhm, I suppose you're here for\n"
                "some flowers, just like me.\p"
                "If you'll excuse me…")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         applymovement(OBJ_EVENT_ID_PLAYER, AcrenForest_PlantShop_Movement_PlayerWalkUpBackwards)
         applymovement(LOCALID_JULIA, Common_Movement_WalkUp)
@@ -42,10 +42,10 @@ script AcrenForest_PlantShop_EventScript_ShopOwner {
         waitmovement(0)
         turnobject(LOCALID_JULIA, DIR_SOUTH)
         delay(15)
-        load_speech_bubble(LOCALID_JULIA)
+        loadspeechtail(FALSE, LOCALID_JULIA)
         msgbox("Thanks a lot, Sir!\p"
                "The flowers look beautiful.")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         applymovement(LOCALID_SHOPOWNER, AcrenForest_PlantShop_Movement_ShopOwnerWalkBehindCounter)
         waitmovement(0)
@@ -59,10 +59,10 @@ script AcrenForest_PlantShop_EventScript_ShopOwner {
         turnobject(LOCALID_SHOPOWNER, DIR_EAST)
         delay(15)
         turnobject(LOCALID_JULIA, DIR_NORTH)
-        load_speech_bubble(LOCALID_JULIA)
+        loadspeechtail(FALSE, LOCALID_JULIA)
         msgbox("Anyway, I'll be going again.\p"
                "I guess I'll see you later.")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_WalkDown)
         applymovement(LOCALID_JULIA, Common_Movement_WalkDown)
@@ -71,14 +71,14 @@ script AcrenForest_PlantShop_EventScript_ShopOwner {
         playse(SE_PIN)
         applymovement(LOCALID_JULIA, Common_Movement_ExclamationMark)
         waitmovement(0)
-        load_speech_bubble(LOCALID_JULIA)
+        loadspeechtail(FALSE, LOCALID_JULIA)
         msgbox("Oh and…\n"
                "What's your name?\p"
                "… … … … … …\n"
                "… … … … … …\p"
                "{PLAYER}…\p"
                "I'll see you later then, {PLAYER}!")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         applymovement(LOCALID_JULIA, AcrenForest_PlantShop_Movement_JuliaWalkToExit)
         waitmovement(0)
@@ -89,12 +89,12 @@ script AcrenForest_PlantShop_EventScript_ShopOwner {
         release
         end
     }
-    load_speech_bubble(LOCALID_SHOPOWNER)
+    loadspeechtail(FALSE, LOCALID_SHOPOWNER)
     message("Welcome to my GREENERY SHOP!\n"
 	       "How can I help you?")
     waitmessage
     pokemartdecoration(AcrenForest_PlantShop_PokemartDecor_Plants)
-    destroy_speech_bubble
+    destroyspeechtail
     msgbox("Please visit my GREENERY SHOP again!", MSGBOX_NPC)
     release
     end

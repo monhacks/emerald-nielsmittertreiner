@@ -11,11 +11,11 @@ script CedarredTown_Mart_EventScript_Clerk {
 	           "Come back when you have one.", MSGBOX_NPC)
         end
     }
-    load_speech_bubble(LOCALID_CLERK)
+    loadspeechtail(FALSE, LOCALID_CLERK)
     message(gText_HowMayIServeYou)
     waitmessage
     pokemart(CedarredTown_Mart_Pokemart)
-    destroy_speech_bubble
+    destroyspeechtail
     msgbox(gText_PleaseComeAgain, MSGBOX_NPC)
     release 
     end

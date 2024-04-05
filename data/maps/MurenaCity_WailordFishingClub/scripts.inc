@@ -21,27 +21,27 @@ MurenaCity_WailordFishingClub_EventScript_Fisherman::
 	lock
 	applymovement 3, Common_Movement_WalkInPlaceFastestRight
 	waitmovement 0
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox MurenaCity_WailordFishingClub_EventScript_Fisherman_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	applymovement 4, Common_Movement_WalkInPlaceFastestLeft
 	waitmovement 0
 	msgbox MurenaCity_WailordFishingClub_EventScript_Fisherman_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 3, Common_Movement_WalkInPlaceFastestRight
 	waitmovement 0
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox MurenaCity_WailordFishingClub_EventScript_Fisherman_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 4, Common_Movement_WalkInPlaceFastestLeft
 	waitmovement 0
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox MurenaCity_WailordFishingClub_EventScript_Fisherman_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end

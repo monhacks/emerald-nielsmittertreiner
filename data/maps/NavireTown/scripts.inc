@@ -12,7 +12,7 @@ NavireTown_MapScripts_MAP_SCRIPT_ON_TRANSITION:
 NavireTown_EventScript_Fisherman::
 	lock
 	faceplayer
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox NavireTown_EventScript_Fisherman_Text_0, MSGBOX_YESNO
 	switch VAR_RESULT
 	case YES, NavireTown_EventScript_Fisherman_2
@@ -35,7 +35,7 @@ NavireTown_EventScript_Fisherman_4:
 
 NavireTown_EventScript_ChooseLitor::
 	msgbox NavireTown_EventScript_ChooseLitor_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto NavireTown_EventScript_SailToLitor
 	return
@@ -43,7 +43,7 @@ NavireTown_EventScript_ChooseLitor::
 
 NavireTown_EventScript_CancelFerrySelect::
 	msgbox NavireTown_EventScript_CancelFerrySelect_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
@@ -89,9 +89,9 @@ NavireTown_EventScript_SailToLitor::
 	hideobjectat 10, MAP_MURENA_CITY
 	hideobjectat 1, MAP_MURENA_CITY_SHIPYARD
 	hideobjectat 1, MAP_NAVIRE_TOWN
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox NavireTown_EventScript_SailToLitor_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	resetobjectsubpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN
 	resetobjectsubpriority 2, MAP_LITOR_TOWN

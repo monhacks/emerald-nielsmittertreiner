@@ -43,30 +43,30 @@ FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer::
 	goto_if_eq FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer_2
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer_1:
 	call FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
 
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer_2:
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer_1
 
 
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound::
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	switch VAR_TOURNAMENT_HALL_ROUND
 	case 1, FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound_3
 	case 2, FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound_4
 	case 3, FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound_5
 	case 4, FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound_6
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound_1:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	return
 
@@ -89,7 +89,7 @@ FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound_6:
 
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant::
 	call FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	message FirwealdCity_TournamentHallLobby_Text_WhatWouldYouLikeToDo
 	waitmessage
 	multichoice 21, 6, MULTI_TOURNAMENT_HALL_PRE_BATTLE, 1
@@ -122,7 +122,7 @@ FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_4:
 
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_5:
 	msgbox FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_1
 
@@ -147,19 +147,19 @@ FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_11:
 
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_13:
 	msgbox FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_Text_6
-	destroy_speech_bubble
+	destroyspeechtail
 	warp MAP_FIRWEALD_CITY_TOURNAMENT_HALL_LOBBY, 0xFF, 6, 6
 	waitstate
 	goto FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_1
 
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_14:
-	destroy_speech_bubble
+	destroyspeechtail
 	goto FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant
 	goto FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_1
 
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_16:
 	msgbox FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_FACING, DIR_NORTH
 	goto_if_eq FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_19
@@ -174,7 +174,7 @@ FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_18:
 
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_17:
 	msgbox FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant_1
 
@@ -229,11 +229,11 @@ FirwealdCity_TournamentHallPreBattleRoom_EventScripts_BulletinBoard::
 FirwealdCity_TournamentHallPreBattleRoom_EventScripts_MartEmployee::
 	lock
 	faceplayer
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	message FirwealdCity_TournamentHallPreBattleRoom_EventScripts_MartEmployee_Text_0
 	waitmessage
 	pokemart FirwealdCity_TournamentHallPreBattleRoom_Pokemart
-	destroy_speech_bubble
+	destroyspeechtail
 	msgbox FirwealdCity_TournamentHallPreBattleRoom_EventScripts_MartEmployee_Text_1, MSGBOX_NPC
 	release
 	end

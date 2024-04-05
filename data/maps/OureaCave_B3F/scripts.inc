@@ -74,9 +74,9 @@ OureaCave_B3F_EventScript_KarateChopTutor_1:
 	goto_if_set FLAG_MOVE_TUTOR_TAUGHT_KARATE_CHOP, OureaCave_B3F_EventScript_KarateChopTutor_5
 	lock
 	faceplayer
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox OureaCave_B3F_EventScript_KarateChopTutor_Text_1, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_RESULT, NO
 	goto_if_eq OureaCave_B3F_EventScript_KarateChopTutor_8
@@ -85,9 +85,9 @@ OureaCave_B3F_EventScript_KarateChopTutor_7:
 	compare VAR_RESULT, NO
 	goto_if_eq OureaCave_B3F_EventScript_KarateChopTutor_11
 OureaCave_B3F_EventScript_KarateChopTutor_10:
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox OureaCave_B3F_EventScript_KarateChopTutor_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_0x8005, TUTOR_MOVE_KARATE_CHOP
 	call MoveTutor_EventScript_OpenPartyMenu
@@ -95,9 +95,9 @@ OureaCave_B3F_EventScript_KarateChopTutor_10:
 	goto_if_eq OureaCave_B3F_EventScript_KarateChopTutor_14
 OureaCave_B3F_EventScript_KarateChopTutor_13:
 	setflag FLAG_MOVE_TUTOR_TAUGHT_KARATE_CHOP
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox OureaCave_B3F_EventScript_KarateChopTutor_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end

@@ -28,6 +28,8 @@
 #define STD_WINDOW_PALETTE_SIZE PLTT_SIZEOF(10)
 #define STD_WINDOW_BASE_TILE_NUM 0x214
 
+#define NUM_MINI_WINDOW_IDS 4
+
 struct MenuInfoIcon
 {
     u8 width;
@@ -67,6 +69,8 @@ EWRAM_DATA u8 gPopupTaskId;
 static EWRAM_DATA u8 sStartMenuWindowId = 0;
 static EWRAM_DATA u8 sPrimaryPopupWindowId = 0;
 static EWRAM_DATA u8 sSecondaryPopupWindowId = 0;
+static EWRAM_DATA u8 sMiniWindowIds[NUM_MINI_WINDOW_IDS] = {0};
+static EWRAM_DATA u16 sMiniWindowBaseBlock = 0;
 static EWRAM_DATA struct Menu sMenu = {0};
 static EWRAM_DATA u16 sTileNum = 0;
 static EWRAM_DATA u8 sPaletteNum = 0;
@@ -147,10 +151,18 @@ static const struct MenuInfoIcon sMenuInfoIcons[] =
 
 void InitStandardTextBoxWindows(void)
 {
+    u32 i;
+
     InitWindows(sStandardTextBox_WindowTemplates);
     sStartMenuWindowId = WINDOW_NONE;
     sPrimaryPopupWindowId = WINDOW_NONE;
     sSecondaryPopupWindowId = WINDOW_NONE;
+
+    for (i = 0; i < NUM_MINI_WINDOW_IDS; i++)
+    {
+        sMiniWindowIds[i] = WINDOW_NONE;
+    }
+    sMiniWindowBaseBlock = 1;
 }
 
 void FreeAllOverworldWindowBuffers(void)
@@ -221,9 +233,42 @@ void LoadMessageBoxAndBorderGfx(void)
 
 void DrawDialogueFrame(u8 windowId, bool8 copyToVram)
 {
+    if (VarGet(VAR_MSGBOX_POS) == TRUE)
+        SetWindowAttribute(windowId, WINDOW_TILEMAP_TOP, 1);
+    else
+        SetWindowAttribute(windowId, WINDOW_TILEMAP_TOP, 15);
+
     CallWindowFunction(windowId, WindowFunc_DrawDialogueFrame);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
     PutWindowTilemap(windowId);
+    if (copyToVram == TRUE)
+        CopyWindowToVram(windowId, COPYWIN_FULL);
+}
+
+void DrawMiniDialogueFrame(u8 windowId, bool8 copyToVram)
+{
+    u32 i;
+    u16 width = GetWindowAttribute(windowId, WINDOW_WIDTH);
+    u16 height = GetWindowAttribute(windowId, WINDOW_HEIGHT);
+
+    PutWindowTilemap(windowId);
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
+    BlitBitmapRectToWindow(windowId, gMessageBox_Gfx, 8, 0, 8, 8, 0, 0, 8, 8);
+
+    for (i = 1; i < width - 1; i++)
+        BlitBitmapRectToWindow(windowId, gMessageBox_Gfx, 24, 0, 8, 8, i * 8, 0, 8, 8);
+    
+    BlitBitmapRectToWindow(windowId, gMessageBox_Gfx, 48, 0, 8, 8, (width - 1) * 8, 0, 8, 8);
+    BlitBitmapRectToWindow(windowId, gMessageBox_Gfx, 56, 0, 8, 8, 0, 8, 8, 8);
+    BlitBitmapRectToWindow(windowId, gMessageBox_Gfx, 80, 0, 8, 8, (width - 1) * 8, 8, 8, 8);
+    BlitBitmapRectToWindow(windowId, gMessageBox_Gfx, 88, 0, 8, 8, 0, (height - 1) * 8, 8, 8);
+
+    for (i = 1; i < width - 1; i++)
+        BlitBitmapRectToWindow(windowId, gMessageBox_Gfx, 96, 0, 8, 8, i * 8, (height - 1) * 8, 8, 8);
+
+    BlitBitmapRectToWindow(windowId, gMessageBox_Gfx, 104, 0, 8, 8, (width - 1) * 8, (height - 1) * 8, 8, 8);
+    FillWindowPixelRect(windowId, PIXEL_FILL(1), 8, 6, (width - 2) * 8, 12);
+
     if (copyToVram == TRUE)
         CopyWindowToVram(windowId, COPYWIN_FULL);
 }
@@ -241,6 +286,14 @@ void ClearDialogWindowAndFrame(u8 windowId, bool8 copyToVram)
 {
     CallWindowFunction(windowId, WindowFunc_ClearDialogWindowAndFrame);
     FillWindowPixelBuffer(windowId, PIXEL_FILL(1));
+    ClearWindowTilemap(windowId);
+    if (copyToVram == TRUE)
+        CopyWindowToVram(windowId, COPYWIN_FULL);
+}
+
+void ClearMiniDialogueWindowAndFrame(u8 windowId, bool8 copyToVram)
+{
+    FillWindowPixelBuffer(windowId, PIXEL_FILL(0));
     ClearWindowTilemap(windowId);
     if (copyToVram == TRUE)
         CopyWindowToVram(windowId, COPYWIN_FULL);
@@ -2189,4 +2242,96 @@ void HBlankCB_DoublePopupWindow(void)
         REG_BG0VOFS = offset;
     else
         REG_BG0VOFS = 512 - offset;
+}
+
+u8 AddMiniWindow(u8 x, u8 y, u8 width)
+{
+    u32 i;
+    bool8 found = FALSE;
+
+    for (i = 0; i < NUM_MINI_WINDOW_IDS; i++)
+    {
+        if (sMiniWindowIds[i] == WINDOW_NONE)
+        {
+            sMiniWindowIds[i] = AddWindowParameterized(0, x, y, width, 3, 15, sMiniWindowBaseBlock);
+            found = TRUE;
+            break;
+        }
+    }
+
+    if (found)
+    {
+        sMiniWindowBaseBlock += width * 3;
+        return sMiniWindowIds[i];
+    }
+    else
+    {
+        return WINDOW_NONE;
+    }
+}
+
+u8 GetMiniWindowId(u8 index)
+{
+    return sMiniWindowIds[index];
+}
+
+u8 GetFirstMiniWindowId(void)
+{
+    u32 i;
+
+    for (i = 0; i < NUM_MINI_WINDOW_IDS; i++)
+    {
+        if (sMiniWindowIds[i] != WINDOW_NONE)
+            return sMiniWindowIds[i];
+    }
+
+    return WINDOW_NONE;
+}
+
+u8 GetLastMiniWindowId(void)
+{
+    u32 i;
+
+    for (i = 0; i < NUM_MINI_WINDOW_IDS; i++)
+    {
+        if (sMiniWindowIds[3 - i] != WINDOW_NONE)
+            return sMiniWindowIds[3 - i];
+    }
+    
+    return WINDOW_NONE;
+}
+
+void RemoveMiniWindow(u8 windowId)
+{
+    u32 i;
+
+    for (i = 0; i < NUM_MINI_WINDOW_IDS; i++)
+    {
+        if (sMiniWindowIds[i] == windowId)
+        {
+            sMiniWindowBaseBlock -= GetWindowAttribute(windowId, WINDOW_WIDTH) * GetWindowAttribute(windowId, WINDOW_HEIGHT);
+            ClearMiniDialogueWindowAndFrame(windowId, TRUE);
+            RemoveWindow(windowId);
+            sMiniWindowIds[i] = WINDOW_NONE;
+            break;
+        }
+    }
+}
+
+void RemoveAllMiniWindows(void)
+{
+    u32 i;
+    u8 windowId;
+
+    for (i = 0; i < NUM_MINI_WINDOW_IDS; i++)
+    {
+        windowId = GetMiniWindowId(i);
+        if (windowId != WINDOW_NONE)
+        {
+            sMiniWindowBaseBlock -= GetWindowAttribute(windowId, WINDOW_WIDTH) * GetWindowAttribute(windowId, WINDOW_HEIGHT);
+            ClearMiniDialogueWindowAndFrame(windowId, TRUE);
+            RemoveWindow(windowId);
+            sMiniWindowIds[i] = WINDOW_NONE;
+        }
+    }
 }

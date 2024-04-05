@@ -47,9 +47,9 @@ Route403_EventScript_RichBoy::
 	lock
 	applymovement 8, Route403_Movement_RichBoyJumpInPlace
 	waitmovement 0
-	load_speech_bubble 8
+	loadspeechtail FALSE, 8
 	msgbox Route403_EventScript_RichBoy_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_FIRWEALD_CITY_STATE, 0
 	goto_if_gt Route403_EventScript_RichBoy_2

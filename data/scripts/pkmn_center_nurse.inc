@@ -1,12 +1,12 @@
 Common_EventScript_PkmnCenterNurse::
 	special CheckPokeCenterLocation
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox Common_EventScript_PkmnCenterNurse_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox Common_EventScript_PkmnCenterNurse_Text_1, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	switch VAR_RESULT
 	case YES, Common_EventScript_PkmnCenterNurse_3
 	case NO, Common_EventScript_PkmnCenterNurse_4

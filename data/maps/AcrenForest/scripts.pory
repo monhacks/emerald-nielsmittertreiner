@@ -72,18 +72,18 @@ script AcrenForest_EventScript_PhyllosShrineCutscene {
     playse(SE_PIN)
     applymovement(LOCALID_PHYLLOS_2, Common_Movement_ExclamationMark)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS_2)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS_2)
     msgbox("Hello {PLAYER}.\n"
            "I have something important to\l"
            "tell you.\p"
            "Follow me if you will.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_PHYLLOS_2, AcrenForest_Movement_PhyllosWalkToShrine)
     applymovement(OBJ_EVENT_ID_PLAYER, AcrenForest_Movement_PlayerWalkToShrine)
     waitmovement(0)
     delay(30)
-    load_speech_bubble(LOCALID_PHYLLOS_2)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS_2)
     msgbox("As you may or may not know\n"
            "EURUS is divided in districts.\p"
            "These districts each have a\n"
@@ -101,7 +101,7 @@ script AcrenForest_EventScript_PhyllosShrineCutscene {
            "world will be in balance.\p"
            "I am the shrine keeper of\n"
            "FIRWEALD CITY and its area.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     delay(10)
     fadenewbgm(MUS_CELEBI)
@@ -110,19 +110,19 @@ script AcrenForest_EventScript_PhyllosShrineCutscene {
     applymovement(LOCALID_PHYLLOS_2, Common_Movement_FaceUp)
     applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceUp)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS_2)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS_2)
     msgbox("This shrine you see here is\n"
            "home to the LEGENDARY\l"
            "POKéMON CELEBI.\p"
            "Also known as the\n"
            "GUARDIAN of the FOREST.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     delay(10)
     applymovement(LOCALID_PHYLLOS_2, Common_Movement_FaceLeft)
     applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceRight)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS_2)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS_2)
     msgbox("Anyways, I would like to\n"
            "ask you for a favor…\p"
            "Seeing as we had that run in\n"
@@ -141,7 +141,7 @@ script AcrenForest_EventScript_PhyllosShrineCutscene {
            "And I'm not the one to take\n"
            "this journey on at my age…\p"
            "Har har har!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     delay(10)
     fadedefaultbgm
@@ -149,17 +149,17 @@ script AcrenForest_EventScript_PhyllosShrineCutscene {
     doweather
     applymovement(LOCALID_PHYLLOS_2, Common_Movement_WalkInPlaceFastestLeft)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS_2)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS_2)
     msgbox("Here, take this.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     giveitem(ITEM_BRIGHT_POWDER, 1)
-    load_speech_bubble(LOCALID_PHYLLOS_2)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS_2)
     msgbox("If you need me, I'll be at\n"
            "the TOURNAMENT HALL.\p"
            "Thank you once again, our battle\n"
            "really sparked joy!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_PHYLLOS_2, AcrenForest_Movement_PhyllosWalkFromShrine_1)
     delay(32)
@@ -188,12 +188,12 @@ script AcrenForest_EventScript_LoggersCutscene {
         applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceUp)
         waitmovement(0)
     }
-    load_speech_bubble(LOCALID_LOGGER_1)
+    loadspeechtail(FALSE, LOCALID_LOGGER_1)
     msgbox("Hello there {PLAYER}!\p"
            "I heard from the boss we need to deal\n"
            "with those TEAM AIRLOCK GRUNTS\l"
            "back there…")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     special(SpawnCameraObject)
     applymovement(OBJ_EVENT_ID_CAMERA, AcrenForest_Movement_CameraToGrunts)
@@ -204,16 +204,16 @@ script AcrenForest_EventScript_LoggersCutscene {
     applymovement(OBJ_EVENT_ID_CAMERA, AcrenForest_Movement_CameraToPlayer)
     waitmovement(0)
     special(RemoveCameraObject)
-    load_speech_bubble(LOCALID_LOGGER_1)
+    loadspeechtail(FALSE, LOCALID_LOGGER_1)
     msgbox("I just need to check if you're\n"
            "official POKéMON TRAINER.\p"
            "May I see your POKéDEX please?")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     msgbox("… … … … … … … … …\n"
            "… … … … … … … … …")
     closemessage
-    load_speech_bubble(LOCALID_LOGGER_1)
+    loadspeechtail(FALSE, LOCALID_LOGGER_1)
     msgbox("Hmmm…\n"
            "You don't seem to have a POKéDEX\l"
            "at all…\p"
@@ -221,7 +221,7 @@ script AcrenForest_EventScript_LoggersCutscene {
            "an official POKéMON TRAINER.\p"
            "Go speak to the PROFESSOR about this.\p"
            "We'll handle it from here.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     setvar(VAR_ACREN_FOREST_STATE, 1)
     release
@@ -336,19 +336,19 @@ script AcrenForest_EventScript_DescribeIllegalCamp {
     }
     applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceRight)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS)
     msgbox("Hi again {PLAYER}.\n"
            "You've managed to find us.\l"
            "Now let's get to business shall we.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     turnobject(LOCALID_PHYLLOS, DIR_SOUTH)
     applymovement(LOCALID_PHYLLOS, AcrenForest_Movement_PhyllosLaughterJump)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS)
     msgbox("Har har har!\p"
            "Well then…")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     delay(10)
     teleportcamera(6, 28)
@@ -361,10 +361,10 @@ script AcrenForest_EventScript_DescribeIllegalCamp {
     delay(10)
     resetcamera
     delay(30)
-    load_speech_bubble(LOCALID_PHYLLOS)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS)
     msgbox("What are you waiting for kiddo?\p"
            "They should know you're coming.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     setvar(VAR_ACREN_FOREST_STATE, 5)
     release
@@ -376,7 +376,7 @@ script AcrenForest_EventScript_WarnBoss {
     playbgm(MUS_ENCOUNTER_AQUA, FALSE)
     applymovement(LOCALID_TEAMAIRLOCKGRUNT_GUARD, Common_Movement_ExclamationMark)
     waitmovement(0)
-    load_speech_bubble(LOCALID_TEAMAIRLOCKGRUNT_GUARD)
+    loadspeechtail(FALSE, LOCALID_TEAMAIRLOCKGRUNT_GUARD)
     msgbox("Oh no!\n"
            "How did you get here?!\p"
            "You shouldn't be able to get here!\n"
@@ -384,7 +384,7 @@ script AcrenForest_EventScript_WarnBoss {
            "Hrmph.\n"
            "Fine then, the BOSS will make sure to\l"
            "get you out! Ha ha ha ha!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_TEAMAIRLOCKGRUNT_GUARD, Common_Movement_WalkUp)
     waitmovement(0)
@@ -425,10 +425,10 @@ script AcrenForest_EventScript_TrainerTipsHeldItems {
 script AcrenForest_EventScript_Boy {
     lock
     faceplayer
-    load_speech_bubble(LOCALID_BOY)
+    loadspeechtail(FALSE, LOCALID_BOY)
     msgbox("Did you know that jogging\n"
            "burn 446 calories an hour?", MSGBOX_YESNO)
-    destroy_speech_bubble
+    destroyspeechtail
     switch (var(VAR_RESULT)) {
         case YES:
             msgbox("Oh did you now?", MSGBOX_NPC)

@@ -2,14 +2,14 @@ const LOCALID_NURSE = 1
 
 script Common_EventScript_PkmnCenterNurse {
     special(CheckPokeCenterLocation)
-    load_speech_bubble(LOCALID_NURSE)
+    loadspeechtail(FALSE, LOCALID_NURSE)
     msgbox("Welcome to {STR_VAR_1}'s\n"
            "POKéMON CENTER.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
-    load_speech_bubble(LOCALID_NURSE)
+    loadspeechtail(FALSE, LOCALID_NURSE)
     msgbox("Would you like to rest your POKEMON?", MSGBOX_YESNO)
-    destroy_speech_bubble
+    destroyspeechtail
     switch (var(VAR_RESULT)) {
         case YES:
             incrementgamestat(GAME_STAT_USED_POKECENTER)

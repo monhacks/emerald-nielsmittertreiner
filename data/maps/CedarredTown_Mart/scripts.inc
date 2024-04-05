@@ -6,11 +6,11 @@ CedarredTown_Mart_EventScript_Clerk::
 	lock
 	faceplayer
 	goto_if_unset FLAG_SYS_POKEMON_GET, CedarredTown_Mart_EventScript_Clerk_3
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	message gText_HowMayIServeYou
 	waitmessage
 	pokemart CedarredTown_Mart_Pokemart
-	destroy_speech_bubble
+	destroyspeechtail
 	msgbox gText_PleaseComeAgain, MSGBOX_NPC
 	release
 	end

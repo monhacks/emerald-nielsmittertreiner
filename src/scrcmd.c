@@ -44,6 +44,7 @@
 #include "shop.h"
 #include "slot_machine.h"
 #include "sound.h"
+#include "speech_tail.h"
 #include "string_util.h"
 #include "text.h"
 #include "text_window.h"
@@ -1285,6 +1286,54 @@ bool8 ScrCmd_message(struct ScriptContext *ctx)
     return FALSE;
 }
 
+bool8 ScrCmd_signmsg(struct ScriptContext *ctx)
+{
+    const u8 *msg = (const u8 *)ScriptReadWord(ctx);
+
+    if (msg == NULL)
+        msg = (const u8 *)ctx->data[0];
+    ShowSignFieldMessage(msg);
+    return FALSE;
+}
+
+bool8 ScrCmd_minimsg(struct ScriptContext *ctx)
+{
+    const u8 *msg = (const u8 *)ScriptReadWord(ctx);
+    u8 x = ScriptReadByte(ctx);
+    u8 y = ScriptReadByte(ctx);
+
+    if (msg == NULL)
+        msg = (const u8 *)ctx->data[0];
+    ShowMiniFieldMessage(msg, x, y);
+    return FALSE;
+}
+
+bool8 ScrCmd_closeminimessage(struct ScriptContext *ctx)
+{
+    u8 windowId = GetMiniWindowId(ScriptReadByte(ctx));
+
+    RemoveMiniWindow(windowId);
+    return FALSE;
+}
+
+bool8 ScrCmd_closefirstminimessage(struct ScriptContext *ctx)
+{
+    RemoveMiniWindow(GetFirstMiniWindowId());
+    return FALSE;
+}
+
+bool8 ScrCmd_closelastminimessage(struct ScriptContext *ctx)
+{
+    RemoveMiniWindow(GetLastMiniWindowId());
+    return FALSE;
+}
+
+bool8 ScrCmd_closeallminimessages(struct ScriptContext *ctx)
+{
+    RemoveAllMiniWindows();
+    return FALSE;
+}
+
 bool8 ScrCmd_pokenavcall(struct ScriptContext *ctx)
 {
     const u8 *msg = (const u8 *)ScriptReadWord(ctx);
@@ -2424,4 +2473,18 @@ bool8 ScrCmd_callfunc(struct ScriptContext *ctx)
 {
     u32 func = ScriptReadWord(ctx);
     return ((ScrCmdFunc) func)(ctx);
+}
+
+bool8 ScrCmd_loadspeechtail(struct ScriptContext *ctx)
+{
+    bool8 top = VarGet(gSpecialVar_0x8004);
+    s16 x = VarGet(gSpecialVar_0x8005);
+    s16 y = VarGet(gSpecialVar_0x8006);
+
+    if (y == 0xFF)
+        LoadTailFromObjectEventId(top, x);
+    else
+        LoadTail(top, x, y);
+    
+    return FALSE;
 }

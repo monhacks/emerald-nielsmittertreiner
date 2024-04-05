@@ -34,41 +34,41 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
             playse(SE_PIN)
             applymovement(LOCALID_LOGGERQUESTMASTER, CedarredTown_LoggersCabin_Movement_LoggerQuestMasterNoticePlayer)
             waitmovement(0)
-            load_speech_bubble(LOCALID_LOGGERQUESTMASTER)
+            loadspeechtail(FALSE, LOCALID_LOGGERQUESTMASTER)
             msgbox("Ah, PROFESSOR CONIFER!\n"
 	               "We've been waiting for you.\p"
 	               "Hmmm, who's that you brought with you?\p"
 	               "Any extra help is always nice to have.\n"
 	               "Definitely with what we have going on\l"
 	               "in ACREN FOREST.")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             playse(SE_PIN)
             applymovement(LOCALID_LOGGERMAN_2, Common_Movement_ExclamationMark)
             waitmovement(0)
             delay(8)
             turnobject(LOCALID_LOGGERMAN_2, DIR_EAST)
-            load_speech_bubble(LOCALID_LOGGERMAN_2)
+            loadspeechtail(FALSE, LOCALID_LOGGERMAN_2)
             msgbox("Sir!\p"
 	               "I have an idea on how the kid could\n"
 	               "help us, Sir!\p"
 	               "We could lend him one of our POKéMON.\n"
 	               "Sir!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             turnobject(LOCALID_LOGGERQUESTMASTER, DIR_WEST)
-            load_speech_bubble(LOCALID_LOGGERQUESTMASTER)
+            loadspeechtail(FALSE, LOCALID_LOGGERQUESTMASTER)
             msgbox("Hmmm…\n"
 	               "One of our POKéMON you say…\p"
 	               "I think that's a great idea!\p"
 	               "Recruit, could you fetch me our\n"
 	               "POKéBALLS the kid can use?")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
-            load_speech_bubble(LOCALID_LOGGERMAN_2)
+            loadspeechtail(FALSE, LOCALID_LOGGERMAN_2)
             msgbox("Yes, Sir!\p"
 	               "I'll get them right away!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             playse(SE_BIKE_HOP)
             applymovement(LOCALID_LOGGERMAN_2, CedarredTown_LoggersCabin_Movement_LoggerManTwoWalkToCupboard)
@@ -83,18 +83,18 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
             playse(SE_BIKE_HOP)
             applymovement(LOCALID_LOGGERMAN_2, CedarredTown_LoggersCabin_Movement_LoggerManTwoWalkToLeader)
             waitmovement(0)
-            load_speech_bubble(LOCALID_LOGGERQUESTMASTER)
+            loadspeechtail(FALSE, LOCALID_LOGGERQUESTMASTER)
             msgbox("Aha… I see, you chose these\n"
 	               "POKéMON for the kid.\p"
 	               "These POKéMON should do well.")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             turnobject(LOCALID_LOGGERQUESTMASTER, DIR_SOUTH)
             random(3)
-            load_speech_bubble(LOCALID_LOGGERQUESTMASTER)
+            loadspeechtail(FALSE, LOCALID_LOGGERQUESTMASTER)
             msgbox("Now…\n"
                    "Close your eyes…")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             delay(30)
             fadescreen(FADE_TO_BLACK)
@@ -119,7 +119,7 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
                                         break
                                     case NO:
                                         hidemonpic
-                                        destroy_speech_bubble
+                                        destroyspeechtail
                                         closemessage
                                         break
                                 }
@@ -136,7 +136,7 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
                                         break
                                     case NO:
                                         hidemonpic
-                                        destroy_speech_bubble
+                                        destroyspeechtail
                                         closemessage
                                         break
                                 }
@@ -153,7 +153,7 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
                                         break
                                     case NO:
                                         hidemonpic
-                                        destroy_speech_bubble
+                                        destroyspeechtail
                                         closemessage
                                         break
                                 }
@@ -178,7 +178,7 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
                                         break
                                     case NO:
                                         hidemonpic
-                                        destroy_speech_bubble
+                                        destroyspeechtail
                                         closemessage
                                         break
                                 }
@@ -195,7 +195,7 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
                                         break
                                     case NO:
                                         hidemonpic
-                                        destroy_speech_bubble
+                                        destroyspeechtail
                                         closemessage
                                         break
                                 }
@@ -212,7 +212,7 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
                                         break
                                     case NO:
                                         hidemonpic
-                                        destroy_speech_bubble
+                                        destroyspeechtail
                                         closemessage
                                         break
                                 }
@@ -237,7 +237,7 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
                                         break
                                     case NO:
                                         hidemonpic
-                                        destroy_speech_bubble
+                                        destroyspeechtail
                                         closemessage
                                         break
                                 }
@@ -254,7 +254,7 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
                                         break
                                     case NO:
                                         hidemonpic
-                                        destroy_speech_bubble
+                                        destroyspeechtail
                                         closemessage
                                         break
                                 }
@@ -271,7 +271,7 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
                                         break
                                     case NO:
                                         hidemonpic
-                                        destroy_speech_bubble
+                                        destroyspeechtail
                                         closemessage
                                         break
                                 }
@@ -285,44 +285,44 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
             closemessage
             hidemonpic
             fadescreen(FADE_FROM_BLACK)
-            load_speech_bubble(LOCALID_LOGGERQUESTMASTER)
+            loadspeechtail(FALSE, LOCALID_LOGGERQUESTMASTER)
             msgbox("While you're at it, why not give a\n"
 	               "nickname to that {STR_VAR_1}?", MSGBOX_YESNO)
             switch (var(VAR_RESULT)) {
                 case YES:
-                    destroy_speech_bubble
+                    destroyspeechtail
                     setvar(VAR_0x8004, 0)
                     call(Common_EventScript_NameReceivedPartyMon)
                     bufferpartymonnick(1, 0)
-                    load_speech_bubble(LOCALID_LOGGERQUESTMASTER)
+                    loadspeechtail(FALSE, LOCALID_LOGGERQUESTMASTER)
                     msgbox("{STR_VAR_2}…\p"
 	                       "That's a nice nickname for a {STR_VAR_1}!")
-                    destroy_speech_bubble
+                    destroyspeechtail
                     break
                 case NO:
-                    destroy_speech_bubble
-                    load_speech_bubble(LOCALID_LOGGERQUESTMASTER)
+                    destroyspeechtail
+                    loadspeechtail(FALSE, LOCALID_LOGGERQUESTMASTER)
                     msgbox("No nickname?\p"
 	                       "That's okay, not everybody likes them.")
-                    destroy_speech_bubble
+                    destroyspeechtail
                     break
             }
             playse(SE_PIN)
             applymovement(OBJ_EVENT_ID_FOLLOWER, Common_Movement_ExclamationMark)
             waitmovement(0)
-            load_speech_bubble(OBJ_EVENT_ID_FOLLOWER)
+            loadspeechtail(FALSE, OBJ_EVENT_ID_FOLLOWER)
             msgbox("On that note…\n"
 	               "I'll be going back to the LAB.\p"
 	               "I'm sure {PLAYER} will be able\n"
 	               "to help  you like no other.")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             turnobject(OBJ_EVENT_ID_FOLLOWER, DIR_WEST)
             turnobject(OBJ_EVENT_ID_PLAYER, DIR_EAST)
-            load_speech_bubble(OBJ_EVENT_ID_FOLLOWER)
+            loadspeechtail(FALSE, OBJ_EVENT_ID_FOLLOWER)
             msgbox("And {PLAYER}…\p"
 	               "See me in my LAB after you're done.")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             applymovement(OBJ_EVENT_ID_FOLLOWER, CedarredTown_LoggersCabin_Movement_ConiferWalkOut)
             waitmovement(0)
@@ -332,12 +332,12 @@ mapscripts CedarredTown_LoggersCabin_MapScripts {
             delay(16)
             applymovement(OBJ_EVENT_ID_PLAYER, CedarredTown_LoggersCabin_Movement_PlayerWalkInFrontOfLeader)
             waitmovement(0)
-            load_speech_bubble(LOCALID_LOGGERQUESTMASTER)
+            loadspeechtail(FALSE, LOCALID_LOGGERQUESTMASTER)
             msgbox("Now that you have a POKéMON, you should\n"
 	               "head to ACREN FOREST and see what is\l"
 	               "going on there…\p"
 	               "Now off you go…")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             clearflag(FLAG_HIDE_SUNSET_TOWN_LAB_PROF_CONIFER)
             clearflag(FLAG_DISABLE_ENCOUNTERS)

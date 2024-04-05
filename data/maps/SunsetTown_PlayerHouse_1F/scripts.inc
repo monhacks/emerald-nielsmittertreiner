@@ -28,10 +28,10 @@ SunsetTown_PlayerHouse_1F_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0:
 	closemessage
 	applymovement OBJ_EVENT_ID_PLAYER, SunsetTown_PlayerHouse_1F_Movement_PlayerWalksToMom
 	waitmovement 0
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox SunsetTown_PlayerHouse_1F_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_1
 	closemessage
-	destroy_speech_bubble
+	destroyspeechtail
 	applymovement OBJ_EVENT_ID_PLAYER, SunsetTown_PlayerHouse_1F_Movement_PlayerWalkBack
 	waitmovement 0
 	applymovement 1, SunsetTown_PlayerHouse_1F_Movement_MomWalksToChair
@@ -44,9 +44,9 @@ SunsetTown_PlayerHouse_1F_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0:
 SunsetTown_PlayerHouse_1F_EventScript_Mom::
 	lock
 	faceplayer
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox SunsetTown_PlayerHouse_1F_EventScript_Mom_Text_0, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	switch VAR_RESULT
 	case YES, SunsetTown_PlayerHouse_1F_EventScript_Mom_3
@@ -65,9 +65,9 @@ SunsetTown_PlayerHouse_1F_EventScript_Mom_3:
 	waitfanfare
 	special HealPlayerParty
 	fadescreen FADE_FROM_BLACK
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox SunsetTown_PlayerHouse_1F_EventScript_Mom_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end

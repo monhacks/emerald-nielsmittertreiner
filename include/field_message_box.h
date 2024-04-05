@@ -10,6 +10,9 @@ enum
 };
 
 bool8 ShowFieldMessage(const u8 *message);
+void Task_ExecuteSignMessage(u8 taskId);
+bool8 ShowSignFieldMessage(const u8 *message);
+bool8 ShowMiniFieldMessage(const u8 *message, u8 x, u8 y);
 bool8 ShowPokenavFieldMessage(const u8 *message);
 bool8 ShowFieldMessageFromBuffer(void);
 bool8 ShowFieldAutoScrollMessage(const u8 *message);

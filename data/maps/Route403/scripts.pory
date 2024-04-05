@@ -53,11 +53,11 @@ script Route403_EventScript_RichBoy {
     lock
     applymovement(LOCALID_RICH_BOY, Route403_Movement_RichBoyJumpInPlace)
     waitmovement(0)
-    load_speech_bubble(LOCALID_RICH_BOY)
+    loadspeechtail(FALSE, LOCALID_RICH_BOY)
     msgbox("Get outta here!\n"
            "You blue collar scum!\p"
            "My daddy's boat is about to arrive!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     if (var(VAR_FIRWEALD_CITY_STATE) > 0) {
         applymovement(LOCALID_AIRLOCK_GRUNT_1, Route403_Movement_TeamAirlockGrunt1WalkBack)

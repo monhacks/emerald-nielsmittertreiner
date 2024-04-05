@@ -5,11 +5,11 @@ LitorTown_Mart_MapScripts::
 LitorTown_Mart_EventScript_Clerk::
 	lock
 	faceplayer
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	message gText_HowMayIServeYou
 	waitmessage
 	pokemart LitorTown_Mart_Pokemart
-	destroy_speech_bubble
+	destroyspeechtail
 	msgbox gText_PleaseComeAgain, MSGBOX_NPC
 	release
 	end

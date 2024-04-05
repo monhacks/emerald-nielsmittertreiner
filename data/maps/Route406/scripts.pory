@@ -12,9 +12,9 @@ script Route406_EventScript_InitializeOureaCaveStoryline {
     waitmovement(0)
     applymovement(LOCALID_HIKER1, Common_Movement_FaceDown)
     waitmovement(0)
-    load_speech_bubble(LOCALID_HIKER1)
+    loadspeechtail(FALSE, LOCALID_HIKER1)
     msgbox("Earthquake! Get down!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     playse(SE_M_EARTHQUAKE)
     setvar(VAR_0x8004, 0)  // vertical pan
@@ -38,9 +38,9 @@ script Route406_EventScript_InitializeOureaCaveStoryline {
     delay(30)
     applymovement(LOCALID_HIKER1, Route406_Movement_Hiker1LookAround)
     waitmovement(0)
-    load_speech_bubble(LOCALID_HIKER1)
+    loadspeechtail(FALSE, LOCALID_HIKER1)
     msgbox("Phew, it seems the quake settled down…")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     playse(SE_PIN)
     applymovement(LOCALID_HIKER1, Common_Movement_ExclamationMark)
@@ -48,12 +48,12 @@ script Route406_EventScript_InitializeOureaCaveStoryline {
     delay(30)
     applymovement(LOCALID_HIKER1, Route406_Movement_Hiker1RunToPlayer)
     waitmovement(0)
-    load_speech_bubble(LOCALID_HIKER1)
+    loadspeechtail(FALSE, LOCALID_HIKER1)
     msgbox("Wait… what's a kid like you\n"
            "doing here?!\p"
            "You could've gotten hurt!\p"
            "Come with me…")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_HIKER1, Route406_Movement_Hiker1TakePlayerToCave)
     applymovement(OBJ_EVENT_ID_PLAYER, Route406_Movement_PlayerWalkToCave)
@@ -91,19 +91,19 @@ script Route406_EventScript_Hiker2 {
         delay(60)
         applymovement(LOCALID_LEMONADE_HIKER, Common_Movement_FaceRight)
         waitmovement(0)
-        load_speech_bubble(LOCALID_LEMONADE_HIKER)
+        loadspeechtail(FALSE, LOCALID_LEMONADE_HIKER)
         msgbox("I wonder what's down there?")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
     } else {
-        load_speech_bubble(LOCALID_LEMONADE_HIKER)
+        loadspeechtail(FALSE, LOCALID_LEMONADE_HIKER)
         msgbox("Hah, you thought I would fight\n"
            "you didn't you?\p"
            "Well… I could but I really don't\n"
            "feel like it now.\l"
            "Instead take a break, drink up\l"
            "and enjoy the view with me!")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         giveitem(ITEM_LEMONADE, 1)
         closemessage

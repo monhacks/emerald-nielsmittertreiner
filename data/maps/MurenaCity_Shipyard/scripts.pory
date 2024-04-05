@@ -31,10 +31,10 @@ script MurenaCity_Shipyard_EventScript_SetUpObjects {
 
 script MurenaCity_Shipyard_EventScript_FinishSailToMurena {
     setvar(VAR_FISHERMAN_FERRY_STATE, 0)
-    load_speech_bubble(LOCALID_FISHERMAN)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN)
     msgbox("Ahoy! We've hit the docks of MURENA!\n"
            "Just come back to me if you need a ride!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     release
     end
@@ -47,18 +47,18 @@ script MurenaCity_Shipyard_EventScript_Fisherman {
         applymovement(OBJ_EVENT_ID_PLAYER, MurenaCity_Shipyard_Movement_PlayerWalkToFisherman)
         waitmovement(0)
     }
-    load_speech_bubble(LOCALID_FISHERMAN)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN)
     msgbox("Hey there {PLAYER}!\n"
            "So…\p"
            "Wanna head to LITOR TOWN?", MSGBOX_YESNO)
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     switch (var(VAR_RESULT)) {
         case YES:
-            load_speech_bubble(LOCALID_FISHERMAN)
+            loadspeechtail(FALSE, LOCALID_FISHERMAN)
             msgbox("Alright!\n"
                    "We're headed to LITOR TOWN!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             goto(MurenaCity_Shipyard_EventScript_SailToLitorTown)
         case NO:
@@ -69,10 +69,10 @@ script MurenaCity_Shipyard_EventScript_Fisherman {
 }
 
 script MurenaCity_Shipyard_EventScript_CancelFerrySelect {
-    load_speech_bubble(LOCALID_FISHERMAN)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN)
     msgbox("Tell me whenever you need me\n"
            "and my trusty boat.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     release
     end

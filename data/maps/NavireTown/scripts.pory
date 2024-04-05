@@ -20,7 +20,7 @@ mapscripts NavireTown_MapScripts {
 script NavireTown_EventScript_Fisherman {
     lock
     faceplayer
-    load_speech_bubble(LOCALID_FISHERMAN_NAVIRE)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN_NAVIRE)
     msgbox("You need a trip to LITOR?\n"
            "I'm always here.", MSGBOX_YESNO)
     switch (var(VAR_RESULT)) {
@@ -36,7 +36,7 @@ script NavireTown_EventScript_Fisherman {
 script NavireTown_EventScript_ChooseLitor {
     msgbox("We're headed to LITOR TOWN!\n"
            "Let's set sail!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     goto(NavireTown_EventScript_SailToLitor)
 }
@@ -44,7 +44,7 @@ script NavireTown_EventScript_ChooseLitor {
 script NavireTown_EventScript_CancelFerrySelect {
     msgbox("Tell me whenever you need me\n"
            "and my trusty boat.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     release
     end
@@ -90,10 +90,10 @@ script NavireTown_EventScript_SailToLitor {
     hideobjectat(LOCALID_BOAT_MURENA, MAP_MURENA_CITY)
     hideobjectat(LOCALID_BOAT_MURENA_SHIPYARD, MAP_MURENA_CITY_SHIPYARD)
     hideobjectat(LOCALID_BOAT_NAVIRE, MAP_NAVIRE_TOWN)
-    load_speech_bubble(LOCALID_FISHERMAN_LITOR)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN_LITOR)
     msgbox("Ahoy! We've arrived at LITOR TOWN!\n"
            "Don't get sunburnt alright.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     resetobjectsubpriority(OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN)
     resetobjectsubpriority(LOCALID_FISHERMAN_LITOR, MAP_LITOR_TOWN)

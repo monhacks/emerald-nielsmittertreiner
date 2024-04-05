@@ -342,7 +342,7 @@ SECTIONS {
         src/battle_transition_frontier.o(.text);
         src/international_string_util.o(.text);
         src/follow_me.o(.text);
-        src/speech_bubble.o(.text);
+        src/speech_tail.o(.text);
         src/pokenav_v2.o(.text);
         src/time.o(.text);
         src/quests.o(.text);
@@ -710,7 +710,7 @@ SECTIONS {
         data/mystery_gift.o(.rodata);
         src/m4a_tables.o(.rodata);
         data/sound_data.o(.rodata);
-        src/speech_bubble.o(.rodata);
+        src/speech_tail.o(.rodata);
         src/follow_me.o(.rodata);
         src/pokenav_v2.o(.rodata);
         src/quests.o(.rodata);

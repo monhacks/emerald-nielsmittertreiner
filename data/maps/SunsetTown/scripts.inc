@@ -32,13 +32,13 @@ SunsetTown_EventScript_SetUpObjects::
 SunsetTown_EventScript_FollowerScript::
 	lock
 	facefollower
-	load_speech_bubble OBJ_EVENT_ID_FOLLOWER
+	loadspeechtail FALSE, OBJ_EVENT_ID_FOLLOWER
 	switch VAR_SUNSET_TOWN_FOLLOWER_STATE
 	case 1, SunsetTown_EventScript_FollowerScript_3
 	case 2, SunsetTown_EventScript_FollowerScript_4
 	case 3, SunsetTown_EventScript_FollowerScript_5
 SunsetTown_EventScript_FollowerScript_1:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
@@ -82,8 +82,25 @@ SunsetTown_EventScript_FatMan::
 
 
 SunsetTown_EventScript_Lass::
-	msgbox SunsetTown_EventScript_Lass_Text_0, MSGBOX_NPC
-	return
+	lock
+	faceplayer
+	minimsg SunsetTown_EventScript_Lass_Text_0, 1, 7
+	minimsg SunsetTown_EventScript_Lass_Text_0, 5, 12
+	minimsg SunsetTown_EventScript_Lass_Text_0, 15, 14
+	minimsg SunsetTown_EventScript_Lass_Text_0, 21, 8
+	loadspeechtail TRUE, 2
+	msgbox SunsetTown_EventScript_Lass_Text_1, MSGBOX_DEFAULT, TRUE
+	closelastminimessage
+	waitbuttonpress
+	closelastminimessage
+	waitbuttonpress
+	closelastminimessage
+	waitbuttonpress
+	closelastminimessage
+	destroyspeechtail
+	closemessage
+	release
+	end
 
 
 SunsetTown_EventScript_ProfessorConifer::
@@ -127,9 +144,9 @@ SunsetTown_EventScript_BlockPlayer::
 	playse SE_PIN
 	applymovement 3, Common_Movement_FaceDown
 	applymovement 3, Common_Movement_ExclamationMark
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox SunsetTown_EventScript_BlockPlayer_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	waitmovement 0
 	getplayerxy VAR_TEMP_0, VAR_TEMP_1
@@ -142,9 +159,9 @@ SunsetTown_EventScript_BlockPlayer_1:
 	turnobject OBJ_EVENT_ID_PLAYER, DIR_WEST
 	applymovement 3, SunsetTown_Movement_WalkToPlayerX
 	waitmovement 0
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox SunsetTown_EventScript_BlockPlayer_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	warp MAP_SUNSET_TOWN_PROFESSOR_CONIFER_LAB, 0, 12, 9
 	waitstate
@@ -177,9 +194,9 @@ SunsetTown_EventScript_TakeTheLead::
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestUp
 	applymovement 3, Common_Movement_WalkInPlaceFastestDown
 	waitmovement 0
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox SunsetTown_EventScript_TakeTheLead_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	loadword 0, SunsetTown_EventScript_FollowerScript
 	setfollower 3, FOLLOWER_FLAG_CUSTOM_FOLLOW_SCRIPT
@@ -258,8 +275,8 @@ SunsetTown_EventScript_FollowerScript_Text_2:
 	.string "It should be at the far EAST of town.$"
 
 SunsetTown_EventScript_TownSign_Text_0:
-	.string "SUNSET TOWN\n"
-	.string "“A town that can be shaded any hue.”$"
+	.string "{COLOR BLUE}SUNSET TOWN\n"
+	.string "{COLOR RED}“A town that can be shaded any hue.”$"
 
 SunsetTown_EventScript_PlayerHouseSign_Text_0:
 	.string "{PLAYER}'s HOUSE$"
@@ -278,9 +295,10 @@ SunsetTown_EventScript_FatMan_Text_0:
 	.string "is staggering!$"
 
 SunsetTown_EventScript_Lass_Text_0:
-	.string "The flowers of SUNSET TOWN are so\n"
-	.string "beautiful!\p"
-	.string "I love them!$"
+	.string "Hello :D$"
+
+SunsetTown_EventScript_Lass_Text_1:
+	.string "America ya :D$"
 
 SunsetTown_EventScript_ProfessorConifer_Text_0:
 	.string "Oh hey there {PLAYER}.\n"

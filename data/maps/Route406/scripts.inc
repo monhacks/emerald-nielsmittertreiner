@@ -10,9 +10,9 @@ Route406_EventScript_InitializeOureaCaveStoryline::
 	waitmovement 0
 	applymovement 2, Common_Movement_FaceDown
 	waitmovement 0
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox Route406_EventScript_InitializeOureaCaveStoryline_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	playse SE_M_EARTHQUAKE
 	setvar VAR_0x8004, 0
@@ -36,9 +36,9 @@ Route406_EventScript_InitializeOureaCaveStoryline::
 	delay 30
 	applymovement 2, Route406_Movement_Hiker1LookAround
 	waitmovement 0
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox Route406_EventScript_InitializeOureaCaveStoryline_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	playse SE_PIN
 	applymovement 2, Common_Movement_ExclamationMark
@@ -46,9 +46,9 @@ Route406_EventScript_InitializeOureaCaveStoryline::
 	delay 30
 	applymovement 2, Route406_Movement_Hiker1RunToPlayer
 	waitmovement 0
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox Route406_EventScript_InitializeOureaCaveStoryline_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 2, Route406_Movement_Hiker1TakePlayerToCave
 	applymovement OBJ_EVENT_ID_PLAYER, Route406_Movement_PlayerWalkToCave
@@ -83,9 +83,9 @@ Route406_EventScript_Hiker2::
 	lock
 	face_down
 	goto_if_set FLAG_TEMP_1, Route406_EventScript_Hiker2_2
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox Route406_EventScript_Hiker2_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	giveitem ITEM_LEMONADE, 1
 	closemessage
@@ -99,9 +99,9 @@ Route406_EventScript_Hiker2_2:
 	delay 60
 	applymovement 1, Common_Movement_FaceRight
 	waitmovement 0
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox Route406_EventScript_Hiker2_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto Route406_EventScript_Hiker2_1
 

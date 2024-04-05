@@ -85,16 +85,16 @@ OureaCave_B4F_LowTide_EventScript_DoCallCutsceneForWorker1::
 	waitmovement 0
 	turnobject 2, DIR_NORTH
 	delay 30
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	call OureaCave_B4F_LowTide_EventScript_DoCallDialogue
 	turnobject 1, DIR_SOUTH
 	delay 60
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox OureaCave_B4F_LowTide_EventScript_DoCallCutsceneForWorker1_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	turnobject 1, DIR_WEST
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	call OureaCave_B4F_LowTide_EventScript_DoAfterCallDialogue
 	applymovement OBJ_EVENT_ID_PLAYER, OureaCave_B4F_LowTide_Movement_PlayerWalkDown
 	applymovement 1, OureaCave_B4F_LowTide_Movement_ConstructionWorkerWalkOffScreen
@@ -113,16 +113,16 @@ OureaCave_B4F_LowTide_EventScript_DoCallCutsceneForWorker2::
 	waitmovement 0
 	turnobject 1, DIR_SOUTH
 	delay 30
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	call OureaCave_B4F_LowTide_EventScript_DoCallDialogue
 	turnobject 2, DIR_NORTH
 	delay 60
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox OureaCave_B4F_LowTide_EventScript_DoCallCutsceneForWorker1_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	turnobject 2, DIR_WEST
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	call OureaCave_B4F_LowTide_EventScript_DoAfterCallDialogue
 	applymovement OBJ_EVENT_ID_PLAYER, OureaCave_B4F_LowTide_Movement_PlayerWalkUp
 	applymovement 2, OureaCave_B4F_LowTide_Movement_ConstructionWorkerWalkOffScreen
@@ -136,14 +136,14 @@ OureaCave_B4F_LowTide_EventScript_DoCallCutsceneForWorker2::
 
 OureaCave_B4F_LowTide_EventScript_DoCallDialogue::
 	msgbox OureaCave_B4F_LowTide_EventScript_DoCallDialogue_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	return
 
 
 OureaCave_B4F_LowTide_EventScript_DoAfterCallDialogue::
 	msgbox OureaCave_B4F_LowTide_EventScript_DoAfterCallDialogue_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	return
 

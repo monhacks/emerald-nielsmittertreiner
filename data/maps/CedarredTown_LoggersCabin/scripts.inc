@@ -28,27 +28,27 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0:
 	playse SE_PIN
 	applymovement 4, CedarredTown_LoggersCabin_Movement_LoggerQuestMasterNoticePlayer
 	waitmovement 0
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	playse SE_PIN
 	applymovement 2, Common_Movement_ExclamationMark
 	waitmovement 0
 	delay 8
 	turnobject 2, DIR_EAST
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	turnobject 4, DIR_WEST
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	playse SE_BIKE_HOP
 	applymovement 2, CedarredTown_LoggersCabin_Movement_LoggerManTwoWalkToCupboard
@@ -63,15 +63,15 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0:
 	playse SE_BIKE_HOP
 	applymovement 2, CedarredTown_LoggersCabin_Movement_LoggerManTwoWalkToLeader
 	waitmovement 0
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	turnobject 4, DIR_SOUTH
 	random 3
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_5
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 30
 	fadescreen FADE_TO_BLACK
@@ -88,7 +88,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_1:
 	closemessage
 	hidemonpic
 	fadescreen FADE_FROM_BLACK
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_18, MSGBOX_YESNO
 	switch VAR_RESULT
 	case YES, CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_8
@@ -97,15 +97,15 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_6:
 	playse SE_PIN
 	applymovement OBJ_EVENT_ID_FOLLOWER, Common_Movement_ExclamationMark
 	waitmovement 0
-	load_speech_bubble OBJ_EVENT_ID_FOLLOWER
+	loadspeechtail FALSE, OBJ_EVENT_ID_FOLLOWER
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_21
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	turnobject OBJ_EVENT_ID_FOLLOWER, DIR_WEST
 	turnobject OBJ_EVENT_ID_PLAYER, DIR_EAST
-	load_speech_bubble OBJ_EVENT_ID_FOLLOWER
+	loadspeechtail FALSE, OBJ_EVENT_ID_FOLLOWER
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_22
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement OBJ_EVENT_ID_FOLLOWER, CedarredTown_LoggersCabin_Movement_ConiferWalkOut
 	waitmovement 0
@@ -115,9 +115,9 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_6:
 	delay 16
 	applymovement OBJ_EVENT_ID_PLAYER, CedarredTown_LoggersCabin_Movement_PlayerWalkInFrontOfLeader
 	waitmovement 0
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_23
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	clearflag FLAG_HIDE_SUNSET_TOWN_LAB_PROF_CONIFER
 	clearflag FLAG_DISABLE_ENCOUNTERS
@@ -165,20 +165,20 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_29:
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_1
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_8:
-	destroy_speech_bubble
+	destroyspeechtail
 	setvar VAR_0x8004, 0
 	call Common_EventScript_NameReceivedPartyMon
 	bufferpartymonnick 1, 0
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_19
-	destroy_speech_bubble
+	destroyspeechtail
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_6
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_9:
-	destroy_speech_bubble
-	load_speech_bubble 4
+	destroyspeechtail
+	loadspeechtail FALSE, 4
 	msgbox CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_20
-	destroy_speech_bubble
+	destroyspeechtail
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_6
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_21:
@@ -278,7 +278,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_35:
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_36:
 	hidemonpic
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_19
 
@@ -289,7 +289,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_38:
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_39:
 	hidemonpic
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_19
 
@@ -300,7 +300,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_41:
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_42:
 	hidemonpic
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_19
 
@@ -311,7 +311,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_44:
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_45:
 	hidemonpic
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_24
 
@@ -322,7 +322,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_47:
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_48:
 	hidemonpic
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_24
 
@@ -333,7 +333,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_50:
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_51:
 	hidemonpic
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_24
 
@@ -344,7 +344,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_53:
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_54:
 	hidemonpic
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_29
 
@@ -355,7 +355,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_56:
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_57:
 	hidemonpic
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_29
 
@@ -366,7 +366,7 @@ CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_59:
 
 CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_60:
 	hidemonpic
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto CedarredTown_LoggersCabin_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_29
 

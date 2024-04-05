@@ -61,9 +61,9 @@ MurenaCity_EventScript_SailToLitor::
 	hideobjectat 10, MAP_MURENA_CITY
 	hideobjectat 1, MAP_MURENA_CITY_SHIPYARD
 	hideobjectat 1, MAP_NAVIRE_TOWN
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox MurenaCity_EventScript_SailToLitor_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	resetobjectsubpriority OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN
 	resetobjectsubpriority 2, MAP_LITOR_TOWN
@@ -77,13 +77,13 @@ MurenaCity_EventScript_TeamAirlockEncounter::
 	playbgm MUS_ENCOUNTER_AQUA, FALSE
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceLeft
 	waitmovement 0
-	load_speech_bubble 20
+	loadspeechtail FALSE, 20
 	msgbox MurenaCity_EventScript_TeamAirlockEncounter_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
-	load_speech_bubble 18
+	loadspeechtail FALSE, 18
 	msgbox MurenaCity_EventScript_TeamAirlockEncounter_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 19, MurenaCity_Movement_Grunt2PunchFisherman
 	waitmovement 0
@@ -103,9 +103,9 @@ MurenaCity_EventScript_TeamAirlockEncounter::
 MurenaCity_EventScript_TeamAirlockEncounter_1:
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceRight
 	waitmovement 0
-	load_speech_bubble 20
+	loadspeechtail FALSE, 20
 	msgbox MurenaCity_EventScript_TeamAirlockEncounter_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_TEMP_1, 28
 	goto_if_eq MurenaCity_EventScript_TeamAirlockEncounter_7
@@ -114,14 +114,14 @@ MurenaCity_EventScript_TeamAirlockEncounter_1:
 MurenaCity_EventScript_TeamAirlockEncounter_6:
 	applymovement 18, Common_Movement_FaceRight
 	waitmovement 0
-	load_speech_bubble 18
+	loadspeechtail FALSE, 18
 	msgbox MurenaCity_EventScript_TeamAirlockEncounter_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	trainerbattle_no_intro TRAINER_MURENA_CITY_GRUNT, MurenaCity_Text_GruntDefeat
-	load_speech_bubble 18
+	loadspeechtail FALSE, 18
 	msgbox MurenaCity_EventScript_TeamAirlockEncounter_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	fadedefaultbgm
 	applymovement 18, MurenaCity_Movement_Grunt1RunAway
@@ -136,9 +136,9 @@ MurenaCity_EventScript_TeamAirlockEncounter_6:
 MurenaCity_EventScript_TeamAirlockEncounter_11:
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceUp
 	waitmovement 0
-	load_speech_bubble 20
+	loadspeechtail FALSE, 20
 	msgbox MurenaCity_EventScript_TeamAirlockEncounter_Text_5
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 20, MurenaCity_Movement_FishermanWalkToShipyard
 	waitmovement 0
@@ -186,9 +186,9 @@ MurenaCity_EventScript_ArtistTrader::
 	copyvar VAR_0x8004, VAR_0x8008
 	specialvar VAR_RESULT, GetInGameTradeSpeciesInfo
 	copyvar VAR_0x8009, VAR_RESULT
-	load_speech_bubble 9
+	loadspeechtail FALSE, 9
 	msgbox MurenaCity_EventScript_ArtistTrader_Text_1, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_RESULT, NO
 	goto_if_eq MurenaCity_EventScript_ArtistTrader_5
@@ -210,9 +210,9 @@ MurenaCity_EventScript_ArtistTrader_7:
 	special DoInGameTradeScene
 	waitstate
 	bufferspeciesname 0, VAR_0x8009
-	load_speech_bubble 9
+	loadspeechtail FALSE, 9
 	msgbox MurenaCity_EventScript_ArtistTrader_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setflag FLAG_MURENA_NPC_TRADE_COMPLETED
 	release
@@ -232,9 +232,9 @@ MurenaCity_EventScript_ArtistTrader_8:
 
 
 MurenaCity_EventScript_ArtistTrader_Decline::
-	load_speech_bubble 9
+	loadspeechtail FALSE, 9
 	msgbox MurenaCity_EventScript_ArtistTrader_Decline_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
@@ -249,30 +249,30 @@ MurenaCity_EventScript_FeebasSeller::
 	lock
 	faceplayer
 	goto_if_set FLAG_MURENA_BOUGHT_FEEBAS, MurenaCity_EventScript_FeebasSeller_2
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox MurenaCity_EventScript_FeebasSeller_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	showmoneybox 0, 0, 0
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox MurenaCity_EventScript_FeebasSeller_Text_2, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_RESULT, YES
 	goto_if_eq MurenaCity_EventScript_FeebasSeller_5
 	hidemoneybox
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox MurenaCity_EventScript_FeebasSeller_Text_5
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 MurenaCity_EventScript_FeebasSeller_4:
 	release
 	end
 
 MurenaCity_EventScript_FeebasSeller_2:
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox MurenaCity_EventScript_FeebasSeller_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
@@ -288,17 +288,17 @@ MurenaCity_EventScript_FeebasSeller_5:
 	delay 30
 	hidemoneybox
 	givemon SPECIES_FEEBAS, 5, ITEM_NONE
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox MurenaCity_EventScript_FeebasSeller_Text_4
 	setflag FLAG_MURENA_BOUGHT_FEEBAS
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto MurenaCity_EventScript_FeebasSeller_4
 
 MurenaCity_EventScript_FeebasSeller_9:
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox MurenaCity_EventScript_FeebasSeller_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
@@ -308,26 +308,26 @@ MurenaCity_EventScript_OldMan::
 	lock
 	faceplayer
 	goto_if_set FLAG_MURENA_SHOWN_RELICANTH, MurenaCity_EventScript_OldMan_2
-	load_speech_bubble 15
+	loadspeechtail FALSE, 15
 	msgbox MurenaCity_EventScript_OldMan_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 30
 	specialvar VAR_RESULT, CheckMurenaCityRelicanth
 	compare VAR_RESULT, TRUE
 	goto_if_eq MurenaCity_EventScript_OldMan_5
-	load_speech_bubble 15
+	loadspeechtail FALSE, 15
 	msgbox MurenaCity_EventScript_OldMan_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 MurenaCity_EventScript_OldMan_4:
 	release
 	end
 
 MurenaCity_EventScript_OldMan_2:
-	load_speech_bubble 15
+	loadspeechtail FALSE, 15
 	msgbox MurenaCity_EventScript_OldMan_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
@@ -336,9 +336,9 @@ MurenaCity_EventScript_OldMan_5:
 	playse SE_PIN
 	applymovement 15, Common_Movement_ExclamationMark
 	waitmovement 0
-	load_speech_bubble 15
+	loadspeechtail FALSE, 15
 	msgbox MurenaCity_EventScript_OldMan_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	showmoneybox 0, 0, 0
 	delay 30
@@ -347,10 +347,10 @@ MurenaCity_EventScript_OldMan_5:
 	updatemoneybox 0
 	delay 30
 	hidemoneybox
-	load_speech_bubble 15
+	loadspeechtail FALSE, 15
 	msgbox MurenaCity_EventScript_OldMan_Text_3
 	setflag FLAG_MURENA_SHOWN_RELICANTH
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto MurenaCity_EventScript_OldMan_4
 
@@ -366,21 +366,21 @@ MurenaCity_EventScript_Wingull::
 MurenaCity_EventScript_MarketSalesWoman::
 	lock
 	faceplayer
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox MurenaCity_EventScript_MarketSalesWoman_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	showmoneybox 0, 0, 0
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox MurenaCity_EventScript_MarketSalesWoman_Text_1, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_RESULT, YES
 	goto_if_eq MurenaCity_EventScript_MarketSalesWoman_2
 	hidemoneybox
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox MurenaCity_EventScript_MarketSalesWoman_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 MurenaCity_EventScript_MarketSalesWoman_1:
 	release
@@ -397,16 +397,16 @@ MurenaCity_EventScript_MarketSalesWoman_2:
 	delay 30
 	hidemoneybox
 	giveitem ITEM_TENTACOOL_SKEWER, 1
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox MurenaCity_EventScript_MarketSalesWoman_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto MurenaCity_EventScript_MarketSalesWoman_1
 
 MurenaCity_EventScript_MarketSalesWoman_6:
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox MurenaCity_EventScript_MarketSalesWoman_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end

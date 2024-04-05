@@ -15,7 +15,7 @@ LitorTown_EventScript_Fisherman::
 	goto_if_unset FLAG_MET_SCOTT_ON_LITOR, LitorTown_EventScript_Fisherman_2
 	goto_if_unset FLAG_MET_JULIA_ON_LITOR, LitorTown_EventScript_Fisherman_2
 LitorTown_EventScript_Fisherman_1:
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	message LitorTown_Text_WhereAreWeHeaded
 	waitmessage
 	multichoicedefault 21, 6, MULTI_FERRY_ON_LITOR, 1, 0
@@ -27,7 +27,7 @@ LitorTown_EventScript_Fisherman_1:
 	return
 
 LitorTown_EventScript_Fisherman_2:
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox LitorTown_EventScript_Fisherman_Text_0, MSGBOX_YESNO
 	switch VAR_RESULT
 	case YES, LitorTown_EventScript_Fisherman_12
@@ -66,7 +66,7 @@ LitorTown_EventScript_Fisherman_14:
 
 LitorTown_EventScript_ChooseMurena::
 	msgbox LitorTown_EventScript_ChooseMurena_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto LitorTown_EventScript_SailToMurena
 	return
@@ -74,7 +74,7 @@ LitorTown_EventScript_ChooseMurena::
 
 LitorTown_EventScript_ChooseNavire::
 	msgbox LitorTown_EventScript_ChooseNavire_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto LitorTown_EventScript_SailToNavire
 	return
@@ -82,7 +82,7 @@ LitorTown_EventScript_ChooseNavire::
 
 LitorTown_EventScript_CancelFerrySelect::
 	msgbox LitorTown_EventScript_CancelFerrySelect_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
@@ -172,9 +172,9 @@ LitorTown_EventScript_SailToNavire_1:
 	hideobjectat 10, MAP_MURENA_CITY
 	hideobjectat 1, MAP_MURENA_CITY_SHIPYARD
 	hideobjectat 1, MAP_LITOR_TOWN
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox LitorTown_EventScript_SailToNavire_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	resetobjectsubpriority OBJ_EVENT_ID_PLAYER, MAP_NAVIRE_TOWN
 	resetobjectsubpriority 2, MAP_NAVIRE_TOWN
@@ -203,16 +203,16 @@ LitorTown_EventScript_Scott::
 	lock
 	faceplayer
 	goto_if_set FLAG_MET_SCOTT_ON_LITOR, LitorTown_EventScript_Scott_1
-	load_speech_bubble 7
+	loadspeechtail FALSE, 7
 	msgbox LitorTown_EventScript_Scott_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	playse SE_PIN
 	applymovement 7, Common_Movement_ExclamationMark
 	waitmovement 0
-	load_speech_bubble 7
+	loadspeechtail FALSE, 7
 	msgbox LitorTown_EventScript_Scott_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	playfanfare MUS_OBTAIN_ITEM
 	setflag FLAG_SYS_POKENAV_GET
@@ -221,18 +221,18 @@ LitorTown_EventScript_Scott::
 	msgbox LitorTown_EventScript_Scott_Text_3
 	waitfanfare
 	closemessage
-	load_speech_bubble 7
+	loadspeechtail FALSE, 7
 	msgbox LitorTown_EventScript_Scott_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setflag FLAG_MET_SCOTT_ON_LITOR
 	release
 	end
 
 LitorTown_EventScript_Scott_1:
-	load_speech_bubble 7
+	loadspeechtail FALSE, 7
 	msgbox LitorTown_EventScript_Scott_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
@@ -246,15 +246,15 @@ LitorTown_EventScript_JuliaEncounter::
 	applymovement 13, Common_Movement_WalkDown
 	applymovement OBJ_EVENT_ID_PLAYER, LitorTown_Movement_PlayerWalkDown
 	waitmovement 0
-	load_speech_bubble 13
+	loadspeechtail FALSE, 13
 	msgbox LitorTown_EventScript_JuliaEncounter_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 13, Common_Movement_QuestionMark
 	waitmovement 0
-	load_speech_bubble 13
+	loadspeechtail FALSE, 13
 	msgbox LitorTown_EventScript_JuliaEncounter_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 13, LitorTown_Movement_JuliaWalkOffscreen
 	waitmovement 0

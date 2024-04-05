@@ -55,15 +55,15 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom::
 	case 3, FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_5
 FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_1:
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 30
 	playse SE_M_ENCORE2
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_Text_4
 	waitse
 	delay 30
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	switch VAR_TOURNAMENT_HALL_ROUND
 	case 1, FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_7
@@ -74,21 +74,21 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_1:
 FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_3:
 	applymovement 3, FirwealdCity_TournamentHallBattleRoom_Movement_RefereeWalkInPlaceFast
 	waitmovement 0
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_Text_0
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_1
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_4:
 	applymovement 3, FirwealdCity_TournamentHallBattleRoom_Movement_RefereeWalkInPlaceFast
 	waitmovement 0
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_Text_1
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_1
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_5:
 	applymovement 3, FirwealdCity_TournamentHallBattleRoom_Movement_RefereeEnthusiasticHop
 	waitmovement 0
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_Text_2
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_1
 
@@ -106,9 +106,9 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom_9:
 
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent::
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	fadescreen FADE_TO_BLACK
 	delay 60
@@ -137,9 +137,9 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent_3:
 FirwealdCity_TournamentHallBattleRoom_EventScripts_OpponentEnterRoom::
 	applymovement 1, FirwealdCity_TournamentHallBattleRoom_Movement_OpponentEnterBattleRoom
 	waitmovement 0
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_OpponentEnterRoom_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 10
 	return
@@ -156,19 +156,19 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForBattle::
 FirwealdCity_TournamentHallBattleRoom_EventScripts_ConcludeBattle::
 	playse SE_DING_DONG
 	waitse
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_ConcludeBattle_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 10
 	applymovement 1, FirwealdCity_TournamentHallBattleRoom_OpponentMoveBack
 	applymovement 2, FirwealdCity_TournamentHallBattleRoom_PlayerMoveBack
 	waitmovement 0
 	playse SE_M_ENCORE2
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_ConcludeBattle_Text_1
 	waitse
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 1, FirwealdCity_TournamentHallBattleRoom_Movement_OpponentExitBattleRoom
 	waitmovement 0
@@ -193,13 +193,13 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_1:
 	playse SE_M_ENCORE2
 	waitse
 	call FirwealdCity_TournamentHallBattleRoom_EventScripts_OpponentEnterRoom
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	switch VAR_TEMP_3
 	case 0, FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_8
 	case 1, FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_9
 	case 2, FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_10
 FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_6:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	call FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForBattle
 	switch VAR_TEMP_3
@@ -211,25 +211,25 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_11:
 	return
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_3:
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_CAMPER
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_1
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_4:
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_WOMAN_2
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_1
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_5:
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_BUG_CATCHER
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne_1
@@ -272,13 +272,13 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_1:
 	playse SE_M_ENCORE2
 	waitse
 	call FirwealdCity_TournamentHallBattleRoom_EventScripts_OpponentEnterRoom
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	switch VAR_TEMP_3
 	case 0, FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_8
 	case 1, FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_9
 	case 2, FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_10
 FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_6:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	call FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForBattle
 	switch VAR_TEMP_3
@@ -290,25 +290,25 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_11:
 	return
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_3:
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_MAN_3
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_1
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_4:
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_YOUNGSTER
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_1
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_5:
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_PICNICKER
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo_1
@@ -350,12 +350,12 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_1:
 	playse SE_M_ENCORE2
 	waitse
 	call FirwealdCity_TournamentHallBattleRoom_EventScripts_OpponentEnterRoom
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	switch VAR_TEMP_3
 	case 0, FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_7
 	case 1, FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_8
 FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_5:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	call FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForBattle
 	switch VAR_TEMP_3
@@ -366,17 +366,17 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_9:
 	return
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_3:
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_MAN_3
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_1
 
 FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_4:
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_RICH_BOY
 	goto FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals_1
@@ -409,9 +409,9 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals::
 	addobject 1
 	setobjectxy 1, 10, 5
 	fadescreenspeed FADE_FROM_WHITE, -1
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	call FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForBattle
 	trainerbattle_no_intro TRAINER_FIRWEALD_CITY_TOURNAMENT_PHYLLOS, FirwealdCity_TournamentHallBattleRoom_Text_PhyllosDefeat
@@ -420,34 +420,34 @@ FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals::
 	applymovement 3, FirwealdCity_TournamentHallBattleRoom_Movement_RefereeEnthusiasticHop
 	waitmovement 0
 	waitse
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals_Text_2
 	special DoDomeConfetti
 	playse SE_M_ENCORE2
 	waitse
 	delay 120
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 1, FirwealdCity_TournamentHallBattleRoom_Movement_PhyllosWalkToPlayer
 	waitmovement 0
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	playfanfare MUS_OBTAIN_BADGE
 	setflag FLAG_BADGE01_GET
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals_Text_4
 	waitse
 	closemessage
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals_Text_5
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	giveitem ITEM_TM_GIGA_DRAIN
 	closemessage
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals_Text_6
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	warp MAP_FIRWEALD_CITY_TOURNAMENT_HALL_LOBBY, 0xFF, 6, 6
 	waitstate

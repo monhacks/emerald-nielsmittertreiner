@@ -5,10 +5,10 @@ mapscripts LitorTown_Bar_MapScripts {}
 script LitorTown_Bar_EventScript_Barman {
     lock
     faceplayer
-    load_speech_bubble(LOCALID_BARMAN)
+    loadspeechtail(FALSE, LOCALID_BARMAN)
     message(LitorTown_Bar_Text_WelcomeToMyBar)
     waitmessage
-    destroy_speech_bubble
+    destroyspeechtail
     special(SpawnCameraObject)
     goto(LitorTown_Bar_EventScript_SetUpShop)
     end
@@ -16,7 +16,7 @@ script LitorTown_Bar_EventScript_Barman {
 
 script LitorTown_Bar_EventScript_SetUpShop {
     call(LitorTown_Bar_EventScript_SetUpShopCamera)
-    load_speech_bubble(LOCALID_BARMAN)
+    loadspeechtail(FALSE, LOCALID_BARMAN)
     message(LitorTown_Bar_Text_WhatDoYouFancy)
     waitmessage
     goto(LitorTown_Bar_EventScript_DrawShopMenu)
@@ -37,7 +37,7 @@ script LitorTown_Bar_EventScript_ResetShopCamera {
 script LitorTown_Bar_EventScript_DrawShopMenu {
     showmoneybox(0, 0, 0)
     multichoice(0, 4, MULTI_LITOR_BAR_SHOP, 0)
-    destroy_speech_bubble
+    destroyspeechtail
     switch (var(VAR_RESULT)) {
         case 0:
             goto(LitorTown_Bar_EventScript_ChooseFreshWater)
@@ -56,9 +56,9 @@ script LitorTown_Bar_EventScript_DrawShopMenu {
 
 script LitorTown_Bar_EventScript_ChooseFreshWater {
     call(LitorTown_Bar_EventScript_ResetShopCamera)
-    load_speech_bubble(LOCALID_BARMAN)
+    loadspeechtail(FALSE, LOCALID_BARMAN)
     msgbox("Is one FRESH WATER your choice?", MSGBOX_YESNO)
-    destroy_speech_bubble
+    destroyspeechtail
     switch (var(VAR_RESULT)) {
         case YES:
             goto(LitorTown_Bar_EventScript_TryBuyFreshWater)
@@ -99,9 +99,9 @@ script LitorTown_Bar_EventScript_ChooseLemonade {
 script LitorTown_Bar_EventScript_TryBuyFreshWater {
     checkmoney(200, 0)
     if (var(VAR_RESULT) == FALSE) {
-        load_speech_bubble(LOCALID_BARMAN)
+        loadspeechtail(FALSE, LOCALID_BARMAN)
         msgbox("You don't seem to have enough money…")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         goto(LitorTown_Bar_EventScript_CancelBuyDrink)
     }
@@ -118,9 +118,9 @@ script LitorTown_Bar_EventScript_TryBuyFreshWater {
 script LitorTown_Bar_EventScript_TryBuySodaPop {
     checkmoney(200, 0)
     if (var(VAR_RESULT) == FALSE) {
-        load_speech_bubble(LOCALID_BARMAN)
+        loadspeechtail(FALSE, LOCALID_BARMAN)
         msgbox("You don't seem to have enough money…")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         goto(LitorTown_Bar_EventScript_CancelBuyDrink)
     }
@@ -137,9 +137,9 @@ script LitorTown_Bar_EventScript_TryBuySodaPop {
 script LitorTown_Bar_EventScript_TryBuyLemonade {
     checkmoney(200, 0)
     if (var(VAR_RESULT) == FALSE) {
-        load_speech_bubble(LOCALID_BARMAN)
+        loadspeechtail(FALSE, LOCALID_BARMAN)
         msgbox("You don't seem to have enough money…")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         goto(LitorTown_Bar_EventScript_CancelBuyDrink)
     }
@@ -154,9 +154,9 @@ script LitorTown_Bar_EventScript_TryBuyLemonade {
 }
 
 script LitorTown_Bar_EventScript_CancelBuyDrink {
-    load_speech_bubble(LOCALID_BARMAN)
+    loadspeechtail(FALSE, LOCALID_BARMAN)
     msgbox("Have a nice day!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     goto(LitorTown_Bar_EventScript_ExitShop)
 }

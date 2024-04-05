@@ -71,10 +71,10 @@ script MurenaCity_EventScript_SailToLitor {
     hideobjectat(LOCALID_BOAT_MURENA, MAP_MURENA_CITY)
     hideobjectat(LOCALID_BOAT_MURENA_SHIPYARD, MAP_MURENA_CITY_SHIPYARD)
     hideobjectat(LOCALID_BOAT_NAVIRE, MAP_NAVIRE_TOWN)
-    load_speech_bubble(LOCALID_FISHERMAN_LITOR)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN_LITOR)
     msgbox("Ahoy! We've arrived at LITOR TOWN!\n"
            "You can smell the salty sea here too.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     resetobjectsubpriority(OBJ_EVENT_ID_PLAYER, MAP_LITOR_TOWN)
     resetobjectsubpriority(LOCALID_FISHERMAN_LITOR, MAP_LITOR_TOWN)
@@ -88,18 +88,18 @@ script MurenaCity_EventScript_TeamAirlockEncounter {
     playbgm(MUS_ENCOUNTER_AQUA, FALSE)
     applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceLeft)
     waitmovement(0)
-    load_speech_bubble(LOCALID_FISHERMAN)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN)
     msgbox("Hey!\n"
            "Let me through!\p"
            "I've got to get an important TENTACOOL\n"
            "haul for the MARKET tomorrow!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
-    load_speech_bubble(LOCALID_AIRLOCK_GRUNT_1)
+    loadspeechtail(FALSE, LOCALID_AIRLOCK_GRUNT_1)
     msgbox("Do not resist!\p"
            "We are impounding your boat for\n"
            "the greater good!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_AIRLOCK_GRUNT_2, MurenaCity_Movement_Grunt2PunchFisherman)
     waitmovement(0)
@@ -121,12 +121,12 @@ script MurenaCity_EventScript_TeamAirlockEncounter {
     }
     applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceRight)
     waitmovement(0)
-    load_speech_bubble(LOCALID_FISHERMAN)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN)
     msgbox("Hey kiddo, ya gotta help me out here!\p"
            "Those thugs are trying to\n"
            "steal my ship!\p"
            "Please do something!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     if (var(VAR_TEMP_1) == 28) {
         applymovement(OBJ_EVENT_ID_PLAYER, MurenaCity_Movement_PlayerWalkToGrunt)
@@ -137,22 +137,22 @@ script MurenaCity_EventScript_TeamAirlockEncounter {
     }
     applymovement(LOCALID_AIRLOCK_GRUNT_1, Common_Movement_FaceRight)
     waitmovement(0)
-    load_speech_bubble(LOCALID_AIRLOCK_GRUNT_1)
+    loadspeechtail(FALSE, LOCALID_AIRLOCK_GRUNT_1)
     msgbox("So what are you gonna do?!\n"
            "Save him?\p"
            "Hahaha!\n"
            "I don't think so kid!\p"
            "You can't take the wind\n"
            "out of our sails!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     trainerbattle_no_intro(TRAINER_MURENA_CITY_GRUNT, MurenaCity_Text_GruntDefeat)
-    load_speech_bubble(LOCALID_AIRLOCK_GRUNT_1)
+    loadspeechtail(FALSE, LOCALID_AIRLOCK_GRUNT_1)
     msgbox("Oh no!\n"
            "You're stronger than I thought!\p"
            "Quickly!\n"
            "Let's get out of here!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     fadedefaultbgm
     applymovement(LOCALID_AIRLOCK_GRUNT_1, MurenaCity_Movement_Grunt1RunAway)
@@ -169,7 +169,7 @@ script MurenaCity_EventScript_TeamAirlockEncounter {
     }
     applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceUp)
     waitmovement(0)
-    load_speech_bubble(LOCALID_FISHERMAN)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN)
     msgbox("Phew… Thank you.\p"
            "I don't know what I would've done\n"
            "without you…\p"
@@ -177,7 +177,7 @@ script MurenaCity_EventScript_TeamAirlockEncounter {
            "across the straits free of charge!\p"
            "I'll be right here in the SHIPYARD if\n"
            "you need me.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_FISHERMAN, MurenaCity_Movement_FishermanWalkToShipyard)
     waitmovement(0)
@@ -199,7 +199,7 @@ script MurenaCity_EventScript_ArtistTrader {
     copyvar(VAR_0x8004, VAR_0x8008)
     specialvar(VAR_RESULT, GetInGameTradeSpeciesInfo)
     copyvar(VAR_0x8009, VAR_RESULT)
-    load_speech_bubble(LOCALID_ARTIST)
+    loadspeechtail(FALSE, LOCALID_ARTIST)
     msgbox("The ocean is a canvas…\p"
            "But to truly blend into it,\n"
            "that deep dark blue…\p"
@@ -207,7 +207,7 @@ script MurenaCity_EventScript_ArtistTrader {
            "Can you bring me one.\p"
            "If you can find me a KECLEON,\n"
            "I will give you my SMEARGLE…", MSGBOX_YESNO)
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     if (var(VAR_RESULT) == NO) {
         goto(MurenaCity_EventScript_ArtistTrader_Decline)
@@ -229,10 +229,10 @@ script MurenaCity_EventScript_ArtistTrader {
     special(DoInGameTradeScene)
     waitstate
     bufferspeciesname(0, VAR_0x8009)
-    load_speech_bubble(LOCALID_ARTIST)
+    loadspeechtail(FALSE, LOCALID_ARTIST)
     msgbox("Magnificent…\n"
            "Such color I have never seen.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     setflag(FLAG_MURENA_NPC_TRADE_COMPLETED)
     release
@@ -240,11 +240,11 @@ script MurenaCity_EventScript_ArtistTrader {
 }
 
 script MurenaCity_EventScript_ArtistTrader_Decline {
-    load_speech_bubble(LOCALID_ARTIST)
+    loadspeechtail(FALSE, LOCALID_ARTIST)
     msgbox("I see…\p"
            "I guess true culture is hard to\n"
            "come by in these parts…")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     release
     end
@@ -260,33 +260,33 @@ script MurenaCity_EventScript_FeebasSeller {
     lock
     faceplayer
     if (flag(FLAG_MURENA_BOUGHT_FEEBAS)) {
-        load_speech_bubble(LOCALID_FEEBAS_SELLER)
+        loadspeechtail(FALSE, LOCALID_FEEBAS_SELLER)
         msgbox("SORRY KIDDO, I AIN'T GOT\n"
                "ANY MORE FISHES!")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         release
         end
     }
-    load_speech_bubble(LOCALID_FEEBAS_SELLER)
+    loadspeechtail(FALSE, LOCALID_FEEBAS_SELLER)
     msgbox("HEY KID!\n"
            "WANNA BUY THIS MAGIKARP?!\p"
            "IT'S KINDA UGLY, SO IT'S\n"
            "ONLY ¥500!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     showmoneybox(0, 0, 0)
-    load_speech_bubble(LOCALID_FEEBAS_SELLER)
+    loadspeechtail(FALSE, LOCALID_FEEBAS_SELLER)
     msgbox("WHADDYA SAY?\n"
            "¥500 AIN'T MUCH!", MSGBOX_YESNO)
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     if (var(VAR_RESULT) == YES) {
         checkmoney(500, 0)
         if (var(VAR_RESULT) == FALSE) {
-            load_speech_bubble(LOCALID_FEEBAS_SELLER)
+            loadspeechtail(FALSE, LOCALID_FEEBAS_SELLER)
             msgbox("NO NO NO, THAT WON'T DO!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             release
             end
@@ -298,17 +298,17 @@ script MurenaCity_EventScript_FeebasSeller {
         delay(30)
         hidemoneybox
         givemon(SPECIES_FEEBAS, 5, ITEM_NONE)
-        load_speech_bubble(LOCALID_FEEBAS_SELLER)
+        loadspeechtail(FALSE, LOCALID_FEEBAS_SELLER)
         msgbox("HERE YA GO KIDDO!")
         setflag(FLAG_MURENA_BOUGHT_FEEBAS)
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
     } else {
         hidemoneybox
-        load_speech_bubble(LOCALID_FEEBAS_SELLER)
+        loadspeechtail(FALSE, LOCALID_FEEBAS_SELLER)
         msgbox("IF YA DON'T APPRECIATE THE UGLY,\n"
                "YA DON'T DESERVE THE BEAUTIFUL!")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
     }
     release
@@ -319,23 +319,23 @@ script MurenaCity_EventScript_OldMan {
     lock
     faceplayer
     if (flag(FLAG_MURENA_SHOWN_RELICANTH)) {
-        load_speech_bubble(LOCALID_OLD_MAN)
+        loadspeechtail(FALSE, LOCALID_OLD_MAN)
         msgbox("Thank you friend, for showing me\n"
                "the true beauty of a RELICANTH.\p"
                "Perhaps once I will catch one of\n"
                "my very own…")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         release
         end
     }
-    load_speech_bubble(LOCALID_OLD_MAN)
+    loadspeechtail(FALSE, LOCALID_OLD_MAN)
     msgbox("I am looking for a creature…\n"
            "Ancient in age.\l"
            "Aquatic in nature.\p"
            "Bring my aquatic anomaly…\n"
            "For you shall be rewarded handsomely.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     delay(30)
     specialvar(VAR_RESULT, CheckMurenaCityRelicanth)
@@ -343,13 +343,13 @@ script MurenaCity_EventScript_OldMan {
         playse(SE_PIN)
         applymovement(LOCALID_OLD_MAN, Common_Movement_ExclamationMark)
         waitmovement(0)
-        load_speech_bubble(LOCALID_OLD_MAN)
+        loadspeechtail(FALSE, LOCALID_OLD_MAN)
         msgbox("Oh yes…\n"
                "It surpasses even the wildest\l"
                "of imaginations…\p"
                "Here you are… your reward.\n"
                "That will come down to ¥25000")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         showmoneybox(0, 0, 0)
         delay(30)
@@ -358,20 +358,20 @@ script MurenaCity_EventScript_OldMan {
         updatemoneybox(0)
         delay(30)
         hidemoneybox
-        load_speech_bubble(LOCALID_OLD_MAN)
+        loadspeechtail(FALSE, LOCALID_OLD_MAN)
         msgbox("Spend it wisely…\p"
                "Thanks again, good friend…")
         setflag(FLAG_MURENA_SHOWN_RELICANTH)
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
     } else {
-        load_speech_bubble(LOCALID_OLD_MAN)
+        loadspeechtail(FALSE, LOCALID_OLD_MAN)
         msgbox("I see…\p"
                "What I'm looking for you do\n"
                "not possess…\p"
                "If you could find it for me…\n"
                "I shall be very grateful…")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
     }
     release
@@ -389,26 +389,26 @@ script MurenaCity_EventScript_Wingull {
 script MurenaCity_EventScript_MarketSalesWoman {
     lock
     faceplayer
-    load_speech_bubble(LOCALID_SKEWER_SELLER)
+    loadspeechtail(FALSE, LOCALID_SKEWER_SELLER)
     msgbox("Hey there!\n"
            "I make MURENA CITY's delicacy, the\l"
            "famous TENTACOOL SKEWERS!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     showmoneybox(0, 0, 0)
-    load_speech_bubble(LOCALID_SKEWER_SELLER)
+    loadspeechtail(FALSE, LOCALID_SKEWER_SELLER)
     msgbox("One delicious skewer for ¥250?", MSGBOX_YESNO)
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     if (var(VAR_RESULT) == YES)
     {
         checkmoney(250, 0)
         if (var(VAR_RESULT) == FALSE)
         {
-            load_speech_bubble(LOCALID_SKEWER_SELLER)
+            loadspeechtail(FALSE, LOCALID_SKEWER_SELLER)
             msgbox("I'm sorry, but that's not\n"
                    "quite enough dear.")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             release
             end
@@ -420,19 +420,19 @@ script MurenaCity_EventScript_MarketSalesWoman {
         delay(30)
         hidemoneybox
         giveitem(ITEM_TENTACOOL_SKEWER, 1)
-        load_speech_bubble(LOCALID_SKEWER_SELLER)
+        loadspeechtail(FALSE, LOCALID_SKEWER_SELLER)
         msgbox("Eat up dear!")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
     }
     else
     {
         hidemoneybox
-        load_speech_bubble(LOCALID_SKEWER_SELLER)
+        loadspeechtail(FALSE, LOCALID_SKEWER_SELLER)
         msgbox("That's okay too dear,\n"
                "I'll be right here if you want to\l"
                "taste one.")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
     }
     release

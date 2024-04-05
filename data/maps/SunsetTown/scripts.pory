@@ -24,7 +24,7 @@ script SunsetTown_EventScript_SetUpObjects {
 script SunsetTown_EventScript_FollowerScript {
     lock
     facefollower
-    load_speech_bubble(OBJ_EVENT_ID_FOLLOWER)
+    loadspeechtail(FALSE, OBJ_EVENT_ID_FOLLOWER)
     switch (var(VAR_SUNSET_TOWN_FOLLOWER_STATE))
     {
         case 1:
@@ -41,15 +41,15 @@ script SunsetTown_EventScript_FollowerScript {
 	               "Let's find the LOGGERS CABIN.\p"
 	               "It should be at the far EAST of town.")
     }
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     release
     end
 }
 
 script SunsetTown_EventScript_TownSign {
-    msgbox("SUNSET TOWN\n"
-	       "“A town that can be shaded any hue.”", MSGBOX_SIGN)
+    msgbox("{COLOR BLUE}SUNSET TOWN\n"
+	       "{COLOR RED}“A town that can be shaded any hue.”", MSGBOX_SIGN)
 }
 
 script SunsetTown_EventScript_PlayerHouseSign {
@@ -73,9 +73,25 @@ script SunsetTown_EventScript_FatMan {
 }
 
 script SunsetTown_EventScript_Lass {
-    msgbox("The flowers of SUNSET TOWN are so\n"
-	       "beautiful!\p"
-	       "I love them!", MSGBOX_NPC)
+    lock
+    faceplayer
+    minimsg("Hello :D", 1, 7)
+    minimsg("Hello :D", 5, 12)
+    minimsg("Hello :D", 15, 14)
+    minimsg("Hello :D", 21, 8)
+    loadspeechtail(TRUE, 2)
+    msgbox("America ya :D", MSGBOX_DEFAULT, TRUE)
+    closelastminimessage
+    waitbuttonpress
+    closelastminimessage
+    waitbuttonpress
+    closelastminimessage
+    waitbuttonpress
+    closelastminimessage
+    destroyspeechtail
+    closemessage
+    release
+    end
 }
 
 script SunsetTown_EventScript_ProfessorConifer {
@@ -118,9 +134,9 @@ script SunsetTown_EventScript_BlockPlayer {
     playse(SE_PIN)
     applymovement(LOCALID_CONIFER, Common_Movement_FaceDown)
     applymovement(LOCALID_CONIFER, Common_Movement_ExclamationMark)
-    load_speech_bubble(LOCALID_CONIFER)
+    loadspeechtail(FALSE, LOCALID_CONIFER)
     msgbox("Oh hey there {PLAYER}.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     waitmovement(0)
     getplayerxy(VAR_TEMP_0, VAR_TEMP_1)
@@ -142,11 +158,11 @@ script SunsetTown_EventScript_BlockPlayer {
     turnobject(OBJ_EVENT_ID_PLAYER, DIR_WEST)
     applymovement(LOCALID_CONIFER, SunsetTown_Movement_WalkToPlayerX)
     waitmovement(0)
-    load_speech_bubble(LOCALID_CONIFER)
+    loadspeechtail(FALSE, LOCALID_CONIFER)
     msgbox("Come in quickly, something\n"
 	       "happened not too far away\l"
 	       "from here and I need your help.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     warp(MAP_SUNSET_TOWN_PROFESSOR_CONIFER_LAB, 0, 12, 9)
     waitstate
@@ -158,11 +174,11 @@ script SunsetTown_EventScript_TakeTheLead {
     applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFastestUp)
     applymovement(LOCALID_CONIFER, Common_Movement_WalkInPlaceFastestDown)
     waitmovement(0)
-    load_speech_bubble(LOCALID_CONIFER)
+    loadspeechtail(FALSE, LOCALID_CONIFER)
     msgbox("I'll let you take the lead.\n"
 	       "You're well of age to be responsible!\p"
 	       "To CEDARRED TOWN we go!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     loadword(0, SunsetTown_EventScript_FollowerScript)
     setfollower(LOCALID_CONIFER, FOLLOWER_FLAG_CUSTOM_FOLLOW_SCRIPT)

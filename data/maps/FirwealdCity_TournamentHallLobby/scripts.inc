@@ -12,19 +12,19 @@ FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0:
 	waitmovement 0
 	applymovement 1, FirwealdCity_TournamentHallLobby_Movement_AttendantWalkDown
 	waitmovement 0
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 16
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_1, MSGBOX_YESNO
 	compare VAR_RESULT, YES
 	goto_if_eq FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_2
-	destroy_speech_bubble
-	load_speech_bubble 1
+	destroyspeechtail
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_1:
 	applymovement 1, FirwealdCity_TournamentHallLobby_Movement_AttendantWalkUp
@@ -34,10 +34,10 @@ FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_1:
 	end
 
 FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_2:
-	destroy_speech_bubble
-	load_speech_bubble 1
+	destroyspeechtail
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto FirwealdCity_TournamentHallLobby_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_1
 
@@ -46,7 +46,7 @@ FirwealdCity_TournamentHallLobby_EventScript_Attendant::
 	lock
 	faceplayer
 	goto_if_set FLAG_BADGE01_GET, FirwealdCity_TournamentHallLobby_EventScript_Attendant_2
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	message FirwealdCity_TournamentHallLobby_Text_WelcomeToFirwealdCityTounamentHall
 	waitmessage
 	multichoice 22, 6, MULTI_TOURNAMENT_HALL_JOIN, 1
@@ -57,27 +57,27 @@ FirwealdCity_TournamentHallLobby_EventScript_Attendant::
 	return
 
 FirwealdCity_TournamentHallLobby_EventScript_Attendant_2:
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallLobby_EventScript_Attendant_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	release
 	end
 
 FirwealdCity_TournamentHallLobby_EventScript_Attendant_5:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto FirwealdCity_TournamentHallLobby_EventScript_JoinTournament
 	return
 
 FirwealdCity_TournamentHallLobby_EventScript_Attendant_6:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	msgbox FirwealdCity_TournamentHallLobby_EventScript_Attendant_Text_1, MSGBOX_NPC
 	goto FirwealdCity_TournamentHallLobby_EventScript_Attendant
 	return
 
 FirwealdCity_TournamentHallLobby_EventScript_Attendant_7:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto FirwealdCity_TournamentHallLobby_EventScript_CancelTournament
 	return
@@ -89,7 +89,7 @@ FirwealdCity_TournamentHallLobby_EventScript_CancelTournament::
 
 
 FirwealdCity_TournamentHallLobby_EventScript_JoinTournament::
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_TournamentHallLobby_EventScript_JoinTournament_Text_0, MSGBOX_YESNO
 	switch VAR_RESULT
 	case YES, FirwealdCity_TournamentHallLobby_EventScript_JoinTournament_3
@@ -113,14 +113,14 @@ FirwealdCity_TournamentHallLobby_EventScript_JoinTournament_1:
 	return
 
 FirwealdCity_TournamentHallLobby_EventScript_JoinTournament_3:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	call Common_EventScript_SaveGame
 	closemessage
 	goto FirwealdCity_TournamentHallLobby_EventScript_JoinTournament_1
 
 FirwealdCity_TournamentHallLobby_EventScript_JoinTournament_4:
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto FirwealdCity_TournamentHallLobby_EventScript_CancelTournament
 	goto FirwealdCity_TournamentHallLobby_EventScript_JoinTournament_1

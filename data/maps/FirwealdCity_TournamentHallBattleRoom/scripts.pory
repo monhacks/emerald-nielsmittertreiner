@@ -44,21 +44,21 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom {
         case 1:
             applymovement(LOCALID_REFEREE, FirwealdCity_TournamentHallBattleRoom_Movement_RefereeWalkInPlaceFast)
             waitmovement(0)
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Get ready for the first round\n"
                    "of the FIRWEALD TOURNAMENT!")
             break
         case 2:
             applymovement(LOCALID_REFEREE, FirwealdCity_TournamentHallBattleRoom_Movement_RefereeWalkInPlaceFast)
             waitmovement(0)
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Get ready for the second round\n"
                    "of the FIRWEALD TOURNAMENT!")
             break
         case 3:
             applymovement(LOCALID_REFEREE, FirwealdCity_TournamentHallBattleRoom_Movement_RefereeEnthusiasticHop)
             waitmovement(0)
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Get ready for the SEMIFINALE\n"
                    "of the FIRWEALD TOURNAMENT!")
             break
@@ -66,16 +66,16 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom {
     msgbox("I will be your referee for the\n"
            "exciting FIRWEALD TOURNAMENT!\p"
            "Now let us begin!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     delay(30)
     playse(SE_M_ENCORE2)
-    load_speech_bubble(LOCALID_REFEREE)
+    loadspeechtail(FALSE, LOCALID_REFEREE)
     msgbox("{PLAYER} has entered the\n"
            "FIRWEALD BATTLE ROOM!")
     waitse
     delay(30)
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     switch (var(VAR_TOURNAMENT_HALL_ROUND)) {
         case 1:
@@ -88,10 +88,10 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_EnterRoom {
 }
 
 script FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent {
-    load_speech_bubble(LOCALID_REFEREE)
+    loadspeechtail(FALSE, LOCALID_REFEREE)
     msgbox("Now your opponent\n"
            "shall be chosen.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     fadescreen(FADE_TO_BLACK)
     delay(60)
@@ -110,10 +110,10 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent {
 script FirwealdCity_TournamentHallBattleRoom_EventScripts_OpponentEnterRoom {
     applymovement(LOCALID_OPPONENT, FirwealdCity_TournamentHallBattleRoom_Movement_OpponentEnterBattleRoom)
     waitmovement(0)
-    load_speech_bubble(LOCALID_REFEREE)
+    loadspeechtail(FALSE, LOCALID_REFEREE)
     msgbox("Both competitors ready?\n"
            "Let the match begin!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     delay(10)
     return
@@ -130,19 +130,19 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForB
 script FirwealdCity_TournamentHallBattleRoom_EventScripts_ConcludeBattle {
     playse(SE_DING_DONG)
     waitse
-    load_speech_bubble(LOCALID_REFEREE)
+    loadspeechtail(FALSE, LOCALID_REFEREE)
     msgbox("That concludes this match!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     delay(10)
     applymovement(LOCALID_OPPONENT, FirwealdCity_TournamentHallBattleRoom_OpponentMoveBack)
     applymovement(LOCALID_PLAYER, FirwealdCity_TournamentHallBattleRoom_PlayerMoveBack)
     waitmovement(0)
     playse(SE_M_ENCORE2)
-    load_speech_bubble(LOCALID_REFEREE)
+    loadspeechtail(FALSE, LOCALID_REFEREE)
     msgbox("The winner is {PLAYER}!")
     waitse
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_OPPONENT, FirwealdCity_TournamentHallBattleRoom_Movement_OpponentExitBattleRoom)
     waitmovement(0)
@@ -157,26 +157,26 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne {
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent)
     switch (var(VAR_OPPONENT)) {
         case 0:
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Everyone welcome MITOCHON to\n"
                    "the BATTLE ROOM!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             setvar(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_CAMPER)
             break
         case 1:
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Everyone welcome DAISY to\n"
                    "the BATTLE ROOM!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             setvar(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_WOMAN_2)
             break
         case 2:
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Everyone welcome SINEAD to\n"
                    "the BATTLE ROOM!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             setvar(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_BUG_CATCHER)
             break
@@ -187,7 +187,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne {
     playse(SE_M_ENCORE2)
     waitse
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_OpponentEnterRoom)
-    load_speech_bubble(LOCALID_OPPONENT)
+    loadspeechtail(FALSE, LOCALID_OPPONENT)
     switch (var(VAR_OPPONENT)) {
         case 0:
             msgbox("I'll kick you out of here before\n"
@@ -202,7 +202,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundOne {
                    "my POKéMON!")
             break
     }
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForBattle)
     switch (var(VAR_OPPONENT)) {
@@ -223,26 +223,26 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo {
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent)
     switch (var(VAR_OPPONENT)) {
         case 0:
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Everyone welcome WALTER to\n"
                    "the BATTLE ROOM!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             setvar(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_MAN_3)
             break
         case 1:
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Everyone welcome JAXON to\n"
                    "the BATTLE ROOM!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             setvar(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_YOUNGSTER)
             break
         case 2:
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Everyone welcome ARIANA to\n"
                    "the BATTLE ROOM!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             setvar(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_PICNICKER)
             break
@@ -253,7 +253,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo {
     playse(SE_M_ENCORE2)
     waitse
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_OpponentEnterRoom)
-    load_speech_bubble(LOCALID_OPPONENT)
+    loadspeechtail(FALSE, LOCALID_OPPONENT)
     switch (var(VAR_OPPONENT)) {
         case 0:
             msgbox("I came all the way from HOENN\n"
@@ -270,7 +270,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_RoundTwo {
                    "people say…!")
             break
     }
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForBattle)
     switch (var(VAR_OPPONENT)) {
@@ -291,18 +291,18 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals {
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_ChooseOpponent)
     switch (var(VAR_OPPONENT)) {
         case 0:
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Everyone welcome OLIVE to\n"
                    "the BATTLE ROOM!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             setvar(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_MAN_3)
             break
         case 1:
-            load_speech_bubble(LOCALID_REFEREE)
+            loadspeechtail(FALSE, LOCALID_REFEREE)
             msgbox("Everyone welcome GORDON to\n"
                    "the BATTLE ROOM!")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             setvar(VAR_OBJ_GFX_ID_0, OBJ_EVENT_GFX_RICH_BOY)
             break
@@ -313,7 +313,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals {
     playse(SE_M_ENCORE2)
     waitse
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_OpponentEnterRoom)
-    load_speech_bubble(LOCALID_OPPONENT)
+    loadspeechtail(FALSE, LOCALID_OPPONENT)
     switch (var(VAR_OPPONENT)) {
         case 0:
             msgbox("What's something me and RED share?\n"
@@ -326,7 +326,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_Semifinals {
                    "you would want.")
             break
     }
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForBattle)
     switch (var(VAR_OPPONENT)) {
@@ -360,11 +360,11 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals {
     addobject(LOCALID_OPPONENT)
     setobjectxy(LOCALID_OPPONENT, 10, 5)
     fadescreenspeed(FADE_FROM_WHITE, -1)
-    load_speech_bubble(LOCALID_OPPONENT)
+    loadspeechtail(FALSE, LOCALID_OPPONENT)
     msgbox("So you have made it this far huh?\p"
            "Time to show you the guardian of the\n"
            "forest does not go down quietly!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     call(FirwealdCity_TournamentHallBattleRoom_EventScripts_CompetitorsPrepareForBattle)
     trainerbattle_no_intro(TRAINER_FIRWEALD_CITY_TOURNAMENT_PHYLLOS, FirwealdCity_TournamentHallBattleRoom_Text_PhyllosDefeat)
@@ -373,7 +373,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals {
     applymovement(LOCALID_REFEREE, FirwealdCity_TournamentHallBattleRoom_Movement_RefereeEnthusiasticHop)
     waitmovement(0)
     waitse
-    load_speech_bubble(LOCALID_REFEREE)
+    loadspeechtail(FALSE, LOCALID_REFEREE)
     msgbox("What an amazing battle that was!\p"
            "With the winner being!…\n"
            "{PLAYER}!")
@@ -381,18 +381,18 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals {
     playse(SE_M_ENCORE2)
     waitse
     delay(120)
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_OPPONENT, FirwealdCity_TournamentHallBattleRoom_Movement_PhyllosWalkToPlayer)
     waitmovement(0)
-    load_speech_bubble(LOCALID_OPPONENT)
+    loadspeechtail(FALSE, LOCALID_OPPONENT)
     msgbox("I am proud of your achievements son.\n"
            "The trees had told me of this battle\l"
            "to come long before you ever arrived.\p"
            "I just wanted to make sure that my\n"
            "losing battle would be one they would\l"
            "speak of for ages to come. Har har har!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     playfanfare(MUS_OBTAIN_BADGE)
     setflag(FLAG_BADGE01_GET)
@@ -400,7 +400,7 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals {
            "from PHYLLOS.")
     waitse
     closemessage
-    load_speech_bubble(LOCALID_OPPONENT)
+    loadspeechtail(FALSE, LOCALID_OPPONENT)
     msgbox("With this badge, you'll be one\n"
            "step closer to greatness, kid.\p"
            "Take pride in your journey, and\n"
@@ -408,18 +408,18 @@ script FirwealdCity_TournamentHallBattleRoom_EventScripts_Finals {
            "Before I forget…\p"
            "Take this TM, it's a great GRASS-type\n"
            "move, GIGA DRAIN.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     giveitem(ITEM_TM_GIGA_DRAIN)
     closemessage
-    load_speech_bubble(LOCALID_OPPONENT)
+    loadspeechtail(FALSE, LOCALID_OPPONENT)
     msgbox("You're truly exceptional {PLAYER},\n"
            "and for that reason, I wish to\l"
            "show you something.\p"
            "Meet me at the cave north of town\n"
            "and talk to the lady in front of\l"
            "the entrance.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     warp(MAP_FIRWEALD_CITY_TOURNAMENT_HALL_LOBBY, 0xFF, 6, 6)
     waitstate

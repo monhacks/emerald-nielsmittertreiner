@@ -31,22 +31,22 @@ AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene::
 	applymovement 4, AcrenForest_IllegalCabin_Movement_Grunt4RunToPlayer
 	delay 4
 	waitmovement 0
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 1, Common_Movement_QuestionMark
 	delay 60
 	waitmovement 0
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 1, AcrenForest_IllegalCabin_Movement_Grunt1LookAround
 	waitmovement 0
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 16
 	addobject 5
@@ -57,25 +57,25 @@ AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene::
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceDown
 	waitmovement 0
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 5, Common_Movement_FaceLeft
 	waitmovement 0
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_5
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 5, Common_Movement_FaceUp
 	waitmovement 0
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_6
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 5, Common_Movement_WalkInPlaceFastestLeft
 	waitmovement 0
@@ -109,9 +109,9 @@ AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene::
 	applymovement 1, AcrenForest_IllegalCabin_Movement_GruntsFallBack
 	applymovement 2, AcrenForest_IllegalCabin_Movement_GruntsFallBack
 	waitmovement 0
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_8
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 1, AcrenForest_IllegalCabin_Movement_Grunt1RunOut
 	delay 8
@@ -125,9 +125,9 @@ AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene::
 	removeobject 2
 	removeobject 3
 	removeobject 4
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_9
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	addobject 6
 	setobjectxy 6, 13, 6
@@ -141,9 +141,9 @@ AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene::
 	delay 12
 	removeobject 6
 	waitmovement 0
-	load_speech_bubble 5
+	loadspeechtail FALSE, 5
 	msgbox AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene_Text_10
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 5, Common_Movement_WalkDown2
 	waitmovement 0

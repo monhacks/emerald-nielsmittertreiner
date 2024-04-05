@@ -248,12 +248,12 @@ LittlerootTown_EventScript_SetRivalBirchPosForDexUpgradeFemale::
 
 LittlerootTown_EventScript_FatMan::
 	msgbox LittlerootTown_Text_CanUsePCToStoreItems, MSGBOX_NPC
-	destroy_speech_bubble
+	destroyspeechtail
 	end
 
 LittlerootTown_EventScript_Boy::
 	msgbox LittlerootTown_Text_BirchSpendsDaysInLab, MSGBOX_NPC
-	destroy_speech_bubble
+	destroyspeechtail
 	end
 
 LittlerootTown_EventScript_Twin::
@@ -284,7 +284,7 @@ LittlerootTown_EventScript_YouSavedBirch::
 
 LittlerootTown_EventScript_GoodLuck::
 	msgbox LittlerootTown_Text_GoodLuckCatchingPokemon, MSGBOX_DEFAULT
-	destroy_speech_bubble
+	destroyspeechtail
 	release
 	end
 

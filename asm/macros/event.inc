@@ -1542,38 +1542,33 @@
 	.2byte \box
 	.endm
 
-	@ Used only in FireRed/LeafGreen, does nothing in Emerald.
-	.macro textcolor color:req
+	.macro signmsg text:req
 	.byte 0xc7
-	.byte \color
-	.endm
-
-	@ Used only in FireRed/LeafGreen, does nothing in Emerald.
-	.macro loadhelp text:req
-	.byte 0xc8
 	.4byte \text
 	.endm
 
-	@ Used only in FireRed/LeafGreen, does nothing in Emerald.
-	.macro unloadhelp
-	.byte 0xc9
+	.macro minimsg text:req, x:req, y:req
+	.byte 0xc8
+	.4byte \text
+	.byte \x
+	.byte \y
 	.endm
 
-	@ Used only in FireRed/LeafGreen, does nothing in Emerald.
-	.macro signmsg
+	.macro closeminimessage x:req
+	.byte 0xc9
+	.byte \x
+	.endm
+
+	.macro closefirstminimessage
 	.byte 0xca
 	.endm
 
-	@ Used only in FireRed/LeafGreen, does nothing in Emerald.
-	.macro normalmsg
+	.macro closelastminimessage
 	.byte 0xcb
 	.endm
 
-	@ Used only in FireRed/LeafGreen, does nothing in Emerald.
-	.macro comparehiddenvar a:req, value:req
+	.macro closeallminimessages
 	.byte 0xcc
-	.byte \a
-	.4byte \value
 	.endm
 
 	@ Sets the modernFatefulEncounter bit for the Pokemon in the specified slot of the player's party.
@@ -1593,12 +1588,6 @@
 	@ ram script is invalid then this does nothing.
 	.macro trywondercardscript
 	.byte 0xcf
-	.endm
-
-	@ Used only in FireRed/LeafGreen, does nothing in Emerald.
-	.macro setworldmapflag worldmapflag:req
-	.byte 0xd0
-	.2byte \worldmapflag
 	.endm
 
 	@ Warps the player to the specified map using a teleport effect. Effect is similar to warpteleport, but
@@ -1771,29 +1760,15 @@
     .byte 0xe8
     .endm
 
-
-@ Supplementary
-
-	@ Loads a speech bubble tail on the screen. 
-	@ Usage:
-	@ 	To point towards an object event (use VAR_LAST_TALKED for current object event): 
-	@ 	load_speech_bubble LOCAL_ID
-	@	
-	@ 	To point towards an absolute coordinate:
-	@ 	load_speech_bubble x, y
-	.macro load_speech_bubble x:req, y=0xFF
-		.if \y == 0xFF
-			setvar VAR_0x8004, \x
-			callnative LoadTailAutoFromScript
-		.else
-			setvar VAR_0x8005, \x
-			setvar VAR_0x8006, \y
-			callnative LoadTailFromScript
-		.endif
+	.macro loadspeechtail top:req, x:req, y=0xFF
+	setvar VAR_0x8004, \top
+	setvar VAR_0x8005, \x
+	setvar VAR_0x8006, \y
+	.byte 0xd0
 	.endm
 
 	@ Destroys the currently active speech bubble tail.
-	.macro destroy_speech_bubble
+	.macro destroyspeechtail
 	callnative DestroyTail
 	.endm
 	
@@ -1945,8 +1920,9 @@
 	NO  = 0
 
 	@ Buffers the given text and calls the relevant standard message script (see gStdScripts).
-	.macro msgbox text:req, type=MSGBOX_DEFAULT
+	.macro msgbox text:req, type=MSGBOX_DEFAULT, top=FALSE
 	loadword 0, \text
+	setvar VAR_MSGBOX_POS, \top
 	callstd \type
 	.endm
 

@@ -1,30 +1,30 @@
 Std_MsgboxNPC:
 	lock
 	faceplayer
-	specialvar VAR_RESULT, IsPlayerInFlashCave
-	call_if_eq VAR_RESULT, FALSE, Std_MsgboxLoadSpeechBubble
+	specialvar VAR_RESULT GetPlayerFacingDirection
+	call_if_eq VAR_RESULT, DIR_NORTH, Std_LoadSpeechTailTop
+	call_if_ne VAR_RESULT, DIR_NORTH, Std_LoadSpeechTailBottom
 	message NULL
 	waitmessage
 	waitbuttonpress
-	specialvar VAR_RESULT, IsPlayerInFlashCave
-	compare VAR_RESULT, 0
-	call_if_eq VAR_RESULT, FALSE, Std_MsgboxDestroySpeechBubble
+	destroyspeechtail
 	release
 	return
 
-Std_MsgboxLoadSpeechBubble:
-	load_speech_bubble VAR_LAST_TALKED
+Std_LoadSpeechTailTop::
+	loadspeechtail TRUE, VAR_LAST_TALKED
+	setvar VAR_MSGBOX_POS, TRUE
 	return
 
-Std_MsgboxDestroySpeechBubble:
-	destroy_speech_bubble
+Std_LoadSpeechTailBottom::
+	loadspeechtail FALSE, VAR_LAST_TALKED
+	setvar VAR_MSGBOX_POS, FALSE
 	return
 
 Std_MsgboxSign:
 	lockall
-	message NULL
+	signmsg NULL
 	waitmessage
-	waitbuttonpress
 	releaseall
 	return
 

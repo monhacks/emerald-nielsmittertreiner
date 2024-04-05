@@ -5,11 +5,11 @@ AcrenForest_PlantShop_MapScripts::
 AcrenForest_PlantShop_EventScript_ShopOwner::
 	compare VAR_JULIA_STATE, 0
 	goto_if_eq AcrenForest_PlantShop_EventScript_ShopOwner_2
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	message AcrenForest_PlantShop_EventScript_ShopOwner_Text_4
 	waitmessage
 	pokemartdecoration AcrenForest_PlantShop_PokemartDecor_Plants
-	destroy_speech_bubble
+	destroyspeechtail
 	msgbox AcrenForest_PlantShop_EventScript_ShopOwner_Text_5, MSGBOX_NPC
 	release
 	end
@@ -25,9 +25,9 @@ AcrenForest_PlantShop_EventScript_ShopOwner_2:
 	applymovement 4, AcrenForest_PlantShop_Movement_JuliaWalkToPlayer
 	waitmovement 0
 	turnobject OBJ_EVENT_ID_PLAYER, DIR_SOUTH
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox AcrenForest_PlantShop_EventScript_ShopOwner_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement OBJ_EVENT_ID_PLAYER, AcrenForest_PlantShop_Movement_PlayerWalkUpBackwards
 	applymovement 4, Common_Movement_WalkUp
@@ -47,9 +47,9 @@ AcrenForest_PlantShop_EventScript_ShopOwner_2:
 	waitmovement 0
 	turnobject 4, DIR_SOUTH
 	delay 15
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox AcrenForest_PlantShop_EventScript_ShopOwner_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 1, AcrenForest_PlantShop_Movement_ShopOwnerWalkBehindCounter
 	waitmovement 0
@@ -63,9 +63,9 @@ AcrenForest_PlantShop_EventScript_ShopOwner_2:
 	turnobject 1, DIR_EAST
 	delay 15
 	turnobject 4, DIR_NORTH
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox AcrenForest_PlantShop_EventScript_ShopOwner_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkDown
 	applymovement 4, Common_Movement_WalkDown
@@ -74,9 +74,9 @@ AcrenForest_PlantShop_EventScript_ShopOwner_2:
 	playse SE_PIN
 	applymovement 4, Common_Movement_ExclamationMark
 	waitmovement 0
-	load_speech_bubble 4
+	loadspeechtail FALSE, 4
 	msgbox AcrenForest_PlantShop_EventScript_ShopOwner_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 4, AcrenForest_PlantShop_Movement_JuliaWalkToExit
 	waitmovement 0

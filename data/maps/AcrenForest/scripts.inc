@@ -80,17 +80,17 @@ AcrenForest_EventScript_PhyllosShrineCutscene::
 	playse SE_PIN
 	applymovement 31, Common_Movement_ExclamationMark
 	waitmovement 0
-	load_speech_bubble 31
+	loadspeechtail FALSE, 31
 	msgbox AcrenForest_EventScript_PhyllosShrineCutscene_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 31, AcrenForest_Movement_PhyllosWalkToShrine
 	applymovement OBJ_EVENT_ID_PLAYER, AcrenForest_Movement_PlayerWalkToShrine
 	waitmovement 0
 	delay 30
-	load_speech_bubble 31
+	loadspeechtail FALSE, 31
 	msgbox AcrenForest_EventScript_PhyllosShrineCutscene_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 10
 	fadenewbgm MUS_CELEBI
@@ -99,17 +99,17 @@ AcrenForest_EventScript_PhyllosShrineCutscene::
 	applymovement 31, Common_Movement_FaceUp
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceUp
 	waitmovement 0
-	load_speech_bubble 31
+	loadspeechtail FALSE, 31
 	msgbox AcrenForest_EventScript_PhyllosShrineCutscene_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 10
 	applymovement 31, Common_Movement_FaceLeft
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceRight
 	waitmovement 0
-	load_speech_bubble 31
+	loadspeechtail FALSE, 31
 	msgbox AcrenForest_EventScript_PhyllosShrineCutscene_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 10
 	fadedefaultbgm
@@ -117,14 +117,14 @@ AcrenForest_EventScript_PhyllosShrineCutscene::
 	doweather
 	applymovement 31, Common_Movement_WalkInPlaceFastestLeft
 	waitmovement 0
-	load_speech_bubble 31
+	loadspeechtail FALSE, 31
 	msgbox AcrenForest_EventScript_PhyllosShrineCutscene_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	giveitem ITEM_BRIGHT_POWDER, 1
-	load_speech_bubble 31
+	loadspeechtail FALSE, 31
 	msgbox AcrenForest_EventScript_PhyllosShrineCutscene_Text_5
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 31, AcrenForest_Movement_PhyllosWalkFromShrine_1
 	delay 32
@@ -149,9 +149,9 @@ AcrenForest_EventScript_LoggersCutscene::
 	compare VAR_TEMP_0, 56
 	goto_if_eq AcrenForest_EventScript_LoggersCutscene_3
 AcrenForest_EventScript_LoggersCutscene_1:
-	load_speech_bubble 17
+	loadspeechtail FALSE, 17
 	msgbox AcrenForest_EventScript_LoggersCutscene_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	special SpawnCameraObject
 	applymovement OBJ_EVENT_ID_CAMERA, AcrenForest_Movement_CameraToGrunts
@@ -161,15 +161,15 @@ AcrenForest_EventScript_LoggersCutscene_1:
 	applymovement OBJ_EVENT_ID_CAMERA, AcrenForest_Movement_CameraToPlayer
 	waitmovement 0
 	special RemoveCameraObject
-	load_speech_bubble 17
+	loadspeechtail FALSE, 17
 	msgbox AcrenForest_EventScript_LoggersCutscene_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	msgbox AcrenForest_EventScript_LoggersCutscene_Text_3
 	closemessage
-	load_speech_bubble 17
+	loadspeechtail FALSE, 17
 	msgbox AcrenForest_EventScript_LoggersCutscene_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_ACREN_FOREST_STATE, 1
 	release
@@ -307,16 +307,16 @@ AcrenForest_EventScript_DescribeIllegalCamp::
 AcrenForest_EventScript_DescribeIllegalCamp_1:
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_FaceRight
 	waitmovement 0
-	load_speech_bubble 30
+	loadspeechtail FALSE, 30
 	msgbox AcrenForest_EventScript_DescribeIllegalCamp_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	turnobject 30, DIR_SOUTH
 	applymovement 30, AcrenForest_Movement_PhyllosLaughterJump
 	waitmovement 0
-	load_speech_bubble 30
+	loadspeechtail FALSE, 30
 	msgbox AcrenForest_EventScript_DescribeIllegalCamp_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 10
 	teleportcamera 6, 28
@@ -326,9 +326,9 @@ AcrenForest_EventScript_DescribeIllegalCamp_1:
 	delay 10
 	resetcamera
 	delay 30
-	load_speech_bubble 30
+	loadspeechtail FALSE, 30
 	msgbox AcrenForest_EventScript_DescribeIllegalCamp_Text_3
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setvar VAR_ACREN_FOREST_STATE, 5
 	release
@@ -345,9 +345,9 @@ AcrenForest_EventScript_WarnBoss::
 	playbgm MUS_ENCOUNTER_AQUA, FALSE
 	applymovement 29, Common_Movement_ExclamationMark
 	waitmovement 0
-	load_speech_bubble 29
+	loadspeechtail FALSE, 29
 	msgbox AcrenForest_EventScript_WarnBoss_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 29, Common_Movement_WalkUp
 	waitmovement 0
@@ -378,9 +378,9 @@ AcrenForest_EventScript_TrainerTipsHeldItems::
 AcrenForest_EventScript_Boy::
 	lock
 	faceplayer
-	load_speech_bubble 8
+	loadspeechtail FALSE, 8
 	msgbox AcrenForest_EventScript_Boy_Text_0, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	switch VAR_RESULT
 	case YES, AcrenForest_EventScript_Boy_3
 	case NO, AcrenForest_EventScript_Boy_4

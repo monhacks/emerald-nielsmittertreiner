@@ -24,7 +24,7 @@ script LitorTown_EventScript_Fisherman {
     lock
     faceplayer
     if (!flag(FLAG_MET_SCOTT_ON_LITOR) || !flag(FLAG_MET_JULIA_ON_LITOR)) {
-        load_speech_bubble(LOCALID_FISHERMAN_LITOR)
+        loadspeechtail(FALSE, LOCALID_FISHERMAN_LITOR)
         msgbox("Shall we head back to MURENA?", MSGBOX_YESNO)
         switch (var(VAR_RESULT)) {
             case YES:
@@ -35,7 +35,7 @@ script LitorTown_EventScript_Fisherman {
                 goto(LitorTown_EventScript_CancelFerrySelect)
         }
     }
-    load_speech_bubble(LOCALID_FISHERMAN_LITOR)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN_LITOR)
     message(LitorTown_Text_WhereAreWeHeaded)
     waitmessage
     multichoicedefault(21, 6, MULTI_FERRY_ON_LITOR, 1, 0)
@@ -56,7 +56,7 @@ script LitorTown_EventScript_Fisherman {
 script LitorTown_EventScript_ChooseMurena {
     msgbox("We're headed to MURENA CITY!\n"
            "Let's set sail!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     goto(LitorTown_EventScript_SailToMurena)
 }
@@ -64,7 +64,7 @@ script LitorTown_EventScript_ChooseMurena {
 script LitorTown_EventScript_ChooseNavire {
     msgbox("We're headed to NAVIRE TOWN!\n"
            "Let's set sail!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     goto(LitorTown_EventScript_SailToNavire)
 }
@@ -72,7 +72,7 @@ script LitorTown_EventScript_ChooseNavire {
 script LitorTown_EventScript_CancelFerrySelect {
     msgbox("Tell me whenever you need me\n"
            "and my trusty boat.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     release
     end
@@ -165,10 +165,10 @@ script LitorTown_EventScript_SailToNavire {
     hideobjectat(LOCALID_BOAT_MURENA, MAP_MURENA_CITY)
     hideobjectat(LOCALID_BOAT_MURENA_SHIPYARD, MAP_MURENA_CITY_SHIPYARD)
     hideobjectat(LOCALID_BOAT_LITOR, MAP_LITOR_TOWN)
-    load_speech_bubble(LOCALID_FISHERMAN_NAVIRE)
+    loadspeechtail(FALSE, LOCALID_FISHERMAN_NAVIRE)
     msgbox("These are the sands of NAVIRE!\n"
            "We've hit the mainland again!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     resetobjectsubpriority(OBJ_EVENT_ID_PLAYER, MAP_NAVIRE_TOWN)
     resetobjectsubpriority(LOCALID_FISHERMAN_NAVIRE, MAP_NAVIRE_TOWN)
@@ -182,27 +182,27 @@ script LitorTown_EventScript_Scott {
     lock
     faceplayer
     if (flag(FLAG_MET_SCOTT_ON_LITOR)) {
-        load_speech_bubble(LOCALID_SCOTT)
+        loadspeechtail(FALSE, LOCALID_SCOTT)
         msgbox("Boot up that new POKéNAV of yours now!\p"
                "And check out the map while you're at it,\n"
                "you can even check out city views!")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         release
         end
     } else {
-        load_speech_bubble(LOCALID_SCOTT)
+        loadspeechtail(FALSE, LOCALID_SCOTT)
         msgbox("Hey there, my name is SCOTT.\n"
                "I'm the founder of the HOENN\l"
                "BATTLE FRONTIER.\p"
                "… … … … … …\p"
                "Hmmm, you seem familiar to me…")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         playse(SE_PIN)
         applymovement(LOCALID_SCOTT, Common_Movement_ExclamationMark)
         waitmovement(0)
-        load_speech_bubble(LOCALID_SCOTT)
+        loadspeechtail(FALSE, LOCALID_SCOTT)
         msgbox("Ah that's it!\n"
                "I saw you on TV!\p"
                "You won the FIRWEALD CITY TOURNAMENT,\n"
@@ -216,7 +216,7 @@ script LitorTown_EventScript_Scott {
                "Wait, you don't have one?\p"
                "Well, I know a solution for that.\n"
                "Take this!")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         playfanfare(MUS_OBTAIN_ITEM)
         setflag(FLAG_SYS_POKENAV_GET)
@@ -226,7 +226,7 @@ script LitorTown_EventScript_Scott {
                "from SCOTT!")
         waitfanfare
         closemessage
-        load_speech_bubble(LOCALID_SCOTT)
+        loadspeechtail(FALSE, LOCALID_SCOTT)
         msgbox("A POKéNAV is the perfect device for\n"
                "any TRAINER!\p"
                "You can view the map of the EURUS\n"
@@ -236,7 +236,7 @@ script LitorTown_EventScript_Scott {
                "Pretty handy device, ey?\p"
                "I'll be staying here for a while, but\n"
                "perhaps our paths cross again.")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         setflag(FLAG_MET_SCOTT_ON_LITOR)
         release
@@ -253,7 +253,7 @@ script LitorTown_EventScript_JuliaEncounter {
     applymovement(LOCALID_JULIA, Common_Movement_WalkDown)
     applymovement(OBJ_EVENT_ID_PLAYER, LitorTown_Movement_PlayerWalkDown)
     waitmovement(0)
-    load_speech_bubble(LOCALID_JULIA)
+    loadspeechtail(FALSE, LOCALID_JULIA)
     msgbox("Oh hey there {PLAYER}!\n"
            "I didn't expect you here on LITOR too.\p"
            "What a coincidence don't you agree?\n"
@@ -263,17 +263,17 @@ script LitorTown_EventScript_JuliaEncounter {
            "Oh you should totally get a FRESH WATER!\n"
            "It's important to stay hydrated\l"
            "on an island like this!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_JULIA, Common_Movement_QuestionMark)
     waitmovement(0)
-    load_speech_bubble(LOCALID_JULIA)
+    loadspeechtail(FALSE, LOCALID_JULIA)
     msgbox("What? You want to battle me?\p"
            "Oh no no, I'm not prepared for that now.\p"
            "Maybe when we meet again we'll battle.\n"
            "I promise, alright?!\p"
            "Anyway emm… I'll be going again hehe…")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_JULIA, LitorTown_Movement_JuliaWalkOffscreen)
     waitmovement(0)

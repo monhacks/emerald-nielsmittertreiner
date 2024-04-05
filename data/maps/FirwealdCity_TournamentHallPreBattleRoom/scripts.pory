@@ -33,22 +33,22 @@ script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_EnterRoom {
 script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_InformPlayer {
     setvar(VAR_TEMP_1, 1)
     if (var(VAR_TOURNAMENT_HALL_ROUND) == 1) {
-        load_speech_bubble(LOCALID_ATTENDANT)
+        loadspeechtail(FALSE, LOCALID_ATTENDANT)
         msgbox(format("In this room, you are able to prepare yourself for your upcoming battles. \pIf you wish to continue to the next round, or to retreat from the challenge, just talk to me."))
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
     }
     call(FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound)
-    load_speech_bubble(LOCALID_ATTENDANT)
+    loadspeechtail(FALSE, LOCALID_ATTENDANT)
     msgbox("I'll be waiting right here.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     release
     end
 }
 
 script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound {
-    load_speech_bubble(LOCALID_ATTENDANT)
+    loadspeechtail(FALSE, LOCALID_ATTENDANT)
     switch (var(VAR_TOURNAMENT_HALL_ROUND)) {
         case 1:
             msgbox("Your first round of the TOURNAMENT\n"
@@ -67,14 +67,14 @@ script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound {
                    "are about to begin.")
             break
     }
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     return
 }
 
 script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant {
     call(FirwealdCity_TournamentHallPreBattleRoom_EventScripts_ComingRound)
-    load_speech_bubble(LOCALID_ATTENDANT)
+    loadspeechtail(FALSE, LOCALID_ATTENDANT)
     message(FirwealdCity_TournamentHallLobby_Text_WhatWouldYouLikeToDo)
     waitmessage
     multichoice(21, 6, MULTI_TOURNAMENT_HALL_PRE_BATTLE, 1)
@@ -107,7 +107,7 @@ script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant {
                 case YES:
                     msgbox("I wish you good luck\n"
                            "on your battle!")
-                    destroy_speech_bubble
+                    destroyspeechtail
                     closemessage
                     if (var(VAR_FACING) == DIR_NORTH)
                     {
@@ -155,7 +155,7 @@ script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant {
                     waitstate
                 case NO:
                     msgbox("I'll be waiting right here.")
-                    destroy_speech_bubble
+                    destroyspeechtail
                     closemessage
                     break
             }
@@ -166,16 +166,16 @@ script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant {
                 case YES:
                     msgbox("Please follow me back to\n"
                            "the LOBBY.")
-                    destroy_speech_bubble
+                    destroyspeechtail
                     warp(MAP_FIRWEALD_CITY_TOURNAMENT_HALL_LOBBY, 0xFF, 6, 6)
                     waitstate
                 case NO:
-                    destroy_speech_bubble
+                    destroyspeechtail
                     goto(FirwealdCity_TournamentHallPreBattleRoom_EventScripts_Attendant)
             }
         case 2: // EXIT
             msgbox("I'll be waiting right here.")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             break
     }
@@ -200,12 +200,12 @@ script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_BulletinBoard {
 script FirwealdCity_TournamentHallPreBattleRoom_EventScripts_MartEmployee {
     lock
     faceplayer
-    load_speech_bubble(LOCALID_MARTEMPLOYEE)
+    loadspeechtail(FALSE, LOCALID_MARTEMPLOYEE)
     message("Welcome to the TOURNAMENT SHOP.\n"
 	        "How can I help you?")
     waitmessage
     pokemart(FirwealdCity_TournamentHallPreBattleRoom_Pokemart)
-    destroy_speech_bubble
+    destroyspeechtail
     msgbox("Good luck on your\n"
            "TOURNAMENT CHALLENGE!", MSGBOX_NPC)
     release

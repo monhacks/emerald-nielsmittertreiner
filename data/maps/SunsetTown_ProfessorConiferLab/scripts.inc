@@ -34,9 +34,9 @@ SunsetTown_ProfessorConiferLab_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0:
 	waitmovement 0
 	turnobject 3, DIR_EAST
 	delay 16
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox SunsetTown_ProfessorConiferLab_MapScripts_MAP_SCRIPT_ON_FRAME_TABLE_0_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	addobject 3, MAP_SUNSET_TOWN
 	setvar VAR_SUNSET_TOWN_STATE, 2
@@ -57,9 +57,9 @@ SunsetTown_ProfessorConiferLab_EventScript_Conifer_2:
 	playse SE_PIN
 	applymovement 3, Common_Movement_ExclamationMark
 	waitmovement 0
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox SunsetTown_ProfessorConiferLab_EventScript_Conifer_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	playfanfare MUS_OBTAIN_ITEM
 	msgbox SunsetTown_ProfessorConiferLab_EventScript_Conifer_Text_1
@@ -71,18 +71,18 @@ SunsetTown_ProfessorConiferLab_EventScript_Conifer_2:
 	special EnableNationalPokedex
 	setvar VAR_CABLE_CLUB_TUTORIAL_STATE, 1
 	setvar VAR_ACREN_FOREST_STATE, 2
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox SunsetTown_ProfessorConiferLab_EventScript_Conifer_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	playfanfare MUS_OBTAIN_ITEM
 	msgbox SunsetTown_ProfessorConiferLab_EventScript_Conifer_Text_3
 	waitfanfare
 	closemessage
 	setflag FLAG_SYS_B_DASH
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox SunsetTown_ProfessorConiferLab_EventScript_Conifer_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end

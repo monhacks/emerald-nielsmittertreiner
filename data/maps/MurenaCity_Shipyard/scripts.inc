@@ -33,9 +33,9 @@ MurenaCity_Shipyard_EventScript_SetUpObjects::
 
 MurenaCity_Shipyard_EventScript_FinishSailToMurena::
 	setvar VAR_FISHERMAN_FERRY_STATE, 0
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox MurenaCity_Shipyard_EventScript_FinishSailToMurena_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
@@ -47,9 +47,9 @@ MurenaCity_Shipyard_EventScript_Fisherman::
 	compare VAR_TEMP_0, 9
 	goto_if_eq MurenaCity_Shipyard_EventScript_Fisherman_2
 MurenaCity_Shipyard_EventScript_Fisherman_1:
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox MurenaCity_Shipyard_EventScript_Fisherman_Text_0, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	switch VAR_RESULT
 	case YES, MurenaCity_Shipyard_EventScript_Fisherman_5
@@ -63,9 +63,9 @@ MurenaCity_Shipyard_EventScript_Fisherman_2:
 	goto MurenaCity_Shipyard_EventScript_Fisherman_1
 
 MurenaCity_Shipyard_EventScript_Fisherman_5:
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox MurenaCity_Shipyard_EventScript_Fisherman_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto MurenaCity_Shipyard_EventScript_SailToLitorTown
 	return
@@ -80,9 +80,9 @@ MurenaCity_Shipyard_EventScript_Fisherman_7:
 
 
 MurenaCity_Shipyard_EventScript_CancelFerrySelect::
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox MurenaCity_Shipyard_EventScript_CancelFerrySelect_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end

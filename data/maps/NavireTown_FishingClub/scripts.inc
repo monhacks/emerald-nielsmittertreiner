@@ -13,48 +13,48 @@ NavireTown_FishingClub_EventScript_Fisherman2::
 	lock
 	faceplayer
 	goto_if_set FLAG_RECEIVED_OLD_ROD, NavireTown_FishingClub_EventScript_Fisherman2_2
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox NavireTown_FishingClub_EventScript_Fisherman2_Text_1, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_RESULT, YES
 	goto_if_eq NavireTown_FishingClub_EventScript_Fisherman2_5
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox NavireTown_FishingClub_EventScript_Fisherman2_Text_6
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 NavireTown_FishingClub_EventScript_Fisherman2_4:
 	release
 	end
 
 NavireTown_FishingClub_EventScript_Fisherman2_2:
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox NavireTown_FishingClub_EventScript_Fisherman2_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	release
 	end
 
 NavireTown_FishingClub_EventScript_Fisherman2_5:
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox NavireTown_FishingClub_EventScript_Fisherman2_Text_2
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	delay 30
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox NavireTown_FishingClub_EventScript_Fisherman2_Text_3
 	delay 60
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox NavireTown_FishingClub_EventScript_Fisherman2_Text_4
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	giveitem ITEM_OLD_ROD, 1
 	closemessage
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox NavireTown_FishingClub_EventScript_Fisherman2_Text_5
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	setflag FLAG_RECEIVED_OLD_ROD
 	goto NavireTown_FishingClub_EventScript_Fisherman2_4

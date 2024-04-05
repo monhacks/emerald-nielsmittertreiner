@@ -8,19 +8,19 @@ mapscripts FirwealdCity_TournamentHallLobby_MapScripts {
             waitmovement(0)
             applymovement(LOCALID_ATTENDANT, FirwealdCity_TournamentHallLobby_Movement_AttendantWalkDown)
             waitmovement(0)
-            load_speech_bubble(LOCALID_ATTENDANT)
+            loadspeechtail(FALSE, LOCALID_ATTENDANT)
             msgbox("Hi there TRAINER, it seems like this\n"
                    "is your first time in a TOURNAMENT\l"
                    "HALL.")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             delay(16)
-            load_speech_bubble(LOCALID_ATTENDANT)
+            loadspeechtail(FALSE, LOCALID_ATTENDANT)
             msgbox("Would you like me to explain the use\n"
                    "of TOURNAMENT HALLS?", MSGBOX_YESNO)
             if (var(VAR_RESULT) == YES) {
-                destroy_speech_bubble
-                load_speech_bubble(LOCALID_ATTENDANT)
+                destroyspeechtail
+                loadspeechtail(FALSE, LOCALID_ATTENDANT)
                 msgbox("Across the EURUS REGION, multiple\n"
                        "TOURNAMENT HALLS are spread around\p"
                        "They are used for competitive battling\n"
@@ -30,14 +30,14 @@ mapscripts FirwealdCity_TournamentHallLobby_MapScripts {
                        "the tournament challenge.\p"
                        "You can sign up to join a \n"
                        "tournament at the counter.")
-                destroy_speech_bubble
+                destroyspeechtail
                 closemessage
             } else {
-                destroy_speech_bubble
-                load_speech_bubble(LOCALID_ATTENDANT)
+                destroyspeechtail
+                loadspeechtail(FALSE, LOCALID_ATTENDANT)
                 msgbox("Well then, I'll be waiting at the\n"
                        "counter up front.")
-                destroy_speech_bubble
+                destroyspeechtail
                 closemessage
             }
             applymovement(LOCALID_ATTENDANT, FirwealdCity_TournamentHallLobby_Movement_AttendantWalkUp)
@@ -54,28 +54,28 @@ script FirwealdCity_TournamentHallLobby_EventScript_Attendant {
     faceplayer
     if (flag(FLAG_BADGE01_GET))
     {
-        load_speech_bubble(LOCALID_ATTENDANT)
+        loadspeechtail(FALSE, LOCALID_ATTENDANT)
         msgbox("Congratulations!\n"
                "You have already earned the CONIFER\l"
                "BADGE.\p"
                "We can't let you participate when you\n"
                "already have this TOURNAMENT's BADGE…")
-        destroy_speech_bubble
+        destroyspeechtail
         release
         end
     }
-    load_speech_bubble(LOCALID_ATTENDANT)
+    loadspeechtail(FALSE, LOCALID_ATTENDANT)
     message(FirwealdCity_TournamentHallLobby_Text_WelcomeToFirwealdCityTounamentHall)
     waitmessage
     multichoice(22, 6, MULTI_TOURNAMENT_HALL_JOIN, 1)
     switch (var(VAR_RESULT)) {
         case 0: // JOIN
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             goto(FirwealdCity_TournamentHallLobby_EventScript_JoinTournament)
             break
         case 1: // INFO
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             msgbox("This is the FIRWEALD CITY\n"
                    "TOURNAMENT HALL. Here trainers come\l"
@@ -92,7 +92,7 @@ script FirwealdCity_TournamentHallLobby_EventScript_Attendant {
             goto(FirwealdCity_TournamentHallLobby_EventScript_Attendant)
             break
         case 2: // EXIT
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             goto(FirwealdCity_TournamentHallLobby_EventScript_CancelTournament)
     }
@@ -104,18 +104,18 @@ script FirwealdCity_TournamentHallLobby_EventScript_CancelTournament {
 }
 
 script FirwealdCity_TournamentHallLobby_EventScript_JoinTournament {
-    load_speech_bubble(LOCALID_ATTENDANT)
+    loadspeechtail(FALSE, LOCALID_ATTENDANT)
     msgbox("Before you join the TOURNAMENT,\n"
            "you must save your data. Is that okay?", MSGBOX_YESNO)
     switch (var(VAR_RESULT)) {
         case YES:
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             call(Common_EventScript_SaveGame)
             closemessage
             break
         case NO:
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             goto(FirwealdCity_TournamentHallLobby_EventScript_CancelTournament)
     }

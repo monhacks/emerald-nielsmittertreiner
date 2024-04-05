@@ -32,9 +32,9 @@ CedarredTown_EventScript_AcrenForestSign::
 CedarredTown_EventScript_LoreMan::
 	lock
 	faceplayer
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox CedarredTown_EventScript_LoreMan_Text_0, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	compare VAR_RESULT, 1
 	goto_if_eq CedarredTown_EventScript_LoreMan_1
 	msgbox CedarredTown_EventScript_LoreMan_Text_2, MSGBOX_NPC
@@ -61,9 +61,9 @@ CedarredTown_EventScript_ShowLoggersCabin::
 	applymovement OBJ_EVENT_ID_FOLLOWER, Common_Movement_ExclamationMark
 	waitmovement 0
 	facefollower
-	load_speech_bubble OBJ_EVENT_ID_FOLLOWER
+	loadspeechtail FALSE, OBJ_EVENT_ID_FOLLOWER
 	msgbox CedarredTown_EventScript_ShowLoggersCabin_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	getplayerxy VAR_TEMP_0, VAR_TEMP_1
 	special SpawnCameraObject
@@ -124,9 +124,9 @@ CedarredTown_EventScript_EnterLoggersCabin::
 	applymovement OBJ_EVENT_ID_FOLLOWER, Common_Movement_ExclamationMark
 	waitmovement 0
 	facefollower
-	load_speech_bubble OBJ_EVENT_ID_FOLLOWER
+	loadspeechtail FALSE, OBJ_EVENT_ID_FOLLOWER
 	msgbox CedarredTown_EventScript_EnterLoggersCabin_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	getplayerxy VAR_TEMP_0, VAR_TEMP_1
 	switch VAR_TEMP_0
@@ -176,9 +176,9 @@ CedarredTown_EventScript_PreventWander::
 	applymovement OBJ_EVENT_ID_FOLLOWER, Common_Movement_ExclamationMark
 	waitmovement 0
 	facefollower
-	load_speech_bubble OBJ_EVENT_ID_FOLLOWER
+	loadspeechtail FALSE, OBJ_EVENT_ID_FOLLOWER
 	msgbox CedarredTown_EventScript_PreventWander_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	applymovement OBJ_EVENT_ID_PLAYER, CedarredTown_Movement_WalkDown
 	waitmovement 0
 	turnobject OBJ_EVENT_ID_FOLLOWER, DIR_SOUTH

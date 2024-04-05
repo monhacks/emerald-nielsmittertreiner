@@ -24,7 +24,7 @@ mapscripts SunsetTown_ProfessorConiferLab_MapScripts {
             waitmovement(0)
             turnobject(LOCALID_CONIFER, DIR_EAST)
             delay(16)
-            load_speech_bubble(LOCALID_CONIFER)
+            loadspeechtail(FALSE, LOCALID_CONIFER)
             msgbox("I just got word of one of my aides.\n"
 	               "It's about a raid in the forest\l"
 	               "nearby CEDARRED TOWN.\p"
@@ -33,7 +33,7 @@ mapscripts SunsetTown_ProfessorConiferLab_MapScripts {
 	               "LOGGERS CABIN in CEDARRED TOWN.\p"
 	               "We should take a look and see if all\n"
 	               "is okay there…")
-            destroy_speech_bubble
+            destroyspeechtail
             closemessage
             addobject(LOCALID_CONIFER, MAP_SUNSET_TOWN)
             setvar(VAR_SUNSET_TOWN_STATE, 2)
@@ -51,7 +51,7 @@ script SunsetTown_ProfessorConiferLab_EventScript_Conifer {
         playse(SE_PIN)
         applymovement(LOCALID_CONIFER, Common_Movement_ExclamationMark)
         waitmovement(0)
-        load_speech_bubble(LOCALID_CONIFER)
+        loadspeechtail(FALSE, LOCALID_CONIFER)
         msgbox("Hey there, {PLAYER}.\p"
                "… … … … … … … … …\n"
                "… … … … … … … … …\p"
@@ -59,7 +59,7 @@ script SunsetTown_ProfessorConiferLab_EventScript_Conifer {
                "You don't have a POKéDEX yet.\p"
                "Luckily, I have one right here for you.\p"
                "Go ahead and take it, it's yours.$")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         playfanfare(MUS_OBTAIN_ITEM)
         msgbox("{PLAYER} received the POKéDEX from\n"
@@ -72,7 +72,7 @@ script SunsetTown_ProfessorConiferLab_EventScript_Conifer {
         special(EnableNationalPokedex)
         setvar(VAR_CABLE_CLUB_TUTORIAL_STATE, 1)
         setvar(VAR_ACREN_FOREST_STATE, 2)
-        load_speech_bubble(LOCALID_CONIFER)
+        loadspeechtail(FALSE, LOCALID_CONIFER)
         msgbox("Now that you have a POKéDEX, I can\n"
                "register you as an official\l"
                "POKéMON TRAINER.\p"
@@ -80,7 +80,7 @@ script SunsetTown_ProfessorConiferLab_EventScript_Conifer {
                "Do you still have those old shoes?\l"
                "Well, I wanted to give you new ones\l"
                "anyway…")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         playfanfare(MUS_OBTAIN_ITEM)
         msgbox("{PLAYER} received the RUNNING SHOES from\n"
@@ -88,10 +88,10 @@ script SunsetTown_ProfessorConiferLab_EventScript_Conifer {
         waitfanfare
         closemessage
         setflag(FLAG_SYS_B_DASH)
-        load_speech_bubble(LOCALID_CONIFER)
+        loadspeechtail(FALSE, LOCALID_CONIFER)
         msgbox("I think you have some business\n"
                "to to now…")
-        destroy_speech_bubble
+        destroyspeechtail
         closemessage
         release
         end

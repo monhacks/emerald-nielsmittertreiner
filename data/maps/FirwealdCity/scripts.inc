@@ -73,9 +73,9 @@ FirwealdCity_EventScript_PhyllosEncounter::
 	closedoor 37, 16
 	waitdooranim
 	waitmovement 0
-	load_speech_bubble 9
+	loadspeechtail FALSE, 9
 	msgbox FirwealdCity_EventScript_PhyllosEncounter_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement OBJ_EVENT_ID_PLAYER, FirwealdCity_Movement_PlayerWalkDownBackwards
 	applymovement 9, FirwealdCity_Movement_PhyllosWalkToForest
@@ -109,9 +109,9 @@ FirwealdCity_EventScript_BlockPath::
 	waitmovement 0
 	applymovement 6, FirwealdCity_Movement_WalkInFrontOfPlayer
 	waitmovement 0
-	load_speech_bubble 6
+	loadspeechtail FALSE, 6
 	msgbox FirwealdCity_EventScript_BlockPath_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	applymovement 6, FirwealdCity_Movement_PushBackPlayer
 	applymovement OBJ_EVENT_ID_PLAYER, FirwealdCity_Movement_WalkBack
@@ -171,9 +171,9 @@ FirwealdCity_EventScript_Lass::
 	goto_if_set FLAG_FIRWEALD_CITY_HIDE_AND_SEEK_EVENT, FirwealdCity_EventScript_Lass_3
 	lock
 	faceplayer
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_EventScript_Lass_Text_1, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	switch VAR_RESULT
 	case NO, FirwealdCity_EventScript_Lass_6
 	case YES, FirwealdCity_EventScript_Lass_7
@@ -204,18 +204,18 @@ FirwealdCity_EventScript_LittleGirl_3:
 	playse SE_PIN
 	applymovement OBJ_EVENT_ID_PLAYER, FirwealdCity_Movement_NoticeLittleGirlHidingSpot
 	waitmovement 0
-	load_speech_bubble 2
+	loadspeechtail FALSE, 2
 	msgbox FirwealdCity_EventScript_LittleGirl_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_FACING, DIR_SOUTH
 	goto_if_eq FirwealdCity_EventScript_LittleGirl_6
 	applymovement 3, FirwealdCity_Movement_LassWalkToLittleGirlFacingEastAndWest
 	waitmovement 0
 FirwealdCity_EventScript_LittleGirl_5:
-	load_speech_bubble 3
+	loadspeechtail FALSE, 3
 	msgbox FirwealdCity_EventScript_LittleGirl_Text_1
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	compare VAR_FACING, DIR_SOUTH
 	goto_if_eq FirwealdCity_EventScript_LittleGirl_10

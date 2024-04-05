@@ -1526,8 +1526,8 @@ const u32 gBerryCrush_Crusher_Gfx[] = INCBIN_U32("graphics/berry_crush/crusher.4
 const u32 gBerryCrush_TextWindows_Tilemap[] = INCBIN_U32("graphics/berry_crush/text_windows.bin.lz");
 
 // Speech Bubble
-const u32 gSpeechBubbleTiles[] = INCBIN_U32("graphics/speech_bubble/speech_bubble_tail.4bpp.lz");
-const u16 sSpeechBubblePalette[] = INCBIN_U16("graphics/speech_bubble/speech_bubble_tail.gbapal");
+const u32 gSpeechTail_Gfx[] = INCBIN_U32("graphics/speech_tail/speech_tail.4bpp.lz");
+const u16 gSpeechTail_Pal[] = INCBIN_U16("graphics/speech_tail/speech_tail.gbapal");
 
 // Popup Window Border
 const u32 gPopUpWindowBorderTop_Tiles[] = INCBIN_U32("graphics/interface/window_popup_top_tiles.4bpp");

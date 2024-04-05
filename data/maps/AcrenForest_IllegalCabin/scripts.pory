@@ -36,28 +36,28 @@ script AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene {
     applymovement(LOCALID_GRUNT4, AcrenForest_IllegalCabin_Movement_Grunt4RunToPlayer)
     delay(4)
     waitmovement(0)
-    load_speech_bubble(LOCALID_GRUNT1)
+    loadspeechtail(FALSE, LOCALID_GRUNT1)
     msgbox("How- how did you get in here!\n"
            "Didn't the guards stop you?!\p"
            "Hrmph… Fine then…\n"
            "I guess the BOSS will have to\l"
            "get you out then.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_GRUNT1, Common_Movement_QuestionMark)
     delay(60)
     waitmovement(0)
-    load_speech_bubble(LOCALID_GRUNT1)
+    loadspeechtail(FALSE, LOCALID_GRUNT1)
     msgbox("Huh? Where's the BOSS gone?")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_GRUNT1, AcrenForest_IllegalCabin_Movement_Grunt1LookAround)
     waitmovement(0)
-    load_speech_bubble(LOCALID_GRUNT1)
+    loadspeechtail(FALSE, LOCALID_GRUNT1)
     msgbox("Oh no!\n"
            "He must have left early!\p"
            "Well then-")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     delay(16)
     addobject(LOCALID_PHYLLOS)
@@ -68,28 +68,28 @@ script AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene {
     waitmovement(0)
     applymovement(OBJ_EVENT_ID_PLAYER, Common_Movement_FaceDown)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS)
     msgbox("It looks like you've made it…\n"
            "I'm not intruding I hope.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
-    load_speech_bubble(LOCALID_GRUNT1)
+    loadspeechtail(FALSE, LOCALID_GRUNT1)
     msgbox("It's PHYLLOS! The city's\n"
            "TOURNAMENT MASTER!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_PHYLLOS, Common_Movement_FaceLeft)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS)
     msgbox("I sure am, yes…")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_PHYLLOS, Common_Movement_FaceUp)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS)
     msgbox("Now, let's round these boys up\n"
            "shall we?…")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_PHYLLOS, Common_Movement_WalkInPlaceFastestLeft)
     waitmovement(0)
@@ -123,10 +123,10 @@ script AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene {
     applymovement(LOCALID_GRUNT1, AcrenForest_IllegalCabin_Movement_GruntsFallBack)
     applymovement(LOCALID_GRUNT2, AcrenForest_IllegalCabin_Movement_GruntsFallBack)
     waitmovement(0)
-    load_speech_bubble(LOCALID_GRUNT1)
+    loadspeechtail(FALSE, LOCALID_GRUNT1)
     msgbox("Everyone! Get out of here!\n"
            "Get back to base quickly!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_GRUNT1, AcrenForest_IllegalCabin_Movement_Grunt1RunOut)
     delay(8)
@@ -140,9 +140,9 @@ script AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene {
     removeobject(LOCALID_GRUNT2)
     removeobject(LOCALID_GRUNT3)
     removeobject(LOCALID_GRUNT4)
-    load_speech_bubble(LOCALID_PHYLLOS)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS)
     msgbox("Return, KECLEON!")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     addobject(LOCALID_POKEBALL)
     setobjectxy(LOCALID_POKEBALL, 13, 6)
@@ -156,12 +156,12 @@ script AcrenForest_IllegalCabin_EventScript_GruntPhyllosCutscene {
     delay(12)
     removeobject(LOCALID_POKEBALL)
     waitmovement(0)
-    load_speech_bubble(LOCALID_PHYLLOS)
+    loadspeechtail(FALSE, LOCALID_PHYLLOS)
     msgbox("Now that we have that done,\n"
            "I suppose you could visit and\l"
            "challenge me in FIRWEALD CITY.\p"
            "I'll be waiting for you.")
-    destroy_speech_bubble
+    destroyspeechtail
     closemessage
     applymovement(LOCALID_PHYLLOS, Common_Movement_WalkDown2)
     waitmovement(0)

@@ -5,10 +5,10 @@ LitorTown_Bar_MapScripts::
 LitorTown_Bar_EventScript_Barman::
 	lock
 	faceplayer
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	message LitorTown_Bar_Text_WelcomeToMyBar
 	waitmessage
-	destroy_speech_bubble
+	destroyspeechtail
 	special SpawnCameraObject
 	goto LitorTown_Bar_EventScript_SetUpShop
 	end
@@ -16,7 +16,7 @@ LitorTown_Bar_EventScript_Barman::
 
 LitorTown_Bar_EventScript_SetUpShop::
 	call LitorTown_Bar_EventScript_SetUpShopCamera
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	message LitorTown_Bar_Text_WhatDoYouFancy
 	waitmessage
 	goto LitorTown_Bar_EventScript_DrawShopMenu
@@ -38,7 +38,7 @@ LitorTown_Bar_EventScript_ResetShopCamera::
 LitorTown_Bar_EventScript_DrawShopMenu::
 	showmoneybox 0, 0, 0
 	multichoice 0, 4, MULTI_LITOR_BAR_SHOP, 0
-	destroy_speech_bubble
+	destroyspeechtail
 	switch VAR_RESULT
 	case 0, LitorTown_Bar_EventScript_DrawShopMenu_2
 	case 1, LitorTown_Bar_EventScript_DrawShopMenu_3
@@ -72,9 +72,9 @@ LitorTown_Bar_EventScript_DrawShopMenu_6:
 
 LitorTown_Bar_EventScript_ChooseFreshWater::
 	call LitorTown_Bar_EventScript_ResetShopCamera
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox LitorTown_Bar_EventScript_ChooseFreshWater_Text_0, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	switch VAR_RESULT
 	case YES, LitorTown_Bar_EventScript_ChooseFreshWater_2
 	case NO, LitorTown_Bar_EventScript_ChooseFreshWater_3
@@ -154,9 +154,9 @@ LitorTown_Bar_EventScript_TryBuyFreshWater_1:
 	return
 
 LitorTown_Bar_EventScript_TryBuyFreshWater_2:
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox LitorTown_Bar_EventScript_TryBuyFreshWater_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto LitorTown_Bar_EventScript_CancelBuyDrink
 	goto LitorTown_Bar_EventScript_TryBuyFreshWater_1
@@ -178,9 +178,9 @@ LitorTown_Bar_EventScript_TryBuySodaPop_1:
 	return
 
 LitorTown_Bar_EventScript_TryBuySodaPop_2:
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox LitorTown_Bar_EventScript_TryBuyFreshWater_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto LitorTown_Bar_EventScript_CancelBuyDrink
 	goto LitorTown_Bar_EventScript_TryBuySodaPop_1
@@ -202,18 +202,18 @@ LitorTown_Bar_EventScript_TryBuyLemonade_1:
 	return
 
 LitorTown_Bar_EventScript_TryBuyLemonade_2:
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox LitorTown_Bar_EventScript_TryBuyFreshWater_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto LitorTown_Bar_EventScript_CancelBuyDrink
 	goto LitorTown_Bar_EventScript_TryBuyLemonade_1
 
 
 LitorTown_Bar_EventScript_CancelBuyDrink::
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox LitorTown_Bar_EventScript_CancelBuyDrink_Text_0
-	destroy_speech_bubble
+	destroyspeechtail
 	closemessage
 	goto LitorTown_Bar_EventScript_ExitShop
 	return

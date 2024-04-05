@@ -6,9 +6,9 @@ FirwealdCity_PokemonCenter_1F_EventScript_Nurse::
 	lock
 	faceplayer
 	msgbox FirwealdCity_PokemonCenter_1F_EventScript_Nurse_Text_0, MSGBOX_NPC
-	load_speech_bubble 1
+	loadspeechtail FALSE, 1
 	msgbox FirwealdCity_PokemonCenter_1F_EventScript_Nurse_Text_1, MSGBOX_YESNO
-	destroy_speech_bubble
+	destroyspeechtail
 	switch VAR_RESULT
 	case YES, FirwealdCity_PokemonCenter_1F_EventScript_Nurse_3
 	case NO, FirwealdCity_PokemonCenter_1F_EventScript_Nurse_4
