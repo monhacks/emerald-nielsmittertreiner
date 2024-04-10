@@ -44,6 +44,7 @@ enum
 enum
 {
     MAPPOPUP_THEME_WOOD,
+    MAPPOPUP_THEME_GRASS,
     MAPPOPUP_THEME_MARBLE,
     MAPPOPUP_THEME_BRICK,
     MAPPOPUP_THEME_STONE,
@@ -61,6 +62,9 @@ static const u8 sTextColor[] = {0, 1, 2};
 static const u32 sMapPopup_WoodTop_Gfx[] = INCBIN_U32("graphics/map_popup/wood_top.4bpp");
 static const u32 sMapPopup_WoodBottom_Gfx[] = INCBIN_U32("graphics/map_popup/wood_bottom.4bpp");
 static const u16 sMapPopup_Wood_Pal[] = INCBIN_U16("graphics/map_popup/wood.gbapal");
+static const u32 sMapPopup_GrassTop_Gfx[] = INCBIN_U32("graphics/map_popup/grass_top.4bpp");
+static const u32 sMapPopup_GrassBottom_Gfx[] = INCBIN_U32("graphics/map_popup/grass_bottom.4bpp");
+static const u16 sMapPopup_Grass_Pal[] = INCBIN_U16("graphics/map_popup/grass.gbapal");
 static const u32 sMapPopup_MarbleTop_Gfx[] = INCBIN_U32("graphics/map_popup/marble_top.4bpp");
 static const u32 sMapPopup_MarbleBottom_Gfx[] = INCBIN_U32("graphics/map_popup/marble_bottom.4bpp");
 static const u16 sMapPopup_Marble_Pal[] = INCBIN_U16("graphics/map_popup/marble.gbapal");
@@ -79,6 +83,7 @@ static const u16 sMapPopup_Underwater2_Pal[] = INCBIN_U16("graphics/map_popup/un
 static const u32 *const sMapPopup_GfxTable[][2] = 
 {
     [MAPPOPUP_THEME_WOOD] = {sMapPopup_WoodTop_Gfx, sMapPopup_WoodBottom_Gfx},
+    [MAPPOPUP_THEME_GRASS] = {sMapPopup_GrassTop_Gfx, sMapPopup_GrassBottom_Gfx},
     [MAPPOPUP_THEME_MARBLE] = {sMapPopup_MarbleTop_Gfx, sMapPopup_MarbleBottom_Gfx},
     [MAPPOPUP_THEME_BRICK] = {sMapPopup_BrickTop_Gfx, sMapPopup_BrickBottom_Gfx},
     [MAPPOPUP_THEME_STONE] = {sMapPopup_StoneTop_Gfx, sMapPopup_StoneBottom_Gfx},
@@ -89,6 +94,7 @@ static const u32 *const sMapPopup_GfxTable[][2] =
 static const u16 *const sMapPopup_PalTable[] = 
 {
     [MAPPOPUP_THEME_WOOD] = sMapPopup_Wood_Pal,
+    [MAPPOPUP_THEME_GRASS] = sMapPopup_Grass_Pal,
     [MAPPOPUP_THEME_MARBLE] = sMapPopup_Marble_Pal,
     [MAPPOPUP_THEME_BRICK] = sMapPopup_Brick_Pal,
     [MAPPOPUP_THEME_STONE] = sMapPopup_Stone_Pal,
@@ -114,7 +120,7 @@ static const u8 sRegionMapSectionId_To_PopUpThemeIdMapping[] =
     [MAPSEC_MOSSDEEP_CITY] = MAPPOPUP_THEME_BRICK,
     [MAPSEC_SOOTOPOLIS_CITY] = MAPPOPUP_THEME_MARBLE,
     [MAPSEC_EVER_GRANDE_CITY] = MAPPOPUP_THEME_BRICK,
-    [MAPSEC_ROUTE_401] = MAPPOPUP_THEME_WOOD,
+    [MAPSEC_ROUTE_401] = MAPPOPUP_THEME_GRASS,
     [MAPSEC_ROUTE_402] = MAPPOPUP_THEME_WOOD,
     [MAPSEC_ROUTE_403] = MAPPOPUP_THEME_WOOD,
     [MAPSEC_ROUTE_404] = MAPPOPUP_THEME_WOOD,
