@@ -18,6 +18,9 @@
 #define TEXTBOX_Y_BOTTOM 116
 
 #define sSpriteId2 data[0]
+#define sLocalId   data[1]
+#define sTextboxX  data[2]
+#define sTextboxY  data[3]
 
 static const struct OamData sSpeechTailOamData =
 {
@@ -57,6 +60,8 @@ static const struct SpriteTemplate sSpeechTailSpriteTemplate =
     .callback = SpriteCallbackDummy,
 };
 
+static void SpriteCB_SpeechTailUpdate(struct Sprite *sprite);
+
 EWRAM_DATA static u8 sSpeechTailSpriteId = 0;
 
 void LoadTail(bool8 top, s16 x, s16 y)
@@ -83,6 +88,9 @@ void LoadTail(bool8 top, s16 x, s16 y)
     }
 
     spriteId = CreateSprite(&sSpeechTailSpriteTemplate, (textboxX + x) / 2, (textboxY + y) / 2, 0);
+    gSprites[spriteId].sTextboxX = textboxX;
+    gSprites[spriteId].sTextboxY = textboxY;
+
     if (flash)
         spriteId2 = CreateSprite(&sSpeechTailSpriteTemplate, (textboxX + x) / 2, (textboxY + y) / 2, 0);
     
@@ -97,6 +105,8 @@ void LoadTail(bool8 top, s16 x, s16 y)
     {
         gSprites[spriteId2].oam.matrixNum = gSprites[spriteId].oam.matrixNum;
         gSprites[spriteId2].oam.objMode = ST_OAM_OBJ_WINDOW;
+        gSprites[spriteId2].sTextboxX = textboxX;
+        gSprites[spriteId2].sTextboxY = textboxY;
         gSprites[spriteId].sSpriteId2 = spriteId2;
     }
 
@@ -115,6 +125,45 @@ void LoadTailFromObjectEventId(bool8 top, u32 id)
     y = sprite->oam.y - (sprite->y2 + sprite->centerToCornerVecY) + 8;
 
     LoadTail(top, x, y);
+    gSprites[sSpeechTailSpriteId].callback = SpriteCB_SpeechTailUpdate;
+    gSprites[sSpeechTailSpriteId].sLocalId = id;
+    if (GetFlashLevel() > 1)
+    {
+        gSprites[gSprites[sSpeechTailSpriteId].sSpriteId2].callback = SpriteCB_SpeechTailUpdate;
+        gSprites[gSprites[sSpeechTailSpriteId].sSpriteId2].sLocalId = id;
+    }
+}
+
+static void SpriteCB_SpeechTailUpdate(struct Sprite *sprite)
+{
+    struct ObjectEvent *objectEvent;
+    struct Sprite *sprite2;
+    s16 textboxX;
+    s16 x, y;
+
+    objectEvent = &gObjectEvents[GetObjectEventIdByLocalIdAndMap(sprite->sLocalId, gSaveBlock1Ptr->location.mapNum, gSaveBlock1Ptr->location.mapGroup)];
+    sprite2 = &gSprites[objectEvent->spriteId];
+    x = sprite2->oam.x - (sprite2->x2 + sprite2->centerToCornerVecX);
+    y = sprite2->oam.y - (sprite2->y2 + sprite2->centerToCornerVecY) + 8;
+
+    if (x < 120 && x > TEXTBOX_LEFT_X)
+        x -= 7;
+    else if (x < 120 && x < TEXTBOX_LEFT_X)
+        x += 9;
+    else if (x >= 120 && x > TEXTBOX_RIGHT_X)
+        x -= 7;
+    else if (x >= 120 && x < TEXTBOX_RIGHT_X)
+        x += 9;
+
+    sprite->sTextboxX = (x < 120) ? TEXTBOX_LEFT_X : TEXTBOX_RIGHT_X;
+
+    sprite->x = (sprite->sTextboxX + x) / 2;
+    sprite->y = (sprite->sTextboxY + y) / 2;
+    SetOamMatrix(sprite->oam.matrixNum, 
+                 Q_8_8(1), 
+                 Q_8_8(1.0 / ((float)(y - sprite->sTextboxY) / -(x - sprite->sTextboxX))), // calculate x shear factor
+                 Q_8_8(0), 
+                 Q_8_8(64 / (double)(sprite->sTextboxY - y))); // calculate y scale factor
 }
 
 u8 GetTailSpriteId(void)
