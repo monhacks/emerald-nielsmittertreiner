@@ -2503,7 +2503,7 @@ struct ObjectEventTemplate *GetObjectEventTemplateByLocalIdAndMap(u8 localId, u8
         templates = mapHeader->events->objectEvents;
         count = mapHeader->events->objectEventCount;
     }
-    return FindObjectEventTemplateByLocalId(localId, templates, count);
+    return (struct ObjectEventTemplate *)FindObjectEventTemplateByLocalId(localId, templates, count);
 }
 
 static const struct ObjectEventTemplate *FindObjectEventTemplateByLocalId(u8 localId, const struct ObjectEventTemplate *templates, u8 count)
