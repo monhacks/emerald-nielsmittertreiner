@@ -1493,3 +1493,8 @@ bool8 MetatileBehavior_IsSidewaysWarp(u8 metatileBehavior)
         return FALSE;
 }
 
+bool8 MetatileBehavior_IsLedgeAny(u8 metatileBehavior)
+{
+    return (metatileBehavior == MB_JUMP_EAST || metatileBehavior == MB_JUMP_WEST || metatileBehavior == MB_JUMP_NORTH || metatileBehavior == MB_JUMP_SOUTH);
+}
+

@@ -8120,6 +8120,9 @@ void GroundEffect_StepOnTallGrass(struct ObjectEvent *objEvent, struct Sprite *s
     gFieldEffectArguments[6] = (u8)gSaveBlock1Ptr->location.mapNum << 8 | (u8)gSaveBlock1Ptr->location.mapGroup;
     gFieldEffectArguments[7] = FALSE; // don't skip to end of anim
     FieldEffectStart(FLDEFF_TALL_GRASS);
+
+    if (IsFanfareTaskInactive() && !MetatileBehavior_IsLedgeAny(objEvent->currentMetatileBehavior))
+        PlaySE1WithVolume(SE_M_POISON_POWDER, 127);
 }
 
 void GroundEffect_SpawnOnLongGrass(struct ObjectEvent *objEvent, struct Sprite *sprite)
@@ -8146,6 +8149,9 @@ void GroundEffect_StepOnLongGrass(struct ObjectEvent *objEvent, struct Sprite *s
     gFieldEffectArguments[6] = (u8)gSaveBlock1Ptr->location.mapNum << 8 | (u8)gSaveBlock1Ptr->location.mapGroup;
     gFieldEffectArguments[7] = 0;
     FieldEffectStart(FLDEFF_LONG_GRASS);
+
+    if (IsFanfareTaskInactive() && !MetatileBehavior_IsLedgeAny(objEvent->currentMetatileBehavior))
+        PlaySE1WithVolume(SE_M_POISON_POWDER, 127);
 }
 
 void GroundEffect_WaterReflection(struct ObjectEvent *objEvent, struct Sprite *sprite)
@@ -8199,6 +8205,9 @@ static void DoTracksGroundEffect_Footprints(struct ObjectEvent *objEvent, struct
     gFieldEffectArguments[3] = 2;
     gFieldEffectArguments[4] = objEvent->facingDirection;
     FieldEffectStart(sandFootprints_FieldEffectData[isDeepSand]);
+
+    if (IsFanfareTaskInactive() && !MetatileBehavior_IsLedgeAny(objEvent->currentMetatileBehavior))
+        PlaySE1WithVolume(SE_FOOTPRINT, 127);
 }
 
 static void DoTracksGroundEffect_BikeTireTracks(struct ObjectEvent *objEvent, struct Sprite *sprite, bool8 isDeepSand)

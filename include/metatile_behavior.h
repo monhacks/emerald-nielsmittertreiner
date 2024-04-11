@@ -151,6 +151,7 @@ bool8 MetatileBehavior_IsTrainerHillTimer(u8);
 bool8 MetatileBehavior_IsRockStairs(u8);
 bool8 MetatileBehavior_IsFirwealdClosedDoor(u8);
 bool8 MetatileBehavior_IsSidewaysWarp(u8);
+bool8 MetatileBehavior_IsLedgeAny(u8);
 
 //sideways stairs
 bool8 MetatileBehavior_IsSidewaysStairsRightSide(u8);
