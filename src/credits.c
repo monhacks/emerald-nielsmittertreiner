@@ -1210,7 +1210,7 @@ static bool8 LoadBikeScene(u8 scene, u8 taskId)
         if (gSaveBlock2Ptr->playerGender == MALE)
         {
             LoadCompressedSpriteSheet(gSpriteSheet_CreditsBrendan);
-            LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalMay);
+            LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalPlayerFemale);
             LoadCompressedSpriteSheet(gSpriteSheet_CreditsBicycle);
             LoadSpritePalettes(gSpritePalettes_Credits);
 
@@ -1227,7 +1227,7 @@ static bool8 LoadBikeScene(u8 scene, u8 taskId)
         else
         {
             LoadCompressedSpriteSheet(gSpriteSheet_CreditsMay);
-            LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalBrendan);
+            LoadCompressedSpriteSheet(gSpriteSheet_CreditsRivalPlayerMale);
             LoadCompressedSpriteSheet(gSpriteSheet_CreditsBicycle);
             LoadSpritePalettes(gSpritePalettes_Credits);
 

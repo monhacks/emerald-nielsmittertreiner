@@ -1940,12 +1940,12 @@ static void Task_NewGameBirchSpeech_ReshowBirchLotad(u8 taskId)
         NewGameBirchSpeech_ClearWindow(0);
         if (gSaveBlock2Ptr->playerGender == MALE)
         {
-            StringExpandPlaceholders(gStringVar4, gText_Birch_YourePlayerMale);
+            StringExpandPlaceholders(gStringVar4, gText_Birch_YoureBrendan);
             AddTextPrinterForMessage(1);
         }
         else
         {
-            StringExpandPlaceholders(gStringVar4, gText_Birch_YourePlayerFemale);
+            StringExpandPlaceholders(gStringVar4, gText_Birch_YoureMay);
             AddTextPrinterForMessage(1);
         }
         gTasks[taskId].func = Task_NewGameBirchSpeech_LoadTailAfterGenderAndName;

@@ -239,11 +239,11 @@ PlayersHouse_1F_Movement_MomApproachDadFemale:
 	walk_in_place_faster_left
 	step_end
 
-PlayersHouse_1F_Movement_MomApproachPlayerMale:
+PlayersHouse_1F_Movement_MomApproachBrendan:
 	walk_right
 	step_end
 
-PlayersHouse_1F_Movement_MomApproachPlayerFemale:
+PlayersHouse_1F_Movement_MomApproachMay:
 	walk_left
 	step_end
 
@@ -435,8 +435,8 @@ PlayersHouse_1F_EventScript_GetSSTicketAndSeeLatiTV::
 	applymovement VAR_0x8009, Common_Movement_Delay48
 	waitmovement 0
 	delay 20
-	call_if_eq VAR_0x8008, MALE, PlayersHouse_1F_EventScript_DadApproachPlayerMale
-	call_if_eq VAR_0x8008, FEMALE, PlayersHouse_1F_EventScript_DadApproachPlayerFemale
+	call_if_eq VAR_0x8008, MALE, PlayersHouse_1F_EventScript_DadApproachBrendan
+	call_if_eq VAR_0x8008, FEMALE, PlayersHouse_1F_EventScript_DadApproachMay
 	msgbox PlayersHouse_1F_Text_TicketFromBrineyCameForYou, MSGBOX_DEFAULT
 	giveitem ITEM_SS_TICKET
 	msgbox PlayersHouse_1F_Text_PortsInSlateportLilycove, MSGBOX_DEFAULT
@@ -452,8 +452,8 @@ PlayersHouse_1F_EventScript_GetSSTicketAndSeeLatiTV::
 	removeobject VAR_0x8009
 	setflag FLAG_RECEIVED_SS_TICKET
 	delay 30
-	call_if_eq VAR_0x8008, MALE, PlayersHouse_1F_EventScript_MomApproachPlayerMale
-	call_if_eq VAR_0x8008, FEMALE, PlayersHouse_1F_EventScript_MomApproachPlayerFemale
+	call_if_eq VAR_0x8008, MALE, PlayersHouse_1F_EventScript_MomApproachBrendan
+	call_if_eq VAR_0x8008, FEMALE, PlayersHouse_1F_EventScript_MomApproachMay
 	delay 20
 	msgbox PlayersHouse_1F_Text_DadShouldStayLonger, MSGBOX_DEFAULT
 	closemessage
@@ -502,13 +502,13 @@ PlayersHouse_1F_EventScript_SetUpObjectEventVarsFemale::
 	setvar VAR_0x800A, LOCALID_MOM
 	return
 
-PlayersHouse_1F_EventScript_DadApproachPlayerMale::
-	applymovement VAR_0x8009, PlayersHouse_1F_Movement_DadApproachPlayerMale
+PlayersHouse_1F_EventScript_DadApproachBrendan::
+	applymovement VAR_0x8009, PlayersHouse_1F_Movement_DadApproachBrendan
 	waitmovement 0
 	return
 
-PlayersHouse_1F_EventScript_DadApproachPlayerFemale::
-	applymovement VAR_0x8009, PlayersHouse_1F_Movement_DadApproachPlayerFemale
+PlayersHouse_1F_EventScript_DadApproachMay::
+	applymovement VAR_0x8009, PlayersHouse_1F_Movement_DadApproachMay
 	waitmovement 0
 	return
 
@@ -564,15 +564,15 @@ PlayersHouse_1F_EventScript_PlayerApproachTVForLatiFemale::
 	waitmovement 0
 	return
 
-PlayersHouse_1F_EventScript_MomApproachPlayerMale::
-	applymovement VAR_0x800A, PlayersHouse_1F_Movement_MomApproachPlayerMale
+PlayersHouse_1F_EventScript_MomApproachBrendan::
+	applymovement VAR_0x800A, PlayersHouse_1F_Movement_MomApproachBrendan
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
 	return
 
-PlayersHouse_1F_EventScript_MomApproachPlayerFemale::
-	applymovement VAR_0x800A, PlayersHouse_1F_Movement_MomApproachPlayerFemale
+PlayersHouse_1F_EventScript_MomApproachMay::
+	applymovement VAR_0x800A, PlayersHouse_1F_Movement_MomApproachMay
 	waitmovement 0
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
@@ -602,12 +602,12 @@ PlayersHouse_1F_EventScript_MomApproachPlayerAfterTVFemale::
 	waitmovement 0
 	return
 
-PlayersHouse_1F_Movement_DadApproachPlayerMale:
+PlayersHouse_1F_Movement_DadApproachBrendan:
 	walk_right
 	walk_right
 	step_end
 
-PlayersHouse_1F_Movement_DadApproachPlayerFemale:
+PlayersHouse_1F_Movement_DadApproachMay:
 	walk_left
 	walk_left
 	step_end

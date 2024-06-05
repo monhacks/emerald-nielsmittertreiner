@@ -53,7 +53,7 @@ gText_Birch_WhatsYourName::
 gText_Birch_SoItsPlayer::
 	.string "So it's {PLAYER}{KUN}?$"
 
-gText_Birch_YourePlayerMale::
+gText_Birch_YoureBrendan::
 	.string "Hold on!\n"
 	.string "You're {PLAYER}{KUN}, my son!\p"
 	.string "We live in SUNSET TOWN now,\n"
@@ -61,7 +61,7 @@ gText_Birch_YourePlayerMale::
 	.string "It's a place in the EURUS REGION.\p"
 	.string "$"
 
-gText_Birch_YourePlayerFemale::
+gText_Birch_YoureMay::
 	.string "Hold on!\n"
 	.string "You're {PLAYER}{KUN}, my daughter!\p"
 	.string "We live in SUNSET TOWN now,\n"

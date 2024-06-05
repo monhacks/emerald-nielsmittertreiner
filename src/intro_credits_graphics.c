@@ -18,8 +18,8 @@
 */
 
 #define TAG_BICYCLE 1001
-#define TAG_BRENDAN 1002
-#define TAG_MAY     1003
+#define TAG_MALE 1002
+#define TAG_FEMALE     1003
 #define TAG_FLYGON_LATIOS  1004
 #define TAG_FLYGON_LATIAS  1005
 
@@ -464,8 +464,8 @@ static const union AnimCmd *const sAnims_Player[] =
 
 static const struct SpriteTemplate sSpriteTemplate_Brendan =
 {
-    .tileTag = TAG_BRENDAN,
-    .paletteTag = TAG_BRENDAN,
+    .tileTag = TAG_MALE,
+    .paletteTag = TAG_MALE,
     .oam = &sOamData_Player,
     .anims = sAnims_Player,
     .images = NULL,
@@ -475,8 +475,8 @@ static const struct SpriteTemplate sSpriteTemplate_Brendan =
 
 static const struct SpriteTemplate sSpriteTemplate_May =
 {
-    .tileTag = TAG_MAY,
-    .paletteTag = TAG_MAY,
+    .tileTag = TAG_FEMALE,
+    .paletteTag = TAG_FEMALE,
     .oam = &sOamData_Player,
     .anims = sAnims_Player,
     .images = NULL,
@@ -509,7 +509,7 @@ static const union AnimCmd *const sAnims_Bicycle[] =
 static const struct SpriteTemplate sSpriteTemplate_BrendanBicycle =
 {
     .tileTag = TAG_BICYCLE,
-    .paletteTag = TAG_BRENDAN,
+    .paletteTag = TAG_MALE,
     .oam = &sOamData_Bicycle,
     .anims = sAnims_Bicycle,
     .images = NULL,
@@ -520,7 +520,7 @@ static const struct SpriteTemplate sSpriteTemplate_BrendanBicycle =
 static const struct SpriteTemplate sSpriteTemplate_MayBicycle =
 {
     .tileTag = TAG_BICYCLE,
-    .paletteTag = TAG_MAY,
+    .paletteTag = TAG_FEMALE,
     .oam = &sOamData_Bicycle,
     .anims = sAnims_Bicycle,
     .images = NULL,
@@ -581,7 +581,7 @@ const struct CompressedSpriteSheet gSpriteSheet_IntroBrendan[] =
     {
         .data = gIntroBrendan_Gfx,
         .size = 0x2000,
-        .tag = TAG_BRENDAN
+        .tag = TAG_MALE
     },
     {}
 };
@@ -591,7 +591,7 @@ const struct CompressedSpriteSheet gSpriteSheet_IntroMay[] =
     {
         .data = gIntroMay_Gfx,
         .size = 0x2000,
-        .tag = TAG_MAY
+        .tag = TAG_FEMALE
     },
     {}
 };
@@ -629,8 +629,8 @@ const struct CompressedSpriteSheet gSpriteSheet_IntroFlygon[] =
 
 const struct SpritePalette gSpritePalettes_IntroPlayerFlygon[] =
 {
-    { .data = gIntroPlayer_Pal, .tag = TAG_BRENDAN },
-    { .data = gIntroPlayer_Pal, .tag = TAG_MAY },
+    { .data = gIntroPlayer_Pal, .tag = TAG_MALE },
+    { .data = gIntroPlayer_Pal, .tag = TAG_FEMALE },
     { .data = gIntroFlygon_Pal, .tag = TAG_FLYGON_LATIOS },
     { .data = gIntroFlygon_Pal, .tag = TAG_FLYGON_LATIAS },
     {}
@@ -641,7 +641,7 @@ const struct CompressedSpriteSheet gSpriteSheet_CreditsBrendan[] =
     {
         .data = sBrendanCredits_Gfx,
         .size = 0x3800,
-        .tag = TAG_BRENDAN
+        .tag = TAG_MALE
     },
     {}
 };
@@ -651,7 +651,7 @@ const struct CompressedSpriteSheet gSpriteSheet_CreditsMay[] =
     {
         .data = sMayCredits_Gfx,
         .size = 0x3800,
-        .tag = TAG_MAY
+        .tag = TAG_FEMALE
     },
     {}
 };
@@ -690,29 +690,29 @@ static const struct CompressedSpriteSheet sSpriteSheet_Latias[] =
 
 const struct SpritePalette gSpritePalettes_Credits[] =
 {
-    { .data = sBrendanCredits_Pal, .tag = TAG_BRENDAN },
-    { .data = sMayCredits_Pal,     .tag = TAG_MAY },
+    { .data = sBrendanCredits_Pal, .tag = TAG_MALE },
+    { .data = sMayCredits_Pal,     .tag = TAG_FEMALE },
     { .data = sLatios_Pal,         .tag = TAG_FLYGON_LATIOS },
     { .data = sLatias_Pal,         .tag = TAG_FLYGON_LATIAS },
     {}
 };
 
-const struct CompressedSpriteSheet gSpriteSheet_CreditsRivalBrendan[] =
+const struct CompressedSpriteSheet gSpriteSheet_CreditsRivalPlayerMale[] =
 {
     {
         .data = sBrendanCredits_Gfx,
         .size = 0x2000,
-        .tag = TAG_BRENDAN
+        .tag = TAG_MALE
     },
     {}
 };
 
-const struct CompressedSpriteSheet gSpriteSheet_CreditsRivalMay[] =
+const struct CompressedSpriteSheet gSpriteSheet_CreditsRivalPlayerFemale[] =
 {
     {
         .data = sMayCredits_Gfx,
         .size = 0x2000,
-        .tag = TAG_MAY
+        .tag = TAG_FEMALE
     },
     {}
 };

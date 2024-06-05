@@ -475,16 +475,16 @@ LittlerootTown_EventScript_GiveRunningShoesTrigger5::
 
 LittlerootTown_EventScript_GiveRunningShoesTrigger::
 	checkplayergender
-	call_if_eq VAR_RESULT, MALE, LittlerootTown_EventScript_MomNoticePlayerMale
-	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_EventScript_MomNoticePlayerFemale
+	call_if_eq VAR_RESULT, MALE, LittlerootTown_EventScript_MomNoticeBrendan
+	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_EventScript_MomNoticeMay
 	checkplayergender
 	call_if_eq VAR_RESULT, MALE, LittlerootTown_EventScript_SetHomeDoorCoordsMale
 	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_EventScript_SetHomeDoorCoordsFemale
 	msgbox LittlerootTown_Text_WaitPlayer, MSGBOX_DEFAULT
 	closemessage
 	checkplayergender
-	call_if_eq VAR_RESULT, MALE, LittlerootTown_EventScript_MomApproachPlayerMale
-	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_EventScript_MomApproachPlayerFemale
+	call_if_eq VAR_RESULT, MALE, LittlerootTown_EventScript_MomApproachBrendan
+	call_if_eq VAR_RESULT, FEMALE, LittlerootTown_EventScript_MomApproachMay
 	call LittlerootTown_EventScript_GiveRunningShoes
 	checkplayergender
 	call_if_eq VAR_RESULT, MALE, LittlerootTown_EventScript_MomReturnHomeMale
@@ -502,32 +502,32 @@ LittlerootTown_EventScript_SetHomeDoorCoordsFemale::
 	setvar VAR_0x800A, 8
 	return
 
-LittlerootTown_EventScript_MomNoticePlayerMale::
+LittlerootTown_EventScript_MomNoticeBrendan::
 	applymovement LOCALID_MOM, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomNoticePlayerFemale::
+LittlerootTown_EventScript_MomNoticeMay::
 	applymovement LOCALID_MOM, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerMale::
+LittlerootTown_EventScript_MomApproachBrendan::
 	call_if_eq VAR_0x8008, 0, LittlerootTown_EventScript_MomApproachPlayer0
 	call_if_eq VAR_0x8008, 1, LittlerootTown_EventScript_MomApproachPlayer1
-	call_if_eq VAR_0x8008, 2, LittlerootTown_EventScript_MomApproachPlayerMale2
-	call_if_eq VAR_0x8008, 3, LittlerootTown_EventScript_MomApproachPlayerMale3
-	call_if_eq VAR_0x8008, 4, LittlerootTown_EventScript_MomApproachPlayerMale4
-	call_if_eq VAR_0x8008, 5, LittlerootTown_EventScript_MomApproachPlayerMale5
+	call_if_eq VAR_0x8008, 2, LittlerootTown_EventScript_MomApproachBrendan2
+	call_if_eq VAR_0x8008, 3, LittlerootTown_EventScript_MomApproachBrendan3
+	call_if_eq VAR_0x8008, 4, LittlerootTown_EventScript_MomApproachBrendan4
+	call_if_eq VAR_0x8008, 5, LittlerootTown_EventScript_MomApproachBrendan5
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerFemale::
+LittlerootTown_EventScript_MomApproachMay::
 	call_if_eq VAR_0x8008, 0, LittlerootTown_EventScript_MomApproachPlayer0
 	call_if_eq VAR_0x8008, 1, LittlerootTown_EventScript_MomApproachPlayer1
-	call_if_eq VAR_0x8008, 2, LittlerootTown_EventScript_MomApproachPlayerFemale2
-	call_if_eq VAR_0x8008, 3, LittlerootTown_EventScript_MomApproachPlayerFemale3
-	call_if_eq VAR_0x8008, 4, LittlerootTown_EventScript_MomApproachPlayerFemale4
-	call_if_eq VAR_0x8008, 5, LittlerootTown_EventScript_MomApproachPlayerFemale5
+	call_if_eq VAR_0x8008, 2, LittlerootTown_EventScript_MomApproachMay2
+	call_if_eq VAR_0x8008, 3, LittlerootTown_EventScript_MomApproachMay3
+	call_if_eq VAR_0x8008, 4, LittlerootTown_EventScript_MomApproachMay4
+	call_if_eq VAR_0x8008, 5, LittlerootTown_EventScript_MomApproachMay5
 	return
 
 LittlerootTown_EventScript_MomApproachPlayer0::
@@ -544,59 +544,59 @@ LittlerootTown_EventScript_MomApproachPlayer1::
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerMale2::
+LittlerootTown_EventScript_MomApproachBrendan2::
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
-	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachPlayerMale2
+	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachBrendan2
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerMale3::
+LittlerootTown_EventScript_MomApproachBrendan3::
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
-	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachPlayerMale3
+	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachBrendan3
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerMale4::
+LittlerootTown_EventScript_MomApproachBrendan4::
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
-	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachPlayerMale4
+	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachBrendan4
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerMale5::
+LittlerootTown_EventScript_MomApproachBrendan5::
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterLeft
 	waitmovement 0
-	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachPlayerMale5
+	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachBrendan5
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerFemale2::
+LittlerootTown_EventScript_MomApproachMay2::
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
-	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachPlayerFemale2
+	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachMay2
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerFemale3::
+LittlerootTown_EventScript_MomApproachMay3::
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
-	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachPlayerFemale3
+	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachMay3
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerFemale4::
+LittlerootTown_EventScript_MomApproachMay4::
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
-	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachPlayerFemale4
+	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachMay4
 	waitmovement 0
 	return
 
-LittlerootTown_EventScript_MomApproachPlayerFemale5::
+LittlerootTown_EventScript_MomApproachMay5::
 	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkInPlaceFasterRight
 	waitmovement 0
-	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachPlayerFemale5
+	applymovement LOCALID_MOM, LittlerootTown_Movement_MomApproachMay5
 	waitmovement 0
 	return
 
@@ -742,14 +742,14 @@ LittlerootTown_Movement_MomApproachPlayer1:
 	walk_up
 	step_end
 
-LittlerootTown_Movement_MomApproachPlayerMale2:
+LittlerootTown_Movement_MomApproachBrendan2:
 	walk_right
 	walk_right
 	walk_right
 	walk_right
 	step_end
 
-LittlerootTown_Movement_MomApproachPlayerMale3:
+LittlerootTown_Movement_MomApproachBrendan3:
 	walk_right
 	walk_right
 	walk_right
@@ -757,37 +757,37 @@ LittlerootTown_Movement_MomApproachPlayerMale3:
 	walk_right
 	step_end
 
-LittlerootTown_Movement_MomApproachPlayerMale4:
+LittlerootTown_Movement_MomApproachBrendan4:
 	walk_right
 	walk_right
 	step_end
 
-LittlerootTown_Movement_MomApproachPlayerMale5:
+LittlerootTown_Movement_MomApproachBrendan5:
 	walk_right
 	walk_right
 	walk_right
 	step_end
 
-LittlerootTown_Movement_MomApproachPlayerFemale2:
-	walk_left
-	walk_left
-	walk_left
-	step_end
-
-LittlerootTown_Movement_MomApproachPlayerFemale3:
-	walk_left
-	walk_left
-	step_end
-
-LittlerootTown_Movement_MomApproachPlayerFemale4:
-	walk_left
-	walk_left
+LittlerootTown_Movement_MomApproachMay2:
 	walk_left
 	walk_left
 	walk_left
 	step_end
 
-LittlerootTown_Movement_MomApproachPlayerFemale5:
+LittlerootTown_Movement_MomApproachMay3:
+	walk_left
+	walk_left
+	step_end
+
+LittlerootTown_Movement_MomApproachMay4:
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	step_end
+
+LittlerootTown_Movement_MomApproachMay5:
 	walk_left
 	walk_left
 	walk_left

@@ -22,11 +22,11 @@ Route103_EventScript_OpenAlteringCave::
 Route103_EventScript_Rival::
 	lockall
 	checkplayergender
-	goto_if_eq VAR_RESULT, MALE, Route103_EventScript_RivalMay
-	goto_if_eq VAR_RESULT, FEMALE, Route103_EventScript_RivalBrendan
+	goto_if_eq VAR_RESULT, MALE, Route103_EventScript_RivalPlayerFemale
+	goto_if_eq VAR_RESULT, FEMALE, Route103_EventScript_RivalPlayerMale
 	end
 
-Route103_EventScript_RivalMay::
+Route103_EventScript_RivalPlayerFemale::
 	msgbox Route103_Text_MayRoute103Pokemon, MSGBOX_DEFAULT
 	closemessage
 	playbgm MUS_ENCOUNTER_MAY, TRUE
@@ -43,7 +43,7 @@ Route103_EventScript_RivalMay::
 	case 2, Route103_EventScript_StartMayBattleMudkip
 	end
 
-Route103_EventScript_RivalBrendan::
+Route103_EventScript_RivalPlayerMale::
 	msgbox Route103_Text_BrendanRoute103Pokemon, MSGBOX_DEFAULT
 	closemessage
 	playbgm MUS_ENCOUNTER_BRENDAN, TRUE
