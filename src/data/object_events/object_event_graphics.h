@@ -334,9 +334,9 @@ const u16 gObjectEventPal_Phyllos[] = INCBIN_U16("graphics/object_events/palette
 const u32 gObjectEventPic_ConstructionWorker[] = INCBIN_U32("graphics/object_events/pics/people/construction_worker.4bpp");
 const u16 gObjectEventPal_ConstructionWorker[] = INCBIN_U16("graphics/object_events/palettes/construction_worker.gbapal");
 
-const u16 gObjectEventPaletteLight[] = INCBIN_U16("graphics/object_events/palettes/lantern.gbapal");
-const u16 gObjectEventPaletteLight2[] = INCBIN_U16("graphics/object_events/palettes/light2.gbapal");
-const u16 gObjectEventPaletteNeonLight[] = INCBIN_U16("graphics/object_events/palettes/neon_light.gbapal");
+const u16 gObjectEventPal_Light[] = INCBIN_U16("graphics/object_events/palettes/light.gbapal");
+const u16 gObjectEventPal_Light2[] = INCBIN_U16("graphics/object_events/palettes/light2.gbapal");
+const u16 gObjectEventPal_NeonLight[] = INCBIN_U16("graphics/object_events/palettes/neon_light.gbapal");
 const u32 gFieldEffectObjectPic_LanternLight[] = INCBIN_U32("graphics/object_events/pics/misc/lantern.4bpp");
 const u32 gFieldEffectObjectPic_PokeCenterLight[] = INCBIN_U32("graphics/object_events/pics/misc/poke_center_light.4bpp");
 const u32 gFieldEffectObjectPic_MartLight[] = INCBIN_U32("graphics/object_events/pics/misc/mart_light.4bpp");

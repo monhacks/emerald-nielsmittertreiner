@@ -499,9 +499,9 @@ static const struct SpritePalette sObjectEventSpritePalettes[] = {
     {gObjectEventPal_TeamAirlockGrunt,      OBJ_EVENT_PAL_TAG_TEAM_AIRLOCK_GRUNT},
     {gObjectEventPal_Phyllos,               OBJ_EVENT_PAL_TAG_PHYLLOS},
     {gObjectEventPal_ConstructionWorker,    OBJ_EVENT_PAL_TAG_CONSTRUCTION_WORKER},
-    {gObjectEventPaletteLight,              OBJ_EVENT_PAL_TAG_LIGHT},
-    {gObjectEventPaletteLight2,             OBJ_EVENT_PAL_TAG_LIGHT_2},
-    {gObjectEventPaletteNeonLight,          OBJ_EVENT_PAL_TAG_NEON_LIGHT},
+    {gObjectEventPal_Light,                 OBJ_EVENT_PAL_TAG_LIGHT},
+    {gObjectEventPal_Light2,                OBJ_EVENT_PAL_TAG_LIGHT_2},
+    {gObjectEventPal_NeonLight,             OBJ_EVENT_PAL_TAG_NEON_LIGHT},
     {gObjectEventPal_Emotions,              OBJ_EVENT_PAL_TAG_EMOTIONS},
     {NULL,                                  OBJ_EVENT_PAL_TAG_NONE},
 };
