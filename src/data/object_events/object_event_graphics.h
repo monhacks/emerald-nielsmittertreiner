@@ -340,3 +340,5 @@ const u16 gObjectEventPaletteNeonLight[] = INCBIN_U16("graphics/object_events/pa
 const u32 gFieldEffectObjectPic_LanternLight[] = INCBIN_U32("graphics/object_events/pics/misc/lantern.4bpp");
 const u32 gFieldEffectObjectPic_PokeCenterLight[] = INCBIN_U32("graphics/object_events/pics/misc/poke_center_light.4bpp");
 const u32 gFieldEffectObjectPic_MartLight[] = INCBIN_U32("graphics/object_events/pics/misc/mart_light.4bpp");
+
+const u16 gObjectEventPal_Emotions[] = INCBIN_U16("graphics/object_events/palettes/emotions.gbapal");
